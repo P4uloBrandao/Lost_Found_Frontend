@@ -1,3 +1,5 @@
+
+
 import * as React from 'react';
 import  { useState } from "react";
 
@@ -19,30 +21,15 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import axios from "axios";
-import {PasswordStrength} from '../controllers/index'
 
-// TODO remove, this demo shouldn't need to reset the theme.
-const genders = [
-    {
-      value: 'male',
-      label: 'male'
-    },
-    {
-      value: 'female',
-      label: 'female'
-    },
-    {
-      value: 'undefined',
-      label: 'undefined'
-    },
-  ]
+
+
 const defaultTheme = createTheme();
 
-export default function SignUp() {
+export default function ProfileSettings() {
     const [firstName, setFirstName] = React.useState('');
     const [lastName, setLastName] = React.useState('');
     const [email, setEmail] = React.useState('');
-    const [gender, setGender] = React.useState('');
     const [address, setAddress] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [checkPassword, setCheckPassword] = React.useState('');
@@ -51,8 +38,11 @@ export default function SignUp() {
     const [nif, setNif] = React.useState('');
     const [message, setMessage] = useState("");
 
-    const handleChange = (value) => console.log(value);
 
+
+
+
+    
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -60,7 +50,6 @@ export default function SignUp() {
         data.append('firstName', firstName);
         data.append('lastName', lastName);
         data.append('email', email);
-        data.append('gender', gender);
         data.append('address', address);
         data.append('password', password);
         data.append('checkPassword', checkPassword);
@@ -72,7 +61,7 @@ export default function SignUp() {
             console.log(pair[0] + ', ' + pair[1]);
         }
         try {
-            const response = await axios.post("http://localhost:3001/api/auth/register", {
+            const response = await axios.put("http://localhost:3001/api/auth/register", {
                 data
              });
             setMessage(response.data.message);
@@ -101,7 +90,7 @@ export default function SignUp() {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Sign up
+                         Profile Details
                     </Typography>
                     <Box className='cada' component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
                         <Grid container spacing={2}>
@@ -143,7 +132,17 @@ export default function SignUp() {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                 <PasswordStrength placeholder="password" onChange={handleChange} />
+                                <TextField
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                    value={password}
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="new-password"
+                                />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
@@ -155,25 +154,10 @@ export default function SignUp() {
                                     label="Confirm Password"
                                     type="password"
                                     id="checkPassword"
+                                    autoComplete="new-password"
                                 />
                             </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                onChange={(e) => setGender(e.target.value)}
-                                id="gender"
-                                name="gender"
-                                select
-                                label="Your Gender"
-                                value={gender}
-                                helperText="Please select your category "
-                                >
-                                {genders.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                    </MenuItem>
-                                ))}
-                                </TextField>
-                            </Grid>
+                            
                             <Grid item xs={6}>
                             <DatePicker  
                                 selected={date}
@@ -215,7 +199,7 @@ export default function SignUp() {
                                     value={nic}
                                     required
                                     fullWidth
-                                    name="NICS"
+                                    name="NIC"
                                     label="Your NIC"
                                     type="text"
                                     id="nic"
@@ -231,15 +215,9 @@ export default function SignUp() {
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                         >
-                            Sign Up
+                            Update 
                         </Button>
-                        <Grid container justifyContent="flex-end">
-                            <Grid item>
-                                <Link href="/login" variant="body2">
-                                    Already have an account? Sign in
-                                </Link>
-                            </Grid>
-                        </Grid>
+                        
                     </Box>
                 </Box>
                 

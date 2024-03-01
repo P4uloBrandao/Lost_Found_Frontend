@@ -16,41 +16,47 @@ import { AuthContext } from "../AuthContext";
 import axios from "axios";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import {PasswordStrength} from '../controllers/index'
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
-export default function SignIn() {
+const defaultTheme = createTheme();
+
+export default function ChangePassword() {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [newPassword, setNewPassword] = React.useState('');
     const [errorMessage, setErrorMessage] = useState(null); // New state for handling error messages
     // const { setToken } = useContext(AuthContext);
-    const defaultTheme = createTheme();
-    
-    
-   
+
     const navigate = useNavigate();
-    
+    const handleChange = (value) => console.log(value);
+
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         data.append('email', email);
         data.append('password', password);
+        data.append('newPassword', password);
+
 
         console.log({
             email: data.get('email'),
             password: data.get('password'),
+            password: data.get('newPassword'),
         });
         try {
-            const response = await axios.post("http://localhost:3001/api/auth/login", {
+            const response = await axios.put("", {
               email,
               password,
+              newPassword,
             });
-
+            setErrorMessage(response.data.message);
             // setToken(response.data.token);
             // localStorage.setItem("token", response.data.token);
-            navigate("/home");
+            navigate("/login");
           } catch (error) {
-            console.error("Authentication failed:", error);
+            console.error("Password update failed:", error);
             // setToken(null);
             // localStorage.removeItem("token");
             if (error.response && error.response.data) {
@@ -77,10 +83,9 @@ export default function SignIn() {
                         <LockOutlinedIcon />
                     </Avatar>
                     <Typography component="h1" variant="h5">
-                        Sign in
+                       Change Password
                     </Typography>
                     <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-
                         <TextField
                             margin="normal"
                             required
@@ -90,45 +95,36 @@ export default function SignIn() {
                             id="email"
                             label="Email Address"
                             name="email"
-                            autoComplete="email"
                             autoFocus
                         />
+                        <PasswordStrength placeholder="password" onChange={handleChange} />
+
                         <TextField
                             margin="normal"
                             required
                             fullWidth
-                            onChange={(e) => setPassword(e.target.value)}
-                            name="password"
-                            value={password}
-                            label="Password"
+                            onChange={(e) => setNewPassword(e.target.value)}
+                            name="newPassword"
+                            value={newPassword}
+                            label="newPassword"
                             type="password"
+                            id="newPassword"
                             
-                            id="password"
-                            autoComplete="current-password"
                         />
                         
-                        
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        />
                         <Button
                             type="submit"
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                         >
-                            Sign In
+                            Update Password
                         </Button>
                         <Grid container>
-                            <Grid item xs>
-                                <Link href="/changePassword" variant="body2">
-                                    Forgot password?
-                                </Link>
-                            </Grid>
+                            
                             <Grid item>
-                                <Link href="/signup" variant="body2">
-                                    {"Don't have an account? Sign Up"}
+                                <Link href="/login" variant="body2">
+                                    {"I remember my password"}
                                 </Link>
                             </Grid>
                         </Grid>
