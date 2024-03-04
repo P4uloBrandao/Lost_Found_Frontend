@@ -1,7 +1,7 @@
 import React from 'react';
 import Signup from './components/signUp/index';
 import Home from './components/home/index';
-import Login from './components/login/index';
+import LoginPage from './pages/LoginPage';
 import ProfileSettings from './components/profileSettings/index';
 import ChangePassword from './components/changePassword/index';
 
@@ -15,7 +15,7 @@ function App() {
         <Routes>
           <Route path="/profileSettings" element={<ProfileSettings />} />
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/changePassword" element={<ChangePassword />} />
         </Routes>
