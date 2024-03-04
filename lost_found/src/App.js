@@ -1,16 +1,10 @@
 import './App.css';
-import SignUp from "./components/esquadra/place";
+import SignUp from "./components/esquadra";
 import PlaceComponent from "./components/esquadra/place";
 
 function App() {
   return (
-      //<SignUp />
-      
-      <div className="row mt-3">
-      <div className="col-6 offset-3">
-        <PlaceComponent />
-      </div>
-    </div>
+      <SignUp />
   );
 }
 
