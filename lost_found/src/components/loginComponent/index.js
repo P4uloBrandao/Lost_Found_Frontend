@@ -18,11 +18,12 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import Paper from '@mui/material/Paper';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-
-
+import InputF  from '../inputFieldComponent/InputField';
+import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 // TODO remove, this demo shouldn't need to reset the theme.
 import styled, { keyframes, css} from 'styled-components';
+import LockIcon from '@mui/icons-material/Lock';
+import LockIconOpen from '@mui/icons-material/LockOpenRounded';
 const colors = css`
   --primary-color: #c6c3c3;
   --second-color: #ffffff;
@@ -193,7 +194,13 @@ export default function SignIn() {
     const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
 
     const navigate = useNavigate();
-    
+    const toggleShowPassword = () => {
+      setShowPassword((prevShowPassword) => {
+        const newShowPassword = !prevShowPassword;
+        console.log('New showPassword state:', newShowPassword);
+        return newShowPassword;
+      });
+    };
     const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -233,39 +240,33 @@ export default function SignIn() {
       </LoginHeader>
       <form onSubmit={handleSubmit} >
         <InputBox>
-          <InputField
-            type="text"
-            id="email"
-            required
-            onChange={(e) => setEmail(e.target.value)}
-            value={email}
-            name="email"
-          />
-          <Label  className="label">
-            Email
-          </Label>
-          <FontAwesomeIcon icon="fa-light fa-user" />
+        <InputF 
+        icon={<PersonOutlineRoundedIcon />} 
+        type={'text'} 
+        placeholder={'Enter your Email'}  
+        id="email"
+        required
+        onChange={(e) => setEmail(e.target.value)}
+        value={email}
+        name="Email"/>
+          
+          
+        
         </InputBox>
         <InputBox>
-        <InputField
-            type={showPassword ? 'text' : 'password'}
-            id="password"
-            autocomplete="off"
-            onChange={(e) => setPassword(e.target.value)}
-            name="password"
-            value={password}
-            autoComplete="off"
-            label="Password"
-            required
-          />
-          <Label  className="label">
-            Password
-          </Label>
-          <Icon 
-          className={`bx bx-lock-alt `} 
-           id="show-password"
-            >
-           </Icon></InputBox>
+        <InputF 
+        icon={showPassword ? <LockIconOpen /> : <LockIcon />}
+        
+        placeholder={'Enter your Password'}  
+        id="email"
+        required
+        onChange={(e) => setPassword(e.target.value)}
+        type={showPassword ? 'text' : 'password'}
+        value={password}
+        name="Password"
+        setShowPassword={toggleShowPassword}
+        />
+        </InputBox>
         <RememberForgot>
           <div className="remember-me">
             <input type="checkbox" id="remember" />
