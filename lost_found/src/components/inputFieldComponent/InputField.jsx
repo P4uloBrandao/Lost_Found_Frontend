@@ -17,8 +17,8 @@ const InputBox = styled.div`
 `;
 
 const InputField = styled.input`
-${colors}  
-width: 96%;
+  ${colors}
+  width: 96%;
   height: 55px;
   font-size: 16px;
   background: transparent;
@@ -27,7 +27,21 @@ width: 96%;
   border: 2px solid var(--primary-color);
   border-radius: 30px;
   outline: none;
+
+  &:focus ~ label,
+  &:valid + label {
+    position: absolute;
+    top: -10px;
+    left: 20px;
+    font-size: 14px;
+    background-color: var(--primary-color);
+    border-radius: 30px;
+    color: var(--black-color);
+    padding: 0 10px;
+    transition: 0.2s;
+  }
 `;
+
 const Label = styled.label`
   position: absolute;
   top: -28px;

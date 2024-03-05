@@ -18,6 +18,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 import axios from "axios";
 import {PasswordStrength} from '../controllers/index'
 
@@ -37,6 +38,8 @@ const genders = [
     },
   ]
 const defaultTheme = createTheme();
+// Função para formatar a data como "DD-MM-YYYY"
+
 
 export default function SignUp() {
     const [firstName, setFirstName] = React.useState('');
@@ -50,13 +53,20 @@ export default function SignUp() {
     const [nic, setNic] = React.useState('');
     const [nif, setNif] = React.useState('');
     const [message, setMessage] = useState("");
-
+    const formatDate = (inputDate) => {
+        const dateObject = new Date(inputDate);
+        const day = String(dateObject.getDate()).padStart(2, '0');
+        const month = String(dateObject.getMonth() + 1).padStart(2, '0');
+        const year = dateObject.getFullYear();
+        return `${day}-${month}-${year}`;
+      };
     const handleChange = (value) => console.log(value);
 
 
     const handleSubmit = async (event) => {
+    
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
+        const data = new FormData();
         data.append('firstName', firstName);
         data.append('lastName', lastName);
         data.append('email', email);
@@ -64,7 +74,7 @@ export default function SignUp() {
         data.append('address', address);
         data.append('password', password);
         data.append('checkPassword', checkPassword);
-        data.append('date', date);
+        data.append('date', formatDate(date));
         data.append('nic', nic);
         data.append('nif', nif);
         // Print all FormData entries
@@ -72,9 +82,10 @@ export default function SignUp() {
             console.log(pair[0] + ', ' + pair[1]);
         }
         try {
-            const response = await axios.post("http://localhost:3001/api/auth/register", {
-                data
-             });
+            const response = await axios.post("http://localhost:3000/api/users/signup",
+             data 
+            );
+            
             setMessage(response.data.message);
           } catch (error) {
             console.error("Registration failed:", error.response.data.error);
@@ -177,7 +188,10 @@ export default function SignUp() {
                             <Grid item xs={6}>
                             <DatePicker  
                                 selected={date}
-                                onChange={(date) => setDate(date)}
+                                onChange={(date) => {
+  const formattedDate = formatDate(date);
+  setDate(formattedDate);
+}}
                                 id="date"
                                 name="date"
                                 label="Birthday"
@@ -226,7 +240,7 @@ export default function SignUp() {
                         {message && <div style={{ color: "red" }}>{message}</div>}
 
                         <Button
-                            
+                            onClick={handleSubmit}
                             fullWidth
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}

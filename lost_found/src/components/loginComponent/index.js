@@ -170,6 +170,10 @@ const Register = styled.div`
 
 const RegisterLink = styled.a`
   font-weight: 500;
+  text-decoration: none;
+  color: var(--second-color);
+  &:hover {
+    text-decoration: underline;
 `;
 
 const MediaQueryWrapper = styled.div`
@@ -212,7 +216,7 @@ export default function SignIn() {
             password: data.get('password'),
         });
         try {
-            const response = await axios.post("http://localhost:3001/api/auth/login", {
+            const response = await axios.post("http://localhost:3001/api/users/login", {
               email,
               password,
             });
@@ -273,16 +277,16 @@ export default function SignIn() {
             <label >Remember me</label>
           </div>
           <div className="forgot">
-            <a href="#">Forgot password</a>
+            <RegisterLink href="#">Forgot password</RegisterLink>
           </div>
         </RememberForgot>
         <InputBox>
-          <InputSubmit type="submit" className="input-submit" value="Login" />
+          <InputSubmit type="submit" className="input-submit" value="Login" label="Login">Submit</InputSubmit>
         </InputBox>
         <Register>
           <span>
-            Don't have an account?
-            <RegisterLink href="#">Register</RegisterLink>
+            Don't have an account?  
+            <RegisterLink href="./signup">  Register</RegisterLink>
           </span>
         </Register>
       </form>
