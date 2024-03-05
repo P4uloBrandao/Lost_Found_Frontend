@@ -1,6 +1,5 @@
 import './App.css';
-import SignUp from "./components/NavBar";
-import PlaceComponent from "./components/esquadra/place";
+import SignUp from "./components/signUp";
 
 function App() {
   return (
