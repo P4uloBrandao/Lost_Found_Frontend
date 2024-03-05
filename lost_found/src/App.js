@@ -1,5 +1,5 @@
 import './App.css';
-import SignUp from "./components/esquadra";
+import SignUp from "./components/NavBar";
 import PlaceComponent from "./components/esquadra/place";
 
 function App() {
