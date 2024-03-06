@@ -18,10 +18,11 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
+import LockIcon from '@mui/icons-material/Lock';
+import LockIconOpen from '@mui/icons-material/LockOpenRounded';
 import axios from "axios";
 import {PasswordStrength} from '../controllers/index'
-
+import InputF  from '../inputFieldComponent/InputField';
 // TODO remove, this demo shouldn't need to reset the theme.
 const genders = [
     {
@@ -35,24 +36,27 @@ const genders = [
     {
       value: 'undefined',
       label: 'undefined'
-    },
+    },3
   ]
 const defaultTheme = createTheme();
 // Função para formatar a data como "DD-MM-YYYY"
 
 
 export default function SignUp() {
-    const [firstName, setFirstName] = React.useState('');
-    const [lastName, setLastName] = React.useState('');
+    const [first_name, setFirstName] = React.useState('');
+    const [last_name, setLastName] = React.useState('');
     const [email, setEmail] = React.useState('');
     const [gender, setGender] = React.useState('');
-    const [address, setAddress] = React.useState('');
+    const [adddress, setAdddress] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [checkPassword, setCheckPassword] = React.useState('');
     const [date, setDate] = React.useState('');
     const [nic, setNic] = React.useState('');
     const [nif, setNif] = React.useState('');
     const [message, setMessage] = useState("");
+    const [phone, setPhone] = React.useState('');
+    const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
+
     const formatDate = (inputDate) => {
         const dateObject = new Date(inputDate);
         const day = String(dateObject.getDate()).padStart(2, '0');
@@ -62,34 +66,58 @@ export default function SignUp() {
       };
     const handleChange = (value) => console.log(value);
 
+    const toggleShowPassword = () => {
+      setShowPassword((prevShowPassword) => {
+        const newShowPassword = !prevShowPassword;
+        console.log('New showPassword state:', newShowPassword);
+        return newShowPassword;
+      });
+    };
 
     const handleSubmit = async (event) => {
     
         event.preventDefault();
-        const data = new FormData();
-        data.append('firstName', firstName);
-        data.append('lastName', lastName);
-        data.append('email', email);
-        data.append('gender', gender);
-        data.append('address', address);
-        data.append('password', password);
-        data.append('checkPassword', checkPassword);
-        data.append('date', formatDate(date));
-        data.append('nic', nic);
-        data.append('nif', nif);
-        // Print all FormData entries
-        for (const pair of data.entries()) {
-            console.log(pair[0] + ', ' + pair[1]);
+        const data1 = new FormData();
+        data1.append('first_name', first_name);
+        data1.append('last_name', last_name);
+        data1.append('email', email);
+        data1.append('adddress', adddress);
+        data1.append('password', password);
+        data1.append('birth', date);
+        data1.append('gender', gender);
+        data1.append('nic', nic);
+        data1.append('nif', nif);
+        data1.append('phone', phone);
+        
+            
+        for (const pair of data1.entries()) {
+            console.log(pair[0] + ': ' + pair[1]);
         }
         try {
             const response = await axios.post("http://localhost:3000/api/users/signup",
-             data 
-            );
+            {first_name,
+                last_name,
+                email,
+                adddress,
+                password,
+                date,
+                gender,
+                phone,
+                nic,
+                nif
+
+            });
             
-            setMessage(response.data.message);
+            console.log(response.data)
           } catch (error) {
-            console.error("Registration failed:", error.response.data.error);
-            setMessage(error.response.data.error);
+            console.error("Registration failed:", error);
+             
+             
+            if (error.response && error.response.data) {
+              setMessage(error.response.data.error); // Set the error message if present in the error response
+            } else {
+              setMessage("An unexpected error occurred. Please try again.");
+            }
           }
     };
 
@@ -120,13 +148,13 @@ export default function SignUp() {
                                 <TextField
                                     onChange={(e) => setFirstName(e.target.value)}
                                     autoComplete="given-name"
-                                    name="firstName"
+                                    name="first_name"
                                     required
                                     fullWidth
-                                    id="firstName"
+                                    id="first_name"
                                     label="First Name"
                                     autoFocus
-                                    value={firstName}
+                                    value={first_name}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
@@ -134,11 +162,11 @@ export default function SignUp() {
                                     onChange={(e) => setLastName(e.target.value)}
                                     required
                                     fullWidth
-                                    id="lastName"
+                                    id="last_name"
                                     label="Last Name"
-                                    name="lastName"
+                                    name="last_name"
                                     autoComplete="family-name"
-                                    value={lastName}
+                                    value={last_name}
                                 />
                             </Grid>
                             <Grid item xs={12}>
@@ -147,7 +175,7 @@ export default function SignUp() {
                                     required
                                     fullWidth
                                     id="email"
-                                    label="Email Address"
+                                    label="Email"
                                     name="email"
                                     autoComplete="email"
                                     value={email}
@@ -157,15 +185,29 @@ export default function SignUp() {
                                  <PasswordStrength placeholder="password" onChange={handleChange} />
                             </Grid>
                             <Grid item xs={12}>
+                            <InputF 
+                                icon={showPassword ? <LockIconOpen /> : <LockIcon />}
+                                
+                                placeholder={'Enter your Password'}  
+                                id="email"
+                                required
+                                onChange={(e) => setPassword(e.target.value)}
+                                type={showPassword ? 'text' : 'password'}
+                                value={password}
+                                name=" Repeat Password"
+                                setShowPassword={toggleShowPassword}
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
                                 <TextField
-                                    onChange={(e) => setCheckPassword(e.target.value)}
+                                    onChange={(e) => setPhone(e.target.value)}
                                     required
-                                    value={checkPassword}
+                                    value={phone}
                                     fullWidth
-                                    name="checkPassword"
-                                    label="Confirm Password"
-                                    type="password"
-                                    id="checkPassword"
+                                    name="phone"
+                                    label="Phone"
+                                    type="text"
+                                    id="phone"
                                 />
                             </Grid>
                             <Grid item xs={6}>
@@ -200,12 +242,13 @@ export default function SignUp() {
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
-                                onChange={(e) => setAddress(e.target.value)}
-                                    value={address}
+                                onChange={(e) => setAdddress(e.target.value)}
+                                    value={adddress}
                                     required
                                     fullWidth
                                     name="address"
                                     label="Your Street address"
+                                    
                                     type="text"
                                     id="address"
                                     autoComplete="Address.."

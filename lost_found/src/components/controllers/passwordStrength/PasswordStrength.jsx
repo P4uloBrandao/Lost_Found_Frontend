@@ -28,7 +28,7 @@ export const PasswordStrength = ({ placeholder, onChange }) => {
     <ThemeProvider theme={defaultTheme}>
       <TextField
         className='control'
-        type="password"
+        type="text"
         margin="normal"
         required
         fullWidth

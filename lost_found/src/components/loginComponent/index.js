@@ -190,7 +190,8 @@ const MediaQueryLoginBox = styled.div`
 
 
 export default function SignIn() {
-    const [email, setEmail] = React.useState('');
+  const [token, setToken] = React.useState('');  
+  const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [errorMessage, setErrorMessage] = useState(null); // New state for handling error messages
     // const { setToken } = useContext(AuthContext);
@@ -206,35 +207,44 @@ export default function SignIn() {
       });
     };
     const handleSubmit = async (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        data.append('email', email);
-        data.append('password', password);
-
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
+      event.preventDefault();
+  
+      const data = new FormData(event.currentTarget);
+      data.append('email', email);
+      data.append('password', password);
+  
+      console.log({
+          email: data.get('email'),
+          password: data.get('password'),
+      });
+  
+      try {
+        const response = await axios.post("http://localhost:3000/api/auth/login", data, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
         });
-        try {
-            const response = await axios.post("http://localhost:3001/api/users/login", {
-              email,
-              password,
-            });
-
-            // setToken(response.data.token);
-            // localStorage.setItem("token", response.data.token);
-            navigate("/home");
-          } catch (error) {
-            console.error("Authentication failed:", error);
-            // setToken(null);
-            // localStorage.removeItem("token");
-            if (error.response && error.response.data) {
-              setErrorMessage(error.response.data); // Set the error message if present in the error response
-            } else {
+    
+        // Process the response as needed
+        console.log(response.data);
+  
+          // setToken(response.data.token);
+          // localStorage.setItem("token", response.data.token);
+          // navigate("/home");
+     
+        } catch (error) {
+          console.error("Authentication failed:", error);
+          // setToken(null);
+          // localStorage.removeItem("token");
+          if (error.response && error.response.data) {
+              // Log the specific server-side error message
+              console.error("Server-side error:", error.response.data.error);
+              setErrorMessage(error.response.data.error); // Set the error message if present in the error response
+          } else {
               setErrorMessage("An unexpected error occurred. Please try again.");
-            }
           }
-    };
+      }
+  };
 
     return (
         <Wrapper>
