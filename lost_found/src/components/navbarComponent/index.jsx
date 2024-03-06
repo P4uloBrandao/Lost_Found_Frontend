@@ -1,233 +1,203 @@
-import * as React from 'react';
-import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import Badge from '@mui/material/Badge';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MailIcon from '@mui/icons-material/Mail';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
+import React, { useState } from 'react';
+import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, Avatar, ListSubheader, ListItemIcon, ListItemText, Popover, ListItem, List, createTheme, ThemeProvider } from '@mui/material';
+import { AccountCircle, Brightness4, Brightness7, ExpandMore } from '@mui/icons-material';
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
-  '&:hover': {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: theme.spacing(3),
-    width: 'auto',
-  },
-}));
+const Navbar = () => {
+  const [submenuAnchorLost, setSubmenuAnchorLost] = useState(null);
+  const [submenuAnchorAuctions, setSubmenuAnchorAuctions] = useState(null);
+  const [submenuAnchorProfile, setSubmenuAnchorProfile] = useState(null);
+  const [hoveredOption, setHoveredOption] = useState(null);
+  const [isAvatarClicked, setIsAvatarClicked] = useState(false);
+  const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null); 
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
+  const theme = createTheme({
+    palette: {
+      mode: isDarkTheme ? 'dark' : 'light',
     },
-  },
-}));
+    typography: {
+        fontFamily: 'Segoe UI, sans-serif',
+      },
+  });
 
-export default function PrimarySearchAppBar() {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
-
-  const isMenuOpen = Boolean(anchorEl);
-  const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-  const handleProfileMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleAvatarClick = (event) => {
+    setIsAvatarClicked(true);
+    setAnchorEl(event.currentTarget); // Set anchorEl
   };
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
+  const handleAvatarClose = () => {
+    setIsAvatarClicked(false);
   };
 
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
+  const handleSubmenuLostClick = (event) => {
+    setSubmenuAnchorLost(event.currentTarget);
   };
 
-  const handleMobileMenuOpen = (event) => {
-    setMobileMoreAnchorEl(event.currentTarget);
+  const handleSubmenuAuctionsClick = (event) => {
+    setSubmenuAnchorAuctions(event.currentTarget);
   };
 
-  const menuId = 'primary-search-account-menu';
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-    </Menu>
-  );
+  const handleSubmenuProfileClick = (event) => {
+    setSubmenuAnchorProfile(event.currentTarget);
+  };
 
-  const mobileMenuId = 'primary-search-account-menu-mobile';
-  const renderMobileMenu = (
-    <Menu
-      anchorEl={mobileMoreAnchorEl}
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      id={mobileMenuId}
-      keepMounted
-      transformOrigin={{
-        vertical: 'top',
-        horizontal: 'right',
-      }}
-      open={isMobileMenuOpen}
-      onClose={handleMobileMenuClose}
-    >
-      <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          size="large"
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
-      </MenuItem>
-    </Menu>
-  );
+  const handleSubmenuClose = () => {
+    setSubmenuAnchorLost(null);
+    setSubmenuAnchorAuctions(null);
+    setSubmenuAnchorProfile(null);
+  };
+
+  const handleThemeToggle = () => {
+    setIsDarkTheme(!isDarkTheme);
+  };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+    <ThemeProvider theme={theme}>
+      <AppBar position="static" color={isDarkTheme ? "transparent" : "transparent"}  style={{boxShadow: 'none'}}>
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ display: { xs: 'none', sm: 'block' } }}
-          >
-            MUI
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Logo
           </Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-          <Box sx={{ flexGrow: 1 }} />
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="error">
-                <MailIcon />
-              </Badge>
-            </IconButton>
+          <div>
             <IconButton
               size="large"
-              aria-label="show 17 new notifications"
+              aria-label="toggle theme"
+              onClick={handleThemeToggle}
               color="inherit"
             >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
+              {isDarkTheme ? <Brightness7 /> : <Brightness4 />}
             </IconButton>
             <IconButton
-              size="large"
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
+            size="large"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
+            onClick={handleAvatarClick} 
+            color="inherit"
             >
-              <AccountCircle />
+            <Avatar src="/avatar.jpg" alt="Avatar" sx={{ width: 32, height: 32, border: isAvatarClicked ? '2px solid black' : 'none' }} />
             </IconButton>
-          </Box>
-          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-            <IconButton
-              size="large"
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
+            <Popover
+              id="menu-appbar"
+              open={isAvatarClicked}
+              anchorEl={anchorEl}
+              onClose={handleAvatarClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+              transformOrigin={{ 
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              sx={{ '& .MuiPaper-root': { boxShadow: 'none' } }}
             >
-              <MoreIcon />
-            </IconButton>
-          </Box>
+              <List sx={{ width: 'auto' }}>
+                <ListItem
+                  button
+                  onMouseEnter={() => setHoveredOption('lost')}
+                  onMouseLeave={() => setHoveredOption(null)}
+                  onClick={handleSubmenuLostClick}
+                  sx={{
+                    backgroundColor: hoveredOption === 'lost' ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
+                    '&:hover .MuiListItemIcon-root': {
+                      visibility: 'visible',
+                    },
+                  }}
+                >
+                  <ListItemText primary="Lost" />
+                  <ExpandMore style={{ visibility: hoveredOption === 'lost' ? 'visible' : 'hidden' }} />
+                </ListItem>
+                <Menu
+                  anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                  id="submenu-lost"
+                  anchorEl={submenuAnchorLost}
+                  open={Boolean(submenuAnchorLost)}
+                  onClose={handleSubmenuClose}
+                  sx={{ '& .MuiPaper-root': { boxShadow: 'none' } }}
+                >
+                  <MenuItem onClick={handleSubmenuClose}>Register Lost Object</MenuItem>
+                  <MenuItem onClick={handleSubmenuClose}>Browse Found Objects</MenuItem>
+                  <MenuItem onClick={handleSubmenuClose}>My Lost Objects</MenuItem>
+                </Menu>
+
+                <ListItem
+                  button
+                  onMouseEnter={() => setHoveredOption('auctions')}
+                  onMouseLeave={() => setHoveredOption(null)}
+                  onClick={handleSubmenuAuctionsClick}
+                  sx={{
+                    backgroundColor: hoveredOption === 'auctions' ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
+                    '&:hover .MuiListItemIcon-root': {
+                      visibility: 'visible',
+                    },
+                  }}
+                >
+                  <ListItemText primary="Auctions" />
+                  <ExpandMore style={{ visibility: hoveredOption === 'auctions' ? 'visible' : 'hidden' }} />
+                </ListItem>
+                <Menu
+                  anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                  id="submenu-auctions"
+                  anchorEl={submenuAnchorAuctions}
+                  open={Boolean(submenuAnchorAuctions)}
+                  onClose={handleSubmenuClose}
+                  sx={{ '& .MuiPaper-root': { boxShadow: 'none' } }}
+                >
+                  <MenuItem onClick={handleSubmenuClose}>My Auctions</MenuItem>
+                  <MenuItem onClick={handleSubmenuClose}>Browse Auctions</MenuItem>
+                  <MenuItem onClick={handleSubmenuClose}>?????</MenuItem>
+                </Menu>
+
+                <ListItem
+                  button
+                  onMouseEnter={() => setHoveredOption('profile')}
+                  onMouseLeave={() => setHoveredOption(null)}
+                  onClick={handleSubmenuProfileClick}
+                  sx={{
+                    backgroundColor: hoveredOption === 'profile' ? 'rgba(0, 0, 0, 0.1)' : 'transparent',
+                    '&:hover .MuiListItemIcon-root': {
+                      visibility: 'visible',
+                    },
+                  }}
+                >
+                  <ListItemText primary="Profile settings" />
+                  <ExpandMore style={{ visibility: hoveredOption === 'profile' ? 'visible' : 'hidden' }} />
+                </ListItem>
+                <Menu
+                  anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+                  transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                  id="submenu-profile"
+                  anchorEl={submenuAnchorProfile}
+                  open={Boolean(submenuAnchorProfile)}
+                  onClose={handleSubmenuClose}
+                  sx={{ '& .MuiPaper-root': { boxShadow: 'none' } }}
+                >
+                  <MenuItem onClick={handleSubmenuClose}>Edit Profile</MenuItem>
+                  <MenuItem onClick={handleSubmenuClose}>Change Password</MenuItem>
+                  <MenuItem onClick={handleSubmenuClose}>Privacy Settings</MenuItem>
+                </Menu>
+
+                <ListItem
+                  button
+                  onClick={handleAvatarClose}
+                  sx={{
+                    '&:hover .MuiListItemIcon-root': {
+                      visibility: 'visible',
+                    },
+                  }}
+                >
+                  <ListItemText primary="Logout" />
+                </ListItem>
+              </List>
+            </Popover>
+          </div>
         </Toolbar>
       </AppBar>
-      {renderMobileMenu}
-      {renderMenu}
-    </Box>
+    </ThemeProvider>
   );
-}
+};
+
+export default Navbar;
