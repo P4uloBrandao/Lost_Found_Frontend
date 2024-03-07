@@ -29,17 +29,7 @@ const colors = css`
   --second-color: #ffffff;
   --black-color: #000000;
 `;
-const blink = keyframes`
-  0% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-`;
+
 
 const Wrapper = styled.div`
   width: 100%;

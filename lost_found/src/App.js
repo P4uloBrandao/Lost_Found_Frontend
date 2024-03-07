@@ -6,6 +6,7 @@ import ProfileSettings from './components/profileSettings/index';
 import ChangePassword from './components/changePassword/index';
 import Navbar from './components/navbarComponent/index'
 import styled from 'styled-components';
+import Esquadras from './components/esquadra/index'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 const LayoutContainer = styled.div`
@@ -25,6 +26,8 @@ function App() {
       <GlobalStyles>
         <Router>
           <Routes>
+          <Route path="/esquadras" element={<Esquadras />} />
+
             <Route path="/profileSettings" element={<ProfileSettings />} />
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<LoginPage />} />

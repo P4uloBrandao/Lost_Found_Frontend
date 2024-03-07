@@ -1,10 +1,12 @@
 import * as React from 'react';
 import  { useState } from "react";
+import styled, { keyframes, css} from 'styled-components';
+import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
+import TextField from '@mui/material/TextField'; 
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import MenuItem from "@mui/material/MenuItem";
@@ -24,6 +26,106 @@ import axios from "axios";
 import {PasswordStrength} from '../controllers/index'
 import InputF  from '../inputFieldComponent/InputField';
 // TODO remove, this demo shouldn't need to reset the theme.
+const colors = css`
+  --primary-color: #c6c3c3;
+  --second-color: #ffffff;
+  --black-color: #000000;
+`;
+const Wrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: rgba(0, 0, 0, 0.2);
+  background-image : url("../../assets/background/bg-photo.jpg")
+`;
+const FormBox = styled.div`
+${colors}
+  position: relative;
+  width: 450px;
+  backdrop-filter: blur(25px);
+  border: 2px solid var(--primary-color);
+  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  padding: 7.5em 2.5em 4em 2.5em;
+  color: var(--second-color);
+`;
+const FormHeader = styled.div`
+  ${colors} 
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--primary-color);
+  width: 140px;
+  height: 70px;
+  border-radius: 0 0 20px 20px;
+
+  &:before,
+  &:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 30px;
+    height: 30px;
+    background: transparent;
+  }
+
+  &:before {
+    left: -30px;
+    border-top-right-radius: 50%;
+    box-shadow: 15px 0 0 0 var(--primary-color);
+  }
+
+  &:after {
+    right: -30px;
+    border-top-left-radius: 50%;
+    box-shadow: -15px 0 0 0 var(--primary-color);
+  }
+`;
+const InputSubmit = styled.button`
+${colors}  
+width: 100%;
+  height: 50px;
+  background: #c6c3c3;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.3s;
+
+  &:hover {
+    background: var(--second-color);
+  }
+`;
+const Register = styled.div`
+  text-align: center;
+`;
+
+const RegisterLink = styled.a`
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--second-color);
+  &:hover {
+    text-decoration: underline;
+`;
+const FormHeaderText = styled.span`
+${colors}
+font-size: 30px;
+  color: var(--black-color);
+`;
+const InputBox = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0;
+`;
+
 const genders = [
     {
       value: 'male',
@@ -122,186 +224,347 @@ export default function SignUp() {
     };
 
     return (
-        <ThemeProvider theme={defaultTheme}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <Container  component="main" maxWidth="xs"  background-color= '#ededf9'>
-                <CssBaseline />
-                <Box
-                    sx={{
+        <Wrapper>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+
+        <FormBox>
+      <FormHeader>
+        <FormHeaderText>Sign Up</FormHeaderText>
+      </FormHeader>
+      <form onSubmit={handleSubmit} >
+      <InputBox>
+        <InputF 
+        icon={<PersonOutlineRoundedIcon />} 
+        type={'text'} 
+        placeholder={'Enter your first name'}  
+        id="first_name"
+        required
+        onChange={(e) => setFirstName(e.target.value)}
+        name="First Name"
+        value={first_name}
+        />
+        </InputBox>
+        <InputBox>
+        <InputF 
+        icon={<PersonOutlineRoundedIcon />} 
+        type={'text'} 
+        placeholder={'Enter your last name'}  
+        id="last_name"
+        required
+        onChange={(e) => setLastName(e.target.value)}
+        name="Last Name"
+        value={last_name}
+        />
+        </InputBox>
+        <InputBox>
+        <InputF 
+        icon={<PersonOutlineRoundedIcon />} 
+        type={'text'} 
+        placeholder={'Enter your Email'}  
+        id="email"
+        required
+        onChange={(e) => setEmail(e.target.value)}
+        value={email}
+        name="Email"/>
+          
+          
+        
+        </InputBox>
+       
+        <InputBox>
+        <InputF 
+        icon={showPassword ? <LockIconOpen /> : <LockIcon />}
+        
+        placeholder={'Enter your Password'}  
+        id="email"
+        required
+        onChange={(e) => setPassword(e.target.value)}
+        type={showPassword ? 'text' : 'password'}
+        value={password}
+        name="Password"
+        setShowPassword={toggleShowPassword}
+        />
+        </InputBox>
+        <InputBox>
+        <InputF 
+        icon={<PersonOutlineRoundedIcon />} 
+        type={'number'} 
+        placeholder={'Enter your phone number'}  
+        id="phone"
+        required
+        onChange={(e) => setPhone(e.target.value)}
+        value={phone}
+        name="Phone"/>
+          
+        </InputBox>
+        <InputBox>
+        <InputF 
+        icon={<PersonOutlineRoundedIcon />} 
+        type={'text'} 
+        select
+        placeholder={'Enter your Gender'}  
+        id="email"
+        required
+        onChange={(e) => setGender(e.target.value)}
+        value={gender}
+        name="Gender"/>
+        {genders.map((option) => (
+            <MenuItem key={option.value} value={option.value}>
+            {option.label}
+            </MenuItem>
+        ))}
+          
+          
+        
+        </InputBox>
+        <InputBox><DatePicker  
+            selected={date}
+            onChange={(date) => {
+            const formattedDate = formatDate(date);
+            setDate(formattedDate);
+            }}
+            id="date"
+            name="date"
+            label="Birthday"
+            />
+            </InputBox>
+
+            <InputBox>
+        <InputF 
+        icon={<PersonOutlineRoundedIcon />} 
+        type={'text'} 
+        placeholder={'Enter your Address'}  
+        id="address"
+        required
+        onChange={(e) => setAdddress(e.target.value)}
+        value={adddress}
+        name="Address"/>
+          
+          
+        
+        </InputBox>
+
+        <InputBox>
+        <InputF 
+        icon={<PersonOutlineRoundedIcon />} 
+        type={'number'} 
+        placeholder={'Enter your NIF'}  
+        id="nif"
+        required
+        onChange={(e) => setNif(e.target.value)}
+        value={nif}
+        name="Nif"/>
+          
+          
+        
+        </InputBox>
+
+        <InputBox>
+        <InputF 
+        icon={<PersonOutlineRoundedIcon />} 
+        type={'number'} 
+        placeholder={'Enter your NIC'}  
+        id="nic"
+        required
+        onChange={(e) => setNic(e.target.value)}
+        value={nic}
+        name="Nic"/>
+          
+        
+        </InputBox>
+        <InputBox>
+          <InputSubmit type="submit" className="input-submit" value="Register" label="Register">Submit</InputSubmit>
+        </InputBox>
+        <Register>
+          <span>
+            
+            <RegisterLink href="./login">  I already have an account.  </RegisterLink>
+          </span>
+        </Register>
+      </form>
+      </FormBox>
+      </LocalizationProvider>
+      </Wrapper>
+//         <ThemeProvider theme={defaultTheme}>
+//             <LocalizationProvider dateAdapter={AdapterDayjs}>
+//             <Container  component="main" maxWidth="xs"  background-color= '#ededf9'>
+//                 <CssBaseline />
+//                 <Box
+//                     sx={{
                         
-                        borderRadius: '10px',
-                        marginTop: 8,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign up
-                    </Typography>
-                    <Box className='cada' component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    onChange={(e) => setFirstName(e.target.value)}
-                                    autoComplete="given-name"
-                                    name="first_name"
-                                    required
-                                    fullWidth
-                                    id="first_name"
-                                    label="First Name"
-                                    autoFocus
-                                    value={first_name}
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    onChange={(e) => setLastName(e.target.value)}
-                                    required
-                                    fullWidth
-                                    id="last_name"
-                                    label="Last Name"
-                                    name="last_name"
-                                    autoComplete="family-name"
-                                    value={last_name}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label="Email"
-                                    name="email"
-                                    autoComplete="email"
-                                    value={email}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                 <PasswordStrength placeholder="password" onChange={handleChange} />
-                            </Grid>
-                            <Grid item xs={12}>
-                            <InputF 
-                                icon={showPassword ? <LockIconOpen /> : <LockIcon />}
+//                         borderRadius: '10px',
+//                         marginTop: 8,
+//                         display: 'flex',
+//                         flexDirection: 'column',
+//                         alignItems: 'center',
+//                     }}
+//                 >
+//                     <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+//                         <LockOutlinedIcon />
+//                     </Avatar>
+//                     <Typography component="h1" variant="h5">
+//                         Sign up
+//                     </Typography>
+//                     <Box className='cada' component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+//                         <Grid container spacing={2}>
+//                             <Grid item xs={12} sm={6}>
+//                                 <TextField
+//                                     onChange={(e) => setFirstName(e.target.value)}
+//                                     autoComplete="given-name"
+//                                     name="first_name"
+//                                     required
+//                                     fullWidth
+//                                     id="first_name"
+//                                     label="First Name"
+//                                     autoFocus
+//                                     value={first_name}
+//                                 />
+//                             </Grid>
+//                             <Grid item xs={12} sm={6}>
+//                                 <TextField
+//                                     onChange={(e) => setLastName(e.target.value)}
+//                                     required
+//                                     fullWidth
+//                                     id="last_name"
+//                                     label="Last Name"
+//                                     name="last_name"
+//                                     autoComplete="family-name"
+//                                     value={last_name}
+//                                 />
+//                             </Grid>
+//                             <Grid item xs={12}>
+//                                 <TextField
+//                                     onChange={(e) => setEmail(e.target.value)}
+//                                     required
+//                                     fullWidth
+//                                     id="email"
+//                                     label="Email"
+//                                     name="email"
+//                                     autoComplete="email"
+//                                     value={email}
+//                                 />
+//                             </Grid>
+//                             <Grid item xs={12}>
+//                                  <PasswordStrength placeholder="password" onChange={handleChange} />
+//                             </Grid>
+//                             <Grid item xs={12}>
+//                             <InputF 
+//                                 icon={showPassword ? <LockIconOpen /> : <LockIcon />}
                                 
-                                placeholder={'Enter your Password'}  
-                                id="email"
-                                required
-                                onChange={(e) => setPassword(e.target.value)}
-                                type={showPassword ? 'text' : 'password'}
-                                value={password}
-                                name=" Repeat Password"
-                                setShowPassword={toggleShowPassword}
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    onChange={(e) => setPhone(e.target.value)}
-                                    required
-                                    value={phone}
-                                    fullWidth
-                                    name="phone"
-                                    label="Phone"
-                                    type="text"
-                                    id="phone"
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                onChange={(e) => setGender(e.target.value)}
-                                id="gender"
-                                name="gender"
-                                select
-                                label="Your Gender"
-                                value={gender}
-                                helperText="Please select your category "
-                                >
-                                {genders.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                    </MenuItem>
-                                ))}
-                                </TextField>
-                            </Grid>
-                            <Grid item xs={6}>
-                            <DatePicker  
-                                selected={date}
-                                onChange={(date) => {
-  const formattedDate = formatDate(date);
-  setDate(formattedDate);
-}}
-                                id="date"
-                                name="date"
-                                label="Birthday"
-                                />
+//                                 placeholder={'Enter your Password'}  
+//                                 id="email"
+//                                 required
+//                                 onChange={(e) => setPassword(e.target.value)}
+//                                 type={showPassword ? 'text' : 'password'}
+//                                 value={password}
+//                                 name=" Repeat Password"
+//                                 setShowPassword={toggleShowPassword}
+//                                 />
+//                             </Grid>
+//                             <Grid item xs={12}>
+//                                 <TextField
+//                                     onChange={(e) => setPhone(e.target.value)}
+//                                     required
+//                                     value={phone}
+//                                     fullWidth
+//                                     name="phone"
+//                                     label="Phone"
+//                                     type="text"
+//                                     id="phone"
+//                                 />
+//                             </Grid>
+//                             <Grid item xs={6}>
+//                                 <TextField
+//                                 onChange={(e) => setGender(e.target.value)}
+//                                 id="gender"
+//                                 name="gender"
+//                                 select
+//                                 label="Your Gender"
+//                                 value={gender}
+//                                 helperText="Please select your category "
+//                                 >
+//                                 {genders.map((option) => (
+//                                     <MenuItem key={option.value} value={option.value}>
+//                                     {option.label}
+//                                     </MenuItem>
+//                                 ))}
+//                                 </TextField>
+//                             </Grid>
+//                             <Grid item xs={6}>
+//                             <DatePicker  
+//                                 selected={date}
+//                                 onChange={(date) => {
+//   const formattedDate = formatDate(date);
+//   setDate(formattedDate);
+// }}
+//                                 id="date"
+//                                 name="date"
+//                                 label="Birthday"
+//                                 />
 
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                onChange={(e) => setAdddress(e.target.value)}
-                                    value={adddress}
-                                    required
-                                    fullWidth
-                                    name="address"
-                                    label="Your Street address"
+//                             </Grid>
+//                             <Grid item xs={12}>
+//                                 <TextField
+//                                 onChange={(e) => setAdddress(e.target.value)}
+//                                     value={adddress}
+//                                     required
+//                                     fullWidth
+//                                     name="address"
+//                                     label="Your Street address"
                                     
-                                    type="text"
-                                    id="address"
-                                    autoComplete="Address.."
-                                />
-                            </Grid>
-                            <Grid item xs={6}>
-                                <TextField
-                                onChange={(e) => setNif(e.target.value)}
-                                    value={nif}
-                                    required
-                                    fullWidthS
-                                    name="NIF"
-                                    label="Your NIF"
-                                    type="text"
-                                    id="nif"
-                                    autoComplete="Adress.."
-                                />
-                            </Grid><Grid item xs={6}>
-                                <TextField
-                                    onChange={(e) => setNic(e.target.value)}
-                                    value={nic}
-                                    required
-                                    fullWidth
-                                    name="NICS"
-                                    label="Your NIC"
-                                    type="text"
-                                    id="nic"
-                                    autoComplete="Adress.."
-                                />
-                            </Grid>
-                        </Grid>
-                        {message && <div style={{ color: "red" }}>{message}</div>}
+//                                     type="text"
+//                                     id="address"
+//                                     autoComplete="Address.."
+//                                 />
+//                             </Grid>
+//                             <Grid item xs={6}>
+//                                 <TextField
+//                                 onChange={(e) => setNif(e.target.value)}
+//                                     value={nif}
+//                                     required
+//                                     fullWidthS
+//                                     name="NIF"
+//                                     label="Your NIF"
+//                                     type="text"
+//                                     id="nif"
+//                                     autoComplete="Adress.."
+//                                 />
+//                             </Grid><Grid item xs={6}>
+//                                 <TextField
+//                                     onChange={(e) => setNic(e.target.value)}
+//                                     value={nic}
+//                                     required
+//                                     fullWidth
+//                                     name="NICS"
+//                                     label="Your NIC"
+//                                     type="text"
+//                                     id="nic"
+//                                     autoComplete="Adress.."
+//                                 />
+//                             </Grid>
+//                         </Grid>
+//                         {message && <div style={{ color: "red" }}>{message}</div>}
 
-                        <Button
-                            onClick={handleSubmit}
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                        >
-                            Sign Up
-                        </Button>
-                        <Grid container justifyContent="flex-end">
-                            <Grid item>
-                                <Link href="/login" variant="body2">
-                                    Already have an account? Sign in
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Box>
+//                         <Button
+//                             onClick={handleSubmit}
+//                             fullWidth
+//                             variant="contained"
+//                             sx={{ mt: 3, mb: 2 }}
+//                         >
+//                             Sign Up
+//                         </Button>
+//                         <Grid container justifyContent="flex-end">
+//                             <Grid item>
+//                                 <Link href="/login" variant="body2">
+//                                     Already have an account? Sign in
+//                                 </Link>
+//                             </Grid>
+//                         </Grid>
+//                     </Box>
+//                 </Box>
                 
-            </Container>
-            </LocalizationProvider>
-        </ThemeProvider>
+//             </Container>
+//             </LocalizationProvider>
+//         </ThemeProvider>
     );
 }
