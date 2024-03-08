@@ -15,58 +15,23 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AuthContext } from "../AuthContext";
 import axios from "axios";
 import { useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom"; 
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
-export default function SignIn() {
-    
-
-    
-
-    
-
-    return (
-        <ThemeProvider theme={defaultTheme}>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <Box
-                    sx={{
-                        marginTop: 8,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Home
-                    </Typography>
-                    <Button
-                            fullWidth
-                            href='/login'
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                        >
-                            Log In
-                        </Button>
-                        <Button
-                            fullWidth
-                            href='/signup'
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                        >
-                            Sign up
-                        </Button>
-                        
-                        
-                    
-                </Box>
-            </Container>
-        </ThemeProvider>
-    );
-}
+function Home() {
+    const { token, loading } = useContext(AuthContext);
+    if (loading) {
+      return null;
+    }
+  
+    if (!token) {
+      return <Navigate to="/login" replace />;
+    }
+  
+    return <h1>Home: Protected Content Here</h1>;
+  }
+  
+  export default Home;

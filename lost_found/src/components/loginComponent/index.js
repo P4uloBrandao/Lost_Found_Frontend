@@ -180,11 +180,10 @@ const MediaQueryLoginBox = styled.div`
 
 
 export default function SignIn() {
-  const [token, setToken] = React.useState('');  
   const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [errorMessage, setErrorMessage] = useState(null); // New state for handling error messages
-    // const { setToken } = useContext(AuthContext);
+    const { setToken } = useContext(AuthContext);
     const defaultTheme = createTheme();
     const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
 
@@ -209,23 +208,19 @@ export default function SignIn() {
       });
   
       try {
-        const response = await axios.post("http://localhost:3000/api/auth/login", data, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
+        const response = await axios.post("http://localhost:3000/api/auth/login", {email,password});
     
         // Process the response as needed
         console.log(response.data);
   
-          // setToken(response.data.token);
-          // localStorage.setItem("token", response.data.token);
-          // navigate("/home");
+           setToken(response.data.token);
+           localStorage.setItem("token", response.data.token);
+           navigate("/home");
      
         } catch (error) {
           console.error("Authentication failed:", error);
-          // setToken(null);
-          // localStorage.removeItem("token");
+           setToken(null);
+           localStorage.removeItem("token");
           if (error.response && error.response.data) {
               // Log the specific server-side error message
               console.error("Server-side error:", error.response.data.error);
@@ -242,6 +237,8 @@ export default function SignIn() {
       <LoginHeader>
         <LoginHeaderText>Login</LoginHeaderText>
       </LoginHeader>
+      {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}{" "}
+
       <form onSubmit={handleSubmit} >
         <InputBox>
         <InputF 
@@ -262,7 +259,7 @@ export default function SignIn() {
         icon={showPassword ? <LockIconOpen /> : <LockIcon />}
         
         placeholder={'Enter your Password'}  
-        id="email"
+        id="password"
         required
         onChange={(e) => setPassword(e.target.value)}
         type={showPassword ? 'text' : 'password'}
