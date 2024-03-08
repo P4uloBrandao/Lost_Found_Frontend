@@ -8,6 +8,7 @@ import Navbar from './components/navbarComponent/index'
 import styled from 'styled-components';
 import Esquadras from './components/esquadra/index'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import './index.css';
 
 const LayoutContainer = styled.div`
   /* Add any layout-related styles here */
