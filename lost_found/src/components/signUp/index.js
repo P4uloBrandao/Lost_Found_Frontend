@@ -31,17 +31,18 @@ const colors = css`
   --black-color: #000000;
 `;
 const Wrapper = styled.div`
+  padding: 50px 0;
   width: 100%;
-  
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   background-color: rgba(0, 0, 0, 0.2);
-  background-image : url("../../assets/background/bg-photo.jpg")
+  background-image : url("../../assets/background/bg-photo.jpg");
 `;
+
 const FormBox = styled.div`
-${colors}
+${colors};
   position: relative;
   max-width: 450px;
   width: 65%;

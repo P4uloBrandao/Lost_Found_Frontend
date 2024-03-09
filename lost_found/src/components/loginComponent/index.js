@@ -42,7 +42,7 @@ const Wrapper = styled.div`
 `;
 
 const LoginBox = styled.div`
-${colors}
+${colors};
   position: relative;
   width: 450px;
   backdrop-filter: blur(25px);
