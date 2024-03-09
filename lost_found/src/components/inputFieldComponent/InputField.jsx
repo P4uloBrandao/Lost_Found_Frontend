@@ -40,6 +40,14 @@ const InputField = styled.input`
     padding: 0 10px;
     transition: 0.2s;
   }
+  ${({ type }) =>
+    type === 'date' &&
+    css`
+      &::-webkit-calendar-picker-indicator {
+        display: none;
+        -webkit-appearance: none;
+      }
+    `}
 `;
 
 const Label = styled.label`

@@ -2,26 +2,25 @@ import * as React from 'react';
 import  { useState } from "react";
 import styled, { keyframes, css} from 'styled-components';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
+import { Avatar , Button } from '@mui/material';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField'; 
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import MenuItem from "@mui/material/MenuItem";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import Link from '@mui/material/Link';
+
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
+
+
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import LockIcon from '@mui/icons-material/Lock';
 import LockIconOpen from '@mui/icons-material/LockOpenRounded';
+import CalendarIcon from '@mui/icons-material/CalendarMonthRounded';
+import MailIcon from '@mui/icons-material/MailOutlineRounded';
+import PhoneIcon from '@mui/icons-material/PhoneAndroidRounded';
+import AddressIcon from '@mui/icons-material/HomeRounded';
+import HomeIcon from '@mui/icons-material/HomeRounded';
+
 import axios from "axios";
 import {PasswordStrength} from '../controllers/index'
 import InputF  from '../inputFieldComponent/InputField';
@@ -33,6 +32,7 @@ const colors = css`
 `;
 const Wrapper = styled.div`
   width: 100%;
+  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -43,12 +43,13 @@ const Wrapper = styled.div`
 const FormBox = styled.div`
 ${colors}
   position: relative;
-  width: 450px;
-  backdrop-filter: blur(25px);
+  max-width: 450px;
+  width: 65%;
+    backdrop-filter: blur(25px);
   border: 2px solid var(--primary-color);
   box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
   border-radius: 15px;
-  padding: 7.5em 2.5em 4em 2.5em;
+  padding: 7.5em 3em 3em 2.5em;
   color: var(--second-color);
 `;
 const FormHeader = styled.div`
@@ -90,7 +91,7 @@ const FormHeader = styled.div`
 const InputSubmit = styled.button`
 ${colors}  
 width: 100%;
-  height: 50px;
+  height: 40px;
   background: #c6c3c3;
   font-size: 16px;
   font-weight: 500;
@@ -120,12 +121,24 @@ font-size: 30px;
   color: var(--black-color);
 `;
 const InputBox = styled.div`
+
   position: relative;
   display: flex;
   flex-direction: column;
   margin: 20px 0;
+  
 `;
-
+const Form = styled.form`
+  display: grid;
+  gap: 20px;
+`;
+const Formbox = styled.div`
+borderRadius: '10px',
+marginTop: 8,
+display: 'flex',
+flexDirection: 'column',
+alignItems: 'center',
+`;
 const genders = [
     {
       value: 'male',
@@ -152,7 +165,7 @@ export default function SignUp() {
     const [adddress, setAdddress] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [checkPassword, setCheckPassword] = React.useState('');
-    const [date, setDate] = React.useState('');
+    const [birth, setBirth] = React.useState('');
     const [nic, setNic] = React.useState('');
     const [nif, setNif] = React.useState('');
     const [message, setMessage] = useState("");
@@ -185,7 +198,7 @@ export default function SignUp() {
         data1.append('email', email);
         data1.append('adddress', adddress);
         data1.append('password', password);
-        data1.append('birth', date);
+        data1.append('birth', birth);
         data1.append('gender', gender);
         data1.append('nic', nic);
         data1.append('nif', nif);
@@ -197,12 +210,12 @@ export default function SignUp() {
         }
         try {
             const response = await axios.post("http://localhost:3000/api/users/signup",
-            {first_name,
+            {   first_name,
                 last_name,
                 email,
                 adddress,
                 password,
-                date,
+                birth,
                 gender,
                 phone,
                 nic,
@@ -231,8 +244,11 @@ export default function SignUp() {
       <FormHeader>
         <FormHeaderText>Sign Up</FormHeaderText>
       </FormHeader>
-      <form onSubmit={handleSubmit} >
-      <InputBox>
+        
+      <Form  onSubmit={handleSubmit} >
+        <Grid  spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <InputBox >
         <InputF 
         icon={<PersonOutlineRoundedIcon />} 
         type={'text'} 
@@ -244,7 +260,9 @@ export default function SignUp() {
         value={first_name}
         />
         </InputBox>
-        <InputBox>
+        </Grid>
+        <Grid item xs={12} sm={6}> 
+          <InputBox>
         <InputF 
         icon={<PersonOutlineRoundedIcon />} 
         type={'text'} 
@@ -256,9 +274,11 @@ export default function SignUp() {
         value={last_name}
         />
         </InputBox>
+        </Grid>
+        <Grid item xs={12} >
         <InputBox>
         <InputF 
-        icon={<PersonOutlineRoundedIcon />} 
+        icon={<MailIcon />} 
         type={'text'} 
         placeholder={'Enter your Email'}  
         id="email"
@@ -266,16 +286,17 @@ export default function SignUp() {
         onChange={(e) => setEmail(e.target.value)}
         value={email}
         name="Email"/>
-          
-          
-        
         </InputBox>
-       
+        </Grid>
+        <Grid item xs={12}>
+           <PasswordStrength placeholder="password" onChange={handleChange} />
+             </Grid>
+        <Grid item xs={12}>
         <InputBox>
         <InputF 
         icon={showPassword ? <LockIconOpen /> : <LockIcon />}
         
-        placeholder={'Enter your Password'}  
+        placeholder={'Repeat your Password'}  
         id="email"
         required
         onChange={(e) => setPassword(e.target.value)}
@@ -285,9 +306,11 @@ export default function SignUp() {
         setShowPassword={toggleShowPassword}
         />
         </InputBox>
+        </Grid>
+        <Grid item xs={12} sm={6}>
         <InputBox>
         <InputF 
-        icon={<PersonOutlineRoundedIcon />} 
+        icon={<PhoneIcon />} 
         type={'number'} 
         placeholder={'Enter your phone number'}  
         id="phone"
@@ -297,41 +320,26 @@ export default function SignUp() {
         name="Phone"/>
           
         </InputBox>
+        </Grid>
+        <Grid item xs={12} sm={6}>
         <InputBox>
         <InputF 
-        icon={<PersonOutlineRoundedIcon />} 
-        type={'text'} 
-        select
-        placeholder={'Enter your Gender'}  
-        id="email"
+        icon={<MailIcon />} 
+        type={'date'} 
+        placeholder={'Enter birthday'}  
+        id="birthday"
         required
-        onChange={(e) => setGender(e.target.value)}
-        value={gender}
-        name="Gender"/>
-        {genders.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-            {option.label}
-            </MenuItem>
-        ))}
-          
-          
-        
-        </InputBox>
-        <InputBox><DatePicker  
-            selected={date}
-            onChange={(date) => {
-            const formattedDate = formatDate(date);
-            setDate(formattedDate);
-            }}
-            id="date"
-            name="date"
-            label="Birthday"
-            />
-            </InputBox>
+        onChange={(e) => setBirth(e.target.value)}
+        value={birth}
+        name="Birthday"/>
 
+ 
+        </InputBox>
+        </Grid>
+        <Grid item xs={12} >
             <InputBox>
         <InputF 
-        icon={<PersonOutlineRoundedIcon />} 
+        icon={<AddressIcon />} 
         type={'text'} 
         placeholder={'Enter your Address'}  
         id="address"
@@ -342,11 +350,11 @@ export default function SignUp() {
           
           
         
-        </InputBox>
-
+         </InputBox>
+        </Grid>
+        <Grid item xs={12} sm={6}>
         <InputBox>
         <InputF 
-        icon={<PersonOutlineRoundedIcon />} 
         type={'number'} 
         placeholder={'Enter your NIF'}  
         id="nif"
@@ -358,10 +366,10 @@ export default function SignUp() {
           
         
         </InputBox>
-
+        </Grid>
+        <Grid item xs={12} sm={6}>
         <InputBox>
         <InputF 
-        icon={<PersonOutlineRoundedIcon />} 
         type={'number'} 
         placeholder={'Enter your NIC'}  
         id="nic"
@@ -372,6 +380,9 @@ export default function SignUp() {
           
         
         </InputBox>
+        </Grid>
+
+
         <InputBox>
           <InputSubmit type="submit" className="input-submit" value="Register" label="Register">Submit</InputSubmit>
         </InputBox>
@@ -381,190 +392,11 @@ export default function SignUp() {
             <RegisterLink href="./login">  I already have an account.  </RegisterLink>
           </span>
         </Register>
-      </form>
+        </Grid>
+      </Form>
       </FormBox>
       </LocalizationProvider>
       </Wrapper>
-//         <ThemeProvider theme={defaultTheme}>
-//             <LocalizationProvider dateAdapter={AdapterDayjs}>
-//             <Container  component="main" maxWidth="xs"  background-color= '#ededf9'>
-//                 <CssBaseline />
-//                 <Box
-//                     sx={{
-                        
-//                         borderRadius: '10px',
-//                         marginTop: 8,
-//                         display: 'flex',
-//                         flexDirection: 'column',
-//                         alignItems: 'center',
-//                     }}
-//                 >
-//                     <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-//                         <LockOutlinedIcon />
-//                     </Avatar>
-//                     <Typography component="h1" variant="h5">
-//                         Sign up
-//                     </Typography>
-//                     <Box className='cada' component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-//                         <Grid container spacing={2}>
-//                             <Grid item xs={12} sm={6}>
-//                                 <TextField
-//                                     onChange={(e) => setFirstName(e.target.value)}
-//                                     autoComplete="given-name"
-//                                     name="first_name"
-//                                     required
-//                                     fullWidth
-//                                     id="first_name"
-//                                     label="First Name"
-//                                     autoFocus
-//                                     value={first_name}
-//                                 />
-//                             </Grid>
-//                             <Grid item xs={12} sm={6}>
-//                                 <TextField
-//                                     onChange={(e) => setLastName(e.target.value)}
-//                                     required
-//                                     fullWidth
-//                                     id="last_name"
-//                                     label="Last Name"
-//                                     name="last_name"
-//                                     autoComplete="family-name"
-//                                     value={last_name}
-//                                 />
-//                             </Grid>
-//                             <Grid item xs={12}>
-//                                 <TextField
-//                                     onChange={(e) => setEmail(e.target.value)}
-//                                     required
-//                                     fullWidth
-//                                     id="email"
-//                                     label="Email"
-//                                     name="email"
-//                                     autoComplete="email"
-//                                     value={email}
-//                                 />
-//                             </Grid>
-//                             <Grid item xs={12}>
-//                                  <PasswordStrength placeholder="password" onChange={handleChange} />
-//                             </Grid>
-//                             <Grid item xs={12}>
-//                             <InputF 
-//                                 icon={showPassword ? <LockIconOpen /> : <LockIcon />}
-                                
-//                                 placeholder={'Enter your Password'}  
-//                                 id="email"
-//                                 required
-//                                 onChange={(e) => setPassword(e.target.value)}
-//                                 type={showPassword ? 'text' : 'password'}
-//                                 value={password}
-//                                 name=" Repeat Password"
-//                                 setShowPassword={toggleShowPassword}
-//                                 />
-//                             </Grid>
-//                             <Grid item xs={12}>
-//                                 <TextField
-//                                     onChange={(e) => setPhone(e.target.value)}
-//                                     required
-//                                     value={phone}
-//                                     fullWidth
-//                                     name="phone"
-//                                     label="Phone"
-//                                     type="text"
-//                                     id="phone"
-//                                 />
-//                             </Grid>
-//                             <Grid item xs={6}>
-//                                 <TextField
-//                                 onChange={(e) => setGender(e.target.value)}
-//                                 id="gender"
-//                                 name="gender"
-//                                 select
-//                                 label="Your Gender"
-//                                 value={gender}
-//                                 helperText="Please select your category "
-//                                 >
-//                                 {genders.map((option) => (
-//                                     <MenuItem key={option.value} value={option.value}>
-//                                     {option.label}
-//                                     </MenuItem>
-//                                 ))}
-//                                 </TextField>
-//                             </Grid>
-//                             <Grid item xs={6}>
-//                             <DatePicker  
-//                                 selected={date}
-//                                 onChange={(date) => {
-//   const formattedDate = formatDate(date);
-//   setDate(formattedDate);
-// }}
-//                                 id="date"
-//                                 name="date"
-//                                 label="Birthday"
-//                                 />
 
-//                             </Grid>
-//                             <Grid item xs={12}>
-//                                 <TextField
-//                                 onChange={(e) => setAdddress(e.target.value)}
-//                                     value={adddress}
-//                                     required
-//                                     fullWidth
-//                                     name="address"
-//                                     label="Your Street address"
-                                    
-//                                     type="text"
-//                                     id="address"
-//                                     autoComplete="Address.."
-//                                 />
-//                             </Grid>
-//                             <Grid item xs={6}>
-//                                 <TextField
-//                                 onChange={(e) => setNif(e.target.value)}
-//                                     value={nif}
-//                                     required
-//                                     fullWidthS
-//                                     name="NIF"
-//                                     label="Your NIF"
-//                                     type="text"
-//                                     id="nif"
-//                                     autoComplete="Adress.."
-//                                 />
-//                             </Grid><Grid item xs={6}>
-//                                 <TextField
-//                                     onChange={(e) => setNic(e.target.value)}
-//                                     value={nic}
-//                                     required
-//                                     fullWidth
-//                                     name="NICS"
-//                                     label="Your NIC"
-//                                     type="text"
-//                                     id="nic"
-//                                     autoComplete="Adress.."
-//                                 />
-//                             </Grid>
-//                         </Grid>
-//                         {message && <div style={{ color: "red" }}>{message}</div>}
-
-//                         <Button
-//                             onClick={handleSubmit}
-//                             fullWidth
-//                             variant="contained"
-//                             sx={{ mt: 3, mb: 2 }}
-//                         >
-//                             Sign Up
-//                         </Button>
-//                         <Grid container justifyContent="flex-end">
-//                             <Grid item>
-//                                 <Link href="/login" variant="body2">
-//                                     Already have an account? Sign in
-//                                 </Link>
-//                             </Grid>
-//                         </Grid>
-//                     </Box>
-//                 </Box>
-                
-//             </Container>
-//             </LocalizationProvider>
-//         </ThemeProvider>
     );
 }

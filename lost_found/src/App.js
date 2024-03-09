@@ -30,14 +30,13 @@ function App() {
         <Navbar />
         <Router>
           <Routes>
-          <Route path="/esquadras" element={<ProtectedRoute><Esquadras /></ProtectedRoute>} />
+          <Route path="/esquadras" element={<ProtectedRoute><Esquadras/></ProtectedRoute>}/>
             <Route path="/" element={<Home />} />
-            <Route path="/profileSettings" element={<ProtectedRoute><ProfileSettings /></ProtectedRoute>} />
+            <Route path="/profileSettings" element={<ProtectedRoute><ProfileSettings /></ProtectedRoute>}/>
             <Route path="/home" element={<Home />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<Signup />} />
-            <Route path="/changePassword" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>} />
-            
+            <Route path="/changePassword" element={<ProtectedRoute><ChangePassword /></ProtectedRoute>}/>
           </Routes>
         </Router>
         </AuthProvider>
