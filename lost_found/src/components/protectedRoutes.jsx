@@ -1,17 +1,24 @@
-import { Navigate } from "react-router-dom";
-import { AuthProvider } from "./AuthContext";
+import React from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { AuthContext } from "./AuthContext";
 
-export const ProtectedRoute = ({ children }) => {
-  const { auth, is2FAVerified } = AuthProvider();
-
+const ProtectedRoute = ({ children }) => {
+  
+  const storedToken = localStorage.getItem("token");
+  let auth = false;
+  if (storedToken) {
+    auth = true
+    
+    
+  } else {
+    auth = false
+  }
   if (!auth) {
     return <Navigate to="/login" />;
   }
-  if (!is2FAVerified) {
-    return <Navigate to="/verify-2fa" />;
-  }
+  
 
-  return children;
+  return <>{children}</>; // Ensure that children are rendered here
 };
 
 export default ProtectedRoute;

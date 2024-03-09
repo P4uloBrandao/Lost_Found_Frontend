@@ -183,7 +183,8 @@ export default function SignIn() {
   const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [errorMessage, setErrorMessage] = useState(null); // New state for handling error messages
-    const { setToken } = useContext(AuthContext);
+    const { setToken, setAuth } = useContext(AuthContext);
+
     const defaultTheme = createTheme();
     const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
 
@@ -211,10 +212,11 @@ export default function SignIn() {
         const response = await axios.post("http://localhost:3000/api/auth/login", {email,password});
     
         // Process the response as needed
-        console.log(response.data);
-  
-           setToken(response.data.token);
+          console.log(response.data);
+          
            localStorage.setItem("token", response.data.token);
+           setToken(response.data.token);
+
            navigate("/home");
      
         } catch (error) {

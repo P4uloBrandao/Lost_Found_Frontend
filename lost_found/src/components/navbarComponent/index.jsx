@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, Avatar, ListSubheader, ListItemIcon, ListItemText, Popover, ListItem, List, createTheme, ThemeProvider } from '@mui/material';
-import { AccountCircle, Brightness4, Brightness7, ExpandMore } from '@mui/icons-material';
+import { AccountCircle, Brightness4, Brightness7, ExpandMore, Refresh } from '@mui/icons-material';
 import { AuthContext } from '../AuthContext';
 import { Navigate } from 'react-router-dom';
 
@@ -16,6 +16,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
+    
     
   };
   const theme = createTheme({
