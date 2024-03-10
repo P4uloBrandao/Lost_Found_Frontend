@@ -8,6 +8,8 @@ import Navbar from './components/navbarComponent/index'
 import styled from 'styled-components';
 import Esquadras from './components/esquadra/index'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import './index.css';
+
 import { AuthProvider }  from './components/AuthContext'
 import ProtectedRoute from './components/protectedRoutes'
 import ProfileSettings from './components/profileSettings/index'
