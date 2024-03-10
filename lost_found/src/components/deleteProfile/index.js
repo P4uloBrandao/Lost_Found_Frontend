@@ -7,6 +7,8 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import InputF  from '../inputFieldComponent/InputField';
 
+
+
 import styled, { keyframes, css} from 'styled-components';
 
 const colors = css`
@@ -138,7 +140,12 @@ const RegisterLink = styled.a`
 const DeleteProfile = () => {
     const [errorMessage, setErrorMessage] = useState(null);
     const [deleteConfirmation, setDeleteConfirmation] = useState('');
-  
+    const { logout } = useContext(AuthContext);
+    const handleLogout = () => {
+            logout();
+            
+            
+          };
     const handleDeleteProfile = async () => {
       // Validate the delete confirmation
       if (deleteConfirmation !== 'DELETE') {
@@ -152,7 +159,7 @@ const DeleteProfile = () => {
         // Make an API call to delete the user profile
         const response = await axios.delete('http://localhost:3000/api/users/delete',{token});
         console.log(response.data); // Log the response from the server
-  
+        handleLogout()
         // Handle success, e.g., redirect to login or show a success message
       } catch (error) {
         console.error('Delete profile failed:', error);
