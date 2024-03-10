@@ -1,26 +1,14 @@
 import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
+
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AuthContext } from "../AuthContext";
 import axios from "axios";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import Paper from '@mui/material/Paper';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import InputF  from '../inputFieldComponent/InputField';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
-// TODO remove, this demo shouldn't need to reset the theme.
+
 import styled, { keyframes, css} from 'styled-components';
 import LockIcon from '@mui/icons-material/Lock';
 import LockIconOpen from '@mui/icons-material/LockOpenRounded';
@@ -108,18 +96,6 @@ const InputBox = styled.div`
   margin: 20px 0;
 `;
 
-const InputField = styled.input`
-${colors}  
-width: 96%;
-  height: 55px;
-  font-size: 16px;
-  background: transparent;
-  color: var(--second-color);
-  padding-inline: 20px 0px;
-  border: 2px solid var(--primary-color);
-  border-radius: 30px;
-  outline: none;
-`;
 
 const Label = styled.label`
   position: absolute;
@@ -308,95 +284,7 @@ export default function SignIn() {
       </form>
     </LoginBox>
     </Wrapper>
-             /* <Grid container component="main" sx={{ height: '100vh' }}>
-                <CssBaseline />
-                    <Grid 
-            item
-            xs={false}
-            sm={4}
-            md={8}
-            sx={{
-                backgroundImage: `url(${bg})`,
-                backgroundRepeat: 'no-repeat',
-                backgroundColor: (t) =>
-                t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-                backgroundSize: 'cover',
-                backgroundPosition: 'left',
-            }}
-            />
-            <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square>
-          <Box
-                    sx={{
-                        marginTop: 8,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign in
-                    </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, textAlign: '-webkit-center' }}>
-
-                        <TextField
-                        margin="normal"
-                        required
-                        onChange={(e) => setEmail(e.target.value)}
-                        value={email}
-                        sx={{ width: '70%', alignContent : 'center' }} // Use sx for styling and pass an object
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        autoComplete="email"
-                        autoFocus
-                        />
-                        <TextField
-                            margin="normal"
-                            required
-                            sx={{ width: '70%', alignContent : 'center' }} // Use sx for styling and pass an object
-
-                            onChange={(e) => setPassword(e.target.value)}
-                            name="password"
-                            value={password}
-                            label="Password"
-                            type="password"
-                            
-                            id="password"
-                            autoComplete="current-password"
-                        />
-                        
-                        
-                        <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
-                            label="Remember me"
-                        />
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                        >
-                            Sign In
-                        </Button>
-                        <Grid container>
-                            <Grid item xs>
-                                <Link href="/changePassword" variant="body2">
-                                    Forgot password?
-                                </Link>
-                            </Grid>
-                            <Grid item>
-                                <Link href="/signup" variant="body2">
-                                    {"Don't have an account? Sign Up"}
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Box>
-                </Grid>
-            </Grid> */
+             
             
     );
 }

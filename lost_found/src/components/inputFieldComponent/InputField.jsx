@@ -13,7 +13,7 @@ const InputBox = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  margin: 20px 0;
+  margin: 5px 0;
 `;
 
 const InputField = styled.input`
@@ -39,9 +39,10 @@ const InputField = styled.input`
     top: -10px;
     left: 20px;
     font-size: 14px;
+    font-weight: bold;
     background-color: var(--primary-color);
     border-radius: 30px;
-    color: var(--black-color);
+    color: #456d74;
     padding: 0 10px;
     transition: 0.2s;
   }

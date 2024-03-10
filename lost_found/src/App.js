@@ -7,6 +7,8 @@ import ChangePassword from './components/changePassword/index';
 import Navbar from './components/navbarComponent/index'
 import styled from 'styled-components';
 import Esquadras from './components/esquadra/index'
+import DeleteProfile from './components/deleteProfile/index'
+
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './index.css';
 
@@ -47,7 +49,14 @@ function App() {
               </ProtectedRoute>
             }
           />
-                
+              <Route
+            path="/deleteProfile"
+            element={
+              <ProtectedRoute>
+                <DeleteProfile />
+              </ProtectedRoute>
+            }
+          />  
           <Route
             path="/changePassword"
             element={

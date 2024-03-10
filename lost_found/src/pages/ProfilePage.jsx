@@ -2,7 +2,7 @@ import React from 'react'
 import photo from '../assets/background/bg-photo.jpg'
 import styled, { keyframes } from 'styled-components';
 import ProfileSettings from '../components/profileSettings/index';
-
+import DeleteProfile from '../components/deleteProfile/index'
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -21,9 +21,10 @@ const Background = styled.div`
 `;
 
 export default function ProfilePage() {
-  return (
-    
-    <Background><ProfileSettings/></Background>
+  return ( 
+  <Background>
+  <ProfileSettings/>
+  </Background>
   )
 }
 

@@ -212,22 +212,7 @@ export default function ProfileSettings() {
     const handleSubmit = async (event) => {
     
         event.preventDefault();
-        const data1 = new FormData();
-        data1.append('first_name', first_name);
-        data1.append('last_name', last_name);
-        data1.append('email', email);
-        data1.append('adddress', adddress);
-        data1.append('password', password);
-        data1.append('birth', birth);
-        data1.append('gender', gender);
-        data1.append('nic', nic);
-        data1.append('nif', nif);
-        data1.append('phone', phone);
-        
-            
-        for (const pair of data1.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
-        }
+       
         try {
             const response = await axios.put("http://localhost:3000/api/users/update",
             {   first_name,
