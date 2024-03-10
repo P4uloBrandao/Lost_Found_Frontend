@@ -38,6 +38,8 @@ function App() {
             element={
               <ProtectedRoute>
                 <ProfileSettings />
+                <DeleteProfile />
+                
               </ProtectedRoute>
             }
           />
