@@ -13,7 +13,7 @@ const fadeIn = keyframes`
 `;
 
 const Background = styled.div`
-  background-image: url(${photo});
+  background-color: url(${photo});
   background-size: cover; /* or "contain" depending on your preference */
   background-position: center;
   height: 100vh; /* Set the desired height */

@@ -1,16 +1,16 @@
 import * as React from 'react';
-import  { useState } from "react";
 import styled, { keyframes, css} from 'styled-components';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import { Avatar , Button } from '@mui/material';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-
+import {useState, useContext } from "react";
+import  { useEffect } from "react";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import Grid from '@mui/material/Grid';
-
+import { AuthContext } from "../AuthContext";
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LockIcon from '@mui/icons-material/Lock';
@@ -30,27 +30,28 @@ const colors = css`
   --second-color: #ffffff;
   --black-color: #000000;
 `;
+
 const Wrapper = styled.div`
-  padding: 50px 0;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: rgba(0, 0, 0, 0.2);
-  background-image : url("../../assets/background/bg-photo.jpg");
+  background-color: #00798e;
+  background-image : url("../../assets/background/bg-photo.jpg")
 `;
 
 const FormBox = styled.div`
 ${colors};
+text-align: -webkit-center;
   position: relative;
-  max-width: 450px;
-  width: 65%;
-    backdrop-filter: blur(25px);
+  height: min-content;
+    width: 330px;
+  backdrop-filter: blur(25px);
   border: 2px solid var(--primary-color);
   box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
   border-radius: 15px;
-  padding: 7.5em 3em 3em 2.5em;
+  padding: 7.5em 2.5em 4em 2.5em;
   color: var(--second-color);
 `;
 const FormHeader = styled.div`
@@ -63,7 +64,7 @@ const FormHeader = styled.div`
   align-items: center;
   justify-content: center;
   background-color: var(--primary-color);
-  width: 140px;
+  width: 240px;
   height: 70px;
   border-radius: 0 0 20px 20px;
 
@@ -158,7 +159,7 @@ const defaultTheme = createTheme();
 // Função para formatar a data como "DD-MM-YYYY"
 
 
-export default function  ProfileSettings() {
+export default function ProfileSettings() {
     const [first_name, setFirstName] = React.useState('');
     const [last_name, setLastName] = React.useState('');
     const [email, setEmail] = React.useState('');
@@ -173,16 +174,41 @@ export default function  ProfileSettings() {
     const [phone, setPhone] = React.useState('');
     const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
 
-    const handleChange = (value) => console.log(value);
+    const token = localStorage.getItem("token");
 
-    const toggleShowPassword = () => {
-      setShowPassword((prevShowPassword) => {
-        const newShowPassword = !prevShowPassword;
-        console.log('New showPassword state:', newShowPassword);
-        return newShowPassword;
-      });
-    };
+    useEffect(() => {
+      const fetchUserProfile = async () => {
+        try {
+          const config = {
+            headers: {
+              Authorization: `${token}` // Assuming you have the token variable
+            }
+          };
+          const response = await axios.get("http://localhost:3000/api/users/profile",config);
 
+          const userProfileData = response.data.currentUser; // Supondo que o endpoint forneça os detalhes do perfil do usuário
+          console.log(userProfileData.first_name)
+          // // Defina os estados com base nas informações do perfil
+          setFirstName(userProfileData.first_name);
+          setLastName(userProfileData.last_name);
+          setEmail(userProfileData.email);
+          setAdddress(userProfileData.adddress);
+          setBirth(userProfileData.birth);
+          setGender(userProfileData.gender);
+          setPhone(userProfileData.phone);
+          setNic(userProfileData.nic);
+          setNif(userProfileData.nif);
+  
+          // ... (outros estados conforme necessário)
+        } catch (error) {
+          console.error("Failed to fetch user profile:", error);
+          // Lide com erros conforme necessário
+        }
+      };
+  
+      // Chame a função de busca ao montar o componente
+      fetchUserProfile();
+    }, []);
     const handleSubmit = async (event) => {
     
         event.preventDefault();
@@ -203,12 +229,11 @@ export default function  ProfileSettings() {
             console.log(pair[0] + ': ' + pair[1]);
         }
         try {
-            const response = await axios.post("http://localhost:3000/api/users/signup",
+            const response = await axios.put("http://localhost:3000/api/users/update",
             {   first_name,
                 last_name,
                 email,
                 adddress,
-                password,
                 birth,
                 gender,
                 phone,
@@ -219,7 +244,7 @@ export default function  ProfileSettings() {
             
             console.log(response.data)
           } catch (error) {
-            console.error("Registration failed:", error);
+            console.error("Update failed:", error);
              
              
             if (error.response && error.response.data) {
@@ -236,7 +261,7 @@ export default function  ProfileSettings() {
 
         <FormBox>
       <FormHeader>
-        <FormHeaderText>Edit info</FormHeaderText>
+        <FormHeaderText>Update Profile</FormHeaderText>
       </FormHeader>
         
       <Form  onSubmit={handleSubmit} >
@@ -282,25 +307,7 @@ export default function  ProfileSettings() {
         name="Email"/>
         </InputBox>
         </Grid>
-        <Grid item xs={12}>
-           <PasswordStrength placeholder="password" onChange={handleChange} />
-             </Grid>
-        <Grid item xs={12}>
-        <InputBox>
-        <InputF 
-        icon={showPassword ? <LockIconOpen /> : <LockIcon />}
         
-        placeholder={'Repeat your Password'}  
-        id="email"
-        required
-        onChange={(e) => setPassword(e.target.value)}
-        type={showPassword ? 'text' : 'password'}
-        value={password}
-        name="Password"
-        setShowPassword={toggleShowPassword}
-        />
-        </InputBox>
-        </Grid>
         <Grid item xs={12} sm={6}>
         <InputBox>
         <InputF 
@@ -364,7 +371,7 @@ export default function  ProfileSettings() {
         <Grid item xs={12} sm={6}>
         <InputBox>
         <InputF 
-        type={'number'} 
+        type={'text'} 
         placeholder={'Enter your NIC'}  
         id="nic"
         required
@@ -378,14 +385,9 @@ export default function  ProfileSettings() {
 
 
         <InputBox>
-          <InputSubmit type="submit" className="input-submit" value="Register" label="Register">Submit</InputSubmit>
+          <InputSubmit type="submit" className="input-submit" value="Register" label="Register">Update</InputSubmit>
         </InputBox>
-        <Register>
-          <span>
-            
-            <RegisterLink href="./login">  I already have an account.  </RegisterLink>
-          </span>
-        </Register>
+      
         </Grid>
       </Form>
       </FormBox>

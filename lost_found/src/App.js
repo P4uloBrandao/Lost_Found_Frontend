@@ -10,6 +10,7 @@ import Esquadras from './components/esquadra/index'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AuthProvider }  from './components/AuthContext'
 import ProtectedRoute from './components/protectedRoutes'
+import ProfileSettings from './components/profileSettings/index'
 const LayoutContainer = styled.div`
   /* Add any layout-related styles here */
 `;
@@ -28,12 +29,32 @@ function App() {
         <Navbar />
         <Router>
           <Routes>
-          <Route element={<ProtectedRoute />}>
-            <Route path="/esquadras" element={<Esquadras />} />
-            <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/changePassword" element={<ChangePassword />}  />
-
-          </Route>
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <ProfileSettings />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/esquadras"
+            element={
+              <ProtectedRoute>
+                <Esquadras />
+              </ProtectedRoute>
+            }
+          />
+                
+          <Route
+            path="/changePassword"
+            element={
+              <ProtectedRoute>
+                <ChangePassword />
+              </ProtectedRoute>
+            }
+          />
+                
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
               <Route path="/login" element={<LoginPage />} />
