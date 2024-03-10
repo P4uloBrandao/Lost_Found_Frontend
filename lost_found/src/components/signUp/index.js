@@ -172,6 +172,7 @@ export default function SignUp() {
     const [message, setMessage] = useState("");
     const [phone, setPhone] = React.useState('');
     const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
+    const [showPassword2, setShowPassword2] = useState(null); // New state for handling error messages
 
     const formatDate = (inputDate) => {
         const dateObject = new Date(inputDate);
@@ -189,6 +190,13 @@ export default function SignUp() {
         return newShowPassword;
       });
     };
+    const toggleShowPassword2 = () => {
+      setShowPassword2((prevShowPassword) => {
+        const newShowPassword = !prevShowPassword;
+        console.log('New showPassword state:', newShowPassword);
+        return newShowPassword;
+      });
+    };
 
     const handleSubmit = async (event) => {
     
@@ -198,7 +206,7 @@ export default function SignUp() {
         data1.append('last_name', last_name);
         data1.append('email', email);
         data1.append('adddress', adddress);
-        data1.append('password', password);
+        data1.append('password', checkPassword);
         data1.append('birth', birth);
         data1.append('gender', gender);
         data1.append('nic', nic);
@@ -215,7 +223,7 @@ export default function SignUp() {
                 last_name,
                 email,
                 adddress,
-                password,
+                checkPassword,
                 birth,
                 gender,
                 phone,
@@ -223,12 +231,12 @@ export default function SignUp() {
                 nif
 
             });
-            
+
             console.log(response.data)
           } catch (error) {
             console.error("Registration failed:", error);
-             
-             
+
+
             if (error.response && error.response.data) {
               setMessage(error.response.data.error); // Set the error message if present in the error response
             } else {
@@ -290,21 +298,35 @@ export default function SignUp() {
         </InputBox>
         </Grid>
         <Grid item xs={12}>
-           <PasswordStrength placeholder="password" onChange={handleChange} />
+            <InputBox>
+                <InputF
+                    icon={showPassword ? <LockIconOpen /> : <LockIcon />}
+
+                    placeholder={'Password'}
+                    id="Password"
+                    required
+                    onChange={(e) => setPassword(e.target.value)}
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    name="Password"
+                    setShowPassword={toggleShowPassword}
+                />
+            </InputBox>
+           <PasswordStrength text={password} />
              </Grid>
         <Grid item xs={12}>
         <InputBox>
         <InputF 
-        icon={showPassword ? <LockIconOpen /> : <LockIcon />}
+        icon={showPassword2 ? <LockIconOpen /> : <LockIcon />}
         
         placeholder={'Repeat your Password'}  
-        id="email"
+        id="CheckPassword"
         required
-        onChange={(e) => setPassword(e.target.value)}
-        type={showPassword ? 'text' : 'password'}
-        value={password}
-        name="Password"
-        setShowPassword={toggleShowPassword}
+        onChange={(e) => setCheckPassword(e.target.value)}
+        type={showPassword2 ? 'text' : 'password'}
+        value={checkPassword}
+        name="CheckPassword"
+        setShowPassword={toggleShowPassword2}
         />
         </InputBox>
         </Grid>

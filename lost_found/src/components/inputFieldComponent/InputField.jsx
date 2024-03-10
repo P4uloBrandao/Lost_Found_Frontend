@@ -17,7 +17,7 @@ const InputBox = styled.div`
 `;
 
 const InputField = styled.input`
-  ${colors}
+  ${colors};
   width: 96%;
   height: 55px;
   font-size: 16px;
