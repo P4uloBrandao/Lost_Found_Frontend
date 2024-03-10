@@ -24,6 +24,7 @@ import HomeIcon from '@mui/icons-material/HomeRounded';
 import axios from "axios";
 import {PasswordStrength} from '../controllers/index'
 import InputF  from '../inputFieldComponent/InputField';
+import {validateBirthDate, validateEmail, validatePasswordCorrespondence} from "../../utils/inputValidations";
 // TODO remove, this demo shouldn't need to reset the theme.
 const colors = css`
   --primary-color: #c6c3c3;
@@ -174,6 +175,22 @@ export default function SignUp() {
     const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
     const [showPassword2, setShowPassword2] = useState(null); // New state for handling error messages
 
+    // Validations
+    const [firstNameError, setFirstNameError ] = useState(null);
+    const [lastNameError, setLastNameError ] = useState(null);
+    const [emailError, setEmailError ] = useState(null);
+    const [genderError, setGenderError ] = useState(null);
+    const [adddressError, setAdddressError ] = useState(null);
+    const [passwordError, setPasswordError ] = useState(null);
+    const [checkPasswordError, setCheckPasswordError ] = useState(null);
+    const [birthError, setBirthError ] = useState(null);
+    const [nicError, setNicError ] = useState(null);
+    const [nifError, setNifError ] = useState(null);
+    const [phoneError, setPhoneError ] = useState(null);
+
+
+
+
     const formatDate = (inputDate) => {
         const dateObject = new Date(inputDate);
         const day = String(dateObject.getDate()).padStart(2, '0');
@@ -181,7 +198,8 @@ export default function SignUp() {
         const year = dateObject.getFullYear();
         return `${day}-${month}-${year}`;
       };
-    const handleChange = (value) => console.log(value);
+
+
 
     const toggleShowPassword = () => {
       setShowPassword((prevShowPassword) => {
@@ -199,7 +217,7 @@ export default function SignUp() {
     };
 
     const handleSubmit = async (event) => {
-    
+
         event.preventDefault();
         const data1 = new FormData();
         data1.append('first_name', first_name);
@@ -212,7 +230,24 @@ export default function SignUp() {
         data1.append('nic', nic);
         data1.append('nif', nif);
         data1.append('phone', phone);
-        
+
+
+        //  Validations
+        setFirstNameError(first_name.length === 0 )
+        setLastNameError(last_name.length === 0)
+        setEmailError(email.length === 0 && !validateEmail(email))
+        setGenderError(gender.length === 0)
+        setAdddressError(adddress.length === 0)
+        setPasswordError(password.length === 0)
+        setCheckPasswordError(checkPassword.length === 0 && !validatePasswordCorrespondence(password, checkPassword))
+        setBirthError(birth.length === 0 && !validateBirthDate(birth))
+        setNicError(nic.length === 0)
+        setNifError(nif.length === 0)
+        setPhoneError(phone.length === 0)
+
+        if (firstNameError || lastNameError || emailError || genderError || adddressError || passwordError || checkPasswordError || birthError || nicError || nifError || phoneError) {
+            return;
+        }
             
         for (const pair of data1.entries()) {
             console.log(pair[0] + ': ' + pair[1]);
@@ -267,6 +302,8 @@ export default function SignUp() {
         onChange={(e) => setFirstName(e.target.value)}
         name="First Name"
         value={first_name}
+        errorMessage={'Nome inválido'}
+        errorValidation={firstNameError}
         />
         </InputBox>
         </Grid>
@@ -281,6 +318,9 @@ export default function SignUp() {
         onChange={(e) => setLastName(e.target.value)}
         name="Last Name"
         value={last_name}
+
+        errorMessage={'Último inválido'}
+        errorValidation={lastNameError}
         />
         </InputBox>
         </Grid>
@@ -294,6 +334,9 @@ export default function SignUp() {
         required
         onChange={(e) => setEmail(e.target.value)}
         value={email}
+
+        errorMessage={'Email inválido'}
+        errorValidation={emailError}
         name="Email"/>
         </InputBox>
         </Grid>
@@ -310,6 +353,8 @@ export default function SignUp() {
                     value={password}
                     name="Password"
                     setShowPassword={toggleShowPassword}
+                    errorMessage={'Senha inválida'}
+                    errorValidation={passwordError}
                 />
             </InputBox>
            <PasswordStrength text={password} />
@@ -327,6 +372,8 @@ export default function SignUp() {
         value={checkPassword}
         name="CheckPassword"
         setShowPassword={toggleShowPassword2}
+        errorMessage={'Senhas não correspondem'}
+        errorValidation={checkPasswordError}
         />
         </InputBox>
         </Grid>
@@ -340,6 +387,8 @@ export default function SignUp() {
         required
         onChange={(e) => setPhone(e.target.value)}
         value={phone}
+        errorValidation={phoneError}
+        errorMessage={'Telefone inválido'}
         name="Phone"/>
           
         </InputBox>
@@ -354,6 +403,8 @@ export default function SignUp() {
         required
         onChange={(e) => setBirth(e.target.value)}
         value={birth}
+        errorValidation={birthError}
+        errorMessage={'Data inválida'}
         name="Birthday"/>
 
  
@@ -369,6 +420,8 @@ export default function SignUp() {
         required
         onChange={(e) => setAdddress(e.target.value)}
         value={adddress}
+        errorValidation={adddressError}
+        errorMessage={'Endereço inválido'}
         name="Address"/>
           
           
@@ -384,6 +437,8 @@ export default function SignUp() {
         required
         onChange={(e) => setNif(e.target.value)}
         value={nif}
+        errorValidation={nifError}
+        errorMessage={'Nif inválido'}
         name="Nif"/>
           
           
@@ -399,6 +454,8 @@ export default function SignUp() {
         required
         onChange={(e) => setNic(e.target.value)}
         value={nic}
+        errorValidation={nicError}
+        errorMessage={'Nic inválido'}
         name="Nic"/>
           
         

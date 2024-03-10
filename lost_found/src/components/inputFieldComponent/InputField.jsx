@@ -70,21 +70,34 @@ const IconWrapper = styled.i`
   font-size: 20px;
 `;
 
-const CustomInput = ({ icon, type, placeholder, id, required, onChange, value, name,setShowPassword }) => {
+const ErrorMessage = styled.p`
+  color: #ad0000;
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  margin-top: 5px;
+`;
+
+
+const CustomInput = ({ icon, type, placeholder, id, required, onChange, value, name,setShowPassword, errorMessage = null, errorValidation = null  }) => {
   return (
     <InputBox>
       <InputField
         type={type}
         placeholder={placeholder}
         id={id}
-        required={required}
+        // required={required}
         onChange={onChange}
         value={value}
         name={name}
       />
       <Label className="label">{name}</Label>
       <IconWrapper onClick={setShowPassword}>{icon} </IconWrapper>
+        {errorMessage && errorValidation?<ErrorMessage>{errorMessage}</ErrorMessage> : null}
+
     </InputBox>
+
   );
 };
 
