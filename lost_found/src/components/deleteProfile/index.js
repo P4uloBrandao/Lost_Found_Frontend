@@ -25,7 +25,6 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: rgba(0, 0, 0, 0.2);
   background-image : url("../../assets/background/bg-photo.jpg")
 `;
 
@@ -158,7 +157,6 @@ const DeleteProfile = () => {
         const token = localStorage.getItem("token");
         console.log(token)
         // Make an API call to delete the user profile
-        const response = await axios.delete('http://localhost:3000/api/users/delete',{token});
         const response = await axios.delete('http://localhost:3000/api/users/delete', {
             headers: {
             Authorization: `${token}`,
