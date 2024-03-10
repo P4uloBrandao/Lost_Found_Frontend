@@ -101,6 +101,11 @@ const Navbar = () => {
               sx={{ '& .MuiPaper-root': { boxShadow: 'none' } }}
             >
               <List sx={{ width: 'auto' }}>
+
+                <ListItem
+                >
+                  <h2 style={{'margin': '0', 'font-weight': '700'}}>Paulo</h2>
+                </ListItem>
                 <ListItem
                   button
                   onMouseEnter={() => setHoveredOption('lost')}

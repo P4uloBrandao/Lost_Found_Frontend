@@ -223,7 +223,7 @@ export default function SignUp() {
                 last_name,
                 email,
                 adddress,
-                checkPassword,
+                password,
                 birth,
                 gender,
                 phone,
