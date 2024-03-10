@@ -18,8 +18,8 @@ const InputBox = styled.div`
 
 const InputField = styled.input`
   ${colors}
-  width: 96%;
-  height: 55px;
+  width: 95%;
+  height: 38px;
   font-size: 16px;
   background: transparent;
   color: var(--second-color);
@@ -27,6 +27,11 @@ const InputField = styled.input`
   border: 2px solid var(--primary-color);
   border-radius: 30px;
   outline: none;
+
+  &::placeholder {
+    color: var(--second-color); /* Change this line to set the placeholder text color */
+    opacity: 0.7;
+  }
 
   &:focus ~ label,
   &:valid + label {
@@ -40,6 +45,14 @@ const InputField = styled.input`
     padding: 0 10px;
     transition: 0.2s;
   }
+  ${({ type }) =>
+    type === 'date' &&
+    css`
+      &::-webkit-calendar-picker-indicator {
+        display: none;
+        -webkit-appearance: none;
+      }
+    `}
 `;
 
 const Label = styled.label`
@@ -47,10 +60,11 @@ const Label = styled.label`
   top: -28px;
   left: 20px;
   transition: 0.2s;
+  color: var(--primary-color); /* Change this line to set the placeholder label color */
 `;
 const IconWrapper = styled.i`
   position: absolute;
-  top: 18px;
+  top: 11px;
   right: 25px;
   font-size: 20px;
 `;

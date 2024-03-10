@@ -24,6 +24,8 @@ import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import styled, { keyframes, css} from 'styled-components';
 import LockIcon from '@mui/icons-material/Lock';
 import LockIconOpen from '@mui/icons-material/LockOpenRounded';
+
+import GoogleButton from '../GoogleButtonComponent/index'
 const colors = css`
   --primary-color: #c6c3c3;
   --second-color: #ffffff;
@@ -42,9 +44,11 @@ const Wrapper = styled.div`
 `;
 
 const LoginBox = styled.div`
-${colors}
+${colors};
+text-align: -webkit-center;
   position: relative;
-  width: 450px;
+  height: 375px;
+    width: 330px;
   backdrop-filter: blur(25px);
   border: 2px solid var(--primary-color);
   box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
@@ -135,13 +139,14 @@ const RememberForgot = styled.div`
   display: flex;
   justify-content: space-between;
   font-size: 15px;
+  margin-bottom: 14px;
 `;
 
 const InputSubmit = styled.button`
 ${colors}  
-width: 100%;
-  height: 50px;
-  background: #c6c3c3;
+width: 50%;
+    height: 40px;
+  background: #ffffff;
   font-size: 16px;
   font-weight: 500;
   border: none;
@@ -180,11 +185,11 @@ const MediaQueryLoginBox = styled.div`
 
 
 export default function SignIn() {
-  const [token, setToken] = React.useState('');  
   const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [errorMessage, setErrorMessage] = useState(null); // New state for handling error messages
-    // const { setToken } = useContext(AuthContext);
+    const { setToken, setAuth } = useContext(AuthContext);
+
     const defaultTheme = createTheme();
     const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
 
@@ -195,6 +200,9 @@ export default function SignIn() {
         console.log('New showPassword state:', newShowPassword);
         return newShowPassword;
       });
+    };
+    const setLoginGoogle = () => {
+      
     };
     const handleSubmit = async (event) => {
       event.preventDefault();
@@ -209,23 +217,20 @@ export default function SignIn() {
       });
   
       try {
-        const response = await axios.post("http://localhost:3000/api/auth/login", data, {
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        });
+        const response = await axios.post("http://localhost:3000/api/auth/login", {email,password});
     
         // Process the response as needed
-        console.log(response.data);
-  
-          // setToken(response.data.token);
-          // localStorage.setItem("token", response.data.token);
-          // navigate("/home");
+          console.log(response.data);
+          
+           localStorage.setItem("token", response.data.token);
+           setToken(response.data.token);
+
+           navigate("/home");
      
         } catch (error) {
           console.error("Authentication failed:", error);
-          // setToken(null);
-          // localStorage.removeItem("token");
+           setToken(null);
+           localStorage.removeItem("token");
           if (error.response && error.response.data) {
               // Log the specific server-side error message
               console.error("Server-side error:", error.response.data.error);
@@ -242,6 +247,8 @@ export default function SignIn() {
       <LoginHeader>
         <LoginHeaderText>Login</LoginHeaderText>
       </LoginHeader>
+      {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}{" "}
+
       <form onSubmit={handleSubmit} >
         <InputBox>
         <InputF 
@@ -262,7 +269,7 @@ export default function SignIn() {
         icon={showPassword ? <LockIconOpen /> : <LockIcon />}
         
         placeholder={'Enter your Password'}  
-        id="email"
+        id="password"
         required
         onChange={(e) => setPassword(e.target.value)}
         type={showPassword ? 'text' : 'password'}
@@ -280,13 +287,22 @@ export default function SignIn() {
             <RegisterLink href="#">Forgot password</RegisterLink>
           </div>
         </RememberForgot>
+        <>
+          <InputSubmit type="submit" className="input-submit" value="Login" label="Login">Login</InputSubmit>
+        </>
         <InputBox>
-          <InputSubmit type="submit" className="input-submit" value="Login" label="Login">Submit</InputSubmit>
+        <GoogleButton
+        placeholder={'Continue with Google'}  
+        id="googleButtonLogin"
+        
+        onClick={(e) => setLoginGoogle(e.target.value)}
+        
+        name="googleButtonLogin"/>
         </InputBox>
         <Register>
           <span>
             Don't have an account?  
-            <RegisterLink href="./signup">  Register</RegisterLink>
+            <RegisterLink href="./signup">Register</RegisterLink>
           </span>
         </Register>
       </form>

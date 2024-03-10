@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, Avatar, ListSubheader, ListItemIcon, ListItemText, Popover, ListItem, List, createTheme, ThemeProvider } from '@mui/material';
-import { AccountCircle, Brightness4, Brightness7, ExpandMore } from '@mui/icons-material';
+import { AccountCircle, Brightness4, Brightness7, ExpandMore, Refresh } from '@mui/icons-material';
+import { AuthContext } from '../AuthContext';
+import { Navigate } from 'react-router-dom';
 
 const Navbar = () => {
   const [submenuAnchorLost, setSubmenuAnchorLost] = useState(null);
@@ -10,7 +12,13 @@ const Navbar = () => {
   const [isAvatarClicked, setIsAvatarClicked] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null); 
+  const { logout } = useContext(AuthContext);
 
+  const handleLogout = () => {
+    logout();
+    
+    
+  };
   const theme = createTheme({
     palette: {
       mode: isDarkTheme ? 'dark' : 'light',
@@ -189,7 +197,7 @@ const Navbar = () => {
                     },
                   }}
                 >
-                  <ListItemText primary="Logout" />
+                  <ListItemText primary="Logout" onClick={handleLogout} />
                 </ListItem>
               </List>
             </Popover>
