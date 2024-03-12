@@ -240,17 +240,13 @@ export default function SignUp() {
         setAdddressError(adddress.length === 0)
         setPasswordError(password.length === 0)
         setCheckPasswordError(checkPassword.length === 0 && !validatePasswordCorrespondence(password, checkPassword))
-        setBirthError(birth.length === 0 && !validateBirthDate(birth))
+        setBirthError(!validateBirthDate(birth))
         setNicError(nic.length === 0)
         setNifError(nif.length === 0)
         setPhoneError(phone.length === 0)
 
         if (firstNameError || lastNameError || emailError || genderError || adddressError || passwordError || checkPasswordError || birthError || nicError || nifError || phoneError) {
             return;
-        }
-            
-        for (const pair of data1.entries()) {
-            console.log(pair[0] + ': ' + pair[1]);
         }
         try {
             const response = await axios.post("http://localhost:3000/api/users/signup",
@@ -267,7 +263,6 @@ export default function SignUp() {
 
             });
 
-            console.log(response.data)
           } catch (error) {
             console.error("Registration failed:", error);
 

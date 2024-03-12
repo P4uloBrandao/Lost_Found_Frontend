@@ -9,6 +9,9 @@ export function validatePasswordCorrespondence(password, confirmPassword) {
 }
 
 export function validateBirthDate(birthDate) {
+    if(!!birthDate) {
+        return false;
+    }
     const today = new Date();
     const birth = new Date(birthDate);
     console.log(birth, today)

@@ -81,6 +81,10 @@ const ErrorMessage = styled.p`
 
 
 const CustomInput = ({ icon, type, placeholder, id, required, onChange, value, name,setShowPassword, errorMessage = null, errorValidation = null  }) => {
+    const removeValidation = () => {
+        errorValidation = false;
+        console.log(errorValidation)
+    }
   return (
     <InputBox>
       <InputField
@@ -91,10 +95,11 @@ const CustomInput = ({ icon, type, placeholder, id, required, onChange, value, n
         onChange={onChange}
         value={value}
         name={name}
+        onFocus={removeValidation}
       />
       <Label className="label">{name}</Label>
       <IconWrapper onClick={setShowPassword}>{icon} </IconWrapper>
-        {errorMessage && errorValidation?<ErrorMessage>{errorMessage}</ErrorMessage> : null}
+        {<ErrorMessage>{errorValidation && errorMessage ? errorMessage : null}</ErrorMessage>}
 
     </InputBox>
 
