@@ -15,6 +15,7 @@ import './index.css';
 import { AuthProvider }  from './components/AuthContext'
 import ProtectedRoute from './components/protectedRoutes'
 import ProfileSettings from './components/profileSettings/index'
+import {Cloudinary} from "@cloudinary/url-gen";
 const LayoutContainer = styled.div`
   /* Add any layout-related styles here */
 `;
@@ -26,6 +27,16 @@ const GlobalStyles = styled.div`
 `;
 
 function App() {
+
+    // Create a Cloudinary instance and set your cloud name.
+    const cld = new Cloudinary({
+        cloud: {
+            cloud_name: 'dkyu0tmfx',
+            api_key: '371956514244332',
+            api_secret: '***************************'
+        }
+    });
+
   return (
     <LayoutContainer>
       <GlobalStyles>

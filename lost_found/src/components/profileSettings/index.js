@@ -91,7 +91,7 @@ const FormHeader = styled.div`
   }
 `;
 const InputSubmit = styled.button`
-${colors}  
+${colors};
 width: 100%;
   height: 40px;
   background: #c6c3c3;

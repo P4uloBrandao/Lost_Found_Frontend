@@ -17,10 +17,10 @@ const Label = styled.label`
 `;
 
 const InputBox = styled.div`
-  ${colors}
+  ${colors};
   position: relative;
   display: inline-block;
-  width: 600px; /* Adjust width as needed */
+  width: auto; /* Adjust width as needed */
   height: 300px; /* Adjust height as needed */
   background-color: var(--primary-color);
   border-radius: 10px;

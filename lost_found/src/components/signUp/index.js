@@ -25,6 +25,8 @@ import axios from "axios";
 import {PasswordStrength} from '../controllers/index'
 import InputF  from '../inputFieldComponent/InputField';
 import {validateBirthDate, validateEmail, validatePasswordCorrespondence} from "../../utils/inputValidations";
+import FileInput from "../ImageInputComponent/FileInput";
+import CustomInputFiles from "../ImageInputComponent/FileInput";
 // TODO remove, this demo shouldn't need to reset the theme.
 const colors = css`
   --primary-color: #c6c3c3;
@@ -216,6 +218,9 @@ export default function SignUp() {
       });
     };
 
+    const onImageUpload = (event) => {
+    }
+
     const handleSubmit = async (event) => {
 
         event.preventDefault();
@@ -286,6 +291,13 @@ export default function SignUp() {
         
       <Form  onSubmit={handleSubmit} >
         <Grid  spacing={2}>
+            <Grid item xs={12} sm={6}>
+                <InputBox>
+
+                    <CustomInputFiles
+                    onChange={onImageUpload}></CustomInputFiles>
+                </InputBox>
+            </Grid>
         <Grid item xs={12} sm={6}>
           <InputBox >
         <InputF 
