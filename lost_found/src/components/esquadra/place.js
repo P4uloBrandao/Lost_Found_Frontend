@@ -1,16 +1,16 @@
 
 
 import TextField from '@mui/material/TextField';
-
+import InputF  from '../inputFieldComponent/InputField';
 import React, { useState } from "react";
 import { Autocomplete, useLoadScript } from "@react-google-maps/api";
 const placesLibrary = ["places"];
 
-function Place() {
+function Place({placeholder, id, name, onChange}) {
   const [searchResult, setSearchResult] = useState("Result: none");
 
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: "AIzaSyDknx8CBDmNq-1fGy3uLANLGZeHPqzyEuo",
+    googleMapsApiKey: "KEY", //falta aqui a APIKEY para nao dar erro
     libraries: placesLibrary
   });
 
@@ -39,15 +39,16 @@ function Place() {
   return (
     <div className="textfield-like">
       <Autocomplete onPlaceChanged={onPlaceChanged} onLoad={onLoad}>
-       <TextField                  
-          name="address"
-          required
-          fullWidth
-          id="address"
-          label="Address"
-          autoFocus
-        />
-       
+      
+        <InputF 
+            type={'text'} 
+            placeholder={placeholder}  
+            id={id}
+            required
+            name= {name}  
+            onChange={onChange}
+          />
+      
       </Autocomplete>
       
     </div>
@@ -56,3 +57,4 @@ function Place() {
 }
 
 export default Place;
+

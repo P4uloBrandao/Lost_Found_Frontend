@@ -19,7 +19,7 @@ const InputBox = styled.div`
 const InputField = styled.input`
   ${colors}
   width: 95%;
-  height: 38px;
+  height: ${(props) => props.height || '38px' };
   font-size: 16px;
   background: transparent;
   color: var(--second-color);
@@ -80,7 +80,7 @@ const ErrorMessage = styled.p`
 `;
 
 
-const CustomInput = ({ icon, type, placeholder, id, required, onChange, value, name,setShowPassword, errorMessage = null, errorValidation = null  }) => {
+const CustomInput = ({ height,icon, type, placeholder, id, required, onChange, value, name,setShowPassword, errorMessage = null, errorValidation = null  }) => {
     const removeValidation = () => {
         errorValidation = false;
         console.log(errorValidation)
@@ -88,6 +88,7 @@ const CustomInput = ({ icon, type, placeholder, id, required, onChange, value, n
   return (
     <InputBox>
       <InputField
+        height = {height}
         type={type}
         placeholder={placeholder}
         id={id}
