@@ -19,7 +19,7 @@ const InputBox = styled.div`
 const InputField = styled.input`
   ${colors}
   width: 96%;
-  height: 55px;
+  height: ${(props) => props.height || '55px'};
   font-size: 16px;
   background: transparent;
   color: var(--second-color);
@@ -55,10 +55,11 @@ const IconWrapper = styled.i`
   font-size: 20px;
 `;
 
-const CustomInput = ({ icon, type, placeholder, id, required, onChange, value, name,setShowPassword }) => {
+const CustomInput = ({height, icon, type, placeholder, id, required, onChange, value, name,setShowPassword }) => {
   return (
-    <InputBox>
+    <InputBox >
       <InputField
+        height={height}
         type={type}
         placeholder={placeholder}
         id={id}
