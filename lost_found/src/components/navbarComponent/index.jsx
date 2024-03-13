@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, Avatar, ListSubheader, ListItemIcon, ListItemText, Popover, ListItem, List, createTheme, ThemeProvider } from '@mui/material';
-import { AccountCircle, Brightness4, Brightness7, ExpandMore } from '@mui/icons-material';
+import { AccountCircle, Brightness4, Brightness7, ExpandMore, Refresh } from '@mui/icons-material';
+import { AuthContext } from '../AuthContext';
+import { Navigate } from 'react-router-dom';
+import styled from "styled-components";
 
 const Navbar = () => {
   const [submenuAnchorLost, setSubmenuAnchorLost] = useState(null);
@@ -10,7 +13,13 @@ const Navbar = () => {
   const [isAvatarClicked, setIsAvatarClicked] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null); 
+  const { logout } = useContext(AuthContext);
 
+  const handleLogout = () => {
+    logout();
+    
+    
+  };
   const theme = createTheme({
     palette: {
       mode: isDarkTheme ? 'dark' : 'light',
@@ -50,6 +59,21 @@ const Navbar = () => {
   const handleThemeToggle = () => {
     setIsDarkTheme(!isDarkTheme);
   };
+
+  const ProfileInfo = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    .infos {
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+    }
+    p {
+        margin: 0;
+    }
+    `;
 
   return (
     <ThemeProvider theme={theme}>
@@ -93,6 +117,17 @@ const Navbar = () => {
               sx={{ '& .MuiPaper-root': { boxShadow: 'none' } }}
             >
               <List sx={{ width: 'auto' }}>
+
+                <ListItem
+                >
+                  <ProfileInfo>
+                    <div className="infos">
+                      <h2 style={{'margin': '0', 'font-weight': '700'}}>Paulo</h2>
+                      <p>pricardo2102@gmail.com</p>
+                    </div>
+                    <Avatar>A</Avatar>
+                  </ProfileInfo>
+                </ListItem>
                 <ListItem
                   button
                   onMouseEnter={() => setHoveredOption('lost')}
@@ -189,7 +224,7 @@ const Navbar = () => {
                     },
                   }}
                 >
-                  <ListItemText primary="Logout" />
+                  <ListItemText primary="Logout" onClick={handleLogout} />
                 </ListItem>
               </List>
             </Popover>

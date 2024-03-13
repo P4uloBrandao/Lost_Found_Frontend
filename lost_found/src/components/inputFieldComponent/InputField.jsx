@@ -13,13 +13,13 @@ const InputBox = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  margin: 20px 0;
+  margin: 5px 0;
 `;
 
 const InputField = styled.input`
   ${colors}
-  width: 96%;
-  height: ${(props) => props.height || '55px'};
+  width: 95%;
+  height: 38px;
   font-size: 16px;
   background: transparent;
   color: var(--second-color);
@@ -28,18 +28,32 @@ const InputField = styled.input`
   border-radius: 30px;
   outline: none;
 
+  &::placeholder {
+    color: var(--second-color); /* Change this line to set the placeholder text color */
+    opacity: 0.7;
+  }
+
   &:focus ~ label,
   &:valid + label {
     position: absolute;
     top: -10px;
     left: 20px;
     font-size: 14px;
+    font-weight: bold;
     background-color: var(--primary-color);
     border-radius: 30px;
-    color: var(--black-color);
+    color: #456d74;
     padding: 0 10px;
     transition: 0.2s;
   }
+  ${({ type }) =>
+    type === 'date' &&
+    css`
+      &::-webkit-calendar-picker-indicator {
+        display: none;
+        -webkit-appearance: none;
+      }
+    `}
 `;
 
 const Label = styled.label`
@@ -47,30 +61,48 @@ const Label = styled.label`
   top: -28px;
   left: 20px;
   transition: 0.2s;
+  color: var(--primary-color); /* Change this line to set the placeholder label color */
 `;
 const IconWrapper = styled.i`
   position: absolute;
-  top: 18px;
+  top: 11px;
   right: 25px;
   font-size: 20px;
 `;
 
-const CustomInput = ({height, icon, type, placeholder, id, required, onChange, value, name,setShowPassword }) => {
+const ErrorMessage = styled.p`
+  color: #ad0000;
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  margin-top: 5px;
+`;
+
+
+const CustomInput = ({ icon, type, placeholder, id, required, onChange, value, name,setShowPassword, errorMessage = null, errorValidation = null  }) => {
+    const removeValidation = () => {
+        errorValidation = false;
+        console.log(errorValidation)
+    }
   return (
-    <InputBox >
+    <InputBox>
       <InputField
-        height={height}
         type={type}
         placeholder={placeholder}
         id={id}
-        required={required}
+        // required={required}
         onChange={onChange}
         value={value}
         name={name}
+        onFocus={removeValidation}
       />
       <Label className="label">{name}</Label>
       <IconWrapper onClick={setShowPassword}>{icon} </IconWrapper>
+        {<ErrorMessage>{errorValidation && errorMessage ? errorMessage : null}</ErrorMessage>}
+
     </InputBox>
+
   );
 };
 

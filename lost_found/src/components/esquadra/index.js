@@ -15,7 +15,7 @@ import PlaceComponent from "./place";
 
 const defaultTheme = createTheme();
 
-function SignUp() {
+function Esquadra() {
     const [esquadras, setEsquadras] = React.useState([]);
     const [selectedEsquadra, setSelectedEsquadra] = React.useState('');
     const [newEsquadra, setNewEsquadra] = React.useState('');
@@ -240,5 +240,5 @@ function SignUp() {
         );
     }
     
-    export default SignUp;
+    export default Esquadra;
     

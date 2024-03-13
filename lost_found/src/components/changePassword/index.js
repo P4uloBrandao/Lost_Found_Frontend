@@ -31,40 +31,35 @@ export default function ChangePassword() {
 
     const navigate = useNavigate();
     const handleChange = (value) => console.log(value);
+    const token = localStorage.getItem("token");
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        data.append('email', email);
-        data.append('password', password);
-        data.append('newPassword', password);
-
-
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-            password: data.get('newPassword'),
-        });
-        try {
-            const response = await axios.put("", {
-              email,
-              password,
-              newPassword,
-            });
-            setErrorMessage(response.data.message);
-            // setToken(response.data.token);
-            // localStorage.setItem("token", response.data.token);
-            navigate("/login");
-          } catch (error) {
-            console.error("Password update failed:", error);
-            // setToken(null);
-            // localStorage.removeItem("token");
-            if (error.response && error.response.data) {
-              setErrorMessage(error.response.data); // Set the error message if present in the error response
-            } else {
-              setErrorMessage("An unexpected error occurred. Please try again.");
+        const config = {
+            headers: {
+              Authorization: `${token}` // Assuming you have the token variable
+            },
+            body:{
+                email: `${email}`,
+                password: `${password}`,
+                newPassword: `${newPassword}`,
             }
-          }
+          };
+        
+    
+        try {
+            const response = await axios.put("http://localhost:3000/api/users/update",config);
+            setErrorMessage(response.data.message);
+    
+        } catch (error) {
+            console.error("Password update failed:", error);
+    
+            if (error.response && error.response.data) {
+                setErrorMessage(error.response.data); // Set the error message if present in the error response
+            } else {
+                setErrorMessage("An unexpected error occurred. Please try again.");
+            }
+        }
     };
 
     return (
@@ -107,7 +102,7 @@ export default function ChangePassword() {
                             name="newPassword"
                             value={newPassword}
                             label="newPassword"
-                            type="password"
+                            type="text"
                             id="newPassword"
                             
                         />
