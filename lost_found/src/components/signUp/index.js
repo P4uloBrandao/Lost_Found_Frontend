@@ -375,6 +375,7 @@ export default function SignUp() {
         
          </InputBox>
         </Grid>
+        
         <Grid item xs={12} sm={6}>
         <InputBox>
         <InputF 
