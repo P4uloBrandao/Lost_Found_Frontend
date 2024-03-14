@@ -9,7 +9,7 @@ export function validatePasswordCorrespondence(password, confirmPassword) {
 }
 
 export function validateBirthDate(birthDate) {
-    if(!!birthDate) {
+    if(!birthDate) {
         return false;
     }
     const today = new Date();

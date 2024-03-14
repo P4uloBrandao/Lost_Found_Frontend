@@ -80,7 +80,7 @@ const ErrorMessage = styled.p`
   padding: 0;
   margin-top: 5px;
 `;
-export const DropdownInput = ({icon, placeholder, id, required, onChange, value, name,setShowPassword, errorMessage = null, errorValidation = null   }) => {
+export const DropdownInput = ({icon, placeholder, id, required, onChange, value,setShowPassword, options, errorMessage = null, errorValidation = null   }) => {
 
     return (
 
@@ -92,13 +92,15 @@ export const DropdownInput = ({icon, placeholder, id, required, onChange, value,
                 required={required}
                 onChange={onChange}
                 value={value}
-                name={name}
                 // onFocus={removeValidation}
             >
-                <option value="teste">teste</option>
-                <option value="teste2">teste2</option>
+                <option value="">Selecione um opção</option>
+
+                {options.map ((option) => {
+                    return <option value={option.value}>{option.label}</option>
+                })}
             </SelectField>
-            <Label className="label">{name}</Label>
+            <Label className="label">{placeholder}</Label>
             <IconWrapper onClick={setShowPassword}>{icon} </IconWrapper>
             {<ErrorMessage>{errorValidation && errorMessage ? errorMessage : null}</ErrorMessage>}
 

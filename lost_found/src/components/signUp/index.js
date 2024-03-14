@@ -193,6 +193,21 @@ export default function SignUp() {
     const [phoneError, setPhoneError ] = useState(null);
 
 
+    const genderOptions= [
+        {
+            value: "masculino",
+            label: "Masculino"
+        },
+        {
+            value: "feminino",
+            label: "Feminino"
+        },
+        {
+            value: "outro",
+            label: "Outro"
+        }
+    ]
+
 
 
     const formatDate = (inputDate) => {
@@ -419,21 +434,21 @@ export default function SignUp() {
  
         </InputBox>
         </Grid>
-            {/*<Grid item xs={12} >*/}
-            {/*    <InputBox>*/}
-            {/*        <DropdownInput*/}
-            {/*            icon={<ArrowDropDownIcon />}*/}
-            {/*            placeholder={'Gender'}*/}
-            {/*            id="gender"*/}
-            {/*            required*/}
-            {/*            onChange={(e) => setGender(e.target.value)}*/}
-            {/*            value={gender}*/}
-            {/*            errorValidation={adddressError}*/}
-            {/*            errorMessage={'Gênero inválido'}*/}
-            {/*            name="Address"*/}
-            {/*        ></DropdownInput>*/}
-            {/*    </InputBox>*/}
-            {/*</Grid>*/}
+            <Grid item xs={12} >
+                <InputBox>
+                    <DropdownInput
+                        icon={<ArrowDropDownIcon />}
+                        placeholder={'Gender'}
+                        id="gender"
+                        required
+                        onChange={(e) => setGender(e.target.value)}
+                        value={gender}
+                        errorValidation={adddressError}
+                        errorMessage={'Gênero inválido'}
+                        options={genderOptions}
+                    ></DropdownInput>
+                </InputBox>
+            </Grid>
         <Grid item xs={12} >
             <InputBox>
         <InputF 
