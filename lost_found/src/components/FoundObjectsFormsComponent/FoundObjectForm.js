@@ -35,12 +35,19 @@ const FoundObjectForm = () => {
     event.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:3000/api/foundObjects', {
+      let url = 'http://localhost:3000/api/foundObjects'; // URL padrão
+
+      if (!isUserRegistered) {
+        // Se o usuário não estiver registrado, mude a URL
+        url = 'http://localhost:3000/api/otherFoundObjects'; // URL alternativa
+      }
+
+      const response = await axios.post(url, {
         category,
         description,
         location,
         price,
-        userWhoFound: isUserRegistered ? null : {
+        userWhoFound: isUserRegistered ? nic : {
           firstName,
           lastName,
           email,
