@@ -17,38 +17,56 @@ import axios from "axios";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import {PasswordStrength} from '../controllers/index'
+import InputF  from '../inputFieldComponent/InputField';
+import styled from 'styled-components';
+import LockIcon from '@mui/icons-material/Lock';
+import LockIconOpen from '@mui/icons-material/LockOpenRounded';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
+const InputBox = styled.div`
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin: 20px 0;
+  
+`;
 export default function ChangePassword() {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [newPassword, setNewPassword] = React.useState('');
     const [errorMessage, setErrorMessage] = useState(null); // New state for handling error messages
     // const { setToken } = useContext(AuthContext);
+    const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
+    const [showPassword2, setShowPassword2] = useState(null); // New state for handling error messages
 
     const navigate = useNavigate();
     const handleChange = (value) => console.log(value);
     const token = localStorage.getItem("token");
 
+    const toggleShowPassword = () => {
+        setShowPassword((prevShowPassword) => {
+          const newShowPassword = !prevShowPassword;
+          console.log('New showPassword state:', newShowPassword);
+          return newShowPassword;
+        });
+      };
+      const toggleShowPassword2 = () => {
+        setShowPassword2((prevShowPassword) => {
+          const newShowPassword = !prevShowPassword;
+          console.log('New showPassword state:', newShowPassword);
+          return newShowPassword;
+        });
+      };
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const config = {
-            headers: {
-              Authorization: `${token}` // Assuming you have the token variable
-            },
-            body:{
-                email: `${email}`,
-                password: `${password}`,
-                newPassword: `${newPassword}`,
-            }
-          };
         
     
         try {
-            const response = await axios.put("http://localhost:3000/api/users/update",config);
+            const response = await axios.put("http://localhost:3000/api/users/updatePass",{token,newPassword,password});
             setErrorMessage(response.data.message);
     
         } catch (error) {
@@ -92,8 +110,23 @@ export default function ChangePassword() {
                             name="email"
                             autoFocus
                         />
-                        <PasswordStrength placeholder="password" onChange={handleChange} />
+                         <Grid item xs={12}>
+            <InputBox>
+                <InputF
+                    icon={showPassword ? <LockIconOpen /> : <LockIcon />}
 
+                    placeholder={'Password'}
+                    id="Password"
+                    required
+                    onChange={(e) => setPassword(e.target.value)}
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    name="Password"
+                    setShowPassword={toggleShowPassword}
+                />
+            </InputBox>
+           <PasswordStrength text={password} />
+             </Grid>
                         <TextField
                             margin="normal"
                             required

@@ -175,16 +175,13 @@ export default function ProfileSettings() {
     const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
 
     const token = localStorage.getItem("token");
-
+   
     useEffect(() => {
       const fetchUserProfile = async () => {
         try {
-          const config = {
-            headers: {
-              Authorization: `${token}` // Assuming you have the token variable
-            }
-          };
-          const response = await axios.get("http://localhost:3000/api/users/profile",config);
+         
+          const response = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
+
 
           const userProfileData = response.data.currentUser; // Supondo que o endpoint forneça os detalhes do perfil do usuário
           console.log(userProfileData.first_name)
@@ -223,7 +220,8 @@ export default function ProfileSettings() {
                 gender,
                 phone,
                 nic,
-                nif
+                nif,
+                token
 
             });
             

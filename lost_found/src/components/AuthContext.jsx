@@ -1,5 +1,6 @@
 // AuthContext.js
 import React, { createContext, useState, useEffect } from "react";
+import { Link } from 'react-router-dom';
 
 export const AuthContext = createContext();
 
@@ -22,6 +23,7 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     setAuth(false);
     localStorage.removeItem("token");
+    <Link to="" refresh="true"></Link>
   };
 
   // Ensure setAuth is part of the context value
