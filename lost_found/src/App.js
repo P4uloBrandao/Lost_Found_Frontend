@@ -16,6 +16,7 @@ import { AuthProvider }  from './components/AuthContext'
 import ProtectedRoute from './components/protectedRoutes'
 import ProfileSettings from './components/profileSettings/index'
 import {Cloudinary} from "@cloudinary/url-gen";
+import FoundObjectPage from './pages/FoundObjectPage';
 const LayoutContainer = styled.div`
   /* Add any layout-related styles here */
 `;
@@ -78,7 +79,15 @@ function App() {
               </ProtectedRoute>
             }
           />
-                
+
+          <Route
+            path="/foundObject"
+            element={
+              <ProtectedRoute>
+                <FoundObjectPage/>
+              </ProtectedRoute>
+            }
+          />    
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
               <Route path="/login" element={<LoginPage />} />
