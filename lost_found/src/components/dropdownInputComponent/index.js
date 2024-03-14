@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import styled, { keyframes, css} from 'styled-components';
+// make a dropdown
+
+import styled, {css} from "styled-components";
+import React from "react";
+
+
 
 const colors = css`
   --primary-color: #c6c3c3;
@@ -16,8 +18,8 @@ const InputBox = styled.div`
   margin: 5px 0;
 `;
 
-const InputField = styled.input`
-  ${colors}
+const SelectField = styled.select`
+  ${colors};
   width: 95%;
   height: ${(props) => props.height || '38px' };
   font-size: 16px;
@@ -78,32 +80,30 @@ const ErrorMessage = styled.p`
   padding: 0;
   margin-top: 5px;
 `;
+export const DropdownInput = ({icon, placeholder, id, required, onChange, value, name,setShowPassword, errorMessage = null, errorValidation = null   }) => {
+
+    return (
 
 
-const CustomInput = ({ height,icon, type, placeholder, id, required, onChange, value, name,setShowPassword, errorMessage = null, errorValidation = null  }) => {
-    const removeValidation = () => {
-        errorValidation = false;
-    }
-  return (
-    <InputBox>
-      <InputField
-        height = {height}
-        type={type}
-        placeholder={placeholder}
-        id={id}
-        // required={required}
-        onChange={onChange}
-        value={value}
-        name={name}
-        onFocus={removeValidation}
-      />
-      <Label className="label">{name}</Label>
-      <IconWrapper onClick={setShowPassword}>{icon} </IconWrapper>
-        {<ErrorMessage>{errorValidation && errorMessage ? errorMessage : null}</ErrorMessage>}
+        <InputBox>
+            <SelectField
+                placeholder={placeholder}
+                id={id}
+                required={required}
+                onChange={onChange}
+                value={value}
+                name={name}
+                // onFocus={removeValidation}
+            >
+                <option value="teste">teste</option>
+                <option value="teste2">teste2</option>
+            </SelectField>
+            <Label className="label">{name}</Label>
+            <IconWrapper onClick={setShowPassword}>{icon} </IconWrapper>
+            {<ErrorMessage>{errorValidation && errorMessage ? errorMessage : null}</ErrorMessage>}
 
-    </InputBox>
+        </InputBox>
 
-  );
-};
 
-export default CustomInput;
+    );
+}

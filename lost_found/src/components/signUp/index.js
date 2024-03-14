@@ -27,6 +27,8 @@ import InputF  from '../inputFieldComponent/InputField';
 import {validateBirthDate, validateEmail, validatePasswordCorrespondence} from "../../utils/inputValidations";
 import FileInput from "../ImageInputComponent/FileInput";
 import CustomInputFiles from "../ImageInputComponent/FileInput";
+import {DropdownInput} from "../dropdownInputComponent";
+import {ArrowDropDownIcon} from "@mui/x-date-pickers";
 // TODO remove, this demo shouldn't need to reset the theme.
 const colors = css`
   --primary-color: #c6c3c3;
@@ -417,6 +419,21 @@ export default function SignUp() {
  
         </InputBox>
         </Grid>
+            {/*<Grid item xs={12} >*/}
+            {/*    <InputBox>*/}
+            {/*        <DropdownInput*/}
+            {/*            icon={<ArrowDropDownIcon />}*/}
+            {/*            placeholder={'Gender'}*/}
+            {/*            id="gender"*/}
+            {/*            required*/}
+            {/*            onChange={(e) => setGender(e.target.value)}*/}
+            {/*            value={gender}*/}
+            {/*            errorValidation={adddressError}*/}
+            {/*            errorMessage={'Gênero inválido'}*/}
+            {/*            name="Address"*/}
+            {/*        ></DropdownInput>*/}
+            {/*    </InputBox>*/}
+            {/*</Grid>*/}
         <Grid item xs={12} >
             <InputBox>
         <InputF 
