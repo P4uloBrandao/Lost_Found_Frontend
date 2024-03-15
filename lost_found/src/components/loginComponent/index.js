@@ -165,7 +165,7 @@ export default function SignIn() {
     const [password, setPassword] = React.useState('');
     const [errorMessage, setErrorMessage] = useState(null); // New state for handling error messages
     const { setToken, setAuth } = useContext(AuthContext);
-
+    const {login } = useContext(AuthContext);
     const defaultTheme = createTheme();
     const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
 
@@ -200,7 +200,11 @@ export default function SignIn() {
           
            localStorage.setItem("token", response.data.token);
            setToken(response.data.token);
-
+           const userData = {
+            username: 'GONcalo',
+            userEmail: 'joao@example.com', // Substitua isso pelo e-mail real do usuário
+          };
+          login(userData);
            navigate("/home");
      
         } catch (error) {

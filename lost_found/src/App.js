@@ -40,7 +40,7 @@ function App() {
   return (
     <LayoutContainer>
       <GlobalStyles>
-      <AuthProvider>
+      <AuthProvider >
         <Navbar />
         <Router>
           <Routes>
