@@ -2,6 +2,7 @@ import * as React from 'react';
 import  { useState } from "react";
 import styled, { keyframes, css} from 'styled-components';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
+import bcrypt from 'bcryptjs';
 import { Avatar , Button } from '@mui/material';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -220,7 +221,6 @@ export default function SignUp() {
 
     const onImageUpload = (event) => {
     }
-
     const handleSubmit = async (event) => {
 
         event.preventDefault();
@@ -253,7 +253,9 @@ export default function SignUp() {
         if (firstNameError || lastNameError || emailError || genderError || adddressError || passwordError || checkPasswordError || birthError || nicError || nifError || phoneError) {
             return;
         }
+      
         try {
+           
             const response = await axios.post("http://localhost:3000/api/users/signup",
             {   first_name,
                 last_name,

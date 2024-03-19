@@ -1,4 +1,5 @@
 import * as React from 'react';
+import bcrypt from 'bcryptjs';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { AuthContext } from "../AuthContext";
@@ -163,11 +164,11 @@ const MediaQueryLoginBox = styled.div`
 export default function SignIn() {
   const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const [errorMessage, setErrorMessage] = useState(null); // New state for handling error messages
+    const [errorMessage, setErrorMessage] = useState(null);
     const { setToken, setAuth } = useContext(AuthContext);
 
     const defaultTheme = createTheme();
-    const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
+    const [showPassword, setShowPassword] = useState(null); 
 
     const navigate = useNavigate();
     const toggleShowPassword = () => {
@@ -180,17 +181,14 @@ export default function SignIn() {
     const setLoginGoogle = () => {
       
     };
+
+  
     const handleSubmit = async (event) => {
       event.preventDefault();
   
       const data = new FormData(event.currentTarget);
       data.append('email', email);
       data.append('password', password);
-  
-      console.log({
-          email: data.get('email'),
-          password: data.get('password'),
-      });
   
       try {
         const response = await axios.post("http://localhost:3000/api/auth/login", {email,password});
@@ -288,3 +286,6 @@ export default function SignIn() {
             
     );
 }
+
+
+
