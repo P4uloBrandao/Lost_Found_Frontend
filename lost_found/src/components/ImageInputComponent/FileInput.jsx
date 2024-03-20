@@ -29,6 +29,7 @@ const InputBox = styled.div`
 
 const FileInputField = styled.input.attrs({
   type: 'file',
+  accept:"image/*"
 })`
   position: absolute;
   top: 0;
@@ -93,18 +94,22 @@ const PlusIconWrapper = styled.div`
 
 // Funcional
 
-const CustomInputFiles = ({id, onChange}) => {
+const CustomInputFiles = ({id, onChange, singleImage = false}) => {
   const [previews, setPreviews] = useState([]);
   const fileInputRef = useRef(null);
 
   const handleImageChange = (e) => {
+    console.log(e.target.files);
     const files = e.target.files;
     const filePreviews = [];
     for (let i = 0; i < files.length; i++) {
       const reader = new FileReader();
       reader.onload = (event) => {
         filePreviews.push(event.target.result);
-        if (filePreviews.length === files.length) {
+        if(singleImage) {
+            setPreviews(filePreviews);
+            onChange(files[0]);
+        }else if (filePreviews.length === files.length) {
           setPreviews((prevPreviews) => [...prevPreviews, ...filePreviews]);
           // Chama a função de retorno de chamada onChange e passa os arquivos selecionados
           onChange(files);
@@ -116,7 +121,7 @@ const CustomInputFiles = ({id, onChange}) => {
 
   return (
     <InputBox>
-      <FileInputField id={id} onChange={handleImageChange} multiple ref={fileInputRef} />
+      <FileInputField id={id} onChange={handleImageChange} multiple={!singleImage} ref={fileInputRef} />
       {previews.length > 0 && (
         <ImagePreviewContainer>
           {previews.map((preview, index) => (
