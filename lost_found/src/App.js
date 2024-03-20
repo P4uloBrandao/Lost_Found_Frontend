@@ -8,10 +8,10 @@ import Navbar from './components/navbarComponent/index';
 import styled from 'styled-components';
 import Esquadras from './components/esquadra/index'
 import DeleteProfile from './components/deleteProfile/index'
-
+import NavbarTest from './components/navBarTest/index'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './index.css';
-
+import DarkMode from './components/darkmodeSwitcher/index'
 import { AuthProvider }  from './components/AuthContext'
 import ProtectedRoute from './components/protectedRoutes'
 import ProfileSettings from './components/profileSettings/index'
@@ -43,13 +43,18 @@ function App() {
     <LayoutContainer>
       <GlobalStyles>
       <AuthProvider >
-        <Navbar />
+        
         <Router>
+          
+          {/* <Navbar /> */}
           <Routes>
+          <Route path="/navbar" element={<NavbarTest />} /> 
+
           <Route
             path="/profile"
             element={
               <ProtectedRoute>
+                <DarkMode/>
                 <ProfileSettings />
                 <DeleteProfile />
                 
@@ -80,7 +85,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-                
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
               <Route path="/login" element={<LoginPage />} />
