@@ -59,7 +59,34 @@ const Navbar = () => {
   const handleThemeToggle = () => {
     setIsDarkTheme(!isDarkTheme);
   };
+  const SvgMenu = styled.svg`
 
+  display: flex;
+
+`;
+const SignBtn = styled.button`
+  display: flex;
+  border: black 1px solid;
+  padding: 12px 14px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  border-radius: 24px;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  background-color: white;
+  color: var(--main-text-color);
+  cursor: pointer;
+
+  &:hover {
+    background-color: black;
+    color: white;
+  }
+`;
   const ProfileInfo = styled.div`
     display: flex;
     justify-content: space-between;
@@ -74,7 +101,32 @@ const Navbar = () => {
         margin: 0;
     }
     `;
-
+    const MenuBtn = styled.button`
+    display: flex;
+    padding: 12px 14px;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    border-radius: 24px;
+    /* font-size: 12px; */
+    /* font-style: normal; */
+    /* font-weight: 400; */
+    /* line-height: 24px; */
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    background-color: #000000c2;
+    color: white;
+    cursor: pointer;
+    
+    
+      &:hover {
+        background-color: rgb(81, 78, 78);
+        /* Corrected syntax: concatenate selectors directly */
+        ${SvgMenu} path {
+          stroke: black;
+        }
+      }
+    `;
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="static" color={isDarkTheme ? "transparent" : "transparent"}  style={{boxShadow: 'none'}}>
@@ -96,11 +148,29 @@ const Navbar = () => {
             aria-label="account of current user"
             aria-controls="menu-appbar"
             aria-haspopup="true"
+            color="inherit"
+            >
+            <SignBtn className="main-btn">
+            <span>Sign Up</span>
+            <SvgMenu xmlns="http://www.w3.org/2000/svg" width="12" height="10" viewBox="0 0 12 10" fill="none">
+              <path d="M7 0.999969L11 5.00003M11 5.00003L7 9.00003M11 5.00003H1" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </SvgMenu>
+          </SignBtn>    
+          </IconButton>
+          <IconButton
+            size="large"
+            aria-label="account of current user"
+            aria-controls="menu-appbar"
+            aria-haspopup="true"
             onClick={handleAvatarClick} 
             color="inherit"
             >
-            <Avatar src="/avatar.jpg" alt="Avatar" sx={{ width: 32, height: 32, border: isAvatarClicked ? '2px solid black' : 'none' }} />
-            </IconButton>
+            <MenuBtn className="menu-btn">MENU
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="white">
+                <path d="M1.30275 9.28441C0.583262 9.28441 0 8.70114 0 7.98165V7.98165C0 7.26216 0.583262 6.6789 1.30275 6.6789H6.68709V1.31291C6.68709 0.587812 7.2749 0 8 0V0C8.7251 0 9.31291 0.58781 9.31291 1.31291V6.6789H14.6972C15.4167 6.6789 16 7.26216 16 7.98165V7.98165C16 8.70114 15.4167 9.28441 14.6972 9.28441H9.31291V14.6871C9.31291 15.4122 8.7251 16 8 16V16C7.2749 16 6.68709 15.4122 6.68709 14.6871V9.28441H1.30275Z"  transform="scale(0.85)" stroke='#393737' fill="white"/>
+              </svg>
+          </MenuBtn>     
+          </IconButton>
             <Popover
               id="menu-appbar"
               open={isAvatarClicked}
@@ -119,13 +189,13 @@ const Navbar = () => {
               <List sx={{ width: 'auto' }}>
 
                 <ListItem
-                >
+                ><Avatar>A</Avatar>
                   <ProfileInfo>
                     <div className="infos">
                       <h2 style={{'margin': '0', 'font-weight': '700'}}>Paulo</h2>
                       <p>pricardo2102@gmail.com</p>
                     </div>
-                    <Avatar>A</Avatar>
+                    
                   </ProfileInfo>
                 </ListItem>
                 <ListItem
@@ -141,6 +211,9 @@ const Navbar = () => {
                   }}
                 >
                   <ListItemText primary="Lost" />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="9" height="8" viewBox="0 0 9 8" fill="none">
+                <ellipse cx="4.1469" cy="4" rx="3.86565" ry="4" fill="#001431"/>
+              </svg>
                   <ExpandMore style={{ visibility: hoveredOption === 'lost' ? 'visible' : 'hidden' }} />
                 </ListItem>
                 <Menu

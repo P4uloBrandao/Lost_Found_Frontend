@@ -4,7 +4,7 @@ import Home from './components/home/index';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
 import ChangePassword from './components/changePassword/index';
-import Navbar from './components/navbarComponent/index'
+import Navbar from './components/navbarComponent/index';
 import styled from 'styled-components';
 import Esquadras from './components/esquadra/index'
 import DeleteProfile from './components/deleteProfile/index'
@@ -18,11 +18,13 @@ import ProfileSettings from './components/profileSettings/index'
 import {Cloudinary} from "@cloudinary/url-gen";
 const LayoutContainer = styled.div`
   /* Add any layout-related styles here */
+  background-color:#ede8e8;
+
 `;
 
 const GlobalStyles = styled.div`
   @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
+  background-color:#ede8e8;
   /* Add any global styles or overrides here */
 `;
 
