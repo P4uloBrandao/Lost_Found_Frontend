@@ -8,14 +8,15 @@ import Navbar from './components/navbarComponent/index';
 import styled from 'styled-components';
 import Esquadras from './components/esquadra/index'
 import DeleteProfile from './components/deleteProfile/index'
-import NavbarTest from './components/navBarTest/index'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './index.css';
-import DarkMode from './components/darkmodeSwitcher/index'
 import { AuthProvider }  from './components/AuthContext'
 import ProtectedRoute from './components/protectedRoutes'
 import ProfileSettings from './components/profileSettings/index'
 import {Cloudinary} from "@cloudinary/url-gen";
+import LostObjects from './components/lostObjForm/index'
+import NavbarTest from './components/NavBar/index'
+
 const LayoutContainer = styled.div`
   /* Add any layout-related styles here */
   background-color:#ede8e8;
@@ -54,11 +55,18 @@ function App() {
             path="/profile"
             element={
               <ProtectedRoute>
-                <DarkMode/>
                 <ProfileSettings />
                 <DeleteProfile />
                 
               </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/lostObjects"
+            element={
+                <LostObjects />
+                
+                
             }
           />
           <Route

@@ -260,6 +260,11 @@ function Navbar() {
                 <ellipse cx="4.1469" cy="4" rx="3.86565" ry="4" fill="#001431"/>
               </svg>
             </StyledA>
+            <ul>
+            <li><i class="fas fa-arrow-right"></i><a href="#">REGISTER LOST </a></li>
+            <li><i class="fas fa-arrow-right"></i><a href="#">MY LOST</a></li>
+            
+          </ul>
           </StyledLI>
           <StyledLI>
             <StyledA href="/">
@@ -268,6 +273,10 @@ function Navbar() {
                 <path d="M7 0.999969L11 5.00003M11 5.00003L7 9.00003M11 5.00003H1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="#001431"/>
               </svg>
             </StyledA>
+            <ul>
+            <li><i class="fas fa-arrow-right"></i><a href="#">BROWSE AUCTIONS </a></li>
+            <li><i class="fas fa-arrow-right"></i><a href="#">MY AUCTIONS </a></li>
+          </ul>
           </StyledLI>
           <StyledLI>
             <StyledA href="/profile">
@@ -276,6 +285,10 @@ function Navbar() {
                 <path d="M7 0.999969L11 5.00003M11 5.00003L7 9.00003M11 5.00003H1" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" fill="#001431"/>
               </svg>
             </StyledA>
+            <ul>
+            <li><i class="fas fa-arrow-right"></i><a href="#">EDIT PROFILE</a></li>
+            <li><i class="fas fa-arrow-right"></i><a href="#">PRIVACY SETTINGS</a></li>
+          </ul>
           </StyledLI>
           <StyledLI>
             <StyledA href="/">

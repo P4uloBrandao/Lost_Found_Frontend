@@ -5,11 +5,39 @@ import Place from '../esquadra/place';
 import InputF  from '../inputFieldComponent/InputField';
 import Input  from '../ImageInputComponent/FileInput';
 
+import styled, { keyframes, css} from 'styled-components';
 
 //NAO TESTADO!!
 
 function ObjFound() {
+  const colors = css`
+  --primary-color: #c6c3c3;
+  --second-color: #ffffff;
+  --black-color: #000000;
+`;
+const Container = styled.div`
+  padding: 50px 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: rgba(0, 0, 0, 0.2);
+  background-image : url("../../assets/background/bg-photo.jpg");
+`;
 
+const  Wrapper = styled.div`
+${colors};
+  position: relative;
+  max-width: 450px;
+  width: 65%;
+    backdrop-filter: blur(25px);
+  border: 2px solid var(--primary-color);
+  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  padding: 7.5em 3em 3em 2.5em;
+  color: var(--second-color);
+`;
   // PARA TESTE
   // FALTA FUNCAO BACK QUE DE TODAS AS CATEGORIAS NA BD
   const dadosDeTesteCategorias = [
@@ -59,6 +87,8 @@ function ObjFound() {
 
 
   return (
+    <Container>
+      <Wrapper>
     <form>
       <div>
           <InputF 
@@ -116,7 +146,8 @@ function ObjFound() {
       </select>
       <button type="submit">Submit</button>
     </form>
-    
+    </Wrapper>
+    </Container>
   );
 };
 
