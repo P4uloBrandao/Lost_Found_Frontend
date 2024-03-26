@@ -12,6 +12,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import MenuItem from '@mui/material/MenuItem';
 import PlaceComponent from "./place";
+import axios from "axios";
+import  { useState } from "react";
 
 const defaultTheme = createTheme();
 
@@ -23,6 +25,14 @@ function Esquadra() {
     const [newEsquadraPostalCode, setNewEsquadraPostalCode] = React.useState('');
     const [newEsquadraPhoneNumber, setNewEsquadraPhoneNumber] = React.useState('');
     const [showNewEsquadraFields, setShowNewEsquadraFields] = React.useState(false);
+    const [first_name, setFirst_name] = React.useState('');
+    const [last_name, setLast_name] = React.useState('');
+    const [password, setPassword] = React.useState('');
+    const [message, setMessage] = useState("");
+    const [phone, setPhone] = useState("");
+    const [email, setEmail] = useState("");
+
+
 
     const toggleNewEsquadraFields = () => {
         setShowNewEsquadraFields(!showNewEsquadraFields);
@@ -55,16 +65,36 @@ function Esquadra() {
         setEsquadras([...esquadras, newEsquadra]);
         setSelectedEsquadra(newEsquadra);
     };
-
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         console.log({
-            firstName: data.get('firstName'),
-            lastName: data.get('lastName'),
+            first_name: data.get('firstName'),
+            last_name: data.get('lastName'),
             password: data.get('password'),
             selectedEsquadra: selectedEsquadra,
         });
+
+        try {
+            const response = await axios.post("http://localhost:3000/api/police/police-officers",
+            {   first_name,
+                last_name,
+                password,
+                selectedEsquadra,
+                phone,
+                email,
+            });
+               console.log(response)
+          } catch (error) {
+            console.error("Police registration failed:", error);
+
+
+            if (error.response && error.response.data) {
+              setMessage(error.response.data.error); // Set the error message if present in the error response
+            } else {
+              setMessage("An unexpected error occurred. Please try again.");
+            }
+          }
     };
 
     return (
@@ -89,28 +119,34 @@ function Esquadra() {
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={6}>
                                 <TextField
+                                    onChange={(e) => setFirst_name(e.target.value)}
+
                                     autoComplete="given-name"
-                                    name="firstName"
+                                    name="first_name"
                                     required
                                     fullWidth
-                                    id="firstName"
+                                    id="first_name"
                                     label="First Name"
                                     autoFocus
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
                                 <TextField
+                                    onChange={(e) => setLast_name(e.target.value)}
+
                                     required
                                     fullWidth
-                                    id="lastName"
+                                    id="last_name"
                                     label="Last Name"
-                                    name="lastName"
+                                    name="last_name"
                                     autoComplete="family-name"
                                 />
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
                                     required
+                                    onChange={(e) => setEmail(e.target.value)}
+
                                     fullWidth
                                     id="email"
                                     label="Email Address"
@@ -122,6 +158,7 @@ function Esquadra() {
                                 <TextField
                                     required
                                     fullWidth
+                                    onChange={(e) => setPhone(e.target.value)}
                                     id="phone"
                                     label="Phone Number"
                                     name="phone"
@@ -209,7 +246,9 @@ function Esquadra() {
                             <Grid item xs={12}>
                                 <TextField
                                     required
-                                    fullWidth
+                                    fullWidth 
+                                    onChange={(e) => setPassword(e.target.value)}
+
                                     name="password"
                                     label="Password"
                                     type="password"

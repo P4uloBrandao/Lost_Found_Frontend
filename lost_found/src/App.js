@@ -4,25 +4,28 @@ import Home from './components/home/index';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
 import ChangePassword from './components/changePassword/index';
-import Navbar from './components/navbarComponent/index'
 import styled from 'styled-components';
 import Esquadras from './components/esquadra/index'
 import DeleteProfile from './components/deleteProfile/index'
-
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './index.css';
-
 import { AuthProvider }  from './components/AuthContext'
 import ProtectedRoute from './components/protectedRoutes'
 import ProfileSettings from './components/profileSettings/index'
 import {Cloudinary} from "@cloudinary/url-gen";
+import LostObjects from './components/lostObjForm/index'
+import Navbar from './components/NavBar/index'
+
 const LayoutContainer = styled.div`
   /* Add any layout-related styles here */
+  background-color:#ede8e8;
+  margin-top:20pt;
+
 `;
 
 const GlobalStyles = styled.div`
   @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
+  background-color:#ede8e8;
   /* Add any global styles or overrides here */
 `;
 
@@ -40,18 +43,30 @@ function App() {
   return (
     <LayoutContainer>
       <GlobalStyles>
-      <AuthProvider>
-        <Navbar />
+      <AuthProvider >
+        
         <Router>
+          
+          <Navbar />
           <Routes>
+          
+
           <Route
             path="/profile"
             element={
-              <ProtectedRoute>
+              <div>
                 <ProfileSettings />
                 <DeleteProfile />
                 
-              </ProtectedRoute>
+              </div>
+            }
+          />
+          <Route
+            path="/lostObjects"
+            element={
+                <LostObjects />
+                
+                
             }
           />
           <Route
@@ -78,7 +93,6 @@ function App() {
               </ProtectedRoute>
             }
           />
-                
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
               <Route path="/login" element={<LoginPage />} />
