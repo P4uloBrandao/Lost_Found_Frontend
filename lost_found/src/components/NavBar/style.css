@@ -1,0 +1,365 @@
+/* Main Styling */
+
+html,
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+
+/* Navbar */
+
+#navbar {
+    position: absolute;
+    width: 88%;
+    margin-right: 185px;
+    height: 79px;
+    margin-left: 80px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+#navbar ul {
+    list-style: none;
+    transition-delay: 0.3s;
+}
+
+#navbar ul li {
+    display: inline-block;
+    padding: 1rem;
+    position: relative;
+}
+
+#navbar ul li a {
+    text-decoration: none;
+}
+
+#navbar ul li,
+#navbar ul li a,
+#navbar ul li:hover,
+#navbar ul li:hover a {
+    color: #000;
+}
+
+
+/* Hide nested ul by default */
+
+#navbar ul li ul {
+    display: none;
+}
+
+#navbar ul li:hover {
+    cursor: pointer;
+    background: coral;
+    margin-bottom: 5pt;
+}
+
+
+/* Nested dropdown show */
+
+#navbar ul li:hover ul {
+    display: block;
+    position: absolute;
+    right: 0;
+    transition: opacity 1s ease-out;
+    text-align: justify;
+    top: 30pt;
+    padding-inline-start: 2px;
+    width: 200px;
+    margin-top: 1rem;
+}
+
+#navbar ul li:hover ul li,
+#navbar ul li ul li:hover ul li {
+    display: block;
+    background: #e7e7e7;
+    border-radius: 19px;
+}
+
+#navbar ul li:hover ul li a {
+    color: #333;
+}
+
+#navbar ul li:hover ul li:hover {
+    background: #e0e0e0;
+    color: inherit;
+}
+
+#navbar ul li:hover ul li span {
+    float: right;
+    color: #fff;
+    background: chocolate;
+    padding: 0.2rem 0.5rem;
+    text-align: center;
+    font-size: 0.8rem;
+    border-radius: 5px;
+}
+
+#navbar ul li:hover ul li:hover span {
+    background: chocolate;
+}
+
+#navbar ul li ul li {
+    position: relative;
+    padding: 1rem;
+}
+
+#navbar ul li ul li ul {
+    display: none;
+    border: none;
+}
+
+#navbar ul li ul li ul li i {
+    color: coral;
+    margin-right: 10px;
+}
+
+#navbar ul li ul li:hover ul {
+    display: block;
+    position: absolute;
+    transition: opacity 1s ease-out;
+    border-radius: 19px;
+    top: 0;
+    right: 107%;
+    margin-left: 5px;
+    border: solid 1px;
+    margin-top: 5px;
+}
+
+.profileNavItem {
+    z-index: -1;
+    top: -17pt !important;
+    border-radius: 20px;
+    border: solid 1px black;
+}
+
+.menuItem {
+    display: flex;
+    width: 174px;
+    padding: 16px 24px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: #0C0C20;
+}
+
+.signInItem {
+    display: flex;
+    width: 174px;
+    height: -webkit-fill-available;
+    padding: 16px 24px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    flex-shrink: 0;
+    border-radius: 20px;
+    border: 1px solid #0C0C20;
+}
+
+.menuItemText {
+    color: white !important;
+}
+
+.signInItemText {
+    color: rgb(0, 0, 0) !important;
+}
+
+.buttonsSide {
+    right: 0;
+    /* width: 557px; */
+    position: absolute;
+    display: flex;
+    align-items: center;
+}
+
+.logoItem {
+    left: 0;
+    position: absolute;
+}
+
+.menuOptions {
+    border-radius: 20px;
+    border: solid 1px black;
+}
+
+.menuOptions1 {
+    z-index: -1;
+    border-radius: 20px;
+    border: solid 1px black;
+    top: -7pt !important;
+}
+
+.menuOptions2 {
+    border-radius: 20px;
+    border: solid 1px black;
+    top: -23pt !important;
+    z-index: -1;
+    width: 213px !important;
+}
+
+.option1 {
+    display: flex;
+    align-items: center;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+}
+
+.sign-in-active {
+    border-radius: 0px 0px 19px 19px!important;
+    border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    left: -1px;
+    width: 10.5rem;
+}
+
+.op1:hover .svgArrow1 {
+    display: block;
+}
+
+.op3 {
+    border-radius: unset!important;
+}
+
+.op2 {
+    border-radius: unset!important;
+}
+
+.op2:hover .svgArrow2 {
+    display: block;
+}
+
+.op3:hover .svgArrow3 {
+    display: block;
+}
+
+.op4:hover .svgArrow4 {
+    display: block;
+}
+
+.op11:hover .svgArrow11 {
+    display: block;
+}
+
+.op12:hover .svgArrow12 {
+    display: block;
+}
+
+.op21:hover .svgArrow21 {
+    display: block;
+}
+
+.op22:hover .svgArrow22 {
+    display: block;
+}
+
+.op31:hover .svgArrow31 {
+    display: block;
+}
+
+.op32:hover .svgArrow32 {
+    display: block;
+}
+
+.svgArrow1 {
+    display: none;
+    position: absolute;
+    right: 0;
+    margin-right: 15pt;
+    top: 13pt;
+}
+
+.svgArrow2 {
+    display: none;
+    position: absolute;
+    right: 0;
+    margin-right: 15pt;
+    top: 13pt;
+}
+
+.svgArrow3 {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 13pt;
+    margin-right: 15pt;
+}
+
+.svgArrow4 {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 13pt;
+    margin-right: 15pt;
+}
+
+.svgArrow11 {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 13pt;
+    margin-right: 15pt;
+}
+
+.svgArrow12 {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 13pt;
+    margin-right: 15pt;
+}
+
+.svgArrow21 {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 13pt;
+    margin-right: 15pt;
+}
+
+.svgArrow22 {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 13pt;
+    margin-right: 15pt;
+}
+
+.svgArrow31 {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 13pt;
+    margin-right: 15pt;
+}
+
+.svgArrow32 {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 13pt;
+    margin-right: 15pt;
+}
+
+
+/* Media Query */
+
+@media(max-width: 600px) {
+    #navbar {
+        width: 100%;
+        text-align: left;
+    }
+    #navbar ul li {
+        display: block;
+    }
+    #navbar ul li:hover ul {
+        width: 100%;
+        position: relative;
+    }
+}

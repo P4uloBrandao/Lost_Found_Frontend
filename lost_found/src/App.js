@@ -4,7 +4,6 @@ import Home from './components/home/index';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
 import ChangePassword from './components/changePassword/index';
-import Navbar from './components/navbarComponent/index';
 import styled from 'styled-components';
 import Esquadras from './components/esquadra/index'
 import DeleteProfile from './components/deleteProfile/index'
@@ -15,11 +14,12 @@ import ProtectedRoute from './components/protectedRoutes'
 import ProfileSettings from './components/profileSettings/index'
 import {Cloudinary} from "@cloudinary/url-gen";
 import LostObjects from './components/lostObjForm/index'
-import NavbarTest from './components/NavBar/index'
+import Navbar from './components/NavBar/index'
 
 const LayoutContainer = styled.div`
   /* Add any layout-related styles here */
   background-color:#ede8e8;
+  margin-top:20pt;
 
 `;
 
@@ -47,18 +47,18 @@ function App() {
         
         <Router>
           
-          {/* <Navbar /> */}
+          <Navbar />
           <Routes>
-          <Route path="/navbar" element={<NavbarTest />} /> 
+          
 
           <Route
             path="/profile"
             element={
-              <ProtectedRoute>
+              <div>
                 <ProfileSettings />
                 <DeleteProfile />
                 
-              </ProtectedRoute>
+              </div>
             }
           />
           <Route

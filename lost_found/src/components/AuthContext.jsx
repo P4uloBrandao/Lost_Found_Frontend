@@ -1,6 +1,7 @@
 // AuthContext.js
 import React, { createContext, useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export const AuthContext = createContext();
 
@@ -8,13 +9,13 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
   const [auth, setAuth] = useState(); // Initialize to false initially
-  const [user, setUser] = useState(null);
   const [userName, setUserName] = useState(null);
   const [userEmail, setUserEmail] = useState(null);
 
 
 
   const login = (userData) => {
+    
     setUserName(userData.userName);
     setUserEmail({userEmail : userData.userEmail})
       console.log(userData.userName, userData.userEmail); // Use userData diretamente
@@ -38,7 +39,7 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     setAuth(false);
     localStorage.removeItem("token");
-    <Link to="" refresh="true"></Link>
+    
   };
   // Ensure setAuth is part of the context value
   
