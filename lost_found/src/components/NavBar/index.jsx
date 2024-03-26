@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
 import Logo from "../../assets/logo/logo.png"
-import styled , { keyframes } from 'styled-components';
 import './style.css';
 import { AuthContext } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +9,7 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 function Navbar() {
   const navigate = useNavigate();
-  const { logout, auth } = useContext(AuthContext);
+  const { logout } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
 
