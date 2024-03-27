@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
-
+import { Toggle } from "../darkmode/index";
 function Navbar() {
   const navigate = useNavigate();
   const { logout, auth } = useContext(AuthContext);
@@ -58,6 +58,7 @@ function Navbar() {
         </div>
 
         <div className='buttonsSide'>
+          <Toggle/>
         {userData ? null : (
               <div onClick={handleSignInClick} className='signInItem'>SIGN IN</div>
             )}
@@ -101,7 +102,7 @@ function Navbar() {
               {userData ? (
   <li className='option op4' onClick={handleLogout}><div><a> LOGOUT</a> <FontAwesomeIcon className='svgArrow4' icon={faArrowLeft} /></div></li>
 ) : (
-  <li onClick={handleSignUpClick} className="sign-in-active">SIGN UP</li>
+  <li onClick={handleSignUpClick} className=" option op4 signbtn sign-in-active"><div><a> SIGN UP</a> <FontAwesomeIcon className='svgArrow4' icon={faArrowLeft} /></div></li>
 )}
               </ul>
             </li>
