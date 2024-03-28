@@ -1,5 +1,7 @@
 import "./style.css";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { BsSun } from "react-icons/bs";
+import { IoMoonOutline } from "react-icons/io5";
+import { HiMiniMoon } from "react-icons/hi2";
 
 export const Toggle = ({ handleChange, isChecked }) => {
   return (
@@ -12,9 +14,17 @@ export const Toggle = ({ handleChange, isChecked }) => {
         checked={isChecked}
       />
       <label for="checkbox" className="checkbox-label">
-        <i className="fas fa-moon"><FontAwesomeIcon icon="fas fa-moon" /></i>
-        <i className="fas fa-sun"><FontAwesomeIcon icon="fas fa-sun" /></i>
-    <span className="ball"></span>
+      <HiMiniMoon
+    style={{
+      color: '#ffffff',
+    }}
+  />
+      <BsSun
+    style={{
+      color: '#ffffff',
+    }}
+  />
+                <span className="ball"></span>
   </label>
     </div>
   );
