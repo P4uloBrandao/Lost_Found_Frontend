@@ -50,8 +50,7 @@ body {
 
 #navbar ul li:hover {
     cursor: pointer;
-    background: coral;
-    margin-bottom: 5pt;
+    background: #69ce64;
 }
 
 
@@ -64,8 +63,9 @@ body {
     transition: opacity 1s ease-out;
     text-align: justify;
     top: 30pt;
+    background-color: #e7e7e7;
     padding-inline-start: 2px;
-    width: 200px;
+    width: 215px;
     margin-top: 1rem;
 }
 
@@ -122,6 +122,7 @@ body {
     top: 0;
     right: 107%;
     margin-left: 5px;
+    background-color: #e7e7e7;
     border: solid 1px;
     margin-top: 5px;
 }
@@ -182,19 +183,20 @@ body {
 
 .menuOptions {
     border-radius: 20px;
-    border: solid 1px black;
+    /* border: solid 1px black; */
 }
 
 .menuOptions1 {
-    z-index: -1;
+    display: none;
     border-radius: 20px;
-    border: solid 1px black;
+    /* border: solid 1px black; */
     top: -7pt !important;
 }
 
 .menuOptions2 {
+    display: none;
     border-radius: 20px;
-    border: solid 1px black;
+    /* border: solid 1px black; */
     top: -23pt !important;
     z-index: -1;
     width: 213px !important;
@@ -212,9 +214,9 @@ body {
 
 .sign-in-active {
     border-radius: 0px 0px 19px 19px!important;
-    border-bottom: 1px solid black;
+    /* border-bottom: 1px solid black;
     border-right: 1px solid black;
-    border-left: 1px solid black;
+    border-left: 1px solid black; */
     left: -1px;
     width: 10.5rem;
 }
@@ -233,6 +235,11 @@ body {
 
 .op2:hover .svgArrow2 {
     display: block;
+}
+
+.op2:hover .menuOptions1 {
+    display: block;
+    z-index: 1!important;
 }
 
 .op3:hover .svgArrow3 {
@@ -345,6 +352,12 @@ body {
     right: 0;
     top: 13pt;
     margin-right: 15pt;
+}
+
+.signbtn {
+    width: 183px;
+    left: -1pt;
+    top: 1pt;
 }
 
 

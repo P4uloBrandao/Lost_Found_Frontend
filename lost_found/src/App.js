@@ -14,7 +14,7 @@ import ProtectedRoute from './components/protectedRoutes'
 import ProfileSettings from './components/profileSettings/index'
 import {Cloudinary} from "@cloudinary/url-gen";
 import LostObjects from './components/lostObjForm/index'
-import Navbar from './components/NavBar/index'
+import Navbar from './components/NavBar/index.jsx'
 
 const LayoutContainer = styled.div`
   /* Add any layout-related styles here */
