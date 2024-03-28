@@ -10,120 +10,13 @@ body {
 
 #navbar {
     position: absolute;
-    width: 88%;
+    width: 75%;
     margin-right: 185px;
     height: 79px;
     margin-left: 80px;
     display: flex;
     align-items: center;
     text-align: center;
-}
-
-#navbar ul {
-    list-style: none;
-    transition-delay: 0.3s;
-}
-
-#navbar ul li {
-    display: inline-block;
-    padding: 1rem;
-    position: relative;
-}
-
-#navbar ul li a {
-    text-decoration: none;
-}
-
-#navbar ul li,
-#navbar ul li a,
-#navbar ul li:hover,
-#navbar ul li:hover a {
-    color: #000;
-}
-
-
-/* Hide nested ul by default */
-
-#navbar ul li ul {
-    display: none;
-}
-
-#navbar ul li:hover {
-    cursor: pointer;
-    background: coral;
-    margin-bottom: 5pt;
-}
-
-
-/* Nested dropdown show */
-
-#navbar ul li:hover ul {
-    display: block;
-    position: absolute;
-    right: 0;
-    transition: opacity 1s ease-out;
-    text-align: justify;
-    top: 30pt;
-    padding-inline-start: 2px;
-    width: 200px;
-    margin-top: 1rem;
-}
-
-#navbar ul li:hover ul li,
-#navbar ul li ul li:hover ul li {
-    display: block;
-    background: #e7e7e7;
-    border-radius: 19px;
-}
-
-#navbar ul li:hover ul li a {
-    color: #333;
-}
-
-#navbar ul li:hover ul li:hover {
-    background: #e0e0e0;
-    color: inherit;
-}
-
-#navbar ul li:hover ul li span {
-    float: right;
-    color: #fff;
-    background: chocolate;
-    padding: 0.2rem 0.5rem;
-    text-align: center;
-    font-size: 0.8rem;
-    border-radius: 5px;
-}
-
-#navbar ul li:hover ul li:hover span {
-    background: chocolate;
-}
-
-#navbar ul li ul li {
-    position: relative;
-    padding: 1rem;
-}
-
-#navbar ul li ul li ul {
-    display: none;
-    border: none;
-}
-
-#navbar ul li ul li ul li i {
-    color: coral;
-    margin-right: 10px;
-}
-
-#navbar ul li ul li:hover ul {
-    display: block;
-    position: absolute;
-    transition: opacity 1s ease-out;
-    border-radius: 19px;
-    top: 0;
-    right: 107%;
-    margin-left: 5px;
-    border: solid 1px;
-    margin-top: 5px;
 }
 
 .profileNavItem {
@@ -138,11 +31,18 @@ body {
     width: 174px;
     padding: 16px 24px;
     justify-content: center;
+    height: 21px;
     align-items: center;
-    gap: 10px;
+    /* gap: 10px; */
+    cursor: pointer;
     flex-shrink: 0;
     border-radius: 20px;
     background: #0C0C20;
+}
+
+.menuItem:hover {
+    background-color: #469c5e;
+    color: #0C0C20
 }
 
 .signInItem {
@@ -159,6 +59,15 @@ body {
     border: 1px solid #0C0C20;
 }
 
+.signInItem:hover {
+    background-color: #0C0C20;
+    /* Mudar background ao passar o mouse */
+    border-color: #0C0C20;
+    /* Mudar cor da borda ao passar o mouse */
+    color: white;
+    /* Mudar cor do texto ao passar o mouse */
+}
+
 .menuItemText {
     color: white !important;
 }
@@ -167,12 +76,39 @@ body {
     color: rgb(0, 0, 0) !important;
 }
 
+.imgMenu {
+    border-radius: 67pt;
+}
+
+.userNameText {
+    color: var(--Gray-Shades-Dark-Gray, #09090A);
+    font-size: 0.9375rem;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin-top: 0pt;
+    margin-bottom: 0pt;
+}
+
+.userEmailText {
+    color: #3CB684;
+    font-size: 0.875rem;
+    font-style: normal;
+    font-weight: 400;
+    margin-bottom: 0pt;
+    margin-top: 3pt;
+    line-height: normal;
+}
+
 .buttonsSide {
+    gap: 10pt;
     right: 0;
-    /* width: 557px; */
+    top: 12pt;
+    width: 301px;
     position: absolute;
+    /* height: 50pt; */
     display: flex;
-    align-items: center;
+    /* align-items: center; */
 }
 
 .logoItem {
@@ -180,171 +116,256 @@ body {
     position: absolute;
 }
 
-.menuOptions {
-    border-radius: 20px;
-    border: solid 1px black;
+.menuOptions1 {
+    display: none;
+    border-radius: 14px;
+    position: relative;
+    /* border: solid 1px black; */
+    top: -9pt;
+    padding: 4px;
+    align-content: flex-end;
+    right: -21pt;
+    height: 67pt;
+    z-index: -1;
+    width: 141pt;
+    background-color: white;
 }
 
-.menuOptions1 {
-    z-index: -1;
-    border-radius: 20px;
-    border: solid 1px black;
-    top: -7pt !important;
+.subMenu1 {
+    width: 80pt;
+    left: -58pt;
+    /* border: 1px solid blue; */
+    height: 31pt;
+    /* background-color: aquamarine; */
+    position: relative;
+}
+
+.subMenu2 {
+    width: 80pt;
+    left: -79pt;
+    top: 7pt;
+    /* border: 1px solid blue; */
+    height: 31pt;
+    /* background-color: aquamarine; */
+    position: relative;
+}
+
+.op1:hover .menuOptions1 {
+    display: block;
+    right: 136pt;
+    z-index: 0;
+}
+
+.op2:hover .menuOptions2 {
+    display: block;
+}
+
+.op3:hover .menuOptions3 {
+    display: block;
 }
 
 .menuOptions2 {
-    border-radius: 20px;
-    border: solid 1px black;
-    top: -23pt !important;
-    z-index: -1;
-    width: 213px !important;
+    display: none;
+    border-radius: 14px;
+    position: relative;
+    /* border: solid 1px black; */
+    top: -31pt;
+    padding: 4px;
+    align-content: flex-end;
+    right: 182pt;
+    padding-left: 9pt;
+    height: 67pt;
+    width: 171pt;
+    background-color: white;
+}
+
+.menuOptions3 {
+    display: none;
+    border-radius: 14px;
+    position: relative;
+    /* border: solid 1px black; */
+    top: -3pt;
+    padding: 4px;
+    align-content: flex-end;
+    right: 171pt;
+    z-index: 1;
+    padding-left: 9pt;
+    height: 67pt;
+    width: 171pt;
+    background-color: white;
+}
+
+.infoUser {
+    text-align: left;
+    padding-left: 10pt;
 }
 
 .option1 {
+    border-radius: 19px 19px 0px 0px;
     display: flex;
     align-items: center;
+    height: 45pt;
+    margin: 0pt 4pt 0pt;
+    width: 170pt;
+    background-color: white;
 }
 
 .option {
     display: flex;
     align-items: center;
+    height: 32pt;
+    left: -22pt;
+    position: relative;
+    margin-left: 19pt;
+    width: 174pt;
+    background-color: white;
+}
+
+.optionMenu {
+    position: relative;
+    left: 10pt;
 }
 
 .sign-in-active {
     border-radius: 0px 0px 19px 19px!important;
-    border-bottom: 1px solid black;
+    /* border-bottom: 1px solid black;
     border-right: 1px solid black;
-    border-left: 1px solid black;
-    left: -1px;
-    width: 10.5rem;
+    border-left: 1px solid black; */
 }
 
 .op1:hover .svgArrow1 {
     display: block;
 }
 
-.op3 {
-    border-radius: unset!important;
-}
-
-.op2 {
-    border-radius: unset!important;
-}
-
-.op2:hover .svgArrow2 {
+.menuOptions1:hover {
     display: block;
 }
 
-.op3:hover .svgArrow3 {
+.menuOptions2:hover {
     display: block;
 }
 
-.op4:hover .svgArrow4 {
+.menuOptions3:hover {
     display: block;
 }
 
-.op11:hover .svgArrow11 {
-    display: block;
+.op1:hover,
+.op2:hover,
+.op3:hover,
+.op4:hover,
+.op11:hover,
+.op12:hover,
+.op21:hover,
+.op22:hover,
+.op31:hover,
+.op32:hover {
+    background-color: rgb(227 227 227);
+    border-radius: 15pt;
 }
 
-.op12:hover .svgArrow12 {
-    display: block;
+.op11,
+.op12 {
+    width: 136pt;
+    text-align: justify;
+    height: 32pt;
+    place-content: center;
 }
 
-.op21:hover .svgArrow21 {
-    display: block;
+.align11 {
+    margin-left: 14pt;
 }
 
-.op22:hover .svgArrow22 {
-    display: block;
-}
-
-.op31:hover .svgArrow31 {
-    display: block;
-}
-
+.op2:hover .svgArrow2,
+.op3:hover .svgArrow3,
+.op4:hover .svgArrow4,
+.op11:hover .svgArrow11,
+.op21:hover .svgArrow21,
+.op22:hover .svgArrow22,
+.op31:hover .svgArrow31,
 .op32:hover .svgArrow32 {
     display: block;
 }
 
-.svgArrow1 {
-    display: none;
-    position: absolute;
-    right: 0;
-    margin-right: 15pt;
-    top: 13pt;
+.op12:hover .svgArrow12 {
+    display: block!important;
 }
 
-.svgArrow2 {
-    display: none;
-    position: absolute;
-    right: 0;
-    margin-right: 15pt;
-    top: 13pt;
-}
-
-.svgArrow3 {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 13pt;
-    margin-right: 15pt;
-}
-
-.svgArrow4 {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 13pt;
-    margin-right: 15pt;
-}
-
-.svgArrow11 {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 13pt;
-    margin-right: 15pt;
-}
-
-.svgArrow12 {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 13pt;
-    margin-right: 15pt;
-}
-
-.svgArrow21 {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 13pt;
-    margin-right: 15pt;
-}
-
-.svgArrow22 {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 13pt;
-    margin-right: 15pt;
-}
-
-.svgArrow31 {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 13pt;
-    margin-right: 15pt;
-}
-
+.svgArrow1,
+.svgArrow2,
+.svgArrow3,
+.svgArrow4,
+.svgArrow11,
+.svgArrow12,
+.svgArrow21,
+.svgArrow22,
+.svgArrow31,
 .svgArrow32 {
     display: none;
     position: absolute;
     right: 0;
-    top: 13pt;
+    top: 0pt;
     margin-right: 15pt;
+}
+
+.svgArrow11 {
+    top: 15pt;
+    right: -7pt;
+}
+
+.svgArrow12 {
+    top: 48pt;
+    right: -7pt;
+}
+
+.svgArrow21 {
+    top: 10pt;
+}
+
+.svgArrow22 {
+    top: 10pt;
+}
+
+.op21 {
+    left: -27pt;
+}
+
+.ml-13 {
+    margin-left: 13pt;
+}
+
+.svgArrow31 {
+    top: 10pt;
+}
+
+.svgArrow32 {
+    top: 10pt;
+}
+
+.svgArrow1 {
+    right: -177px;
+}
+
+.svgArrow2 {
+    right: -136px;
+}
+
+.svgArrow3 {
+    right: -151px;
+}
+
+.svgArrow4 {
+    right: -152px;
+}
+
+.signbtn {
+    width: 183px;
+    left: -1pt;
+    top: 1pt;
+}
+
+.option:hover {
+    background-color: rgb(230 232 234);
+    border-radius: 15pt;
 }
 
 
