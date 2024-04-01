@@ -99,7 +99,6 @@ const CustomInputFiles = ({id, onChange, singleImage = false}) => {
   const fileInputRef = useRef(null);
 
   const handleImageChange = (e) => {
-    console.log(e.target.files);
     const files = e.target.files;
     const filePreviews = [];
     for (let i = 0; i < files.length; i++) {

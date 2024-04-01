@@ -14,6 +14,5 @@ export function validateBirthDate(birthDate) {
     }
     const today = new Date();
     const birth = new Date(birthDate);
-    console.log(birth, today)
     return birth <= today;
 }

@@ -164,6 +164,7 @@ const defaultTheme = createTheme();
 
 
 export default function SignUp() {
+    const [profileImage, setProfileImage] = React.useState(null);
     const [first_name, setFirstName] = React.useState('');
     const [last_name, setLastName] = React.useState('');
     const [email, setEmail] = React.useState('');
@@ -223,35 +224,26 @@ export default function SignUp() {
     const toggleShowPassword = () => {
       setShowPassword((prevShowPassword) => {
         const newShowPassword = !prevShowPassword;
-        console.log('New showPassword state:', newShowPassword);
         return newShowPassword;
       });
     };
     const toggleShowPassword2 = () => {
       setShowPassword2((prevShowPassword) => {
         const newShowPassword = !prevShowPassword;
-        console.log('New showPassword state:', newShowPassword);
         return newShowPassword;
       });
     };
 
     const onImageUpload = (event) => {
+        setProfileImage(event)
+
+
     }
 
     const handleSubmit = async (event) => {
 
+
         event.preventDefault();
-        const data1 = new FormData();
-        data1.append('first_name', first_name);
-        data1.append('last_name', last_name);
-        data1.append('email', email);
-        data1.append('adddress', adddress);
-        data1.append('password', checkPassword);
-        data1.append('birth', birth);
-        data1.append('gender', gender);
-        data1.append('nic', nic);
-        data1.append('nif', nif);
-        data1.append('phone', phone);
 
 
         //  Validations
@@ -270,20 +262,23 @@ export default function SignUp() {
         if (firstNameError || lastNameError || emailError || genderError || adddressError || passwordError || checkPasswordError || birthError || nicError || nifError || phoneError) {
             return;
         }
+        const data1 = new FormData();
+        data1.append('first_name', first_name);
+        data1.append('last_name', last_name);
+        data1.append('email', email);
+        data1.append('adddress', adddress);
+        data1.append('password', checkPassword);
+        data1.append('birth', birth);
+        data1.append('gender', gender);
+        data1.append('nic', nic);
+        data1.append('nif', nif);
+        data1.append('phone', phone);
+        data1.append('profileImage', profileImage);
+
+
         try {
             const response = await axios.post("http://localhost:3000/api/users/signup",
-            {   first_name,
-                last_name,
-                email,
-                adddress,
-                password,
-                birth,
-                gender,
-                phone,
-                nic,
-                nif
-
-            });
+            data1);
 
           } catch (error) {
             console.error("Registration failed:", error);
@@ -311,7 +306,7 @@ export default function SignUp() {
             <Grid item xs={12} sm={6}>
                 <InputBox>
 
-                    <CustomInputFiles
+                    <CustomInputFiles singleImage
                     onChange={onImageUpload}></CustomInputFiles>
                 </InputBox>
             </Grid>
