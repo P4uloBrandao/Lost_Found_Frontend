@@ -21,16 +21,20 @@ const InputField = styled.input`
   width: 95%;
   height: ${(props) => props.height || '38px' };
   font-size: 16px;
-  background: transparent;
-  color: var(--second-color);
+  background: #ECECEC;
+  color: var(--black-color);
   padding-inline: 20px 0px;
-  border: 2px solid var(--primary-color);
+  border: none;
   border-radius: 30px;
   outline: none;
 
   &::placeholder {
-    color: var(--second-color); /* Change this line to set the placeholder text color */
+    color: var(--black-color); /* Change this line to set the placeholder text color */
     opacity: 0.7;
+    text-indent: 30px; 
+  }
+  & {
+    text-indent: 30px; 
   }
 
   &:focus ~ label,
@@ -38,11 +42,11 @@ const InputField = styled.input`
     position: absolute;
     top: -10px;
     left: 20px;
+    color: var(--second-color);
     font-size: 14px;
     font-weight: bold;
     background-color: var(--primary-color);
     border-radius: 30px;
-    color: #456d74;
     padding: 0 10px;
     transition: 0.2s;
   }
@@ -64,10 +68,12 @@ const Label = styled.label`
   color: var(--primary-color); /* Change this line to set the placeholder label color */
 `;
 const IconWrapper = styled.i`
+
   position: absolute;
-  top: 11px;
-  right: 25px;
+  top: 8px;
+  left: 13px;
   font-size: 20px;
+
 `;
 
 const ErrorMessage = styled.p`

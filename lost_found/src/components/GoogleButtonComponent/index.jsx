@@ -9,14 +9,17 @@ const GsiMaterialButton = styled.button`
   background-color: WHITE;
   align-self: center;
   background-image: none;
-  border: 1px solid #747775;
-  border-radius: 20px;
-  box-sizing: border-box;
+  border-radius: 0.5rem;
+  background: #FFF;
+  box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.11);
+  
   color: #1f1f1f;
   cursor: pointer;
   font-family: 'Roboto', Arial, sans-serif;
   font-size: 14px;
-  height: 40px;
+  width: 15.42813rem;
+  border:none;
+height: 3.18063rem;
   letter-spacing: 0.25px;
   outline: none;
   overflow: hidden;
@@ -26,7 +29,7 @@ const GsiMaterialButton = styled.button`
   vertical-align: middle;
   white-space: nowrap;
   text-align-last: center;
-  width: 70%;
+  
     max-width: 400px;
   min-width: min-content;
 

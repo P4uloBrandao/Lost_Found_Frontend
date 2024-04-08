@@ -9,6 +9,7 @@ body {
 /* Navbar */
 
 #navbar {
+    z-index: 10000;
     position: absolute;
     width: 75%;
     margin-right: 185px;

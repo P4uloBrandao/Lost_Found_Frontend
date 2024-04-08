@@ -9,6 +9,7 @@ import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { Toggle } from "../darkmode/index";
+import { useLocation } from 'react-router-dom';
 
 
 const MenuOptions = styled.div`
@@ -25,6 +26,7 @@ display: ${props => props.isOpen ? 'block' : 'none'};  border-radius: 20px;
 `;
 function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { logout, auth } = useContext(AuthContext);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
@@ -93,12 +95,12 @@ function Navbar() {
         <div className='logoItem'>
           <img src={Logo} alt="" />
         </div>
-
+        {location.pathname !== '/signup' &&location.pathname !== '/login' && (
         <div className='buttonsSide'>
           <Toggle/>
-        {userData ? null : (
-              <div onClick={handleSignInClick} className='signInItem'>SIGN IN</div>
-            )}
+          { !userData && ( // Condição para ocultar botões na página de login
+            <div onClick={handleSignInClick} className='signInItem'>SIGN IN</div>
+          )}
           
             <div className='menuItem' onClick={handleMenuItemClick}>
               <div className='menuItemText'>MENU <i class="fas fa-angle-down"></i></div> 
@@ -161,6 +163,7 @@ function Navbar() {
             
           
         </div>
+        )}
       </nav>
     </div>
   );
