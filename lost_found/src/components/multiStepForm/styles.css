@@ -16,14 +16,20 @@
     flex-direction: column;
     box-shadow: 0 10px 10px rgb(0 0 0 / 0.2);
     align-items: center;
-    height: 400px;
-    width: 500px;
+    height: 750px;
+    width: 700px;
 }
 
-.contain {
-    padding: 10px;
-     text-align: center;
- }
+
+  .contain {
+    display: flex;
+    margin-top: 0px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+  }
+
  .form {
      display: flex;
      padding: 10px;

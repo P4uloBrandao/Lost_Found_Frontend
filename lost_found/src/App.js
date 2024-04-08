@@ -2,7 +2,6 @@ import React from 'react';
 import SignUpPage from './pages/SignUpPage';
 import Home from './components/home/index';
 import LoginPage from './pages/LoginPage';
-import ProfilePage from './pages/ProfilePage';
 import ChangePassword from './components/changePassword/index';
 import Navbar from './components/navbarComponent/index'
 import styled from 'styled-components';
@@ -16,7 +15,8 @@ import { AuthProvider }  from './components/AuthContext'
 import ProtectedRoute from './components/protectedRoutes'
 import ProfileSettings from './components/profileSettings/index'
 import {Cloudinary} from "@cloudinary/url-gen";
-import FoundObjectPage from './pages/FoundObjectPage';
+import StepForm from './components/multiStepForm/StepForm';
+import FoundObjectForm from './components/FoundObjectsFormsComponent/FoundObjectForm';
 const LayoutContainer = styled.div`
   /* Add any layout-related styles here */
 `;
@@ -29,7 +29,6 @@ const GlobalStyles = styled.div`
 
 function App() {
 
-    // Create a Cloudinary instance and set your cloud name.
     const cld = new Cloudinary({
         cloud: {
             cloud_name: 'dkyu0tmfx',
@@ -51,7 +50,6 @@ function App() {
               <ProtectedRoute>
                 <ProfileSettings />
                 <DeleteProfile />
-                
               </ProtectedRoute>
             }
           />
@@ -79,12 +77,11 @@ function App() {
               </ProtectedRoute>
             }
           />
-
           <Route
             path="/foundObject"
             element={
               <ProtectedRoute>
-                <FoundObjectPage/>
+                <FoundObjectForm/>
               </ProtectedRoute>
             }
           />    
