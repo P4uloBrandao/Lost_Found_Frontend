@@ -12,10 +12,10 @@ import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import styled, { keyframes, css} from 'styled-components';
 import LockIcon from '@mui/icons-material/Lock';
 import LockIconOpen from '@mui/icons-material/LockOpenRounded';
-
+import LoginImage from '../../assets/background/loginImage.svg'; 
 import GoogleButton from '../GoogleButtonComponent/index'
 const colors = css`
-  --primary-color: #c6c3c3;
+  --primary-color: #3CB684;
   --second-color: #ffffff;
   --black-color: #000000;
 `;
@@ -24,67 +24,47 @@ const colors = css`
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
   min-height: 100vh;
-  background-color: rgba(0, 0, 0, 0.2);
-  background-image : url("../../assets/background/bg-photo.jpg")
+  
+   img {
+    position: absolute;
+    z-index: 100;
+    right: 0px;
+    bottom: 0px;
+    transform: scale(1);
+}
+  
 `;
 
 const LoginBox = styled.div`
 ${colors};
-text-align: -webkit-center;
+  text-align: -webkit-center;
   position: relative;
-  height: 375px;
-    width: 330px;
-  backdrop-filter: blur(25px);
-  border: 2px solid var(--primary-color);
+  height: 61.5vh;
+  background-color: white;
+  width: 30%;  backdrop-filter: blur(25px);
   box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
-  border-radius: 15px;
-  padding: 7.5em 2.5em 4em 2.5em;
-  color: var(--second-color);
+  padding: 7.5em 6.5em;
 `;
 const LoginHeader = styled.div`
-  ${colors} 
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--primary-color);
-  width: 140px;
-  height: 70px;
-  border-radius: 0 0 20px 20px;
 
-  &:before,
-  &:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    width: 30px;
-    height: 30px;
-    background: transparent;
-  }
+  top: 0rem;
+  position: relative;
 
-  &:before {
-    left: -30px;
-    border-top-right-radius: 50%;
-    box-shadow: 15px 0 0 0 var(--primary-color);
-  }
-
-  &:after {
-    right: -30px;
-    border-top-left-radius: 50%;
-    box-shadow: -15px 0 0 0 var(--primary-color);
-  }
 `;
 
 const LoginHeaderText = styled.span`
 ${colors}
-font-size: 30px;
+
   color: var(--black-color);
+  text-align: center;
+  font-family: Roboto;
+  font-size: 3.5rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
 `;
 
 
@@ -116,43 +96,112 @@ const RememberForgot = styled.div`
   justify-content: space-between;
   font-size: 15px;
   margin-bottom: 14px;
+  
+  
 `;
+const RememberBox = styled.div`
+  display: flex;
+  align-items: center;
+  user-select: none;
 
+  label {
+    font-size: 16px;
+    color: #333;
+    margin-left: 8px;
+    cursor: pointer;
+  }
+
+  input {
+    opacity: 0;
+    visibility: hidden;
+    position: absolute;
+
+    &:checked + .check {
+      background-color:  var(--primary-color);
+    }
+  }
+
+   .check {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+    border: 1px solid #ccc;
+    border-radius: 9px;
+    background-color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+`;
 const InputSubmit = styled.button`
 ${colors}  
-width: 50%;
-    height: 40px;
-  background: #ffffff;
-  font-size: 16px;
-  font-weight: 500;
+
+width: 9.93306rem;
+height: 3.25rem;
+  background:var(--primary-color);
+  box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.11);
+  transition: background-color 0.218s, border-color 0.218s, box-shadow 0.218s;
+  text-align: center;
+  font-family: Roboto;
+  font-size: 1.5rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 135.5%;
   border: none;
   border-radius: 30px;
   cursor: pointer;
+  color:var(--second-color);
   transition: 0.3s;
 
   &:hover {
     background: var(--second-color);
+    border: solid 2px var(--primary-color);
+    color:var(--primary-color);
+    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.30), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
   }
 `;
 
 const Register = styled.div`
   text-align: center;
 `;
+const LoginBody = styled.div`
+  position:relative;
+  top:1rem;
+`;
 
 const RegisterLink = styled.a`
   font-weight: 500;
   text-decoration: none;
-  color: var(--second-color);
+  color: var(--primary-color);
+  cursor:pointer;
+  margin-right: 11px;
   &:hover {
     text-decoration: underline;
 `;
 
+const HrDivison = styled.div`
+  display: flex;
+  align-items: center;
+  color: #000000;
+  margin: 20px 0;
+
+  hr {
+    flex: 1;
+    border: none;
+    height: 1.33pt;
+    background-color: #3cb684;
+    margin: 0 10px;
+}
+
+  p {
+    margin: 0;
+  }
+`;
 const MediaQueryWrapper = styled.div`
   @media only screen and (max-width: 564px) {
     padding: 20px;
   }
 `;
-
 const MediaQueryLoginBox = styled.div`
   @media only screen and (max-width: 564px) {
     padding: 7.5em 1.5em 4em 1.5em;
@@ -168,7 +217,13 @@ export default function SignIn() {
     const {login } = useContext(AuthContext);
     const defaultTheme = createTheme();
     const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
-
+    
+      const [checked, setChecked] = useState(false);
+    
+      const handleCheckboxClick = () => {
+        setChecked(!checked);
+      };
+    
     const navigate = useNavigate();
     const toggleShowPassword = () => {
       setShowPassword((prevShowPassword) => {
@@ -226,9 +281,21 @@ export default function SignIn() {
         <LoginBox>
       <LoginHeader>
         <LoginHeaderText>Login</LoginHeaderText>
+        
       </LoginHeader>
+      <LoginBody>
+        
+        
+     
       {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}{" "}
-
+      <GoogleButton
+        placeholder={'Continue with Google'}  
+        id="googleButtonLogin"
+        
+        onClick={(e) => setLoginGoogle(e.target.value)}
+        
+        name="googleButtonLogin"/>
+        <HrDivison ><hr /> <p> OR</p> <hr /></HrDivison>
       <form onSubmit={handleSubmit} >
         <InputBox>
         <InputF 
@@ -259,34 +326,31 @@ export default function SignIn() {
         />
         </InputBox>
         <RememberForgot>
-          <div className="remember-me">
-            <input type="checkbox" id="remember" />
-            <label >Remember me</label>
-          </div>
+           <RememberBox>
+            <input id="one" type="checkbox"/>
+            <span className="check" onClick={handleCheckboxClick}></span>
+            <label for="one">Remember me</label>
+          </RememberBox>
           <div className="forgot">
-            <RegisterLink href="#">Forgot password</RegisterLink>
+            <RegisterLink href="#"  style={{ left: '10px' }}>Forgot password?</RegisterLink>
           </div>
         </RememberForgot>
         <>
           <InputSubmit type="submit" className="input-submit" value="Login" label="Login">Login</InputSubmit>
         </>
         <InputBox>
-        <GoogleButton
-        placeholder={'Continue with Google'}  
-        id="googleButtonLogin"
         
-        onClick={(e) => setLoginGoogle(e.target.value)}
-        
-        name="googleButtonLogin"/>
         </InputBox>
         <Register>
           <span>
             Don't have an account?  
-            <RegisterLink href="./signup">Register</RegisterLink>
+            <RegisterLink href="./signup"> Register</RegisterLink>
           </span>
         </Register>
       </form>
+      </LoginBody>
     </LoginBox>
+    <img src={LoginImage} alt="" />
     </Wrapper>
              
             

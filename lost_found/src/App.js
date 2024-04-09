@@ -19,7 +19,7 @@ import Navbar from './components/NavBar/index.jsx'
 const LayoutContainer = styled.div`
   /* Add any layout-related styles here */
   background-color:#ede8e8;
-  margin-top:20pt;
+ 
 
 `;
 
