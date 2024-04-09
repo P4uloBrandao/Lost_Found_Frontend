@@ -31,7 +31,7 @@ function Home() {
       return <Navigate to="/login" replace />;
     }
   
-    return <h1>Home: Protected Content Here</h1>;
+    return <></>;
   }
   
   export default Home;
