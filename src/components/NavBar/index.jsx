@@ -94,6 +94,10 @@ function Navbar() {
     navigate('/profile'); 
   };
 
+  const redirectToLostObects = () => {
+    navigate('/lostObjects'); 
+  };
+
   return (
     <div>
       <nav id="navbar">
@@ -132,7 +136,7 @@ function Navbar() {
                  <div className='optionMenu'> LOST <FontAwesomeIcon className='svgArrow1' icon={faArrowLeft} /></div>
                   <div className='subMenu1'>
                     <div className='menuOptions1'>
-                    <div  className=' op11'> <div className='align11' >REGISTER LOST<FontAwesomeIcon className='svgArrow11' icon={faArrowLeft} /></div></div>
+                    <div  className=' op11' onClick={redirectToLostObects}> <div className='align11' >REGISTER LOST<FontAwesomeIcon className='svgArrow11' icon={faArrowLeft} /></div></div>
                     <div  className=' op12'> <div className='align11'>MY LOST<FontAwesomeIcon className='svgArrow12' icon={faArrowLeft} /></div></div>
                   </div></div>
                   
