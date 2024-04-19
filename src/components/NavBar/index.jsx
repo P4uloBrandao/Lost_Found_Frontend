@@ -88,6 +88,11 @@ function Navbar() {
   if (loading) {
     return <div>Carregando...</div>;
   }
+  
+
+  const redirectToProfile = () => {
+    navigate('/profile'); 
+  };
 
   return (
     <div>
@@ -147,7 +152,7 @@ function Navbar() {
                <div className='subMenu2'>
 
                 <div className=' menuOptions3'>
-                  <div  className='option op31 '> <div className='ml-13'>EDIT PROFILE<FontAwesomeIcon className='svgArrow31' icon={faArrowLeft} /></div></div>
+                  <div  className='option op31 'onClick={redirectToProfile}> <div className='ml-13'>EDIT PROFILE<FontAwesomeIcon className='svgArrow31' icon={faArrowLeft} /></div></div>
                   <div  className='option op32'> <div className='ml-13'>PRIVACY SETTINGS<FontAwesomeIcon className='svgArrow32' icon={faArrowLeft} /></div></div>
                   </div>
                 </div>

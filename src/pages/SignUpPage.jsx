@@ -2,7 +2,7 @@ import React from 'react'
 import Login from '../components/loginComponent/index'
 import photo from '../assets/background/bg-photo.jpg'
 import styled, { keyframes } from 'styled-components';
-import SignUp from "../components/signUp";
+import SignUp from "../components/SignUpTest";
 const fadeIn = keyframes`
   from {
     opacity: 0;

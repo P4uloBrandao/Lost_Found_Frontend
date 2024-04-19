@@ -19,9 +19,10 @@ const Label = styled.label`
 const InputBox = styled.div`
   ${colors};
   position: relative;
+  align-self: center;
   display: inline-block;
-  width: auto; /* Adjust width as needed */
-  height: 300px; /* Adjust height as needed */
+  width: 100pt; /* Adjust width as needed */
+  height: 100pt; /* Adjust height as needed */
   background-color: var(--primary-color);
   border-radius: 10px;
   overflow: hidden;
@@ -34,8 +35,9 @@ const FileInputField = styled.input.attrs({
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 20pt;
+  
+  height: 20pt;
   opacity: 0;
   cursor: pointer;
 `;

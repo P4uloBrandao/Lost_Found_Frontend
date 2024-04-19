@@ -42,7 +42,7 @@ const LoginBox = styled.div`
 ${colors};
   text-align: -webkit-center;
   position: relative;
-  height: 61.5vh;
+  height: 65.5vh;
   background-color: white;
   width: 30%;  backdrop-filter: blur(25px);
   box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
@@ -260,7 +260,7 @@ export default function SignIn() {
             userEmail: 'joao@example.com', // Substitua isso pelo e-mail real do usuário
           };
           login(userData);
-           navigate("/home");
+           navigate("/profile");
      
         } catch (error) {
           console.error("Authentication failed:", error);

@@ -16,6 +16,7 @@ import { AuthContext } from "../AuthContext";
 import axios from "axios";
 import { useState, useContext } from "react";
 import { Navigate } from "react-router-dom"; 
+import Layout from '../Layout/Layout';
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -29,6 +30,9 @@ function Home() {
   
     if (!token) {
       return <Navigate to="/login" replace />;
+    }
+    else{
+      <Navigate to="/profile" replace />;
     }
   
     return <></>;

@@ -15,6 +15,7 @@ import ProfileSettings from './components/profileSettings/index'
 import {Cloudinary} from "@cloudinary/url-gen";
 import LostObjects from './components/lostObjForm/index'
 import Navbar from './components/NavBar/index.jsx'
+import SignUp from './components/SignUpTest/index.js';
 
 const LayoutContainer = styled.div`
   /* Add any layout-related styles here */
@@ -54,11 +55,11 @@ function App() {
           <Route
             path="/profile"
             element={
-              <div>
-                <ProfileSettings />
-                <DeleteProfile />
+              <ProtectedRoute>
+                <ProfilePage />
                 
-              </div>
+                
+              </ProtectedRoute>
             }
           />
           <Route
@@ -77,22 +78,8 @@ function App() {
               </ProtectedRoute>
             }
           />
-              <Route
-            path="/deleteProfile"
-            element={
-              <ProtectedRoute>
-                <DeleteProfile />
-              </ProtectedRoute>
-            }
-          />  
-          <Route
-            path="/changePassword"
-            element={
-              <ProtectedRoute>
-                <ChangePassword />
-              </ProtectedRoute>
-            }
-          />
+              
+          
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
               <Route path="/login" element={<LoginPage />} />

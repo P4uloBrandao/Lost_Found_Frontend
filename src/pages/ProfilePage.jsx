@@ -3,6 +3,8 @@ import photo from '../assets/background/bg-photo.jpg'
 import styled, { keyframes } from 'styled-components';
 import ProfileSettings from '../components/profileSettings/index';
 import DeleteProfile from '../components/deleteProfile/index'
+import Layout from '../components/Layout/Layout';
+import ChangePassword from '../components/changePassword';
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -22,9 +24,13 @@ const Background = styled.div`
 
 export default function ProfilePage() {
   return ( 
+   
   <Background>
-  <ProfileSettings/>
+                <ProfileSettings />
+                <DeleteProfile />
+                <ChangePassword />
   </Background>
+ 
   )
 }
 
