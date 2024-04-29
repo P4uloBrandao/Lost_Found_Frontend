@@ -26,14 +26,38 @@ label {
     margin: 0.5rem 0;
 }
 
-.form-step {
+
+/* .form-step {
     display: none;
 }
 
 .form-step.active {
     display: block;
-    transform-origin: top;
+    transform-origin: left;
     animation: animate .5s;
+    height: 19rem;
+} */
+
+.form-step {
+    display: none;
+    /* position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    transition: transform 0.5s ease; */
+}
+
+.form-step.active {
+    display: block;
+    transform: translateX(0);
+}
+
+.form-step.next {
+    transform: translateX(100%);
+}
+
+.form-step.prev {
+    transform: translateX(-100%);
 }
 
 
@@ -45,29 +69,33 @@ label {
 }
 
 .btn {
-    padding: 0.75rem;
-    display: block;
-    text-decoration: none;
-    width: min-content;
-    border-radius: 5px;
+    --primary-color: #3CB684;
+    --second-color: #ffffff;
+    --black-color: #000000;
+    width: 6rem;
+    margin: 0 1rem;
+    height: 2rem;
+    background: var(--primary-color);
+    box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.11);
+    transition: background-color 0.218s, border-color 0.218s, box-shadow 0.218s;
     text-align: center;
-    transition: all 0.3s;
+    font-family: Roboto;
+    font-size: 1.1rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 135.5%;
+    border: none;
+    border-radius: 30px;
     cursor: pointer;
-}
-
-.btn-next {
-    background-color: var(--blue-color);
-    color: white;
-    float: right;
-}
-
-.btn-prev {
-    background-color: #777;
-    color: #fff;
+    color: var(--second-color);
+    transition: 0.3s;
 }
 
 .btn:hover {
-    box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--blue-color);
+    background: var(--second-color);
+    border: solid 2px var(--primary-color);
+    color: var(--primary-color);
+    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.30), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
 }
 
 textarea {
@@ -160,7 +188,7 @@ textarea {
 }
 
 .progress-step.active {
-    background-color: var(--blue-color);
+    background-color: #3eb886;
     color: white;
 }
 
@@ -177,21 +205,3 @@ textarea {
 
 
 /* End Progress bar */
-
-
-/* Add Experience Btn */
-
-.add-exp-btn {
-    color: #577d4c;
-    border-right: 2px solid #577d4c;
-    border-bottom: 2px solid #577d4c;
-    padding: 0 10px 10px 0;
-    text-decoration: none;
-    font-weight: 600;
-    border-bottom-right-radius: 6px;
-    cursor: pointer;
-}
-
-.add-experience {
-    margin-bottom: 20px;
-}

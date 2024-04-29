@@ -30,25 +30,15 @@ import FileInput from "../ImageInputComponent/FileInput";
 import CustomInputFiles from "../ImageInputComponent/FileInput";
 import {DropdownInput} from "../dropdownInputComponent";
 import {ArrowDropDownIcon} from "@mui/x-date-pickers";
-const colors = css`
-  --primary-color: #3CB684;
-  --second-color: #ffffff;
-  --black-color: #000000;
-`;
+import '../../assets/colors/colors.css'
+
 const Card = styled.div `
 
   display: flex;
   flex-direction: column;
-  width: 350px;
   
   border-radius: 10px;
-  background: #ffffff;
-  box-shadow: 0px -6.8px 9.8px rgba(0, 0, 0, 0.003),
-    0px -10.8px 23.5px rgba(0, 0, 0, 0.008),
-    0px -10.3px 44.3px rgba(0, 0, 0, 0.016),
-    0px -1.5px 79.1px rgba(0, 0, 0, 0.026),
-    0px 28.5px 147.9px rgba(0, 0, 0, 0.042), 0px 174px 354px rgba(0, 0, 0, 0.07);
-
+  
 
 `
 
@@ -70,14 +60,17 @@ const Wrapper = styled.div`
 `;
 
 const LoginBox = styled.div`
-${colors};
+
   text-align: -webkit-center;
   position: relative;
-  height: 65.5vh;
-  background-color: white;
-  width: 30%;  backdrop-filter: blur(25px);
+  height:  100vh;
+  width: 100%; 
+
+  background-color: var(--white-color);
+  
+  backdrop-filter: blur(25px);
   box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
-  padding: 7.5em 6.5em;
+  padding: 7.5em 5em;
 `;
 const LoginHeader = styled.div`
 
@@ -87,7 +80,6 @@ const LoginHeader = styled.div`
 `;
 
 const LoginHeaderText = styled.span`
-${colors}
 
   color: var(--black-color);
   text-align: center;
@@ -108,19 +100,19 @@ const InputBox = styled.div`
 `;
 
 
-const Label = styled.label`
-  position: absolute;
-  top: -28px;
-  left: 20px;
-  transition: 0.2s;
-`;
+// const Label = styled.label`
+//   position: absolute;
+//   top: -28px;
+//   left: 20px;
+//   transition: 0.2s;
+// `;
 
-const Icon = styled.i`
-  position: absolute;
-  top: 18px;
-  right: 25px;
-  font-size: 20px;
-`;
+// const Icon = styled.i`
+//   position: absolute;
+//   top: 18px;
+//   right: 25px;
+//   font-size: 20px;
+// `;
 
 const RememberForgot = styled.div`
   display: flex;
@@ -148,7 +140,7 @@ const RememberBox = styled.div`
     position: absolute;
 
     &:checked + .check {
-      background-color:  var(--primary-color);
+      background-color:  var( --primary-green-color);
     }
   }
 
@@ -159,17 +151,16 @@ const RememberBox = styled.div`
     vertical-align: middle;
     border: 1px solid #ccc;
     border-radius: 9px;
-    background-color: #fff;
+    background-color: var(--white-color);
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 `;
 const InputSubmit = styled.button`
-${colors}  
 
 width: 9.93306rem;
 height: 3.25rem;
-  background:var(--primary-color);
+  background:var( --primary-green-color);
   box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.11);
   transition: background-color 0.218s, border-color 0.218s, box-shadow 0.218s;
   text-align: center;
@@ -181,19 +172,18 @@ height: 3.25rem;
   border: none;
   border-radius: 30px;
   cursor: pointer;
-  color:var(--second-color);
+  color:var(--white-color);
   transition: 0.3s;
 
   &:hover {
-    background: var(--second-color);
-    border: solid 2px var(--primary-color);
-    color:var(--primary-color);
+    background: var(--white-color);
+    border: solid 2px var(--primary-green-color);
+    color:var(--primary-green-color);
     box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.30), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
   }
 `;
 const Form = styled.form`
   display: grid;
-  gap: 20px;
 `;
 const Register = styled.div`
   text-align: center;
@@ -206,7 +196,7 @@ const LoginBody = styled.div`
 const RegisterLink = styled.a`
   font-weight: 500;
   text-decoration: none;
-  color: var(--primary-color);
+  color: var(--primary-green-color);
   cursor:pointer;
   margin-right: 11px;
   &:hover {
@@ -223,7 +213,7 @@ const HrDivison = styled.div`
     flex: 1;
     border: none;
     height: 1.33pt;
-    background-color: #3cb684;
+    background-color: var(--primary-green-color);
     margin: 0 10px;
 }
 
@@ -322,10 +312,10 @@ export default function SignUp() {
   
   const [formStepsNum, setFormStepsNum] = useState(0);
   const formSteps = [
-      { title: "Personal Informations" },
-      { title: "Contact Informations" },
-      { title: "Experiences" },
-      { title: "Social Links" }
+      { title: "1" },
+      { title: "2" },
+      { title: "3" },
+      { title: "4" }
   ];
 
   const nextStep = () => {
@@ -413,15 +403,15 @@ export default function SignUp() {
         <div className="progress-bar">
                 <div className="progress" style={{ width: `${(formStepsNum + 1) * 25}%` }}></div>
                 {formSteps.map((step, index) => (
-                    <div key={index} className={`progress-step ${index === formStepsNum ? 'active' : ''}`} data-title={step.title}></div>
+                    <div key={index} className={`progress-step ${index === formStepsNum ? 'active' : ''}`} ></div>
                 ))}
             </div>
 
             {formSteps.map((step, index) => (
                 <div key={index} className={`form-step ${index === formStepsNum ? 'active' : ''}`}>
-                    <h3>{step.title}</h3>
+                   
                     {/* Campos do formulário para cada etapa */}
-                    {step.title === "Personal Informations" && (
+                    {step.title === "1" && (
                         <>
                             <InputBox >
         <InputF 
@@ -469,7 +459,7 @@ export default function SignUp() {
                 </>
             )}
 
-            {step.title === "Contact Informations" && (
+            {step.title === "2" && (
                 <>
                     <InputBox>
                 <InputF
@@ -505,24 +495,11 @@ export default function SignUp() {
         errorValidation={checkPasswordError}
         />
         </InputBox>
-        <InputBox>
-        <InputF 
-        icon={<PhoneIcon />} 
-        type={'number'} 
-        placeholder={'Enter your phone number'}  
-        id="phone"
-        required
-        onChange={(e) => setPhone(e.target.value)}
-        value={phone}
-        errorValidation={phoneError}
-        errorMessage={'Telefone inválido'}
-        name="Phone"/>
-          
-        </InputBox>
+        
                 </>
             )}
 
-            {step.title === "Experiences" && (
+            {step.title === "3" && (
                 <>
                 <InputBox>
         <InputF 
@@ -572,8 +549,22 @@ export default function SignUp() {
                 </>
             )}
 
-            {step.title === "Social Links" && (
+            {step.title === "4" && (
                 <>
+                <InputBox>
+        <InputF 
+        icon={<PhoneIcon />} 
+        type={'number'} 
+        placeholder={'Enter your phone number'}  
+        id="phone"
+        required
+        onChange={(e) => setPhone(e.target.value)}
+        value={phone}
+        errorValidation={phoneError}
+        errorMessage={'Telefone inválido'}
+        name="Phone"/>
+          
+        </InputBox>
         <InputBox>
         <InputF 
         type={'number'} 
@@ -621,12 +612,16 @@ export default function SignUp() {
         </div>
             ))}
       </Form>
-      
+      <Register>
+          <span>
+            I already have an account.
+            <RegisterLink href="./login"> Login</RegisterLink>
+          </span>
+        </Register>
         </Card>
       
       </LoginBody>
     </LoginBox>
-    <img src={LoginImage} alt="" />
     </Wrapper>
              
             

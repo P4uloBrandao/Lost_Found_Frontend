@@ -1,5 +1,6 @@
 /* Main Styling */
 
+@import url('../../assets/colors/colors.css');
 html,
 body {
     font-family: 'Roboto', sans-serif;
@@ -10,14 +11,15 @@ body {
 
 #navbar {
     z-index: 10000;
-    position: absolute;
-    width: 75%;
-    margin-right: 185px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    /* margin-right: 185px; */
     height: 79px;
-    margin-left: 80px;
+    /* margin-left: 80px; */
     display: flex;
     align-items: center;
-    text-align: center;
+    /* text-align: center; */
 }
 
 .profileNavItem {
@@ -29,52 +31,56 @@ body {
 
 .menuItem {
     display: flex;
-    width: 174px;
+    width: 8em;
     padding: 16px 24px;
     justify-content: center;
-    height: 21px;
+    height: 1em;
     align-items: center;
     /* gap: 10px; */
     cursor: pointer;
     flex-shrink: 0;
     border-radius: 20px;
-    background: #0C0C20;
+    background: var(--black-color);
 }
 
 .menuItem:hover {
-    background-color: #469c5e;
-    color: #0C0C20
+    background-color: var( --primary-green-color);
+    color: var( --black-color);
 }
 
 .signInItem {
     display: flex;
-    width: 174px;
-    height: -webkit-fill-available;
+    width: 7.889em;
+    height: 0.889em;
     padding: 16px 24px;
     justify-content: center;
     align-items: center;
-    gap: 10px;
+    /* gap: 10px; */
     cursor: pointer;
     flex-shrink: 0;
     border-radius: 20px;
-    border: 1px solid #0C0C20;
+    border: 1px solid var( --black-color);
 }
 
 .signInItem:hover {
-    background-color: #0C0C20;
+    background-color: var( --black-color);
+    ;
     /* Mudar background ao passar o mouse */
-    border-color: #0C0C20;
+    border-color: var( --black-color);
+    ;
     /* Mudar cor da borda ao passar o mouse */
-    color: white;
+    color: var( --white-color);
+    ;
     /* Mudar cor do texto ao passar o mouse */
 }
 
 .menuItemText {
-    color: white !important;
+    color: var(--white-color) !important;
+    position: absolute;
 }
 
 .signInItemText {
-    color: rgb(0, 0, 0) !important;
+    color: var( --black-color) !important;
 }
 
 .imgMenu {
@@ -82,7 +88,7 @@ body {
 }
 
 .userNameText {
-    color: var(--Gray-Shades-Dark-Gray, #09090A);
+    color: var(--Gray-Shades-Dark-Gray, var( --black-color));
     font-size: 0.9375rem;
     font-style: normal;
     font-weight: 700;
@@ -92,7 +98,7 @@ body {
 }
 
 .userEmailText {
-    color: #3CB684;
+    color: var(--primary-green-color);
     font-size: 0.875rem;
     font-style: normal;
     font-weight: 400;
@@ -101,20 +107,41 @@ body {
     line-height: normal;
 }
 
+.svgButtons {
+    transition: transform 0.3s ease;
+    /* Add a transition for the transform property */
+}
+
+
+/* Define the styles for the open and closed states */
+
+.open {
+    transform: rotate(180deg);
+    /* Adjust the rotation for the open state */
+}
+
+.closed {
+    transform: rotate(0deg);
+    /* Keep the rotation as it is for the closed state */
+}
+
 .buttonsSide {
-    gap: 10pt;
-    right: 0;
-    top: 12pt;
-    width: 301px;
-    position: absolute;
+    gap: 1rem;
+    /* margin-right: 4rem; */
+    /* top: 1.2rem; */
+    scale: 0.7;
+    /* width: 18rem; */
+    position: relative;
     /* height: 50pt; */
     display: flex;
     /* align-items: center; */
+    margin-left: auto;
 }
 
 .logoItem {
-    left: 0;
-    position: absolute;
+    margin-left: -2rem;
+    transform: scale(0.5);
+    position: relative;
 }
 
 .menuOptions1 {
@@ -129,7 +156,7 @@ body {
     height: 67pt;
     z-index: -1;
     width: 141pt;
-    background-color: white;
+    background-color: var(--white-color);
 }
 
 .subMenu1 {
@@ -177,7 +204,7 @@ body {
     padding-left: 9pt;
     height: 67pt;
     width: 171pt;
-    background-color: white;
+    background-color: var(--white-color);
 }
 
 .menuOptions3 {
@@ -193,7 +220,7 @@ body {
     padding-left: 9pt;
     height: 67pt;
     width: 171pt;
-    background-color: white;
+    background-color: var(--white-color);
 }
 
 .infoUser {
@@ -208,7 +235,7 @@ body {
     height: 45pt;
     margin: 0pt 4pt 0pt;
     width: 170pt;
-    background-color: white;
+    background-color: var(--white-color);
 }
 
 .option {
@@ -219,7 +246,7 @@ body {
     position: relative;
     margin-left: 19pt;
     width: 174pt;
-    background-color: white;
+    background-color: var(--white-color);
 }
 
 .optionMenu {
@@ -228,7 +255,7 @@ body {
 }
 
 .sign-in-active {
-    border-radius: 0px 0px 19px 19px!important;
+    border-radius: 19px!important;
     /* border-bottom: 1px solid black;
     border-right: 1px solid black;
     border-left: 1px solid black; */
@@ -260,7 +287,7 @@ body {
 .op22:hover,
 .op31:hover,
 .op32:hover {
-    background-color: rgb(227 227 227);
+    background-color: var(--grey-color);
     border-radius: 15pt;
 }
 
@@ -308,14 +335,19 @@ body {
     margin-right: 15pt;
 }
 
+.svgButtons {
+    left: 1em;
+    position: relative;
+}
+
 .svgArrow11 {
     top: 15pt;
-    right: -7pt;
+    position: absolute;
+    /* right: -7pt; */
 }
 
 .svgArrow12 {
     top: 48pt;
-    right: -7pt;
 }
 
 .svgArrow21 {
@@ -365,7 +397,7 @@ body {
 }
 
 .option:hover {
-    background-color: rgb(230 232 234);
+    background-color: var(--grey-color);
     border-radius: 15pt;
 }
 

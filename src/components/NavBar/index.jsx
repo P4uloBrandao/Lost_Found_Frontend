@@ -8,20 +8,23 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faMinus  } from '@fortawesome/free-solid-svg-icons'
 import { Toggle } from "../darkmode/index";
 import { useLocation } from 'react-router-dom';
+import "../../assets/colors/colors.css"
 
 
 const MenuOptions = styled.div`
 display: ${props => props.isOpen ? 'block' : 'none'};  border-radius: 20px;
-  /* border: solid 1px black; */
   position: relative;
-  top: 52pt;
-  width: 167pt;
-  left: -191pt;
-  background-color: white;
+  top: ${props => props.userData === null ? '90pt !important' : '121pt !important'}; 
+    
+    left:${props => props.userData === null ? '-15t !important' : '-7pt !important'}; 
+  background-color: var(--white-color);
   height: ${props => props.userData === null ? '93pt !important' : '168pt !important'}; 
   padding: 15pt;
+    
   
 `;
 function Navbar() {
@@ -102,19 +105,25 @@ function Navbar() {
     <div>
       <nav id="navbar">
         <div className='logoItem'>
-          <img src={Logo} alt="" />
+          <img src={Logo} alt="Brand logo" />
         </div>
         {location.pathname !== '/signup' &&location.pathname !== '/login' && (
         <div className='buttonsSide'>
           <Toggle/>
           { !userData && ( // Condição para ocultar botões na página de login
-            <div onClick={handleSignInClick} className='signInItem'>SIGN IN</div>
+            <div onClick={handleSignInClick} className='signInItem'>SIGN IN <FontAwesomeIcon className='svgButtons' icon={faArrowRight} /></div>
           )}
           
             <div className='menuItem' onClick={handleMenuItemClick}>
-              <div className='menuItemText'>MENU <i class="fas fa-angle-down"></i></div> 
-              
-            </div> 
+            <div className='menuItemText'>
+        MENU
+        <FontAwesomeIcon
+          className={`svgButtons ${isOpen ? 'open' : 'closed'}`}
+          icon={isOpen ? faMinus : faPlus}
+        />
+      </div>
+      {isOpen && <MenuOptions isOpen={isOpen} userData={userData} />}          
+            
             <MenuOptions isOpen={isOpen} userData={userData} > 
                
                
@@ -169,7 +178,7 @@ function Navbar() {
               
                </ MenuOptions>
                
-            
+            </div> 
           
         </div>
         )}

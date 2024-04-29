@@ -1,30 +1,34 @@
-import React from 'react'
-import Login from '../components/loginComponent/index'
-import photo from '../assets/background/bg-photo.jpg'
+import React from 'react';
+import Login from '../components/loginComponent/index';
+import photo from '../assets/background/bg-photo.jpg';
 import styled, { keyframes } from 'styled-components';
+import LoginImage from '../assets/background/loginImage.svg'; 
+import Grid from '@mui/material/Unstable_Grid2/Grid2';
+import "./LoginPage.css"
+import  { useEffect } from "react";
 
 
-const fadeIn = keyframes`
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-`;
 
-const Background = styled.div`
-  background-color: #f9fbe4;
-  /* Set the desired height */
-  animation: ${fadeIn} 1s ease-in; /* You can add animations if needed */
-`;
-const LoginContainer = styled.div`
- 
-`;
 export default function LoginPage() {
-  return (
-    
-    <Background><LoginContainer><Login/></LoginContainer></Background>
-  )
-}
+  useEffect(() => {
+    // Bloquear scroll horizontal e vertical
+    document.body.style.overflow = 'hidden';
 
+    // Retornar a função de limpeza no desmonte do componente
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+  return (
+   
+    <Grid  container  spacing={0}>
+    <Grid className="logincontainer" xs={12} md={5}>
+    <Login/>
+  </Grid>
+  <Grid xs={12} md={7}>
+  <img className='image' src={LoginImage} alt="" />
+
+  </Grid>
+    </Grid>
+  );
+}

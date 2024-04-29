@@ -1,13 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
+@import url('../../assets/colors/colors.css');
 body {
     font-family: "Roboto", sans-serif;
-    background-color: #fff;
+    background-color: var(--white-color);
     margin: 0;
     transition: background 0.2s linear;
 }
 
 body.dark {
-    background-color: #292c35;
+    background-color: var(--black-color);
 }
 
 
@@ -15,7 +16,7 @@ body.dark {
 
 body.dark h1,
 body.dark .support a {
-    color: #fff;
+    color: var(--white-color);
 }
 
 .checkbox {
@@ -24,13 +25,13 @@ body.dark .support a {
 }
 
 .checkbox-label {
-    background-color: #111;
+    background-color: var(--primary-green-color);
     width: 41px;
-    height: 18px;
+    /* height: 18px; */
     border-radius: 50px;
     position: relative;
-    margin-right: 20pt;
-    top: 6pt;
+    /* margin-right: 20pt; */
+    top: 9pt;
     padding: 5px;
     cursor: pointer;
     display: flex;
@@ -39,15 +40,15 @@ body.dark .support a {
 }
 
 .fa-moon {
-    color: #f1c40f;
+    color: var(--red-alert-color);
 }
 
 .fa-sun {
-    color: #f39c12;
+    color: var(--red-alert-color);
 }
 
 .checkbox-label .ball {
-    background-color: #fff;
+    background-color: var(--white-color);
     width: 22px;
     height: 22px;
     position: absolute;

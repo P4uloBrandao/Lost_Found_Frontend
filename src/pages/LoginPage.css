@@ -1,0 +1,9 @@
+.logincontainer {
+    align-items: center;
+}
+
+.image {
+    top: 9rem;
+    right: 2rem;
+    position: relative;
+}

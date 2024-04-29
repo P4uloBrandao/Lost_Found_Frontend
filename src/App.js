@@ -1,6 +1,6 @@
 import React from 'react';
 import SignUpPage from './pages/SignUpPage';
-import Home from './components/home/index';
+import Home from './pages/home/index';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePage';
 import ChangePassword from './components/changePassword/index';
@@ -16,17 +16,17 @@ import {Cloudinary} from "@cloudinary/url-gen";
 import LostObjects from './components/lostObjForm/index'
 import Navbar from './components/NavBar/index.jsx'
 import SignUp from './components/SignUpTest/index.js';
+import LostObjectCatalogPage from './pages/lostObjectCatalogPage.jsx';
+
 
 const LayoutContainer = styled.div`
-  /* Add any layout-related styles here */
-  background-color:#ede8e8;
- 
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
 
 `;
 
 const GlobalStyles = styled.div`
   @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-  background-color:#ede8e8;
   /* Add any global styles or overrides here */
 `;
 
@@ -79,7 +79,7 @@ function App() {
             }
           />
               
-          
+              <Route path="/lostObjectCatalog" element={<LostObjectCatalogPage />} />
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
               <Route path="/login" element={<LoginPage />} />
