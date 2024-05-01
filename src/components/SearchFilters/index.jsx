@@ -3,8 +3,11 @@ import styled, { keyframes } from 'styled-components';
 import "../../assets/colors/colors.css"
 const Container = styled.div`
 border:1px solid black;
-width: 100%;
-    
+width : 90%;
+text-align: -webkit-center;
+display: flex;
+margin : 2rem auto 2rem auto ;
+
   
 `;
 ;const Button = styled.div`

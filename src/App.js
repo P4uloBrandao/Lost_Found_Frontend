@@ -63,7 +63,7 @@ function App() {
             }
           />
           <Route
-            path="/lostObjects"
+            path="/registerLost"
             element={
                 <LostObjects />
                 
@@ -79,7 +79,7 @@ function App() {
             }
           />
               
-              <Route path="/lostObjectCatalog" element={<LostObjectCatalogPage />} />
+              <Route path="/myLostObjects" element={<LostObjectCatalogPage />} />
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
               <Route path="/login" element={<LoginPage />} />
@@ -87,6 +87,7 @@ function App() {
             </Routes>
         </Router>
         </AuthProvider>
+
       </GlobalStyles>
     </LayoutContainer>
   );

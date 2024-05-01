@@ -20,10 +20,13 @@ display: ${props => props.isOpen ? 'block' : 'none'};  border-radius: 20px;
   position: relative;
   top: ${props => props.userData === null ? '90pt !important' : '121pt !important'}; 
     
-    left:${props => props.userData === null ? '-15t !important' : '-7pt !important'}; 
+    left:${props => props.userData === null ? '-15pt !important' : '-7pt !important'}; 
   background-color: var(--white-color);
   height: ${props => props.userData === null ? '93pt !important' : '168pt !important'}; 
-  padding: 15pt;
+  padding: 15pt 0pt 15pt 15pt ;
+  width : 15em;
+  border: solid 1px black ;
+
     
   
 `;
@@ -97,10 +100,12 @@ function Navbar() {
     navigate('/profile'); 
   };
 
-  const redirectToLostObects = () => {
-    navigate('/lostObjects'); 
+  const redirectToLostObjects = () => {
+    navigate('/myLostObjects'); 
   };
-
+  const registerLost = () => {
+    navigate('/registerLost'); 
+  };
   return (
     <div>
       <nav id="navbar">
@@ -122,7 +127,7 @@ function Navbar() {
           icon={isOpen ? faMinus : faPlus}
         />
       </div>
-      {isOpen && <MenuOptions isOpen={isOpen} userData={userData} />}          
+      {isOpen && <MenuOptions className='noborder' isOpen={isOpen} userData={userData} />}          
             
             <MenuOptions isOpen={isOpen} userData={userData} > 
                
@@ -145,8 +150,8 @@ function Navbar() {
                  <div className='optionMenu'> LOST <FontAwesomeIcon className='svgArrow1' icon={faArrowLeft} /></div>
                   <div className='subMenu1'>
                     <div className='menuOptions1'>
-                    <div  className=' op11' onClick={redirectToLostObects}> <div className='align11' >REGISTER LOST<FontAwesomeIcon className='svgArrow11' icon={faArrowLeft} /></div></div>
-                    <div  className=' op12'> <div className='align11'>MY LOST<FontAwesomeIcon className='svgArrow12' icon={faArrowLeft} /></div></div>
+                    <div  className=' op11' onClick={registerLost}> <div className='align11' >REGISTER LOST<FontAwesomeIcon className='svgArrow11' icon={faArrowLeft} /></div></div>
+                    <div  className=' op12'onClick={redirectToLostObjects} > <div className='align11'>MY LOST<FontAwesomeIcon className='svgArrow12' icon={faArrowLeft} /></div></div>
                   </div></div>
                   
                 </div>

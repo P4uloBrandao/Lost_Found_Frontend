@@ -1,63 +1,130 @@
-import styled, { keyframes } from 'styled-components';
-import LoginImage from '../assets/background/loginImage.svg'; 
-import Grid from '@mui/material/Unstable_Grid2/Grid2';
-import FilterButtons from "../components/SearchFilters/index"
-import React, { useState , useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import Grid from '@mui/material/Grid';
+import FilterButtons from "../components/SearchFilters/index";
 import Card from "../components/CardComponent/index";
- 
-const Item = styled.div`
-border:1px solid black;
-    
-  
-`;
-const Container = styled.div`
 
+const Container = styled.div`
     top: 3em;
     position: relative;
-
-    
-  
 `;
-export default function LostObjectCatalogPage() {
 
+export default function LostObjectCatalogPage() {
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [objects, setObjects] = useState([]);
 
-  const filters = ['Filter 1', 'Filter 2', 'Filter 3']; // Defina seus filtros aqui
+  const filters = ['Filter 1', 'Filter 2', 'Filter 3'];
 
-  const handleFilterClick = (filter) => {
-    setSelectedFilter(filter);
-    // Adicione o código para aplicar o filtro selecionado
-    
-  };
   useEffect(() => {
-    // Simulação de chamada de API para obter os dados dos objetos perdidos
+    // Simulate fetching data from an API
     const fetchData = async () => {
-        // Suponha que você tenha uma função de API chamada getLostObjectsData()
-        // que retorna um array de objetos com as informações dos objetos perdidos
+      // Assume you have a function to fetch lost objects data from an API
+      // For simulation purposes, let's just set some sample data
+      const sampleData = [
+        {
+          "_id": "6630af0c4d90e2535504a7fc",
+          "userWhoFound": "65f2fb76b2cdde0f96f64dc3",
+          "policeOfficerThatReceived": "65f2fb76b2cdde0f96f64dc3",
+          "category": "Roupa",
+          "description": "Camisola vermelha",
+          "location": "Campo grande, Lisboa",
+          "price": "0",
+          "date": "05/05/2024",
+          "photo": "https://ricardohage.com.br/wp-content/uploads/2019/01/fotografia-dicas-tutorial-efeito-especial_0000_objeto-flutuante.jpg",
+          "status": "5 Matches Found",
+          "claimant": null,
+          "__v": "0"
+        }, {
+          "_id": "6630af0c4d90e2535504a7fc",
+          "userWhoFound": "65f2fb76b2cdde0f96f64dc3",
+          "policeOfficerThatReceived": "65f2fb76b2cdde0f96f64dc3",
+          "category": "Roupa",
+          "description": "Camisola vermelha",
+          "location": "Campo grande, Lisboa",
+          "price": "0",
+          "date": "05/05/2024",
+          "photo": "https://ricardohage.com.br/wp-content/uploads/2019/01/fotografia-dicas-tutorial-efeito-especial_0000_objeto-flutuante.jpg",
+          "status": "5 Matches Found",
+          "claimant": null,
+          "__v": "0"
+        }, {
+          "_id": "6630af0c4d90e2535504a7fc",
+          "userWhoFound": "65f2fb76b2cdde0f96f64dc3",
+          "policeOfficerThatReceived": "65f2fb76b2cdde0f96f64dc3",
+          "category": "Roupa",
+          "description": "Camisola vermelha",
+          "location": "Campo grande, Lisboa",
+          "price": "0",
+          "date": "05/05/2024",
+          "photo": "https://ricardohage.com.br/wp-content/uploads/2019/01/fotografia-dicas-tutorial-efeito-especial_0000_objeto-flutuante.jpg",
+          "status": "5 Matches Found",
+          "claimant": null,
+          "__v": "0"
+        }, {
+          "_id": "6630af0c4d90e2535504a7fc",
+          "userWhoFound": "65f2fb76b2cdde0f96f64dc3",
+          "policeOfficerThatReceived": "65f2fb76b2cdde0f96f64dc3",
+          "category": "Roupa",
+          "description": "Camisola vermelha",
+          "location": "Campo grande, Lisboa",
+          "price": "0",
+          "date": "05/05/2024",
+          "photo": "https://ricardohage.com.br/wp-content/uploads/2019/01/fotografia-dicas-tutorial-efeito-especial_0000_objeto-flutuante.jpg",
+          "status": "5 Matches Found",
+          "claimant": null,
+          "__v": "0"
+        }, {
+          "_id": "6630af0c4d90e2535504a7fc",
+          "userWhoFound": "65f2fb76b2cdde0f96f64dc3",
+          "policeOfficerThatReceived": "65f2fb76b2cdde0f96f64dc3",
+          "category": "Roupa",
+          "description": "Camisola vermelha",
+          "location": "Campo grande, Lisboa",
+          "price": "0",
+          "date": "05/05/2024",
+          "photo": "https://ricardohage.com.br/wp-content/uploads/2019/01/fotografia-dicas-tutorial-efeito-especial_0000_objeto-flutuante.jpg",
+          "status": "Found",
+          "claimant": null,
+          "__v": "0"
+        },
         
+      ];
+
+      // Update the objects state with the fetched data
+      setObjects(sampleData);
     };
 
     fetchData();
-}, []);
-  
-    return ( 
+  }, []);
+
+  const handleFilterClick = (filter) => {
+    setSelectedFilter(filter);
+    // Add code to apply the selected filter
+  };
+
+  return (
     <Container>
       <h1>Lost Object Catalogue</h1>
-      <FilterButtons filters={filters} handleFilterClick={handleFilterClick} />
-      <Grid container spacing={2}>
+      <FilterButtons  filters={filters} handleFilterClick={handleFilterClick} />
+      <Grid sx={{ textAlign: '-webkit-center',padding: '0 10rem',placeContent: 'center' }} container spacing={5}>
+        {objects.map((object, index) => (
+          <Grid spacing={2} sx={{justifyContent: 'center'        
+          }} item  xs={10} md={10} key={index}>
+            <Card  spacing={2}
+              name={object.description}
+              description={object.description}
+              location={object.location}
+              category={object.category}
+              id={object._id}
+              date ={object.date}
+              photo ={object.photo}
+              status={object.status}
+              policeOfficer={object.policeOfficerThatReceived}
+            />
+          </Grid>
+        ))}
+      </Grid>
 
-      {objects.map((object, index) => (
-                    <Grid item xs={12} md={4} key={index}>
-                        <Card>
-                            <h2>{object.name}</h2>
-                            <p>{object.description}</p>
-                            {/* Adicione mais campos de dados do objeto conforme necessário */}
-                        </Card>
-                    </Grid>
-                ))}
-            </Grid>
     </Container>
   );
-};
-
+}

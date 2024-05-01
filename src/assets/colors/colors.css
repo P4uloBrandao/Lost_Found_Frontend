@@ -3,6 +3,18 @@
     --secondary-green-color: #70D25F;
     --white-color: #FFF;
     --secondary-white-color: #f0f9f4;
+    --primary-grey-color: #ECECEC;
+    --secondary-grey-color: #b0afaf;
+    --black-color: #0C0C20;
+    --blue-petrol-color: #263238;
+    --red-alert-color: #F2AE7C;
+}
+
+:root.dark {
+    --primary-green-color: #3CB684;
+    --secondary-green-color: #70D25F;
+    --white-color: #FFF;
+    --secondary-white-color: #f0f9f4;
     --grey-color: #ECECEC;
     --black-color: #0C0C20;
     --blue-petrol-color: #263238;

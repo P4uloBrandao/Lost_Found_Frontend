@@ -6,6 +6,10 @@ body {
     font-family: 'Roboto', sans-serif;
 }
 
+.noborder {
+    border: none!important;
+}
+
 
 /* Navbar */
 
@@ -48,6 +52,11 @@ body {
     color: var( --black-color);
 }
 
+.menuItem:active {
+    background-color: var( --primary-green-color);
+    color: var( --black-color);
+}
+
 .signInItem {
     display: flex;
     width: 7.889em;
@@ -55,7 +64,7 @@ body {
     padding: 16px 24px;
     justify-content: center;
     align-items: center;
-    /* gap: 10px; */
+    background-color: var( --white-color);
     cursor: pointer;
     flex-shrink: 0;
     border-radius: 20px;
@@ -182,13 +191,16 @@ body {
     display: block;
     right: 136pt;
     z-index: 0;
+    border: 1px solid black;
 }
 
 .op2:hover .menuOptions2 {
     display: block;
+    border: 1px solid black;
 }
 
 .op3:hover .menuOptions3 {
+    border: 1px solid black;
     display: block;
 }
 
