@@ -248,7 +248,7 @@ export default function SignIn() {
       });
   
       try {
-        const response = await axios.post("http://localhost:3000/api/auth/login", {email,password});
+        const response = await axios.post("http://34.125.56.18/api/auth/login", {email,password});
     
         // Process the response as needed
           console.log(response.data);

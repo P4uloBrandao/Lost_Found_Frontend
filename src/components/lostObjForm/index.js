@@ -62,7 +62,7 @@ ${colors};
     event.preventDefault();
     
     try {
-        const response = await axios.post("http://localhost:3000/api/objects/lost-objects",
+        const response = await axios.post("http://34.125.56.18/api/objects/lost-objects",
         {owner,
           category,
           description,
