@@ -17,7 +17,7 @@ import LostObjects from './components/lostObjForm/index'
 import Navbar from './components/NavBar/index.jsx'
 import SignUp from './components/SignUpTest/index.js';
 import LostObjectCatalogPage from './pages/lostObjectCatalogPage.jsx';
-
+import RegisterLostObjectPage from'./pages/RegisterLostObjectPage.jsx'; 
 
 const LayoutContainer = styled.div`
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
@@ -78,7 +78,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-              
+              <Route path="/addLostObject" element={<RegisterLostObjectPage />} />
               <Route path="/myLostObjects" element={<LostObjectCatalogPage />} />
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />

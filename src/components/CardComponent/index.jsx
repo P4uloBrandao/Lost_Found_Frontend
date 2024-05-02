@@ -5,15 +5,7 @@ import { auto } from '@cloudinary/url-gen/qualifiers/format';
 import axios from "axios";
 import React,{ useState, useContext } from "react";
 import './index.css';
-const CardContainer = styled.div`
-// height:'18em';
-// // border: '1px solid black';
-// align-content: 'center';
 
-// margin-left:" auto";
-// margin-top: "1rem";
-// margin-right: "auto";
-`;
 
 const CardLostObjecs = ({ name, description, location, date, category, id,photo, status }) => {
   const navigate = useNavigate();
@@ -47,14 +39,13 @@ const CardLostObjecs = ({ name, description, location, date, category, id,photo,
   
 
   return (
-  <CardContainer>
-    <Grid style={{ borderRadius:'1.25rem',boxShadow: '4px 4px 27.1px 0px rgba(0, 0, 0, 0.25)',height: 'auto',width: 'auto',    alignContent: 'center', justifyContent: 'center'}} container spacing={2}>
+    <Grid style={{ borderRadius:'1.25rem',boxShadow: '4px 4px 27.1px 0px rgba(0, 0, 0, 0.25)',   alignContent: 'center', justifyContent: 'center'}} container spacing={2}>
       <Grid style={{ margin: '1rem 2rem ',height: '215px', width: '215px'}}  spacing={2}>
        <div> <p className='p-absolute'> {category}</p><img  style={{ width: '215px', height: '215px' ,    objectFit: 'cover',borderRadius:' 1.25rem'}}  src={photo} alt="" />
        </div>
         
       </Grid>
-      <Grid style={{padding: '0rem 2rem ',height: '215px', width: 'auto',alignSelf: 'center'}} container spacing={2}>
+      <Grid style={{padding: '0rem 2rem ', width: 'auto',alignSelf: 'center'}} container spacing={2}>
         <Grid container spacing={3} sx={{justifyContent: 'center', flexGrow: 1 }}>
           <Grid style={{paddingLeft: '1rem',textAlign: '-webkit-left', paddingTop: '1em',    height:' 5em'}} xs={12} xsOffset={3}  mdOffset={0}>
           <h2>{name}</h2>
@@ -81,7 +72,6 @@ const CardLostObjecs = ({ name, description, location, date, category, id,photo,
       </Grid>
         <p  className='removeBtn' >  <span onClick={handleRemoveLostObject}style={{ textDecoration: 'underline' }}>Remove</span> lost object</p>
     </Grid>
-  </CardContainer>
   );
 };
 

@@ -106,7 +106,7 @@ export default function LostObjectCatalogPage() {
     <Container>
       <h1>Lost Object Catalogue</h1>
       <FilterButtons  filters={filters} handleFilterClick={handleFilterClick} />
-      <Grid sx={{ textAlign: '-webkit-center',padding: '0 10rem',placeContent: 'center' }} container spacing={5}>
+      <Grid sx={{ textAlign: '-webkit-center',placeContent: 'center' }} container spacing={5}>
         {objects.map((object, index) => (
           <Grid spacing={2} sx={{justifyContent: 'center'        
           }} item  xs={10} md={10} key={index}>

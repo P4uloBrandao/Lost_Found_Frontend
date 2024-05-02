@@ -11,10 +11,10 @@ const InputBox = styled.div`
   display: flex;
   flex-direction: column;
   margin: 5px 14px;
+  
 `;
 
 const InputField = styled.input`
-  width: 100%;
   height: ${(props) => props.height || '38px' };
   font-size: 16px;
   background: #ECECEC;
