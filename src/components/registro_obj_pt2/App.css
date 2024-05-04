@@ -1,4 +1,10 @@
 .selected {
-  background-color: #4CAF50;
-  color: white;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btnSubmitSection {
+    position: relative;
+    margin-left: 410px;
+    bottom: 50px;
 }

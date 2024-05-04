@@ -82,7 +82,7 @@ const ErrorMessage = styled.p`
 `;
 
 
-const CustomInput = ({ height,icon, type, placeholder, id, required, onChange, value, name,setShowPassword, errorMessage = null, errorValidation = null  }) => {
+const CustomInput = ({ style ,height,icon, type, placeholder, id, required, onChange, value, name,setShowPassword, errorMessage = null, errorValidation = null  }) => {
     const removeValidation = () => {
         errorValidation = false;
     }
@@ -98,6 +98,7 @@ const CustomInput = ({ height,icon, type, placeholder, id, required, onChange, v
         value={value}
         name={name}
         onFocus={removeValidation}
+        style={style}
       />
       <Label className="label">{name}</Label>
       <IconWrapper onClick={setShowPassword}>{icon} </IconWrapper>

@@ -38,14 +38,12 @@ ${colors};
   padding: 7.5em 3em 3em 2.5em;
   color: var(--second-color);
 `;
-  // PARA TESTE
-  // FALTA FUNCAO BACK QUE DE TODAS AS CATEGORIAS NA BD
+
   const dadosDeTesteCategorias = [
     { valor: 'valor1', nome: 'Opção 1' },
     { valor: 'valor2', nome: 'Opção 2' },
     { valor: 'valor3', nome: 'Opção 3' },
   ];
-
 
   const [owner, setOwner] = React.useState('');
   const [obj_name, setObjName] = React.useState('');  //FALTA BD
@@ -64,6 +62,7 @@ ${colors};
     try {
         const response = await axios.post("http://localhost:3000/api/objects/lost-objects",
         {owner,
+          obj_name,
           category,
           description,
           location,
@@ -152,4 +151,7 @@ ${colors};
 };
 
 export default ObjFound;
+
+
+
 

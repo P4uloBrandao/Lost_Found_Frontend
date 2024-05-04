@@ -29,7 +29,7 @@ function Home() {
     }
   
     if (!token) {
-      return <Navigate to="/login" replace />;
+      return <Navigate to="/home" replace />;
     }
     else{
       <Navigate to="/profile" replace />;

@@ -7,13 +7,14 @@ import React,{ useState, useContext } from "react";
 import './index.css';
 
 
-const CardLostObjecs = ({ name, description, location, date, category, id,photo, status }) => {
+
+
+const CardLostObjecs = ({ matchButton, catId,name, description, location, date, category, id,photo, status }) => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState(null);
-
   const handleViewMatches = () => {
-    // Add logic to navigate to the matches page
-    // For example: navigate('/matches');
+    // Assuming you want to pass id and name as parameters
+    navigate(`/matchObjects?param1=${catId}&param2=${name}`);
   };
 
   const handleViewInMaps = () => {
@@ -35,6 +36,7 @@ const CardLostObjecs = ({ name, description, location, date, category, id,photo,
         setErrorMessage('An unexpected error occurred. Please try again.');
       }
     }
+    window.location.reload();
   };
   
 
@@ -64,8 +66,9 @@ const CardLostObjecs = ({ name, description, location, date, category, id,photo,
            <div>
             <p>{status}</p>
             </div>
-            <p className='matchesBtn' onClick={handleViewMatches}>View Matches {'>'} </p>
-
+              {matchButton && (
+              <p className='matchesBtn' onClick={handleViewMatches}>View Matches {'>'} </p>
+            )}
           </Grid>
         </Grid>            
 

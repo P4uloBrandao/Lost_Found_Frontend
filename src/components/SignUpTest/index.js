@@ -351,6 +351,9 @@ export default function SignUp() {
       if (firstNameError || lastNameError || emailError || genderError || adddressError || passwordError || checkPasswordError || birthError || nicError || nifError || phoneError) {
           return;
       }
+      if (profileImage === null){
+        setProfileImage('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png')
+      }
       const data1 = new FormData();
       data1.append('first_name', first_name);
       data1.append('last_name', last_name);

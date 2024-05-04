@@ -4,6 +4,11 @@ import Grid from '@mui/material/Grid';
 import FilterButtons from "../components/SearchFilters/index";
 import Card from "../components/CardComponent/index";
 import axios from "axios";
+import { useLocation } from 'react-router-dom';
+
+
+ 
+
 
 const Container = styled.div`
     top: 3em;
@@ -13,15 +18,18 @@ const Container = styled.div`
 export default function LostObjectCatalogPage() {
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [objects, setObjects] = useState([]);
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const param1 = searchParams.get('param1');
+  const param2 = searchParams.get('param2');
 
-  const filters = ['Filter 1', 'Filter 2', 'Filter 3'];
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
   
         // Buscar os dados dos objetos perdidos
-        const objectsResponse = await axios.get(`http://localhost:3000/api/lost-objects/user/${token}`);
+        const objectsResponse = await axios.get(`http://localhost:3000/api/lost-objects/user`, param1);
         const objectsData = objectsResponse.data;
   
         // Atualizar o estado dos objetos com os dados buscados
@@ -36,8 +44,7 @@ export default function LostObjectCatalogPage() {
           // Retornar um novo objeto com o nome da categoria atualizado
           return {
             ...object,
-            category: categoryName,
-            catId: catId
+            category: categoryName
           };
         }));
   
@@ -56,12 +63,11 @@ export default function LostObjectCatalogPage() {
     setSelectedFilter(filter);
     // Add code to apply the selected filter
   };
-
+  
   return (
     <Container>
-      <h1>Lost Object Catalogue</h1>
-      <FilterButtons  filters={filters} handleFilterClick={handleFilterClick} />
-      <Grid sx={{ textAlign: '-webkit-center',placeContent: 'center' }} container spacing={5}>
+      <h1>Similar Object: {param2}</h1>
+       <Grid sx={{ textAlign: '-webkit-center',placeContent: 'center' }} container spacing={5}>
         {objects.map((object, index) => (
           
           <Grid spacing={2} sx={{justifyContent: 'center'        
@@ -72,12 +78,11 @@ export default function LostObjectCatalogPage() {
               location={object.location}
               category={object.category}
               id={object._id}
-              catId={object.catId}
               date ={object.date}
               photo ={object.objectImage}
               status={object.status}
+              matchButton = {false}
               policeOfficer={object.policeOfficerThatReceived}
-              matchButton = {true}
             />
           </Grid>
         ))}

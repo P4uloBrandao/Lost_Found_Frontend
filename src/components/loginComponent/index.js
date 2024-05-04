@@ -253,7 +253,7 @@ export default function SignIn() {
             userEmail: 'joao@example.com', // Substitua isso pelo e-mail real do usuário
           };
           login(userData);
-           navigate("/profile");
+           navigate("/home");
      
         } catch (error) {
           console.error("Authentication failed:", error);

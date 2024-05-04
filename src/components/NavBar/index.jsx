@@ -104,7 +104,7 @@ function Navbar() {
     navigate('/myLostObjects'); 
   };
   const registerLost = () => {
-    navigate('/registerLost'); 
+    navigate('/addLostObject'); 
   };
   return (
     <div>
@@ -136,7 +136,7 @@ function Navbar() {
                   {userData && (
                      <div className='option1'>
                         <div>
-                          <img className='imgMenu' width='40px' height='40px' src={teste} alt="" />
+                          <img className='imgMenu' width='40px' height='40px' src={userData.profileImage} alt="" />
                         </div>
                       <div className='infoUser'>
                         <p className='userNameText'>{userData.first_name} {userData.last_name}</p>

@@ -18,6 +18,7 @@ import Navbar from './components/NavBar/index.jsx'
 import SignUp from './components/SignUpTest/index.js';
 import LostObjectCatalogPage from './pages/lostObjectCatalogPage.jsx';
 import RegisterLostObjectPage from'./pages/RegisterLostObjectPage.jsx'; 
+import MatchObjectCatalogPage from'./pages/matchObjectCatalogPage.jsx'; 
 
 const LayoutContainer = styled.div`
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
@@ -57,19 +58,12 @@ function App() {
             element={
               <ProtectedRoute>
                 <ProfilePage />
-                
-                
+              
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/registerLost"
-            element={
-                <LostObjects />
-                
-                
-            }
-          />
+          
+        
           <Route
             path="/esquadras"
             element={
@@ -77,7 +71,8 @@ function App() {
                 <Esquadras />
               </ProtectedRoute>
             }
-          />
+          />              
+              <Route path="/matchObjects" element={<MatchObjectCatalogPage />} />
               <Route path="/addLostObject" element={<RegisterLostObjectPage />} />
               <Route path="/myLostObjects" element={<LostObjectCatalogPage />} />
               <Route path="/" element={<Home />} />
