@@ -76,7 +76,14 @@ const LoginHeader = styled.div`
 
   top: 0rem;
   position: relative;
-
+  ${({ formStepsNum }) =>
+    formStepsNum == 0
+      ? css`
+          display: block;
+        `
+      : css`
+          display: none;
+        `}
 `;
 
 const LoginHeaderText = styled.span`
@@ -204,8 +211,8 @@ const RegisterLink = styled.a`
 `;
 
 const HrDivison = styled.div`
-  display: flex;
-  align-items: center;
+display: flex;
+align-items: center;
   color: #000000;
   margin: 20px 0;
 
@@ -220,6 +227,7 @@ const HrDivison = styled.div`
   p {
     margin: 0;
   }
+ 
 `;
 const MediaQueryWrapper = styled.div`
   @media only screen and (max-width: 564px) {
@@ -249,7 +257,6 @@ export default function SignUp() {
   const [phone, setPhone] = React.useState('');
   const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
   const [showPassword2, setShowPassword2] = useState(null); // New state for handling error messages
-
   // Validations
   const [firstNameError, setFirstNameError ] = useState(null);
   const [lastNameError, setLastNameError ] = useState(null);
@@ -262,7 +269,7 @@ export default function SignUp() {
   const [nicError, setNicError ] = useState(null);
   const [nifError, setNifError ] = useState(null);
   const [phoneError, setPhoneError ] = useState(null);
-
+  
 
   const genderOptions= [
       {
@@ -320,10 +327,13 @@ export default function SignUp() {
 
   const nextStep = () => {
       setFormStepsNum(prevStep => prevStep + 1);
+      console.log(formStepsNum)
   };
 
   const prevStep = () => {
       setFormStepsNum(prevStep => prevStep - 1);
+      console.log(formStepsNum)
+
   };
 
 
@@ -386,14 +396,16 @@ export default function SignUp() {
 
     return (
         <Wrapper>
+           
+                
         <LoginBox>
-      <LoginHeader>
+      <LoginHeader formStepsNum={formStepsNum}>
         <LoginHeaderText>Sign up</LoginHeaderText>
         
       </LoginHeader>
       <LoginBody>
         
-      <GoogleButton
+      <GoogleButton formStepsNum={formStepsNum}
         placeholder={'Continue with Google'}  
         id="googleButtonLogin"
         
@@ -401,6 +413,7 @@ export default function SignUp() {
         
         name="googleButtonLogin"/>
         <HrDivison ><hr /> <p> OR</p> <hr /></HrDivison>
+            
         <Card className="card" >
         <Form  onSubmit={handleSubmit} >
         <div className="progress-bar">
@@ -463,7 +476,11 @@ export default function SignUp() {
             )}
 
             {step.title === "2" && (
-                <>
+                <><InputBox>
+
+                <CustomInputFiles singleImage
+                onChange={onImageUpload}></CustomInputFiles>
+            </InputBox>
                     <InputBox>
                 <InputF
                     icon={showPassword ? <LockIconOpen /> : <LockIcon />}

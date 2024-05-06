@@ -14,7 +14,8 @@ import LockIcon from '@mui/icons-material/Lock';
 import LockIconOpen from '@mui/icons-material/LockOpenRounded';
 import GoogleButton from '../GoogleButtonComponent/index'
 import '../../assets/colors/colors.css'
-
+import { hasGrantedAllScopesGoogle } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -210,12 +211,11 @@ export default function SignIn() {
     const {login } = useContext(AuthContext);
     const defaultTheme = createTheme();
     const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
+    const [checked, setChecked] = useState(false);
     
-      const [checked, setChecked] = useState(false);
-    
-      const handleCheckboxClick = () => {
-        setChecked(!checked);
-      };
+    const handleCheckboxClick = () => {
+      setChecked(!checked);
+    };
     
     const navigate = useNavigate();
     const toggleShowPassword = () => {
@@ -281,13 +281,40 @@ export default function SignIn() {
         
      
       {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}{" "}
-      <GoogleButton
+      {/* <GoogleButton
+      formStepsNum={"0"}
         placeholder={'Continue with Google'}  
         id="googleButtonLogin"
-        
+        onSuccess={credentialResponse => {
+          console.log(credentialResponse);
+        }}
+        onError={() => {
+          console.log('Login Failed');
+        }}
         onClick={(e) => setLoginGoogle(e.target.value)}
         
-        name="googleButtonLogin"/>
+        name="googleButtonLogin"/> */}
+
+
+
+        <GoogleLogin
+        onSuccess={response => {
+          // Check if the response contains the user's profile information
+          if (response.profileObj) {
+            console.log(response.profileObj)
+            // Access the user's email address from the profile information
+            const userEmail = response.profileObj.email;
+            console.log('User Email:', userEmail);
+          } else {
+            console.log('User profile information not available');
+          }}}
+  
+  onError={() => {
+    console.log('Login Failed');
+  }}
+/>
+       
+
         <HrDivison ><hr /> <p> OR</p> <hr /></HrDivison>
       <form onSubmit={handleSubmit} >
         <InputBox>

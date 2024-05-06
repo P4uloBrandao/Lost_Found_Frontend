@@ -6,10 +6,10 @@ import styled, { keyframes } from 'styled-components';
 import Grid from '@mui/material/Unstable_Grid2/Grid2';
 import "./LoginPage.css"
 import  { useEffect } from "react";
-import AddLostObjectComponent  from '../components/AddLostObjectComponent' ; 
+import AddFoundObjectComponent  from '../components/AddFoundObjectComponent/index' ; 
 
 
-export default function RegisterLostObjectPage() {
+export default function RegisterFoundObjectPage() {
   
   return (
    
@@ -17,7 +17,7 @@ export default function RegisterLostObjectPage() {
     <Grid  xs={12} >
   </Grid>
   <Grid xs={12} >
-  <  AddLostObjectComponent />
+  <  AddFoundObjectComponent />
 
   </Grid>
     </Grid>

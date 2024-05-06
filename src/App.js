@@ -2,7 +2,7 @@ import React from 'react';
 import SignUpPage from './pages/SignUpPage';
 import Home from './pages/home/index';
 import LoginPage from './pages/LoginPage';
-import ProfilePage from './pages/ProfilePage';
+import ProfilePage from './pages/ProfilePageTest.jsx';
 import ChangePassword from './components/changePassword/index';
 import styled from 'styled-components';
 import Esquadras from './components/esquadra/index'
@@ -19,7 +19,8 @@ import SignUp from './components/SignUpTest/index.js';
 import LostObjectCatalogPage from './pages/lostObjectCatalogPage.jsx';
 import RegisterLostObjectPage from'./pages/RegisterLostObjectPage.jsx'; 
 import MatchObjectCatalogPage from'./pages/matchObjectCatalogPage.jsx'; 
-
+import RegisterFoundObjectPage from'./pages/RegisterFoundObjectPage.jsx'; 
+import { GoogleOAuthProvider } from '@react-oauth/google';
 const LayoutContainer = styled.div`
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
@@ -43,6 +44,8 @@ function App() {
     });
 
   return (
+    <GoogleOAuthProvider clientId="535834422242-dfvm3g9s3dv6hpob73povmrmgqbmiuha.apps.googleusercontent.com">
+
     <LayoutContainer>
       <GlobalStyles>
       <AuthProvider >
@@ -71,7 +74,10 @@ function App() {
                 <Esquadras />
               </ProtectedRoute>
             }
-          />              
+          /> 
+              
+              <Route path="/registerFoundObject" element={<RegisterFoundObjectPage />} />
+             
               <Route path="/matchObjects" element={<MatchObjectCatalogPage />} />
               <Route path="/addLostObject" element={<RegisterLostObjectPage />} />
               <Route path="/myLostObjects" element={<LostObjectCatalogPage />} />
@@ -85,6 +91,7 @@ function App() {
 
       </GlobalStyles>
     </LayoutContainer>
+    </GoogleOAuthProvider>
   );
 }
 

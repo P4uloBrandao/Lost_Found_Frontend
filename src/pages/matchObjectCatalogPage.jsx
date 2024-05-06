@@ -29,7 +29,9 @@ export default function LostObjectCatalogPage() {
         const token = localStorage.getItem("token");
   
         // Buscar os dados dos objetos perdidos
-        const objectsResponse = await axios.get(`http://localhost:3000/api/lost-objects/user`, param1);
+        const objectsResponse = await axios.post(`http://localhost:3000/api/match`, {
+          "category": param1
+      });
         const objectsData = objectsResponse.data;
   
         // Atualizar o estado dos objetos com os dados buscados

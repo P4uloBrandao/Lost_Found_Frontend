@@ -26,7 +26,7 @@ export default function ProfilePage() {
   return ( 
    
   <Background>
-                <ProfileSettings />
+                <ProfileSettings  />
                 <DeleteProfile />
                 <ChangePassword />
   </Background>
