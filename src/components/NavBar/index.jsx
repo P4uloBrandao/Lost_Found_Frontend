@@ -37,10 +37,10 @@ function Navbar() {
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState(null);
   const menuRef = useRef();
 
   const handleMenuItemClick = () => {
-    console.log(isOpen)
     setIsOpen(!isOpen);
   };
   
@@ -58,6 +58,10 @@ function Navbar() {
     };
   }, []);
 
+  function getProfileData(id) {
+
+  }
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -65,8 +69,22 @@ function Navbar() {
         try {
           const response = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
           const userProfileData = response.data.currentUser;
-          setUserData(userProfileData);
-          setLoading(false);
+          if (!!userProfileData.profileImage) {
+            axios.get(`http://localhost:3000/api/users/profileImage/${userProfileData.profileImage}`)
+                .then((response) => {
+                  setProfilePhoto(response.data.image)
+                  setUserData(userProfileData);
+                  setLoading(false);
+                })
+                .catch((error) => {
+                  console.log("Failed to fetch user profile:", error);
+                  setLoading(false);
+                  setUserData(null);
+                });
+          } else {
+            setUserData(userProfileData);
+            setLoading(false);
+          }
         } catch (error) {
           console.error("Failed to fetch user profile:", error);
           setLoading(false);
@@ -136,7 +154,8 @@ function Navbar() {
                   {userData && (
                      <div className='option1'>
                         <div>
-                          <img className='imgMenu' width='40px' height='40px' src={userData.profileImage} alt="" />
+                          {!!profilePhoto && <img className='imgMenu' width='40px' height='40px' src={profilePhoto} alt="" />}
+                          {!profilePhoto && <img className='imgMenu' width='40px' height='40px' src="https://res.cloudinary.com/dkyu0tmfx/image/upload/v1715205192/profileImages/profile_1_i39bhb.png" alt="" />}
                         </div>
                       <div className='infoUser'>
                         <p className='userNameText'>{userData.first_name} {userData.last_name}</p>
