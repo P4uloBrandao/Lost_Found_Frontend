@@ -19,7 +19,7 @@ const defaultTheme = createTheme();
 
 function Esquadra() {
     const [esquadras, setEsquadras] = React.useState([]);
-    const [selectedEsquadra, setSelectedEsquadra] = React.useState('');
+    const [station, setSelectedEsquadra] = React.useState('');
     const [newEsquadra, setNewEsquadra] = React.useState('');
     const [newEsquadraAddress, setNewEsquadraAddress] = React.useState('');
     const [newEsquadraPostalCode, setNewEsquadraPostalCode] = React.useState('');
@@ -72,7 +72,7 @@ function Esquadra() {
             first_name: data.get('firstName'),
             last_name: data.get('lastName'),
             password: data.get('password'),
-            selectedEsquadra: selectedEsquadra,
+            station: station,
         });
 
         try {
@@ -80,7 +80,7 @@ function Esquadra() {
             {   first_name,
                 last_name,
                 password,
-                selectedEsquadra,
+                station: "65fb1de629c52b172fe02f42",
                 phone,
                 email,
             });
@@ -170,7 +170,7 @@ function Esquadra() {
                                     select
                                     label="Select Esquadra"
                                     fullWidth
-                                    value={selectedEsquadra}
+                                    value={station}
                                     onChange={(e) => setSelectedEsquadra(e.target.value)}
                                 >
                                     {esquadras.map((esquadra) => (

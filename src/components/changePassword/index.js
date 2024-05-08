@@ -21,6 +21,7 @@ import InputF  from '../inputFieldComponent/InputField';
 import styled from 'styled-components';
 import LockIcon from '@mui/icons-material/Lock';
 import LockIconOpen from '@mui/icons-material/LockOpenRounded';
+import "../../assets/colors/colors.css"
 
 // TODO remove, this demo shouldn't need to reset the theme.
 
@@ -33,6 +34,22 @@ const InputBox = styled.div`
   flex-direction: column;
   margin: 20px 0;
   
+`;
+const InputSubmit = styled.button`
+
+width: 100%;
+  height: 40px;
+  background: #c6c3c3;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.3s;
+
+  &:hover {
+    background: var(--second-color);
+  }
 `;
 export default function ChangePassword() {
     const [email, setEmail] = React.useState('');
@@ -84,36 +101,10 @@ export default function ChangePassword() {
     };
 
     return (
-        <ThemeProvider theme={defaultTheme}>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <Box
-                    sx={{
-                        marginTop: 8,
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
-                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                       Change Password
-                    </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-                        <TextField
-                            margin="normal"
-                            required
-                            onChange={(e) => setEmail(e.target.value)}
-                            value={email}
-                            fullWidth
-                            id="email"
-                            label="Email Address"
-                            name="email"
-                            autoFocus
-                        />
-                         <Grid item xs={12}>
+       
+            <Grid container >
+                
+                <Grid item xs={6}>
             <InputBox>
                 <InputF
                     icon={showPassword ? <LockIconOpen /> : <LockIcon />}
@@ -129,39 +120,30 @@ export default function ChangePassword() {
                 />
             </InputBox>
            <PasswordStrength text={password} />
-             </Grid>
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            onChange={(e) => setNewPassword(e.target.value)}
-                            name="newPassword"
-                            value={newPassword}
-                            label="newPassword"
-                            type="text"
-                            id="newPassword"
-                            
-                        />
+           </Grid>  
+           <Grid item xs={6}>
+             <InputBox>
+                <InputF
+                    icon={showPassword ? <LockIconOpen /> : <LockIcon />}
+
+                    placeholder={'Password'}
+                    id="newPassword"
+                    required
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    type={showPassword ? 'text' : 'password'}
+                    value={newPassword}
+                    name="newPassword"
+                    setShowPassword={toggleShowPassword}
+                />
+            </InputBox>
+               </Grid>         
                         
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 3, mb: 2 }}
-                        >
-                            Update Password
-                        </Button>
-                        <Grid container>
-                            
-                            <Grid item>
-                                <Link href="/login" variant="body2">
-                                    {"I remember my password"}
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </Box>
-                </Box>
-            </Container>
-        </ThemeProvider>
+               <Grid item xs={12}>
+      <InputBox>
+        <InputSubmit type="submit" onClick={handleSubmit} className="input-submit" value="Register" label="Register">Save Changes</InputSubmit>
+      </InputBox>
+    </Grid>
+            </Grid>
+        
     );
 }

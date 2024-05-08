@@ -18,10 +18,11 @@ const Label = styled.label`
 
 const InputBox = styled.div`
   ${colors};
-  position: relative;
+  position: ${props => props.position ? props.position : 'relative'};
+  align-self: center;
   display: inline-block;
-  width: auto; /* Adjust width as needed */
-  height: 300px; /* Adjust height as needed */
+  width: ${props => props.width ? props.width + 'px' : '100px'};
+  height: ${props => props.height ? props.height + 'px' : '100px'};
   background-color: var(--primary-color);
   border-radius: 10px;
   overflow: hidden;
@@ -34,8 +35,9 @@ const FileInputField = styled.input.attrs({
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: 20pt;
+  
+  height: 20pt;
   opacity: 0;
   cursor: pointer;
 `;
@@ -94,10 +96,10 @@ const PlusIconWrapper = styled.div`
 
 // Funcional
 
-const CustomInputFiles = ({id, onChange, singleImage = false}) => {
+const CustomInputFiles = ({id, onChange, singleImage = false, width = null, heigth = null, position= null}) => {
   const [previews, setPreviews] = useState([]);
   const fileInputRef = useRef(null);
-
+console.log(position)
   const handleImageChange = (e) => {
     const files = e.target.files;
     const filePreviews = [];
@@ -120,7 +122,7 @@ const CustomInputFiles = ({id, onChange, singleImage = false}) => {
 
   return (
     <InputBox>
-      <FileInputField id={id} onChange={handleImageChange} multiple={!singleImage} ref={fileInputRef} />
+      <FileInputField id={id} onChange={handleImageChange} multiple={!singleImage} ref={fileInputRef}  />
       {previews.length > 0 && (
         <ImagePreviewContainer>
           {previews.map((preview, index) => (

@@ -1,8 +1,8 @@
 import React from 'react';
 import SignUpPage from './pages/SignUpPage';
-import Home from './components/home/index';
+import Home from './pages/home/index';
 import LoginPage from './pages/LoginPage';
-import ProfilePage from './pages/ProfilePage';
+import ProfilePage from './pages/ProfilePageTest.jsx';
 import ChangePassword from './components/changePassword/index';
 import styled from 'styled-components';
 import Esquadras from './components/esquadra/index'
@@ -15,17 +15,20 @@ import ProfileSettings from './components/profileSettings/index'
 import {Cloudinary} from "@cloudinary/url-gen";
 import LostObjects from './components/lostObjForm/index'
 import Navbar from './components/NavBar/index.jsx'
-
+import SignUp from './components/SignUpTest/index.js';
+import LostObjectCatalogPage from './pages/lostObjectCatalogPage.jsx';
+import RegisterLostObjectPage from'./pages/RegisterLostObjectPage.jsx'; 
+import MatchObjectCatalogPage from'./pages/matchObjectCatalogPage.jsx'; 
+import AdminPage from'./pages/AdminPage.jsx'; 
+import { GoogleOAuthProvider } from '@react-oauth/google';
 const LayoutContainer = styled.div`
-  /* Add any layout-related styles here */
-  background-color:#ede8e8;
- 
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
 
 `;
 
 const GlobalStyles = styled.div`
   @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-  background-color:#ede8e8;
   /* Add any global styles or overrides here */
 `;
 
@@ -41,6 +44,8 @@ function App() {
     });
 
   return (
+    <GoogleOAuthProvider clientId="535834422242-dfvm3g9s3dv6hpob73povmrmgqbmiuha.apps.googleusercontent.com">
+
     <LayoutContainer>
       <GlobalStyles>
       <AuthProvider >
@@ -54,21 +59,14 @@ function App() {
           <Route
             path="/profile"
             element={
-              <div>
-                <ProfileSettings />
-                <DeleteProfile />
-                
-              </div>
+              <ProtectedRoute>
+                <ProfilePage />
+              
+              </ProtectedRoute>
             }
           />
-          <Route
-            path="/lostObjects"
-            element={
-                <LostObjects />
-                
-                
-            }
-          />
+          
+        
           <Route
             path="/esquadras"
             element={
@@ -76,23 +74,13 @@ function App() {
                 <Esquadras />
               </ProtectedRoute>
             }
-          />
-              <Route
-            path="/deleteProfile"
-            element={
-              <ProtectedRoute>
-                <DeleteProfile />
-              </ProtectedRoute>
-            }
-          />  
-          <Route
-            path="/changePassword"
-            element={
-              <ProtectedRoute>
-                <ChangePassword />
-              </ProtectedRoute>
-            }
-          />
+          /> 
+              
+              <Route path="/AdminPage" element={<AdminPage />} />
+             
+              <Route path="/matchObjects" element={<MatchObjectCatalogPage />} />
+              <Route path="/addLostObject" element={<RegisterLostObjectPage />} />
+              <Route path="/myLostObjects" element={<LostObjectCatalogPage />} />
               <Route path="/" element={<Home />} />
               <Route path="/home" element={<Home />} />
               <Route path="/login" element={<LoginPage />} />
@@ -100,8 +88,10 @@ function App() {
             </Routes>
         </Router>
         </AuthProvider>
+
       </GlobalStyles>
     </LayoutContainer>
+    </GoogleOAuthProvider>
   );
 }
 

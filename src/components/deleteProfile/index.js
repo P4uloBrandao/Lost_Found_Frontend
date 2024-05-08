@@ -6,16 +6,12 @@ import axios from "axios";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import InputF  from '../inputFieldComponent/InputField';
+import Grid from '@mui/material/Grid';
 
 
 
 import styled, { keyframes, css} from 'styled-components';
 
-const colors = css`
-  --primary-color: #c6c3c3;
-  --second-color: #ffffff;
-  --black-color: #000000;
-`;
 
 
 const Wrapper = styled.div`
@@ -29,7 +25,6 @@ const Wrapper = styled.div`
 `;
 
 const LoginBox = styled.div`
-${colors};
 text-align: -webkit-center;
   position: relative;
   height: 155px;
@@ -50,7 +45,6 @@ const InputBox = styled.div`
 `;
 
 const LoginHeader = styled.div`
-  ${colors} 
   position: absolute;
   top: 0;
   left: 50%;
@@ -85,15 +79,27 @@ const LoginHeader = styled.div`
     box-shadow: -15px 0 0 0 var(--primary-color);
   }
 `;
+const InputSubmit = styled.button`
+width: 100%;
+  height: 40px;
+  background: #c6c3c3;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: 0.3s;
 
+  &:hover {
+    background: var(--second-color);
+  }
+`;
 const LoginHeaderText = styled.span`
-${colors}
 font-size: 30px;
   color: var(--black-color);
 `;
 
 const Text = styled.span`
-${colors}
 --primary-color: #c6c3c3;
     --second-color: #ffffff;
     --black-color: #000000;
@@ -111,22 +117,6 @@ const RememberForgot = styled.div`
   margin-bottom: 14px;
 `;
 
-const InputSubmit = styled.button`
-${colors}  
-width: 50%;
-    height: 40px;
-  background: #ffffff;
-  font-size: 16px;
-  font-weight: 500;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: 0.3s;
-
-  &:hover {
-    background: var(--second-color);
-  }
-`;
 
 const RegisterLink = styled.a`
   font-weight: 500;
@@ -173,14 +163,9 @@ const DeleteProfile = () => {
     };
   
     return (
-      <Wrapper>
-        <LoginBox>
-          <LoginHeader>
-            <LoginHeaderText>Delete Account</LoginHeaderText>
-          </LoginHeader>
-          <Text>
-            Deleting your account will remove all your data from our databases. This cannot be undone.
-          </Text>
+      
+          <><Grid container xs={12}>
+          <Grid xs={12}>
           <InputBox>
             <InputF
               type="text"
@@ -188,7 +173,7 @@ const DeleteProfile = () => {
               id="deleteConfirmation"
               required
               onChange={(e) => setDeleteConfirmation(e.target.value)}
-              name="To confirm this, type DELETE"
+              name="type DELETE"
               value={deleteConfirmation}
             />
           </InputBox>
@@ -196,9 +181,9 @@ const DeleteProfile = () => {
             Delete
           </InputSubmit>
           {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-
-        </LoginBox>
-      </Wrapper>
+</Grid></Grid>
+</>
+       
     );
   };
   
