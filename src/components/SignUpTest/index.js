@@ -242,7 +242,6 @@ const MediaQueryLoginBox = styled.div`
 
 
 export default function SignUp() {
-  const [profileImage, setProfileImage] = React.useState(null);
   const [first_name, setFirstName] = React.useState('');
   const [last_name, setLastName] = React.useState('');
   const [email, setEmail] = React.useState('');
@@ -310,12 +309,6 @@ export default function SignUp() {
       return newShowPassword;
     });
   };
-
-  const onImageUpload = (event) => {
-      setProfileImage(event)
-
-
-  }
   
   const [formStepsNum, setFormStepsNum] = useState(0);
   const formSteps = [
@@ -361,9 +354,6 @@ export default function SignUp() {
       if (firstNameError || lastNameError || emailError || genderError || adddressError || passwordError || checkPasswordError || birthError || nicError || nifError || phoneError) {
           return;
       }
-      if (profileImage === null){
-        setProfileImage('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png')
-      }
       const data1 = new FormData();
       data1.append('first_name', first_name);
       data1.append('last_name', last_name);
@@ -375,7 +365,6 @@ export default function SignUp() {
       data1.append('nic', nic);
       data1.append('nif', nif);
       data1.append('phone', phone);
-      data1.append('profileImage', profileImage);
 
 
       try {
@@ -476,11 +465,7 @@ export default function SignUp() {
             )}
 
             {step.title === "2" && (
-                <><InputBox>
-
-                <CustomInputFiles singleImage
-                onChange={onImageUpload}></CustomInputFiles>
-            </InputBox>
+                <>
                     <InputBox>
                 <InputF
                     icon={showPassword ? <LockIconOpen /> : <LockIcon />}

@@ -9,16 +9,11 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import Grid from '@mui/material/Grid';
-import { AuthContext } from "../AuthContext";
 
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import LockIcon from '@mui/icons-material/Lock';
-import LockIconOpen from '@mui/icons-material/LockOpenRounded';
-import CalendarIcon from '@mui/icons-material/CalendarMonthRounded';
+import { createTheme } from '@mui/material/styles';
 import MailIcon from '@mui/icons-material/MailOutlineRounded';
 import PhoneIcon from '@mui/icons-material/PhoneAndroidRounded';
 import AddressIcon from '@mui/icons-material/HomeRounded';
-import HomeIcon from '@mui/icons-material/HomeRounded';
 
 import axios from "axios";
 import {PasswordStrength} from '../controllers/index'
@@ -184,7 +179,6 @@ export default function ProfileSettings({btnLabel, options}) {
 
 
           const userProfileData = response.data.currentUser; // Supondo que o endpoint forneça os detalhes do perfil do usuário
-          console.log(userProfileData.first_name)
           // // Defina os estados com base nas informações do perfil
           setFirstName(userProfileData.first_name);
           setLastName(userProfileData.last_name);
@@ -211,21 +205,20 @@ export default function ProfileSettings({btnLabel, options}) {
         event.preventDefault();
        
         try {
-            const response = await axios.put("http://localhost:3000/api/users/update",
-            {   first_name,
-                last_name,
-                email,
-                adddress,
-                birth,
-                gender,
-                phone,
-                nic,
-                nif,
-                token
+          const data1 = new FormData();
+          data1.append('first_name',first_name);
+          data1.append('last_name',last_name);
+          data1.append('email',email);
+          data1.append('adddress',adddress);
+          data1.append('birth',birth);
+          data1.append('gender',gender);
+          data1.append('phone',phone);
+          data1.append('nic',nic);
+          data1.append('nif',nif);
+          data1.append('token',token);
+          data1.append('profileImage',profileImage);
+            const response = await axios.put("http://localhost:3000/api/users/update", data1);
 
-            });
-            
-            console.log(response.data)
           } catch (error) {
             console.error("Update failed:", error);
              

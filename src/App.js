@@ -21,6 +21,7 @@ import RegisterLostObjectPage from'./pages/RegisterLostObjectPage.jsx';
 import MatchObjectCatalogPage from'./pages/matchObjectCatalogPage.jsx'; 
 import RegisterFoundObjectPage from'./pages/RegisterFoundObjectPage.jsx'; 
 import { GoogleOAuthProvider } from '@react-oauth/google';
+
 const LayoutContainer = styled.div`
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 

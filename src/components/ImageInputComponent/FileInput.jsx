@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import styled, { css } from 'styled-components';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 
 // TODO ESTE CSS FOI PARA TESTAR, DEPOIS HÁ DE SER ALTERADO OU REAPROVEITADO
@@ -21,12 +22,21 @@ const InputBox = styled.div`
   position: ${props => props.position ? props.position : 'relative'};
   align-self: center;
   display: inline-block;
-  width: ${props => props.width ? props.width + 'px' : '100px'};
-  height: ${props => props.height ? props.height + 'px' : '100px'};
   background-color: var(--primary-color);
   border-radius: 10px;
   overflow: hidden;
 `;
+
+const DefaultBox = styled.div`
+  ${colors};
+  width: 200px;
+  height: 200px;
+  background: var(--secondary-grey-color);
+  position: relative;
+    border-radius: 10px;
+  `;
+
+
 
 const FileInputField = styled.input.attrs({
   type: 'file',
@@ -43,41 +53,41 @@ const FileInputField = styled.input.attrs({
 `;
 
 const ImagePreviewContainer = styled.div`
-  display: grid;
-  grid-auto-flow: column;
-  gap: 5px;
-  padding: 10px;
+  display: flex;
+    align-items: center;
+  gap: 15px;
+  padding: 20px;
+  max-width: 520px;
   overflow-x: auto;
-`;
-
-const ImagePreviewSlot = styled.div`
-  width: 150px; /* Adjust slot width as needed */
-  height: 100%;
-  position: relative;
-`;
-
-const ImagePreview = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
-
-const TrashIconWrapper = styled.div`
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  color: black;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity 0.3s;
-  z-index: 1;
   
-  ${ImagePreviewSlot}:hover & {
-    opacity: 1;
-  }
+  
+  
 `;
 
-const PlusIconWrapper = styled.div`
+const ImageContainer = styled.div`
+    position: relative;
+
+    width: 150px;
+    max-width: 150px;
+    max-height: 150px;
+  img {
+    width: 150px;
+    max-width: 150px;
+    max-height: 150px;
+    min-width: 150px;
+    object-fit: cover;
+    object-position: center;
+
+  }
+
+  img:hover {
+    cursor: pointer;
+    opacity: 0.7;
+  }
+`
+
+
+const AddIconWrapper = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -88,28 +98,57 @@ const PlusIconWrapper = styled.div`
   opacity: 0;
   transition: opacity 0.3s;
   z-index: 1;
+  drop-shadow: 0 0 5  px var(--black-color);
 
   ${InputBox}:hover & {
     opacity: 1;
   }
 `;
 
+const RemoveIconWrapper = styled.div`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--second-color);
+  font-size: 48px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s;
+  z-index: 1;
+  drop-shadow: 0 0 5  px var(--black-color);
+
+  ${ImageContainer}:hover & {
+    opacity: 1;
+  }
+`;
+
+function removeImage(index, setPreviews) {
+    setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
+}
+
+
 // Funcional
 
-const CustomInputFiles = ({id, onChange, singleImage = false, width = null, heigth = null, position= null}) => {
+const CustomInputFiles = ({id, onChange, max = 1}) => {
   const [previews, setPreviews] = useState([]);
   const fileInputRef = useRef(null);
-console.log(position)
   const handleImageChange = (e) => {
     const files = e.target.files;
     const filePreviews = [];
+
+    if (files.length > max) {
+      alert(`Você pode selecionar no máximo ${max} arquivos`);
+      return;
+    }
+
     for (let i = 0; i < files.length; i++) {
       const reader = new FileReader();
       reader.onload = (event) => {
         filePreviews.push(event.target.result);
-        if(singleImage) {
-            setPreviews(filePreviews);
-            onChange(files[0]);
+        if(max === 1) {
+          setPreviews(filePreviews);
+          onChange(files[0]);
         }else if (filePreviews.length === files.length) {
           setPreviews((prevPreviews) => [...prevPreviews, ...filePreviews]);
           // Chama a função de retorno de chamada onChange e passa os arquivos selecionados
@@ -122,23 +161,28 @@ console.log(position)
 
   return (
     <InputBox>
-      <FileInputField id={id} onChange={handleImageChange} multiple={!singleImage} ref={fileInputRef}  />
-      {previews.length > 0 && (
+      <FileInputField id={id} onChange={handleImageChange} multiple={!(max===1)} ref={fileInputRef}  />
+
+      {previews.length>0 ? (
         <ImagePreviewContainer>
-          {previews.map((preview, index) => (
-            <ImagePreviewSlot key={index}>
-              <ImagePreview src={preview} alt="Preview" />
-              <TrashIconWrapper onClick={() => {setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));}}>
-                &#x1F5D1;
-              </TrashIconWrapper>
-            </ImagePreviewSlot>
-          ))}
+            {previews.map((preview, index) => (
+                <ImageContainer onClick={() => removeImage(index, setPreviews)}>
+                  <img key={index} src={preview} alt="preview" />
+                  <RemoveIconWrapper>
+
+                    <DeleteIcon />
+                  </RemoveIconWrapper>
+                </ImageContainer>
+            ))}
         </ImagePreviewContainer>
+      ) : (
+          <DefaultBox>
+            <AddIconWrapper onClick={() => { fileInputRef.current.click();}}>
+              &#x2B;
+            </AddIconWrapper>
+          </DefaultBox>
       )}
-      <PlusIconWrapper onClick={() => { fileInputRef.current.click();}}>
-        &#x2B;
-      </PlusIconWrapper>
-      <Label className="label">Image upload</Label>
+
     </InputBox>
     
   );
