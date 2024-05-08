@@ -180,7 +180,7 @@ export default function ProfileSettings({btnLabel, options}) {
       const fetchUserProfile = async () => {
         try {
          
-          const response = await axios.get(`http://34.125.56.18/api/users/profile/${token}`);
+          const response = await axios.get(`http://35.219.162.80/api/users/profile/${token}`);
 
 
           const userProfileData = response.data.currentUser; // Supondo que o endpoint forneça os detalhes do perfil do usuário
@@ -211,7 +211,7 @@ export default function ProfileSettings({btnLabel, options}) {
         event.preventDefault();
        
         try {
-            const response = await axios.put("http://34.125.56.18/api/users/update",
+            const response = await axios.put("http://35.219.162.80/api/users/update",
             {   first_name,
                 last_name,
                 email,

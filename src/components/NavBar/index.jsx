@@ -63,7 +63,7 @@ function Navbar() {
     if (token) {
       const fetchUserProfile = async () => {
         try {
-          const response = await axios.get(`http://34.125.56.18/api/users/profile/${token}`);
+          const response = await axios.get(`http://35.219.162.80/api/users/profile/${token}`);
           const userProfileData = response.data.currentUser;
           setUserData(userProfileData);
           setLoading(false);

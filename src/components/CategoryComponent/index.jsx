@@ -112,7 +112,7 @@ export default function AddCategoryComponent() {
     useEffect(() => {
         const fetchCategories = async () => {
           try {
-            const response = await axios.get('http://localhost:3000/api/category');
+            const response = await axios.get('http://35.219.162.80/api/category');
             setCategories(response.data);
     
           } catch (error) {
@@ -126,7 +126,7 @@ export default function AddCategoryComponent() {
     const handleCreateSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post(`http://localhost:3000/api/category/`,{"name": categoryToCreate});
+            const response = await axios.post(`http://35.219.162.80/api/category/`,{"name": categoryToCreate});
            
             console.log(category)
         } catch (error) {
@@ -143,7 +143,7 @@ export default function AddCategoryComponent() {
     const handleDeleteSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.delete(`http://localhost:3000/api/category/${category}`,);
+            const response = await axios.delete(`http://35.219.162.80/api/category/${category}`,);
             
             console.log(category)
         } catch (error) {

@@ -81,7 +81,7 @@ export default function ChangePassword() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.put("http://34.125.56.18/api/users/updatePass",{token,newPassword,password});
+            const response = await axios.put("http://35.219.162.80/api/users/updatePass",{token,newPassword,password});
             setErrorMessage(response.data.message);
             setEmail('');
             setPassword('');
