@@ -19,7 +19,7 @@ import SignUp from './components/SignUpTest/index.js';
 import LostObjectCatalogPage from './pages/lostObjectCatalogPage.jsx';
 import RegisterLostObjectPage from'./pages/RegisterLostObjectPage.jsx'; 
 import MatchObjectCatalogPage from'./pages/matchObjectCatalogPage.jsx'; 
-import RegisterFoundObjectPage from'./pages/RegisterFoundObjectPage.jsx'; 
+import AdminPage from'./pages/AdminPage.jsx'; 
 import { GoogleOAuthProvider } from '@react-oauth/google';
 const LayoutContainer = styled.div`
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
@@ -76,7 +76,7 @@ function App() {
             }
           /> 
               
-              <Route path="/registerFoundObject" element={<RegisterFoundObjectPage />} />
+              <Route path="/AdminPage" element={<AdminPage />} />
              
               <Route path="/matchObjects" element={<MatchObjectCatalogPage />} />
               <Route path="/addLostObject" element={<RegisterLostObjectPage />} />
