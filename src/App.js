@@ -12,6 +12,7 @@ import './index.css';
 import { AuthProvider }  from './components/AuthContext'
 import ProtectedRoute from './components/protectedRoutes'
 import ProfileSettings from './components/profileSettings/index'
+import ProfileMenu from './components/profileMenu/index'
 import {Cloudinary} from "@cloudinary/url-gen";
 import LostObjects from './components/lostObjForm/index'
 import Navbar from './components/NavBar/index.jsx'
