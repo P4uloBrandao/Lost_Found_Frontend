@@ -13,14 +13,7 @@ const GsiMaterialButton = styled.button`
   border-radius: 0.5rem;
   background: #FFF;
   box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.11);
-  ${({ formStepsNum }) =>
-    formStepsNum == 0
-      ? css`
-          display: block;
-        `
-      : css`
-          display: none;
-        `}
+  display:block;
   color: #1f1f1f;
   cursor: pointer;
   font-family: 'Roboto', Arial, sans-serif;
@@ -117,7 +110,7 @@ const GoogleButton = ({formStepsNum, placeholder, id, onClick, value, name }) =>
   return (
 
 
-    <GsiMaterialButton formStepsNum={formStepsNum}>
+    <GsiMaterialButton >
       <div className="gsi-material-button-state"></div>
       <div className="gsi-material-button-content-wrapper">
         <div className="gsi-material-button-icon">

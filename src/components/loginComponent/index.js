@@ -5,7 +5,6 @@ import { AuthContext } from "../AuthContext";
 import axios from "axios";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-
 import InputF  from '../inputFieldComponent/InputField';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 
@@ -212,7 +211,7 @@ export default function SignIn() {
     const defaultTheme = createTheme();
     const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
     const [checked, setChecked] = useState(false);
-    
+
     const handleCheckboxClick = () => {
       setChecked(!checked);
     };
@@ -225,9 +224,22 @@ export default function SignIn() {
         return newShowPassword;
       });
     };
-    const setLoginGoogle = () => {
+    const showUserInformation = (response) => {
+      console.log('Google Response:', response); // Log the entire response
       
-    };
+      // Check if the response contains the user's profile information
+      if (response.profileObj && response.profileObj.email) {
+          // Access the user's email address from the profile information
+          const userEmail = response.profileObj.email;
+          console.log('User Email:', userEmail);
+          // You can access other profile information as well, if needed
+          console.log('User Profile:', response.profileObj);
+      } else {
+          console.log('User profile information not available');
+      }
+  }
+
+
     const handleSubmit = async (event) => {
       event.preventDefault();
   
@@ -267,6 +279,7 @@ export default function SignIn() {
               setErrorMessage("An unexpected error occurred. Please try again.");
           }
       }
+
   };
 
     return (
@@ -297,21 +310,14 @@ export default function SignIn() {
 
 
 
-        <GoogleLogin
-        onSuccess={response => {
-          // Check if the response contains the user's profile information
-          if (response.profileObj) {
-            console.log(response.profileObj)
-            // Access the user's email address from the profile information
-            const userEmail = response.profileObj.email;
-            console.log('User Email:', userEmail);
-          } else {
-            console.log('User profile information not available');
-          }}}
-  
-  onError={() => {
-    console.log('Login Failed');
-  }}
+<GoogleLogin
+    clientId="535834422242-dfvm3g9s3dv6hpob73povmrmgqbmiuha.apps.googleusercontent.com"
+    onSuccess={showUserInformation}
+    onFailure={(error) => {
+        console.log('Login Failed:', error);
+    }}
+    cookiePolicy={'single_host_origin'}
+    scope={'profile email'} // Requesting 'profile' and 'email' scopes
 />
        
 
