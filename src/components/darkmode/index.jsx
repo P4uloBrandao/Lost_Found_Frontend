@@ -2,6 +2,7 @@ import "./style.css";
 import { BsSun } from "react-icons/bs";
 import { IoMoonOutline } from "react-icons/io5";
 import { HiMiniMoon } from "react-icons/hi2";
+import '../../assets/colors/colors.css';
 
 export const Toggle = ({ handleChange, isChecked }) => {
   return (

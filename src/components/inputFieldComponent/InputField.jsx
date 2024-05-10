@@ -2,28 +2,24 @@ import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import styled, { keyframes, css} from 'styled-components';
+import '../../assets/colors/colors.css'
 
-const colors = css`
-  --primary-color: #c6c3c3;
-  --second-color: #ffffff;
-  --black-color: #000000;
-`;
+
 
 const InputBox = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  margin: 5px 0;
+  margin: 5px 14px;
+  
 `;
 
 const InputField = styled.input`
-  ${colors}
-  width: 95%;
   height: ${(props) => props.height || '38px' };
   font-size: 16px;
   background: #ECECEC;
   color: var(--black-color);
-  padding-inline: 20px 0px;
+  padding-inline: 12px 0px;
   border: none;
   border-radius: 30px;
   outline: none;
@@ -42,10 +38,10 @@ const InputField = styled.input`
     position: absolute;
     top: -10px;
     left: 20px;
-    color: var(--second-color);
+    color: var(--white-color);
     font-size: 14px;
     font-weight: bold;
-    background-color: var(--primary-color);
+    background-color: var(--primary-green-color);
     border-radius: 30px;
     padding: 0 10px;
     transition: 0.2s;
@@ -65,7 +61,7 @@ const Label = styled.label`
   top: -28px;
   left: 20px;
   transition: 0.2s;
-  color: var(--primary-color); /* Change this line to set the placeholder label color */
+  color: var(--primary-green-color); /* Change this line to set the placeholder label color */
 `;
 const IconWrapper = styled.i`
 
@@ -86,7 +82,7 @@ const ErrorMessage = styled.p`
 `;
 
 
-const CustomInput = ({ height,icon, type, placeholder, id, required, onChange, value, name,setShowPassword, errorMessage = null, errorValidation = null  }) => {
+const CustomInput = ({ style ,height,icon, type, placeholder, id, required, onChange, value, name,setShowPassword, errorMessage = null, errorValidation = null  }) => {
     const removeValidation = () => {
         errorValidation = false;
     }
@@ -102,6 +98,7 @@ const CustomInput = ({ height,icon, type, placeholder, id, required, onChange, v
         value={value}
         name={name}
         onFocus={removeValidation}
+        style={style}
       />
       <Label className="label">{name}</Label>
       <IconWrapper onClick={setShowPassword}>{icon} </IconWrapper>

@@ -8,20 +8,26 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faMinus  } from '@fortawesome/free-solid-svg-icons'
 import { Toggle } from "../darkmode/index";
 import { useLocation } from 'react-router-dom';
+import "../../assets/colors/colors.css"
 
 
 const MenuOptions = styled.div`
 display: ${props => props.isOpen ? 'block' : 'none'};  border-radius: 20px;
-  /* border: solid 1px black; */
   position: relative;
-  top: 52pt;
-  width: 167pt;
-  left: -191pt;
-  background-color: white;
+  top: ${props => props.userData === null ? '90pt !important' : '121pt !important'}; 
+    
+    left:${props => props.userData === null ? '-15pt !important' : '-7pt !important'}; 
+  background-color: var(--white-color);
   height: ${props => props.userData === null ? '93pt !important' : '168pt !important'}; 
-  padding: 15pt;
+  padding: 15pt 0pt 15pt 15pt ;
+  width : 15em;
+  border: solid 1px black ;
+
+    
   
 `;
 function Navbar() {
@@ -57,7 +63,7 @@ function Navbar() {
     if (token) {
       const fetchUserProfile = async () => {
         try {
-          const response = await axios.get(`http://34.125.56.18/api/users/profile/${token}`);
+          const response = await axios.get(`http://35.219.162.80/api/users/profile/${token}`);
           const userProfileData = response.data.currentUser;
           setUserData(userProfileData);
           setLoading(false);
@@ -88,24 +94,41 @@ function Navbar() {
   if (loading) {
     return <div>Carregando...</div>;
   }
+  
 
+  const redirectToProfile = () => {
+    navigate('/profile'); 
+  };
+
+  const redirectToLostObjects = () => {
+    navigate('/myLostObjects'); 
+  };
+  const registerLost = () => {
+    navigate('/addLostObject'); 
+  };
   return (
     <div>
       <nav id="navbar">
         <div className='logoItem'>
-          <img src={Logo} alt="" />
+          <img src={Logo} alt="Brand logo" />
         </div>
         {location.pathname !== '/signup' &&location.pathname !== '/login' && (
         <div className='buttonsSide'>
           <Toggle/>
           { !userData && ( // Condição para ocultar botões na página de login
-            <div onClick={handleSignInClick} className='signInItem'>SIGN IN</div>
+            <div onClick={handleSignInClick} className='signInItem'>SIGN IN <FontAwesomeIcon className='svgButtons' icon={faArrowRight} /></div>
           )}
           
             <div className='menuItem' onClick={handleMenuItemClick}>
-              <div className='menuItemText'>MENU <i class="fas fa-angle-down"></i></div> 
-              
-            </div> 
+            <div className='menuItemText'>
+        MENU
+        <FontAwesomeIcon
+          className={`svgButtons ${isOpen ? 'open' : 'closed'}`}
+          icon={isOpen ? faMinus : faPlus}
+        />
+      </div>
+      {isOpen && <MenuOptions className='noborder' isOpen={isOpen} userData={userData} />}          
+            
             <MenuOptions isOpen={isOpen} userData={userData} > 
                
                
@@ -113,7 +136,7 @@ function Navbar() {
                   {userData && (
                      <div className='option1'>
                         <div>
-                          <img className='imgMenu' width='40px' height='40px' src={teste} alt="" />
+                          <img className='imgMenu' width='40px' height='40px' src={userData.profileImage} alt="" />
                         </div>
                       <div className='infoUser'>
                         <p className='userNameText'>{userData.first_name} {userData.last_name}</p>
@@ -127,8 +150,8 @@ function Navbar() {
                  <div className='optionMenu'> LOST <FontAwesomeIcon className='svgArrow1' icon={faArrowLeft} /></div>
                   <div className='subMenu1'>
                     <div className='menuOptions1'>
-                    <div  className=' op11'> <div className='align11' >REGISTER LOST<FontAwesomeIcon className='svgArrow11' icon={faArrowLeft} /></div></div>
-                    <div  className=' op12'> <div className='align11'>MY LOST<FontAwesomeIcon className='svgArrow12' icon={faArrowLeft} /></div></div>
+                    <div  className=' op11' onClick={registerLost}> <div className='align11' >REGISTER LOST<FontAwesomeIcon className='svgArrow11' icon={faArrowLeft} /></div></div>
+                    <div  className=' op12'onClick={redirectToLostObjects} > <div className='align11'>MY LOST<FontAwesomeIcon className='svgArrow12' icon={faArrowLeft} /></div></div>
                   </div></div>
                   
                 </div>
@@ -147,7 +170,7 @@ function Navbar() {
                <div className='subMenu2'>
 
                 <div className=' menuOptions3'>
-                  <div  className='option op31 '> <div className='ml-13'>EDIT PROFILE<FontAwesomeIcon className='svgArrow31' icon={faArrowLeft} /></div></div>
+                  <div  className='option op31 'onClick={redirectToProfile}> <div className='ml-13'>EDIT PROFILE<FontAwesomeIcon className='svgArrow31' icon={faArrowLeft} /></div></div>
                   <div  className='option op32'> <div className='ml-13'>PRIVACY SETTINGS<FontAwesomeIcon className='svgArrow32' icon={faArrowLeft} /></div></div>
                   </div>
                 </div>
@@ -160,7 +183,7 @@ function Navbar() {
               
                </ MenuOptions>
                
-            
+            </div> 
           
         </div>
         )}

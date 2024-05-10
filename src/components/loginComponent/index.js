@@ -5,21 +5,16 @@ import { AuthContext } from "../AuthContext";
 import axios from "axios";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-
 import InputF  from '../inputFieldComponent/InputField';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 
 import styled, { keyframes, css} from 'styled-components';
 import LockIcon from '@mui/icons-material/Lock';
 import LockIconOpen from '@mui/icons-material/LockOpenRounded';
-import LoginImage from '../../assets/background/loginImage.svg'; 
 import GoogleButton from '../GoogleButtonComponent/index'
-const colors = css`
-  --primary-color: #3CB684;
-  --second-color: #ffffff;
-  --black-color: #000000;
-`;
-
+import '../../assets/colors/colors.css'
+import { hasGrantedAllScopesGoogle } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -39,12 +34,12 @@ const Wrapper = styled.div`
 `;
 
 const LoginBox = styled.div`
-${colors};
   text-align: -webkit-center;
   position: relative;
-  height: 61.5vh;
-  background-color: white;
-  width: 30%;  backdrop-filter: blur(25px);
+  height:  100vh;
+  background-color: var(--white-color);
+  width: 100%; 
+   backdrop-filter: blur(25px);
   box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
   padding: 7.5em 6.5em;
 `;
@@ -56,7 +51,6 @@ const LoginHeader = styled.div`
 `;
 
 const LoginHeaderText = styled.span`
-${colors}
 
   color: var(--black-color);
   text-align: center;
@@ -117,7 +111,7 @@ const RememberBox = styled.div`
     position: absolute;
 
     &:checked + .check {
-      background-color:  var(--primary-color);
+      background-color:  var( --primary-green-color);
     }
   }
 
@@ -128,18 +122,17 @@ const RememberBox = styled.div`
     vertical-align: middle;
     border: 1px solid #ccc;
     border-radius: 9px;
-    background-color: #fff;
+    background-color: var(--white-color);
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 `;
 const InputSubmit = styled.button`
-${colors}  
 
 width: 9.93306rem;
 height: 3.25rem;
-  background:var(--primary-color);
-  box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.11);
+background:var( --primary-green-color);
+box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.11);
   transition: background-color 0.218s, border-color 0.218s, box-shadow 0.218s;
   text-align: center;
   font-family: Roboto;
@@ -150,13 +143,13 @@ height: 3.25rem;
   border: none;
   border-radius: 30px;
   cursor: pointer;
-  color:var(--second-color);
+  color:var(--white-color);
   transition: 0.3s;
 
   &:hover {
-    background: var(--second-color);
-    border: solid 2px var(--primary-color);
-    color:var(--primary-color);
+    background: var(--white-color);
+    border: solid 2px var(--primary-green-color);
+    color:var(--primary-green-color);
     box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.30), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
   }
 `;
@@ -172,7 +165,7 @@ const LoginBody = styled.div`
 const RegisterLink = styled.a`
   font-weight: 500;
   text-decoration: none;
-  color: var(--primary-color);
+  color: var(--primary-green-color);
   cursor:pointer;
   margin-right: 11px;
   &:hover {
@@ -189,7 +182,7 @@ const HrDivison = styled.div`
     flex: 1;
     border: none;
     height: 1.33pt;
-    background-color: #3cb684;
+    background-color: var(--primary-green-color);
     margin: 0 10px;
 }
 
@@ -217,12 +210,11 @@ export default function SignIn() {
     const {login } = useContext(AuthContext);
     const defaultTheme = createTheme();
     const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
-    
-      const [checked, setChecked] = useState(false);
-    
-      const handleCheckboxClick = () => {
-        setChecked(!checked);
-      };
+    const [checked, setChecked] = useState(false);
+
+    const handleCheckboxClick = () => {
+      setChecked(!checked);
+    };
     
     const navigate = useNavigate();
     const toggleShowPassword = () => {
@@ -232,9 +224,22 @@ export default function SignIn() {
         return newShowPassword;
       });
     };
-    const setLoginGoogle = () => {
+    const showUserInformation = (response) => {
+      console.log('Google Response:', response); // Log the entire response
       
-    };
+      // Check if the response contains the user's profile information
+      if (response.profileObj && response.profileObj.email) {
+          // Access the user's email address from the profile information
+          const userEmail = response.profileObj.email;
+          console.log('User Email:', userEmail);
+          // You can access other profile information as well, if needed
+          console.log('User Profile:', response.profileObj);
+      } else {
+          console.log('User profile information not available');
+      }
+  }
+
+
     const handleSubmit = async (event) => {
       event.preventDefault();
   
@@ -248,7 +253,7 @@ export default function SignIn() {
       });
   
       try {
-        const response = await axios.post("http://34.125.56.18/api/auth/login", {email,password});
+        const response = await axios.post("http://35.219.162.80/api/auth/login", {email,password});
     
         // Process the response as needed
           console.log(response.data);
@@ -274,6 +279,7 @@ export default function SignIn() {
               setErrorMessage("An unexpected error occurred. Please try again.");
           }
       }
+
   };
 
     return (
@@ -288,13 +294,33 @@ export default function SignIn() {
         
      
       {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}{" "}
-      <GoogleButton
+      {/* <GoogleButton
+      formStepsNum={"0"}
         placeholder={'Continue with Google'}  
         id="googleButtonLogin"
-        
+        onSuccess={credentialResponse => {
+          console.log(credentialResponse);
+        }}
+        onError={() => {
+          console.log('Login Failed');
+        }}
         onClick={(e) => setLoginGoogle(e.target.value)}
         
-        name="googleButtonLogin"/>
+        name="googleButtonLogin"/> */}
+
+
+
+<GoogleLogin
+    clientId="535834422242-dfvm3g9s3dv6hpob73povmrmgqbmiuha.apps.googleusercontent.com"
+    onSuccess={showUserInformation}
+    onFailure={(error) => {
+        console.log('Login Failed:', error);
+    }}
+    cookiePolicy={'single_host_origin'}
+    scope={'profile email'} // Requesting 'profile' and 'email' scopes
+/>
+       
+
         <HrDivison ><hr /> <p> OR</p> <hr /></HrDivison>
       <form onSubmit={handleSubmit} >
         <InputBox>
@@ -350,7 +376,6 @@ export default function SignIn() {
       </form>
       </LoginBody>
     </LoginBox>
-    <img src={LoginImage} alt="" />
     </Wrapper>
              
             

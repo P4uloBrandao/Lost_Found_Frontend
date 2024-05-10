@@ -1,11 +1,10 @@
-import * as React from 'react';
 import styled, { keyframes, css} from 'styled-components';
+import React, { useState, useRef, useEffect, useContext } from 'react';
+import CustomInputFiles from '../ImageInputComponent/FileInput'
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import { Avatar , Button } from '@mui/material';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
-import {useState, useContext } from "react";
-import  { useEffect } from "react";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
@@ -37,8 +36,7 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-color: #00798e;
-  background-image : url("../../assets/background/bg-photo.jpg")
+  
 `;
 
 const FormBox = styled.div`
@@ -159,7 +157,9 @@ const defaultTheme = createTheme();
 // Função para formatar a data como "DD-MM-YYYY"
 
 
-export default function ProfileSettings() {
+export default function ProfileSettings({btnLabel, options}) {
+  const [profileImage, setProfileImage] = React.useState(null);
+
     const [first_name, setFirstName] = React.useState('');
     const [last_name, setLastName] = React.useState('');
     const [email, setEmail] = React.useState('');
@@ -180,7 +180,7 @@ export default function ProfileSettings() {
       const fetchUserProfile = async () => {
         try {
          
-          const response = await axios.get(`http://34.125.56.18/api/users/profile/${token}`);
+          const response = await axios.get(`http://35.219.162.80/api/users/profile/${token}`);
 
 
           const userProfileData = response.data.currentUser; // Supondo que o endpoint forneça os detalhes do perfil do usuário
@@ -211,7 +211,7 @@ export default function ProfileSettings() {
         event.preventDefault();
        
         try {
-            const response = await axios.put("http://34.125.56.18/api/users/update",
+            const response = await axios.put("http://35.219.162.80/api/users/update",
             {   first_name,
                 last_name,
                 email,
@@ -238,142 +238,154 @@ export default function ProfileSettings() {
           }
     };
 
+
+  const onImageUpload = (event) => {
+    setProfileImage(event)
+
+
+}
+
     return (
         <Wrapper>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
 
-        <FormBox>
-      <FormHeader>
-        <FormHeaderText>Update Profile</FormHeaderText>
-      </FormHeader>
         
-      <Form  onSubmit={handleSubmit} >
-        <Grid  spacing={2}>
-        <Grid item xs={12} sm={6}>
-          <InputBox >
-        <InputF 
-        icon={<PersonOutlineRoundedIcon />} 
-        type={'text'} 
-        placeholder={'Enter your first name'}  
-        id="first_name"
-        required
-        onChange={(e) => setFirstName(e.target.value)}
-        name="First Name"
-        value={first_name}
-        />
-        </InputBox>
-        </Grid>
-        <Grid item xs={12} sm={6}> 
-          <InputBox>
-        <InputF 
-        icon={<PersonOutlineRoundedIcon />} 
-        type={'text'} 
-        placeholder={'Enter your last name'}  
-        id="last_name"
-        required
-        onChange={(e) => setLastName(e.target.value)}
-        name="Last Name"
-        value={last_name}
-        />
-        </InputBox>
-        </Grid>
-        <Grid item xs={12} >
-        <InputBox>
-        <InputF 
-        icon={<MailIcon />} 
-        type={'text'} 
-        placeholder={'Enter your Email'}  
-        id="email"
-        required
-        onChange={(e) => setEmail(e.target.value)}
-        value={email}
-        name="Email"/>
-        </InputBox>
-        </Grid>
-        
-        <Grid item xs={12} sm={6}>
-        <InputBox>
-        <InputF 
-        icon={<PhoneIcon />} 
-        type={'number'} 
-        placeholder={'Enter your phone number'}  
-        id="phone"
-        required
-        onChange={(e) => setPhone(e.target.value)}
-        value={phone}
-        name="Phone"/>
-          
-        </InputBox>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-        <InputBox>
-        <InputF 
-        icon={<MailIcon />} 
-        type={'date'} 
-        placeholder={'Enter birthday'}  
-        id="birthday"
-        required
-        onChange={(e) => setBirth(e.target.value)}
-        value={birth}
-        name="Birthday"/>
-
- 
-        </InputBox>
-        </Grid>
-        <Grid item xs={12} >
-            <InputBox>
-        <InputF 
-        icon={<AddressIcon />} 
-        type={'text'} 
-        placeholder={'Enter your Address'}  
-        id="address"
-        required
-        onChange={(e) => setAdddress(e.target.value)}
-        value={adddress}
-        name="Address"/>
-          
-          
-        
-         </InputBox>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-        <InputBox>
-        <InputF 
-        type={'number'} 
-        placeholder={'Enter your NIF'}  
-        id="nif"
-        required
-        onChange={(e) => setNif(e.target.value)}
-        value={nif}
-        name="Nif"/>
-          
-          
-        
-        </InputBox>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-        <InputBox>
-        <InputF 
-        type={'text'} 
-        placeholder={'Enter your NIC'}  
-        id="nic"
-        required
-        onChange={(e) => setNic(e.target.value)}
-        value={nic}
-        name="Nic"/>
-          
-        
-        </InputBox>
-        </Grid>
-
-
-        <InputBox>
-          <InputSubmit type="submit" className="input-submit" value="Register" label="Register">Update</InputSubmit>
-        </InputBox>
       
-        </Grid>
-      </Form>
-      </FormBox>
+        
+        <Form onSubmit={handleSubmit}>
+  <Grid container spacing={2}>
+    <Grid item xs={12} sm={6}>
+      <InputBox>
+        <InputF 
+          icon={<PersonOutlineRoundedIcon />} 
+          type={'text'} 
+          placeholder={'Enter your first name'}  
+          id="first_name"
+          required
+          onChange={(e) => setFirstName(e.target.value)}
+          name="First Name"
+          value={first_name}
+        />
+      </InputBox>
+    </Grid>
+    <Grid item xs={12} sm={6}>
+      <InputBox>
+        <InputF 
+          icon={<PersonOutlineRoundedIcon />} 
+          type={'text'} 
+          placeholder={'Enter your last name'}  
+          id="last_name"
+          required
+          onChange={(e) => setLastName(e.target.value)}
+          name="Last Name"
+          value={last_name}
+        />
+      </InputBox>
+    </Grid>
+    <Grid item xs={12} sm={6}>
+      <InputBox>
+        <InputF 
+          icon={<MailIcon />} 
+          type={'text'} 
+          placeholder={'Enter your Email'}  
+          id="email"
+          required
+          onChange={(e) => setEmail(e.target.value)}
+          value={email}
+          name="Email"
+        />
+      </InputBox>
+    </Grid>
+    <Grid item xs={12} sm={6}>
+      <InputBox>
+        <InputF 
+          icon={<AddressIcon />} 
+          type={'text'} 
+          placeholder={'Enter your Address'}  
+          id="address"
+          required
+          onChange={(e) => setAdddress(e.target.value)}
+          value={adddress}
+          name="Address"
+        />
+      </InputBox>
+    </Grid>
+    {/* Adicione os outros campos de entrada aqui */}
+    <Grid item xs={12} sm={3}>
+      <InputBox>
+        <InputF 
+          icon={<PhoneIcon />} 
+          type={'number'} 
+          placeholder={'Enter your phone number'}  
+          id="phone"
+          required
+          onChange={(e) => setPhone(e.target.value)}
+          value={phone}
+          name="Phone"
+        />
+      </InputBox>
+    </Grid>
+    <Grid item xs={12} sm={3}>
+      <InputBox>
+        <InputF 
+          icon={<MailIcon />} 
+          type={'date'} 
+          placeholder={'Enter birthday'}  
+          id="birthday"
+          required
+          onChange={(e) => setBirth(e.target.value)}
+          value={birth}
+          name="Birthday"
+        />
+      </InputBox>
+    </Grid>
+    {/* Adicione os outros campos de entrada aqui */}
+    <Grid item xs={12} sm={6}>
+      <InputBox>
+        <CustomInputFiles 
+        singleImage 
+        onChange={onImageUpload} 
+        width={200}
+        height={200}
+         position="absolute" />
+      </InputBox>
+    </Grid>
+    <Grid item xs={12} sm={3}>
+      <InputBox>
+        <InputF 
+          type={'number'} 
+          placeholder={'Enter your NIF'}  
+          id="nif"
+          required
+          onChange={(e) => setNif(e.target.value)}
+          value={nif}
+          name="Nif"
+        />
+      </InputBox>
+    </Grid>
+    <Grid item xs={12} sm={3}>
+      <InputBox>
+        <InputF 
+          type={'text'} 
+          placeholder={'Enter your NIC'}  
+          id="nic"
+          required
+          onChange={(e) => setNic(e.target.value)}
+          value={nic}
+          name="Nic"
+        />
+      </InputBox>
+    </Grid>
+    {/* Adicione o botão de envio aqui */}
+    <Grid item xs={12}>
+      <InputBox>
+        <InputSubmit type="submit" className="input-submit" value="Register" label="Register">Save Canges</InputSubmit>
+      </InputBox>
+    </Grid>
+  </Grid>
+</Form>
+
+
       </LocalizationProvider>
       </Wrapper>
 
