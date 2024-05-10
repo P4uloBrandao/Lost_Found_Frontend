@@ -9,6 +9,7 @@ import  { useEffect } from "react";
 import AddFoundObjectComponent  from '../components/AddFoundObjectComponent/index' ; 
 import CategoryComponent  from '../components/CategoryComponent/index' ; 
 import SationComponent  from '../components/StationComponent/index' ; 
+import PoliceComponent  from '../components/PoliceComponent/index' ; 
 
 
 export default function AdminPage() {
@@ -21,8 +22,8 @@ export default function AdminPage() {
   <Grid xs={12}>
   <  AddFoundObjectComponent />
   <  CategoryComponent/>
-  <  SationComponent/>
-  {/* <  Police/> */}
+  <  SationComponent/> 
+  <  PoliceComponent/>
   </Grid>
     </Grid>
   );

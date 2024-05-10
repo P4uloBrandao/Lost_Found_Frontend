@@ -13,7 +13,7 @@ import { AuthProvider }  from './components/AuthContext'
 import ProtectedRoute from './components/protectedRoutes'
 import ProfileSettings from './components/profileSettings/index'
 import {Cloudinary} from "@cloudinary/url-gen";
-import LostObjects from './components/lostObjForm/index'
+import AddLostObjectComponent from './components/AddLostObjectComponent/index'
 import Navbar from './components/NavBar/index.jsx'
 import SignUp from './components/SignUpTest/index.js';
 import LostObjectCatalogPage from './pages/lostObjectCatalogPage.jsx';
@@ -21,6 +21,8 @@ import RegisterLostObjectPage from'./pages/RegisterLostObjectPage.jsx';
 import MatchObjectCatalogPage from'./pages/matchObjectCatalogPage.jsx'; 
 import AdminPage from'./pages/AdminPage.jsx'; 
 import { GoogleOAuthProvider } from '@react-oauth/google';
+// import AddLostObjectCatalogPage from'./pages/AddLostObjectCatalogPage.jsx'; 
+
 const LayoutContainer = styled.div`
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
 
@@ -77,7 +79,8 @@ function App() {
           /> 
               
               <Route path="/AdminPage" element={<AdminPage />} />
-             
+              <Route path="/addFoundObject" element={<AddLostObjectComponent />} />
+
               <Route path="/matchObjects" element={<MatchObjectCatalogPage />} />
               <Route path="/addLostObject" element={<RegisterLostObjectPage />} />
               <Route path="/myLostObjects" element={<LostObjectCatalogPage />} />
