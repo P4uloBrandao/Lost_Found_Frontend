@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { AuthContext } from "../AuthContext";
+import { useAuth, AuthProvider } from '../AuthContext';
 import axios from "axios";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -15,6 +15,7 @@ import GoogleButton from '../GoogleButtonComponent/index'
 import '../../assets/colors/colors.css'
 import { hasGrantedAllScopesGoogle } from '@react-oauth/google';
 import { GoogleLogin } from '@react-oauth/google';
+
 
 const Wrapper = styled.div`
   width: 100%;
@@ -206,8 +207,13 @@ export default function SignIn() {
   const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [errorMessage, setErrorMessage] = useState(null); // New state for handling error messages
-    const { setToken, setAuth } = useContext(AuthContext);
-    const {login } = useContext(AuthContext);
+    const {
+      setAuthUser,
+      authUser,
+      isLoggedIn,
+      setIsLoggedIn,
+       token,setToken,setIsAdmin,login,isAdmin,userRole,setUserRole} = useAuth();
+
     const defaultTheme = createTheme();
     const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
     const [checked, setChecked] = useState(false);
@@ -215,6 +221,7 @@ export default function SignIn() {
     const handleCheckboxClick = () => {
       setChecked(!checked);
     };
+   
     
     const navigate = useNavigate();
     const toggleShowPassword = () => {
@@ -257,15 +264,20 @@ export default function SignIn() {
     
         // Process the response as needed
           console.log(response.data);
-          
-           localStorage.setItem("token", response.data.token);
-           setToken(response.data.token);
-           const userData = {
-            username: 'GONcalo',
-            userEmail: 'joao@example.com', // Substitua isso pelo e-mail real do usuário
-          };
-          login(userData);
-           navigate("/home");
+          setAuthUser(response.data)
+          localStorage.setItem("token", response.data.token);
+          setToken(response.data.token);
+          setIsLoggedIn(true);
+          setUserRole(response.data.user.role)
+          if (response.data.user.role === 'Admin') {
+          navigate("/adminPage");
+            setIsAdmin(true);
+            console.log("-login----->", isAdmin)
+          }else{
+            navigate("/home");
+          }
+          login(response.data);
+           
      
         } catch (error) {
           console.error("Authentication failed:", error);

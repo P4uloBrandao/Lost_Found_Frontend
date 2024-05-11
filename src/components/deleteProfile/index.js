@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { AuthContext } from "../AuthContext";
+import { useAuth, AuthProvider } from '../AuthContext';
 import axios from "axios";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -130,7 +130,7 @@ const RegisterLink = styled.a`
 const DeleteProfile = () => {
     const [errorMessage, setErrorMessage] = useState(null);
     const [deleteConfirmation, setDeleteConfirmation] = useState('');
-    const { logout } = useContext(AuthContext);
+    const { logout }= useAuth();
     const handleLogout = () => {
             logout();
             

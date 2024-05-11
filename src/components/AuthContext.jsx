@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }) => {
     setUserName(userData.userName);
     setUserEmail({userEmail : userData.userEmail})
       console.log(userData.userName, userData.userEmail); // Use userData diretamente
+    else{
 
     console.log(userName, userEmail)
     setAuth(true);
