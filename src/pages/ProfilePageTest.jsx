@@ -3,7 +3,7 @@ import photo from '../assets/background/bg-photo.jpg'
 import styled, { keyframes } from 'styled-components';
 import DeleteProfile from '../components/deleteProfile/index'
 import Layout from '../components/Layout/Layout';
-import ChangePassword from '../components/changePassword';
+import ChangePassword from '../components/ChangePasswordComponent';
 import ProfileSettings from '../components/profileSettings/index';
 const PrimaryContainer = styled.div`
   margin: 9em 7em ;

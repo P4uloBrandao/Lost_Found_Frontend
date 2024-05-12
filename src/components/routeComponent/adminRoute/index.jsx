@@ -5,14 +5,18 @@ const AdminRoute = ({children}) =>{
     const { 
         setAuthUser,isAdmin,setUserRole,userRole,
         authUser,setIsAdmin,
-        isLoggedIn,
-        setIsLoggedIn,logout} = useAuth();
+        isLoggedIn,logout,
+        setIsLoggedIn} = useAuth();
      console.log(isAdmin, "-----",isLoggedIn,"---", userRole) 
      console.log(authUser)  
     if (isAdmin && isLoggedIn){
         return (children )
     }
+    else{
+        logout()
+    }
    return(
+            
          <Navigate to={'/login'}/>
     )
     

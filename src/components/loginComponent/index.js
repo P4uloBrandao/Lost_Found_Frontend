@@ -208,11 +208,10 @@ export default function SignIn() {
     const [password, setPassword] = React.useState('');
     const [errorMessage, setErrorMessage] = useState(null); // New state for handling error messages
     const {
-      setAuthUser,
-      authUser,
-      isLoggedIn,
+      setAuthUser,authUser,
       setIsLoggedIn,
-       token,setToken,setIsAdmin,login,isAdmin,userRole,setUserRole} = useAuth();
+      setToken,setIsAdmin,login,isAdmin,setUserRole,token,userRole} = useAuth();
+
 
     const defaultTheme = createTheme();
     const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
@@ -263,20 +262,21 @@ export default function SignIn() {
         const response = await axios.post("http://localhost:3000/api/auth/login", {email,password});
     
         // Process the response as needed
-          console.log(response.data);
-          setAuthUser(response.data)
+          
           localStorage.setItem("token", response.data.token);
-          setToken(response.data.token);
-          setIsLoggedIn(true);
-          setUserRole(response.data.user.role)
+          console.log('teste -->',response.data.user.role)
           if (response.data.user.role === 'Admin') {
-          navigate("/adminPage");
+          // navigate("/adminPage");
             setIsAdmin(true);
+            setUserRole("Admin")
             console.log("-login----->", isAdmin)
           }else{
-            navigate("/home");
+            // navigate("/home");
+            setIsAdmin(false);
+            console.log("-login----->", isAdmin)
           }
           login(response.data);
+          
            
      
         } catch (error) {
@@ -291,7 +291,11 @@ export default function SignIn() {
               setErrorMessage("An unexpected error occurred. Please try again.");
           }
       }
-
+      setAuthUser(authUser)
+      console.log( authUser,token , setIsLoggedIn, userRole)
+     
+      
+    
   };
 
     return (

@@ -27,6 +27,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import '../../assets/colors/colors.css'
 import DropdownInput from "../dropdownInputComponent";
+import AddressIcon from '@mui/icons-material/HomeRounded';
 
 const Form = styled.form`
   display: grid;
@@ -124,6 +125,7 @@ const CategoryButton = styled.button`
 
 
 
+
 export default function PoliceComponent() {
   const [first_name, setFirstName] = React.useState('');
     const [last_name, setLastName] = React.useState('');
@@ -137,7 +139,6 @@ export default function PoliceComponent() {
     const [nif, setNif] = React.useState('');
     const [option, setOption] = useState("");
     const [phone, setPhone] = React.useState('');
-    const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
     const [errorMessage, setErrorMessage]= useState("")
     const [stations, setStations] = React.useState('');
     const [activeButton, setActiveButton] = useState(null);
@@ -145,17 +146,41 @@ export default function PoliceComponent() {
     const [stationName, setStationName] = React.useState('');
     const [stationId, setStationId] = React.useState('');
     const [stationNumber, setStationNumber] = React.useState('');
-    const [station, setStation] = React.useState({ name: null, id: null });
+    const [station, setStation] = React.useState('');
+    const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
+    const [showPassword2, setShowPassword2] = useState(null); // New state for handling error messages
+    const [policeId, setPoliceId] = useState(''); // New state for handling error messages
+    const [adddressError, setAdddressError ] = useState(null);
+    const [zipCode, setZipCode ] = useState(null);
 
     const [isLoading, setIsLoading] = useState(true);
-const [error, setError] = useState(false);
+    const [error, setError] = useState(false);
 
+    const [passwordError, setPasswordError ] = useState(null);
+    const [checkPasswordError, setCheckPasswordError ] = useState(null);
+function setNameOfStation(station){
+  console.log(station)
+  setStation(station)
+}
+const toggleShowPassword = () => {
+  setShowPassword((prevShowPassword) => {
+    const newShowPassword = !prevShowPassword;
+    return newShowPassword;
+  });
+};
+const toggleShowPassword2 = () => {
+  setShowPassword2((prevShowPassword) => {
+    const newShowPassword = !prevShowPassword;
+    return newShowPassword;
+  });
+};
 useEffect(() => {
     const fetchStations = async () => {
         try {
             const response = await axios.get('http://localhost:3000/api/police/police-stations');
             setStations(response.data);
             setIsLoading(false);
+            console.log(stations)
         } catch (error) {
             console.error('Failed to fetch stations', error);
             setError(true);
@@ -173,16 +198,25 @@ if (isLoading) {
 if (error) {
     return <div>Erro ao carregar as estações de polícia.</div>;
 }
+function  getStationID(name,stations){
+    const foundItem = stations.find(item => item.name === name);
+    return foundItem ? foundItem._id : null;
+
+}
     const handleCreateSubmit = async (event) => {
         event.preventDefault();
+       
         try {
-            const response = await axios.post(`http://localhost:3000/api/police/police-stations`,{
-              "first_name" :first_name,
-              "last_name":last_name,
+            const response = await axios.post(`http://localhost:3000/api/police/police-officers`,{
+              "firstName" :first_name,
+              "lastName":last_name,
               "phone":phone,
               "email":email,
-              "station" : stationId,
-              "password": "fys"
+              
+              "station" : getStationID(station,stations),
+              "password": password,
+              "police_id" : policeId,
+              "role": "Police",
             });
            
             
@@ -197,34 +231,33 @@ if (error) {
         }
         //  window.location.reload();
     }
-    const handleDeleteSubmit = async (event) => {
-        event.preventDefault();
-        try {
-            const response = await axios.delete(`http://localhost:3000/api/police/police-stations/${stationId}`);
+    // const handleDeleteSubmit = async (event) => {
+    //     event.preventDefault();
+    //     try {
+    //         const response = await axios.delete(`http://localhost:3000/api/police/police-stations/${stationId}`);
             
-            console.log(stationId)
-        } catch (error) {
-            console.error( error);
+    //     } catch (error) {
+    //         console.error( error);
     
-            if (error.response && error.response.data) {
-                setErrorMessage(error.response.data); // Set the error message if present in the error response
-            } else {
-                setErrorMessage("An unexpected error occurred. Please try again.");
-            }
-        }
-         window.location.reload();
+    //         if (error.response && error.response.data) {
+    //             setErrorMessage(error.response.data); // Set the error message if present in the error response
+    //         } else {
+    //             setErrorMessage("An unexpected error occurred. Please try again.");
+    //         }
+    //     }
+    //      window.location.reload();
+    // };
+    
+    const handleDropdownChange = (selectedOptionName) => {
+      setStation(selectedOptionName)
+      // Faça o que for necessário com o nome da opção selecionada
     };
-    const handleStationClick = (station) => {
-      setStationId(station);
-      };
-    
     return (<Container>
       <Title>Add Police Officer</Title>
       
       
       
         
-        <Form onSubmit={handleCreateSubmit}>
   <Grid container spacing={2}>
     <Grid item xs={12} sm={6}>
       <InputBox>
@@ -267,8 +300,8 @@ if (error) {
           name="Email"
         />
       </InputBox>
-    </Grid>
-    <Grid item xs={12} sm={3}>
+      </Grid>
+    <Grid item xs={12} sm={6}>
       <InputBox>
         <InputF 
           icon={<PhoneIcon />} 
@@ -281,8 +314,8 @@ if (error) {
           name="Phone"
         />
       </InputBox>
-    </Grid>
-    <Grid item xs={12} sm={3}>
+      </Grid>
+    <Grid item xs={12} sm={6}>
       <InputBox>
         <InputF 
           type={'number'} 
@@ -291,33 +324,119 @@ if (error) {
           required
           onChange={(e) => setNif(e.target.value)}
           value={nif}
-          name="Nif"
+          name="NIF"
         />
       </InputBox>
-    </Grid>
-    <Grid item xs={12} sm={3}>
+      </Grid>
+    <Grid item xs={12} sm={6}>
       <InputBox>
         <DropdownInput 
           
           placeholder={'Choose your station'}  
           id="station"
           required
-          onClick = {(e) => setStationId(e.target.value)}
-          onChange={(e) => setStation(e.target.value)}
-          
+          onClick = {(e) => setNameOfStation(e.target.value)}
+          value={station}
+          onChange={handleDropdownChange}
           name="Station"
           options={stations}
          
         />
       </InputBox>
-    </Grid>
+      </Grid><Grid item xs={12} sm={3}>
+      <InputBox>
+        <InputF 
+          
+          placeholder={'****-***'}  
+          id="zipcode"
+          required
+          onChange={(e) => setZipCode(e.target.value)}
+          
+          name="Zip Code"
+         
+        />
+      </InputBox>
+      </Grid>
+      <Grid item xs={12} sm={3}>
+      <InputBox>
+        <InputF 
+          
+          placeholder={'Write your Policer ID'}  
+          id="station"
+          required
+          onChange={(e) => setPoliceId(e.target.value)}
+          
+          name="Police ID"
+         
+        />
+      </InputBox>
+      </Grid>
+      <Grid item xs={12} sm={6}>
+
+      <InputBox>
+              <InputF 
+              icon={<AddressIcon />} 
+              type={'text'} 
+              placeholder={'Enter your Address'}  
+              id="address"
+              required
+              onChange={(e) => setAdddress(e.target.value)}
+              value={adddress}
+              errorValidation={adddressError}
+              errorMessage={'Endereço inválido'}
+              name="Address"/>
+                
+                
+              
+         </InputBox>
+         </Grid>
+    <Grid item xs={12} sm={6}>
+
+    <InputBox>
+
+    <InputF
+        icon={showPassword ? <LockIconOpen /> : <LockIcon />}
+
+        placeholder={'Password'}
+        id="Password"
+        required
+        onChange={(e) => setPassword(e.target.value)}
+        type={showPassword ? 'text' : 'password'}
+        value={password}
+        name="Password"
+        setShowPassword={toggleShowPassword}
+        errorMessage={'Senha inválida'}
+        errorValidation={passwordError}
+                />
+            </InputBox>
+           <PasswordStrength text={password} />
+           </Grid>
+    <Grid item xs={12} sm={6}>
+
+           <InputBox>
+        <InputF 
+        icon={showPassword2 ? <LockIconOpen /> : <LockIcon />}
+        
+        placeholder={'Repeat your Password'}  
+        id="CheckPassword"
+        required
+        onChange={(e) => setCheckPassword(e.target.value)}
+        type={showPassword2 ? 'text' : 'password'}
+        value={checkPassword}
+        name="CheckPassword"
+        setShowPassword={toggleShowPassword2}
+        errorMessage={'Senhas não correspondem'}
+        errorValidation={checkPasswordError}
+        />
+        </InputBox>
+        </Grid>
     <Grid item xs={12}>
       <InputBox>
-        <InputSubmit type="submit" className="input-submit" value="Register" label="Register">Save Canges</InputSubmit>
+        <InputSubmit onClick={handleCreateSubmit} className="input-submit" value="Register" label="Register">Save Canges</InputSubmit>
       </InputBox>
     </Grid>
+
   </Grid>
-</Form>
 
 
      

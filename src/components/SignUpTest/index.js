@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { AuthContext } from "../AuthContext";
+import { useAuth, AuthProvider } from '../AuthContext';
 import axios from "axios";
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -355,7 +355,7 @@ export default function SignUp() {
       data1.append('nif', nif);
       data1.append('phone', phone);
       data1.append('profileImage', profileImage);
-
+      data1.append('role', 'Admin');
 
       try {
           const response = await axios.post("http://localhost:3000/api/users/signup",
@@ -372,7 +372,11 @@ export default function SignUp() {
           }
         }
   };
-
+  const handleDropdownChange = (selectedOptionName) => {
+    console.log("Opção selecionada:", selectedOptionName);
+    setGender(selectedOptionName)
+    // Faça o que for necessário com o nome da opção selecionada
+  };
     return (
         <Wrapper>
            
@@ -518,8 +522,8 @@ export default function SignUp() {
                     placeholder={'Gender'}
                     id="gender"
                     required
-                    onChange={(e) => setGender(e.target.value)}
-                    onClick={(e) => setGender(e.target.value)}
+                    onChange={handleDropdownChange}
+                    onClick = {(e) => setGender(e.target.value)}
                     value={gender}
                     errorValidation={adddressError}
                     errorMessage={'Gênero inválido'}

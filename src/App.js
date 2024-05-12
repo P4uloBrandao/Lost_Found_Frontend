@@ -1,17 +1,16 @@
-import React from 'react';
+import React, { useContext } from "react";
 import SignUpPage from './pages/SignUpPage';
 import Home from './pages/home/index';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePageTest.jsx';
-import ChangePassword from './components/changePassword/index';
 import styled from 'styled-components';
 import Esquadras from './components/esquadra/index'
 import DeleteProfile from './components/deleteProfile/index'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './index.css';
-import { AuthProvider }  from './components/AuthContext'
-import ProtectedRoute from './components/protectedRoutes'
+// import  AuthContext  from './components/AuthContext'
 import ProfileSettings from './components/profileSettings/index'
+// import ProfileMenu from './components/profileMenu/index'
 import {Cloudinary} from "@cloudinary/url-gen";
 import AddLostObjectComponent from './components/AddLostObjectComponent/index'
 import Navbar from './components/NavBar/index.jsx'
@@ -22,6 +21,12 @@ import MatchObjectCatalogPage from'./pages/matchObjectCatalogPage.jsx';
 import AdminPage from'./pages/AdminPage.jsx'; 
 import { GoogleOAuthProvider } from '@react-oauth/google';
 // import AddLostObjectCatalogPage from'./pages/AddLostObjectCatalogPage.jsx'; 
+import { AuthProvider } from "./components/AuthContext.jsx";
+// import  { AdminRoute, PublicRoute } from './components/protectedRoutes.jsx'
+import AdminRoute from './components/routeComponent/adminRoute/index.jsx'
+
+import PublicRoute from './components/routeComponent/publicRoute/index.jsx'
+import PrivateRoute from './components/routeComponent/privateRoute/index.jsx'
 
 const LayoutContainer = styled.div`
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
@@ -35,7 +40,7 @@ const GlobalStyles = styled.div`
 `;
 
 function App() {
-
+  // const { role } = useContext(AuthContext); // Use o contexto de autenticação para acessar o papel do usuário
     // Create a Cloudinary instance and set your cloud name.
     const cld = new Cloudinary({
         cloud: {
@@ -45,57 +50,28 @@ function App() {
         }
     });
 
-  return (
-    <GoogleOAuthProvider clientId="535834422242-dfvm3g9s3dv6hpob73povmrmgqbmiuha.apps.googleusercontent.com">
-
-    <LayoutContainer>
-      <GlobalStyles>
-      <AuthProvider >
-        
-        <Router>
-          
-          <Navbar />
-          <Routes>
-          
-
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <ProfilePage />
+    return (
+      <AuthProvider> {/* Envolve seus componentes com o AuthProvider */}
+        <GoogleOAuthProvider clientId = "535834422242-dfvm3g9s3dv6hpob73povmrmgqbmiuha.apps.googleusercontent.com">
+          <Router>
+            <Navbar />
+            <Routes>
               
-              </ProtectedRoute>
-            }
-          />
-          
-        
-          <Route
-            path="/esquadras"
-            element={
-              <ProtectedRoute>
-                <Esquadras />
-              </ProtectedRoute>
-            }
-          /> 
+              <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute> }/>
+              <Route path="/AdminPage" element={<AdminRoute><AdminPage /></AdminRoute>} />
+              <Route path="/addFoundObject" element={<PrivateRoute><AddLostObjectComponent /></PrivateRoute>} />
+              <Route path="/matchObjects" element={<PrivateRoute><MatchObjectCatalogPage /></PrivateRoute>} />
+              <Route path="/addLostObject" element={<PrivateRoute><RegisterLostObjectPage /></PrivateRoute>} />
+              <Route path="/myLostObjects" element={<PrivateRoute><LostObjectCatalogPage /></PrivateRoute>} />
               
-              <Route path="/AdminPage" element={<AdminPage />} />
-              <Route path="/addFoundObject" element={<AddLostObjectComponent />} />
-
-              <Route path="/matchObjects" element={<MatchObjectCatalogPage />} />
-              <Route path="/addLostObject" element={<RegisterLostObjectPage />} />
-              <Route path="/myLostObjects" element={<LostObjectCatalogPage />} />
-              <Route path="/" element={<Home />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/signup" element={<SignUpPage />} />
+              <Route path="/" element={<PublicRoute><Home /></PublicRoute>} />
+              <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+              <Route path="/signup" element={<PublicRoute><SignUpPage /></PublicRoute>} />
             </Routes>
-        </Router>
-        </AuthProvider>
-
-      </GlobalStyles>
-    </LayoutContainer>
-    </GoogleOAuthProvider>
-  );
-}
-
-export default App;
+          </Router>
+        </GoogleOAuthProvider>
+      </AuthProvider>
+    );
+  }
+  
+  export default App;
