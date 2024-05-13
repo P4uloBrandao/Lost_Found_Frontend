@@ -40,19 +40,28 @@ const CategoryTitle = styled.h2`
 `;
 
 const ProfilePage = () => {
-  const [selectedOption, setSelectedOption] = useState('ProfileSettings');
 
   // Definir as opções de menu
   const menuOptions = ['Profile Settings', 'My Auctions', 'My Lost Objects','Payments Details', 'Privacy Settings'];
 
+  const [selectedOption, setSelectedOption] = useState(menuOptions[0]);
+  
   const renderComponent = () => {
     switch (selectedOption) {
       case 'Profile Settings':
-        return <ProfileSettings />;
+        return [
+          <ProfileSettings/>,
+          <ChangePassword  />,
+          <DeleteProfile />
+        ];
       case 'My Auctions':
         return <ChangePassword />;
       case 'My Lost Objects':
         return <DeleteProfile />;
+      case 'Payments Details':
+          return <DeleteProfile />;
+      case 'Privacy Settings':
+          return <DeleteProfile />;
       default:
         return <ProfileSettings />;
     }
@@ -63,41 +72,6 @@ const ProfilePage = () => {
       {/* Renderizar o componente Menu com as opções */}
       <ProfileMenu options={menuOptions} selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
       <ChangeContainer>
-        {selectedOption === 'Profile Settings' && (
-          <>
-            <Title>Personal Information</Title>
-            <CategoryTitle>
-              You can edit your personal info in the fields that are not locked anytime! Remember to save all changes
-              in the end.
-            </CategoryTitle>
-          
-          <Title>Change Password</Title>
-          <CategoryTitle>
-            Please enter your old and new password and press “Save Changes” to make sure nothing is lost!
-          </CategoryTitle>
-       
-        <Title>Delete Account</Title>
-        <CategoryTitle>
-          Deleting your account will remove all your data from our databases. This cannot be undone.
-        </CategoryTitle>
-        </>
-        )}
-        {selectedOption === 'My Auctions' && (
-          <>
-            <Title>Change Password</Title>
-            <CategoryTitle>
-              Please enter your old and new password and press “Save Changes” to make sure nothing is lost!
-            </CategoryTitle>
-          </>
-        )}
-        {selectedOption === 'My Lost Objects' && (
-          <>
-            <Title>Delete Account</Title>
-            <CategoryTitle>
-              Deleting your account will remove all your data from our databases. This cannot be undone.
-            </CategoryTitle>
-          </>
-        )}
         {renderComponent()}
       </ChangeContainer>
     </PrimaryContainer>
