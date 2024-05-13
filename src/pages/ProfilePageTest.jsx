@@ -1,7 +1,7 @@
 // ProfilePage.jsx
 import React, { useState } from 'react';
 import ProfileMenu from '../components/profileMenu/index';
-import ChangePassword from '../components/changePassword';
+import ChangePassword from '../components/ChangePasswordComponent';
 import ProfileSettings from '../components/profileSettings/index';
 import DeleteProfile from '../components/deleteProfile/index';
 import styled from 'styled-components';

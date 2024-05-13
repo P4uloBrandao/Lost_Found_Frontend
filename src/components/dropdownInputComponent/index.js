@@ -129,14 +129,14 @@ const Pholder = styled.span`
 // Main component
 const DropdownComponent = ({ icon, options, placeholder, onChange, onClick }) => {
   const [isDropdownActive, setIsDropdownActive] = useState(false);
-  const [selectedOption, setSelectedOption] = useState({ name: null, id: null });
+  const [selectedOption, setSelectedOption] = useState(null);
 
   const handleOptionClick = (option) => {
     setSelectedOption(option);
-    
     setIsDropdownActive(false);
-    
-    
+
+    // Chamando onChange com o nome da opção selecionada
+    onChange(option); 
   };
  
   return (
@@ -147,18 +147,17 @@ const DropdownComponent = ({ icon, options, placeholder, onChange, onClick }) =>
         tabIndex="0"
       >
         <Select>
-          <Pholder>{selectedOption.name !== null ? selectedOption.name : "Select one"}</Pholder>
+          <Pholder>{selectedOption !== null ? selectedOption : "Select one"}</Pholder>
           <IconWrapper>{icon}</IconWrapper>
         </Select>
         <DropdownMenu onChange={onChange} active={isDropdownActive}>
           {options.map((option, index) => (
-            <DropdownItem key={index} onChange={() => handleOptionClick(option)}  onClick={() => handleOptionClick(option)} id={option.name}>
+            <DropdownItem key={index}   onClick={() => handleOptionClick(option.name)} id={option.name}>
               {option.name}
             </DropdownItem>
           ))}
         </DropdownMenu>
         <Label className="label">{placeholder}</Label>
-        {/* {selectedOption && <Msg>Hidden input value: {selectedOption}</Msg>} */}
       </DropdownContainer>
     </>
   );
