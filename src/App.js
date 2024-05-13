@@ -27,6 +27,7 @@ import AdminRoute from './components/routeComponent/adminRoute/index.jsx'
 
 import PublicRoute from './components/routeComponent/publicRoute/index.jsx'
 import PrivateRoute from './components/routeComponent/privateRoute/index.jsx'
+import Footer from "./components/FooterComponent";
 
 const LayoutContainer = styled.div`
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
@@ -39,18 +40,19 @@ const GlobalStyles = styled.div`
   /* Add any global styles or overrides here */
 `;
 
+const AppContainer = styled.div`
+    width: 100vw;
+    height: 100vh;
+    background-color: #f5f5f5;
+    overflow-y: auto;
+    overflow-x: hidden;
+    `
+
 function App() {
   // const { role } = useContext(AuthContext); // Use o contexto de autenticação para acessar o papel do usuário
-    // Create a Cloudinary instance and set your cloud name.
-    const cld = new Cloudinary({
-        cloud: {
-            cloud_name: 'dkyu0tmfx',
-            api_key: '371956514244332',
-            api_secret: '***************************'
-        }
-    });
 
     return (
+        <AppContainer>
       <AuthProvider> {/* Envolve seus componentes com o AuthProvider */}
         <GoogleOAuthProvider clientId = "535834422242-dfvm3g9s3dv6hpob73povmrmgqbmiuha.apps.googleusercontent.com">
           <Router>
@@ -68,9 +70,13 @@ function App() {
               <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
               <Route path="/signup" element={<PublicRoute><SignUpPage /></PublicRoute>} />
             </Routes>
+          <Footer></Footer>
           </Router>
         </GoogleOAuthProvider>
+
       </AuthProvider>
+        </AppContainer>
+
     );
   }
   
