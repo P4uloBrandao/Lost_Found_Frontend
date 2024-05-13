@@ -11,6 +11,7 @@ const MenuContainer = styled.div`
   position: relative;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Adding shadow */
   width: 100%; /* Adjusted width */
+  height: 6vh;
 `;
 
 const MenuItem = styled.div`
@@ -18,15 +19,11 @@ const MenuItem = styled.div`
   padding: 10px;
   cursor: pointer;
   text-align: center;
-  transition: background-color 0.3s;
   font-family: 'Roboto', sans-serif;
   font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
-  &:hover {
-    background-color: #f0f0f0;
-  }
 `;
 
 const SelectedBar = styled.div`
@@ -39,8 +36,13 @@ const SelectedBar = styled.div`
 `;
 
 const Menu = ({ options, selectedOption, setSelectedOption }) => {
+
+  setSelectedOption(selectedOption);
+
   const handleClick = (option) => {
-    setSelectedOption(option);
+    
+    setSelectedOption(option); 
+
   };
 
   return (
@@ -50,7 +52,6 @@ const Menu = ({ options, selectedOption, setSelectedOption }) => {
           <MenuItem
             key={option}
             onClick={() => handleClick(option)}
-            style={{ backgroundColor: selectedOption === option ? '#ddd' : 'transparent' }}
           >
             {option}
           </MenuItem>

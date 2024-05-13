@@ -51,6 +51,25 @@ width: 100%;
     background: var(--second-color);
   }
 `;
+
+const Title = styled.h2`
+  font-size: 1.5rem;
+  color: var(--black-color);
+  opacity: 1;
+  text-align: left;
+  margin-bottom: 40px;
+`;
+
+const CategoryTitle = styled.h2`
+  color: #3cb684;
+  display: flex;
+  font-family: 'Roboto', sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 27px;
+  text-align: left !important;
+  margin-top: 0px;
+`;
 export default function ChangePassword() {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -101,7 +120,11 @@ export default function ChangePassword() {
     };
 
     return (
-       
+            <>
+              <Title>Change Password</Title>
+              <CategoryTitle>
+                Please enter your old and new password and press “Save Changes” to make sure nothing is lost!
+              </CategoryTitle>
             <Grid container >
                 
                 <Grid item xs={6}>
@@ -144,6 +167,7 @@ export default function ChangePassword() {
       </InputBox>
     </Grid>
             </Grid>
+            </>
         
     );
 }
