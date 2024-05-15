@@ -130,7 +130,9 @@ const Pholder = styled.span`
 const DropdownComponent = ({ icon, options, placeholder, onChange, onClick }) => {
   const [isDropdownActive, setIsDropdownActive] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
+  console.log("options")
 
+  console.log(options)
   const handleOptionClick = (option) => {
     setSelectedOption(option);
     setIsDropdownActive(false);
@@ -147,7 +149,7 @@ const DropdownComponent = ({ icon, options, placeholder, onChange, onClick }) =>
         tabIndex="0"
       >
         <Select>
-          <Pholder>{selectedOption !== null ? selectedOption : "Select one"}</Pholder>
+          <Pholder>{selectedOption !== null ? selectedOption : "Select one option"}</Pholder>
           <IconWrapper>{icon}</IconWrapper>
         </Select>
         <DropdownMenu onChange={onChange} active={isDropdownActive}>

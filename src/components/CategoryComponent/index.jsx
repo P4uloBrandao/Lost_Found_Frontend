@@ -20,6 +20,7 @@ import styled from 'styled-components';
 import LockIcon from '@mui/icons-material/Lock';
 import LockIconOpen from '@mui/icons-material/LockOpenRounded';
 import "../../assets/colors/colors.css"
+import DropdownInput from "../dropdownInputComponent/index";
 
 const Container = styled.div`
   width: 180vh;
@@ -47,18 +48,28 @@ const InputBox = styled.div`
 `;
 const InputSubmit = styled.button`
 
-width: 100%;
-  height: 40px;
-  background: #c6c3c3;
-  font-size: 16px;
-  font-weight: 500;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: 0.3s;
 
+width: 12.93306rem;
+    height: 3.25rem;
+    background: var(--primary-green-color);
+    box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.11);
+    transition: background-color 0.218s, border-color 0.218s, box-shadow 0.218s;
+    text-align: center;
+    font-family: Roboto;
+    font-size: 1.2rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 135.5%;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    color: var(--white-color);
+    transition: 0.3s;
   &:hover {
-    background: var(--second-color);
+    background: var(--white-color);
+    border: solid 2px var(--primary-green-color);
+    color:var(--primary-green-color);
+    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.30), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
   }
 `;
 const Title = styled.h2`
@@ -105,28 +116,36 @@ const CategoryButton = styled.button`
 export default function AddCategoryComponent() {
     const [errorMessage, setErrorMessage]= useState("")
     const [categories, setCategories] = React.useState('');
-    const [activeButton, setActiveButton] = useState(null);
+    const [mainCategory, setMainCategory] = useState(null);
+    const [subCategory, setSubCategory] = useState(null);
     const [category, setCategory] = React.useState('');
     const [categoryToCreate, setCategoryToCreate] = React.useState('');
+    const [categoryToDelete, setCategoryToDelete] = React.useState('');
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchCategories = async () => {
-          try {
-            const response = await axios.get('http://35.219.162.80/api/category');
-            setCategories(response.data);
-    
-          } catch (error) {
-            console.error('Failed to fetch categories', error);
-            // Lide com erros conforme necessário
-          }
-        };
-    
-        fetchCategories();
-      }, []);
+      const fetchCategories = async () => {
+        try {
+          const response = await axios.get('http://localhost:3000/api/category');
+          setCategories(response.data);
+          setLoading(false); // Definir o estado de carregamento como falso quando o fetch estiver concluído
+        } catch (error) {
+          console.error('Failed to fetch categories', error);
+          // Lide com erros conforme necessário
+        }
+      };
+  
+      fetchCategories();
+    }, []);
+  
+    if (loading) {
+      return <div>Carregando...</div>; // Ou qualquer indicador de carregamento que você preferir
+    }
+  
     const handleCreateSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post(`http://35.219.162.80/api/category/`,{"name": categoryToCreate});
+            const response = await axios.post(`http://localhost:3000/api/category/`,{"name": categoryToCreate});
            
             console.log(category)
         } catch (error) {
@@ -140,10 +159,27 @@ export default function AddCategoryComponent() {
         }
         window.location.reload();
     }
+    const handleCreateSubCategory = async (event) => {
+      event.preventDefault();
+      try {
+          const response = await axios.post(`http://localhost:3000/api/category/subCat/${mainCategory}`,{"name": subCategory});
+         
+          console.log(mainCategory,"----",subCategory)
+      } catch (error) {
+          console.error( error);
+  
+          if (error.response && error.response.data) {
+              setErrorMessage(error.response.data); // Set the error message if present in the error response
+          } else {
+              setErrorMessage("An unexpected error occurred. Please try again.");
+          }
+      }
+      window.location.reload();
+  }
     const handleDeleteSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.delete(`http://35.219.162.80/api/category/${category}`,);
+            const response = await axios.delete(`http://localhost:3000/api/category/${category}`,);
             
             console.log(category)
         } catch (error) {
@@ -160,11 +196,27 @@ export default function AddCategoryComponent() {
     const handleCategoryClick = (category) => {
         setCategory(category);
       };
-    const categoriesArray = Object.entries(categories);
-
+    // const categoriesArray = Object.entries(categories);
+    const handleDropdownChange = (selectedOptionName) => {
+      setCategoryToDelete(selectedOptionName)
+      // Faça o que for necessário com o nome da opção selecionada
+    };
+    const handleDropdownMainCategoryChange = (selectedOptionName) => {
+      setMainCategory(selectedOptionName)
+      // Faça o que for necessário com o nome da opção selecionada
+    };
+    function getIdFromName(categoryName) {
+      // Procurar a categoria com o nome fornecido no array de categorias
+      const category = categories.find(category => category.name === categoryName);
+      
+      // Se a categoria for encontrada, retornar o ID, caso contrário, retornar null
+      return category ? category._id : null;
+    }
     return (<>
         <Container>
-        <Title>Add Category</Title>
+        <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+        <Title>Create Category</Title>
             <CategoryTitle> New categoty to create </CategoryTitle>
             
               <InputBox>
@@ -184,29 +236,90 @@ export default function AddCategoryComponent() {
               <InputSubmit type="submit" onClick={handleCreateSubmit}>
                   Create
                 </InputSubmit>
-            
+                </Grid>
+            <Grid item xs={12} sm={6}>
                 <Title>Delete Category</Title>
             <CategoryTitle> Choose category to delete  </CategoryTitle>
             
-              <InputBox>
-              <CategorySection>
-      {categoriesArray.map(([key, value], index) => (
-        <CategoryButton
-          key={index}
-          isSelected={category === value.name}
-          onClick={() => handleCategoryClick(value.name)}
-          active={activeButton === value.name}
-        >
-          {value.name}
-        </CategoryButton>
-      ))}
-       
-      </CategorySection>
+             
+               <InputBox>
+              <DropdownInput 
+                
+                placeholder={'Categories'}  
+                id="categoryToDelete"
+                required
+                onClick = {(e) => setCategoryToDelete(e.target.value)}
+                value={categoryToDelete}
+                onChange={handleDropdownChange}
+                name="Categories"
+                options={categories}
+                
+              />
+            </InputBox> 
       
-        </InputBox>
         <InputSubmit type="submit" onClick={handleDeleteSubmit}>
             Delete
         </InputSubmit>
+        </Grid>
+        </Grid>
+        </Container>
+        <Container>
+        <Grid container spacing={2}>
+        <Grid item xs={12} sm={12}> <Title>Create Subcategory</Title></Grid>
+        <Grid item xs={12} sm={6}>
+       
+            <CategoryTitle> Choose main category </CategoryTitle>
+                          <InputBox>
+              <DropdownInput 
+                
+                placeholder={'Categories'}  
+                id="mainCategory"
+                required
+                onClick = {(e) => setMainCategory(e.target.value)}
+                value={mainCategory}
+                onChange={handleDropdownMainCategoryChange}
+                name="Categories"
+                options={categories}
+                
+              />
+            </InputBox>
+                </Grid>
+            <Grid item xs={12} sm={6}>
+                
+            <CategoryTitle> Write subcategory to create  </CategoryTitle>
+            
+            <InputBox>
+              <InputF 
+              type={'text'} 
+              placeholder={'Insert subcategory'}  
+              id="subcategory"
+              required
+              onChange={(e) => setSubCategory(e.target.value)}
+              value={subCategory}
+              
+              errorMessage={'invalid'}
+              name="Subcategory"/>
+      
+       
+              </InputBox>
+      
+        
+        </Grid>
+        <Grid item xs={12} sm={12}> <InputSubmit type="submit" onClick={handleCreateSubCategory}>
+            Create
+        </InputSubmit></Grid>
+        
+
+
+
+
+
+
+
+
+
+
+        </Grid>
         </Container>
             
         </>

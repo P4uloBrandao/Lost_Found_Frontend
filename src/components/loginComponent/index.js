@@ -207,6 +207,8 @@ export default function SignIn() {
   const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [errorMessage, setErrorMessage] = useState(null); // New state for handling error messages
+    const [googleId, setGoogleId] = useState(''); // New state for handling error messages
+
     const {
       setAuthUser,authUser,
       setIsLoggedIn,
@@ -230,20 +232,54 @@ export default function SignIn() {
         return newShowPassword;
       });
     };
-    const showUserInformation = (response) => {
+    const showUserInformation = async (response) => {
       console.log('Google Response:', response); // Log the entire response
-      
-      // Check if the response contains the user's profile information
-      if (response.profileObj && response.profileObj.email) {
-          // Access the user's email address from the profile information
-          const userEmail = response.profileObj.email;
-          console.log('User Email:', userEmail);
-          // You can access other profile information as well, if needed
-          console.log('User Profile:', response.profileObj);
-      } else {
-          console.log('User profile information not available');
+    
+      try {
+        const userExistValidation = await axios.post("http://localhost:3000/api/users/getUser", { googleId: response.clientId });
+    
+        if (userExistValidation) {
+          console.log("User is valid");
+          console.log(userExistValidation);
+    
+          try {
+            const response1 = await axios.post("http://localhost:3000/api/auth/login", { clientId: response.clientId });
+    
+            localStorage.setItem("token", response1.data.token);
+            console.log(response1);
+    
+            if (response1.data.user.role === 'Admin') {
+              setIsAdmin(true);
+              setUserRole("Admin");
+              navigate("/adminPage");
+            } else {
+              setIsAdmin(false);
+              navigate("/home");
+            }
+    
+            login(response1.data);
+    
+          } catch (error) {
+            console.error("Authentication failed:", error);
+            setToken(null);
+            localStorage.removeItem("token");
+    
+            if (error.response && error.response.data) {
+              // Log the specific server-side error message
+              console.error("Server-side error:", error.response.data.error);
+              setErrorMessage(error.response.data.error); // Set the error message if present in the error response
+            } else {
+              setErrorMessage("An unexpected error occurred. Please try again.");
+            }
+          }
+          
+          setAuthUser(authUser);
+          
+        }
+      } catch (error) {
+        console.log(error);
       }
-  }
+    }
 
 
     const handleSubmit = async (event) => {
@@ -264,16 +300,13 @@ export default function SignIn() {
         // Process the response as needed
           
           localStorage.setItem("token", response.data.token);
-          console.log('teste -->',response.data.user.role)
           if (response.data.user.role === 'Admin') {
-          // navigate("/adminPage");
             setIsAdmin(true);
             setUserRole("Admin")
-            console.log("-login----->", isAdmin)
+            navigate("/adminPage");
           }else{
-            // navigate("/home");
+            navigate("/home");
             setIsAdmin(false);
-            console.log("-login----->", isAdmin)
           }
           login(response.data);
           
@@ -310,23 +343,11 @@ export default function SignIn() {
         
      
       {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}{" "}
-      {/* <GoogleButton
-      formStepsNum={"0"}
-        placeholder={'Continue with Google'}  
-        id="googleButtonLogin"
-        onSuccess={credentialResponse => {
-          console.log(credentialResponse);
-        }}
-        onError={() => {
-          console.log('Login Failed');
-        }}
-        onClick={(e) => setLoginGoogle(e.target.value)}
-        
-        name="googleButtonLogin"/> */}
-
+     
 
 
 <GoogleLogin
+    className="google-login-button"
     clientId="535834422242-dfvm3g9s3dv6hpob73povmrmgqbmiuha.apps.googleusercontent.com"
     onSuccess={showUserInformation}
     onFailure={(error) => {
