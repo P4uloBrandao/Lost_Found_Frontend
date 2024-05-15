@@ -7,8 +7,7 @@ const AdminRoute = ({children}) =>{
         authUser,setIsAdmin,
         isLoggedIn,logout,
         setIsLoggedIn} = useAuth();
-     console.log(isAdmin, "-----",isLoggedIn,"---", userRole) 
-     console.log(authUser)  
+      
     if (isAdmin && isLoggedIn){
         return (children )
     }
