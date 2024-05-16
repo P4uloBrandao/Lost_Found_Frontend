@@ -17,11 +17,10 @@ import styled, { keyframes, css} from 'styled-components';
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
-  background-color: #00798e;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background-image : url("../../assets/background/bg-photo.jpg")
+  background: pink;
 `;
 
 const LoginBox = styled.div`
@@ -127,7 +126,6 @@ const RegisterLink = styled.a`
 `;
 
 const Title = styled.h2`
-  font-size: 1.5rem;
   color: var(--black-color);
   opacity: 1;
   text-align: left;
@@ -138,7 +136,7 @@ const CategoryTitle = styled.h2`
   color: #3cb684;
   display: flex;
   font-family: 'Roboto', sans-serif;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 400;
   line-height: 27px;
   text-align: left !important;
@@ -171,7 +169,6 @@ const DeleteProfile = () => {
         // Handle success, e.g., redirect to login or show a success message
       } catch (error) {
         console.error('Delete profile failed:', error);
-  
         if (error.response && error.response.data) {
           setErrorMessage(error.response.data.error); // Set the error message if present in the error response
         } else {
@@ -186,7 +183,10 @@ const DeleteProfile = () => {
           <Title>Delete Account</Title>
           <CategoryTitle>
             Deleting your account will remove all your data from our databases. This cannot be undone.
-          </CategoryTitle><Grid container xs={12}>
+          </CategoryTitle>
+
+          <Wrapper>
+          <Grid container xs={12}>
           <Grid xs={12}>
           <InputBox>
             <InputF
@@ -203,7 +203,9 @@ const DeleteProfile = () => {
             Delete
           </InputSubmit>
           {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-</Grid></Grid>
+</Grid>
+</Grid>
+</Wrapper>
 </>
        
     );

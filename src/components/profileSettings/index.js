@@ -23,6 +23,7 @@ import HomeIcon from '@mui/icons-material/HomeRounded';
 import axios from "axios";
 import {PasswordStrength} from '../controllers/index'
 import InputF  from '../inputFieldComponent/InputField';
+import "../../assets/colors/colors.css"
 // TODO remove, this demo shouldn't need to reset the theme.
 const colors = css`
   --primary-color: #c6c3c3;
@@ -37,7 +38,7 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  
+  background: pink;
 `;
 
 const FormBox = styled.div`
@@ -102,7 +103,7 @@ width: 100%;
   transition: 0.3s;
 
   &:hover {
-    background: var(--second-color);
+    background: var(--white-color);
   }
 `;
 const Register = styled.div`
@@ -133,6 +134,7 @@ const InputBox = styled.div`
 const Form = styled.form`
   display: grid;
   gap: 20px;
+  background: pink;
 `;
 const Formbox = styled.div`
 borderRadius: '10px',
@@ -143,7 +145,6 @@ alignItems: 'center',
 `;
 
 const Title = styled.h2`
-  font-size: 1.5rem;
   color: var(--black-color);
   opacity: 1;
   text-align: left;
@@ -154,7 +155,7 @@ const CategoryTitle = styled.h2`
   color: #3cb684;
   display: flex;
   font-family: 'Roboto', sans-serif;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 400;
   line-height: 27px;
   text-align: left !important;
@@ -338,7 +339,7 @@ export default function ProfileSettings({btnLabel, options}) {
         />
       </InputBox>
     </Grid>
-    {/* Adicione os outros campos de entrada aqui */}
+    
     <Grid item xs={12} sm={3}>
       <InputBox>
         <InputF 
@@ -404,7 +405,7 @@ export default function ProfileSettings({btnLabel, options}) {
         />
       </InputBox>
     </Grid>
-    {/* Adicione o botão de envio aqui */}
+    
     <Grid item xs={12}>
       <InputBox>
         <InputSubmit type="submit" className="input-submit" value="Register" label="Register">Save Canges</InputSubmit>
