@@ -31,14 +31,11 @@ export function AuthProvider(props) {
   };
 
   const login = (userData) => {
-    console.log("userLogin")
     setAuthUser(userData);
     setToken(userData.token);
 
     setIsLoggedIn(true);
-    console.log(userData.user)
     if (userData.user.role === 'Admin') {
-      console.log("aquiaquiaqui")
       setIsAdmin(true);
       setUserRole('Admin')
     }

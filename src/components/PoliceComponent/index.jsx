@@ -117,7 +117,7 @@ const CategoryButton = styled.button`
   cursor: pointer;
   &:hover {
     background-color: #3CB684;
-    color: white;
+    color: white; 
   }
   font-size: 1rem;
   opacity: 1;
