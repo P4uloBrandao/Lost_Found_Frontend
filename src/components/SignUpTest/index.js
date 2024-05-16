@@ -1,12 +1,13 @@
 import * as React from 'react';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { AuthContext } from "../AuthContext";
+import { useAuth, AuthProvider } from '../AuthContext';
 import axios from "axios";
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swiper from 'swiper';
 import 'swiper/css';
+import { GoogleLogin } from '@react-oauth/google';
 
 import InputF  from '../inputFieldComponent/InputField';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
@@ -252,6 +253,8 @@ export default function SignUp() {
   const [phone, setPhone] = React.useState('');
   const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
   const [showPassword2, setShowPassword2] = useState(null); // New state for handling error messages
+  const [googleId, setGoogleId] = React.useState('');
+
   // Validations
   const [firstNameError, setFirstNameError ] = useState(null);
   const [lastNameError, setLastNameError ] = useState(null);
@@ -264,7 +267,9 @@ export default function SignUp() {
   const [nicError, setNicError ] = useState(null);
   const [nifError, setNifError ] = useState(null);
   const [phoneError, setPhoneError ] = useState(null);
-  
+
+  const [userGoogleValidation, setGoogleValidation ] = useState(true);
+
 
   const genderOptions= [
       {
@@ -349,7 +354,8 @@ export default function SignUp() {
       data1.append('nic', nic);
       data1.append('nif', nif);
       data1.append('phone', phone);
-
+      data1.append('role', 'User');
+      data1.append('googleId', googleId);
 
       try {
           const response = await axios.post("http://localhost:3000/api/users/signup",
@@ -366,7 +372,63 @@ export default function SignUp() {
           }
         }
   };
+  const handleDropdownChange = (selectedOptionName) => {
+    setGender(selectedOptionName)
+    // Faça o que for necessário com o nome da opção selecionada
+  };
+  const showUserInformation = async (response) => {
+    
+    // Check if the response contains the user's profile information
+    if (response) {
+        const credential = response.credential;
+        setGoogleId(response.clientId)
+        if (credential) {
+          
+            try {
+                const tokenResponse = await axios.get(`http://localhost:3000/api/auth/token/${credential}`);
+                
+                
+                console.log(tokenResponse.data); // Assuming the token is returned in the response data
+                const tempEmail = tokenResponse.data.email
+                
+                try {
+                  const userExistValidation = await axios.post("http://localhost:3000/api/users/getUser", { email: tempEmail, });
+                  if (userExistValidation)  {
+                    console.log("User exists");
+                    setGoogleValidation(false);
+                    // Assuming tokenResponse contains user information
+                   
+                  }
+                } catch (error) {
+                  
+                
+                  // Check the status in the response data
+                  if (error.response.data.error === "User not found") {
+                    setGoogleValidation(true);
+                    setFirstName(tokenResponse.data.given_name);
+                    setLastName(tokenResponse.data.family_name);
+                    setEmail(tokenResponse.data.email);
+                    setProfileImage(tokenResponse.data.email);
+                    
+                  }
+              
+                  console.error("Error getting user:", error);
+                  
+                }
+              } catch (error) {
+                console.error("Failed to get token:", error);
 
+                if (error.response && error.response.data) {
+                    setMessage(error.response.data.error); // Set the error message if present in the error response
+                } else {
+                    setMessage("An unexpected error occurred. Please try again.");
+                }
+            }
+        }
+    } else {
+        console.log('User profile information not available');
+    }
+}
     return (
         <Wrapper>
            
@@ -378,13 +440,17 @@ export default function SignUp() {
       </LoginHeader>
       <LoginBody>
         
-      <GoogleButton formStepsNum={formStepsNum}
-        placeholder={'Continue with Google'}  
-        id="googleButtonLogin"
-        
-        // onClick={(e) => setLoginGoogle(e.target.value)}
-        
-        name="googleButtonLogin"/>
+      
+<GoogleLogin
+    className="google-login-button"
+    clientId="535834422242-dfvm3g9s3dv6hpob73povmrmgqbmiuha.apps.googleusercontent.com"
+    onSuccess={showUserInformation}
+    onFailure={(error) => {
+        console.log('Login Failed:', error);
+    }}
+    cookiePolicy={'single_host_origin'}
+    scope={'profile email'} // Requesting 'profile' and 'email' scopes
+/>{userGoogleValidation === false && (<p> User already exist, please use other email</p>)}
         <HrDivison ><hr /> <p> OR</p> <hr /></HrDivison>
             
         <Card className="card" >
@@ -512,8 +578,8 @@ export default function SignUp() {
                     placeholder={'Gender'}
                     id="gender"
                     required
-                    onChange={(e) => setGender(e.target.value)}
-                    onClick={(e) => setGender(e.target.value)}
+                    onChange={handleDropdownChange}
+                    onClick = {(e) => setGender(e.target.value)}
                     value={gender}
                     errorValidation={adddressError}
                     errorMessage={'Gênero inválido'}

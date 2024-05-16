@@ -3,7 +3,8 @@ import Logo from "../../assets/logo/logo.png"
 import teste from "../../assets/teste.png"
 import styled , { keyframes } from 'styled-components';
 import './style.css';
-import { AuthContext } from '../AuthContext';
+import { useAuth } from '../AuthContext';
+
 import { useNavigate } from 'react-router-dom'; 
 import axios from "axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -33,7 +34,12 @@ display: ${props => props.isOpen ? 'block' : 'none'};  border-radius: 20px;
 function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { logout, auth } = useContext(AuthContext);
+  const { 
+    setAuthUser,
+    authUser,
+    isLoggedIn,
+    setIsLoggedIn,logout} = useAuth();
+    
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -83,6 +89,7 @@ function Navbar() {
                 });
           } else {
             setUserData(userProfileData);
+            setAuthUser(userProfileData)
             setLoading(false);
           }
         } catch (error) {
@@ -99,7 +106,9 @@ function Navbar() {
   }, []);
 
   const handleLogout = () => {
-    logout();
+    logout()
+    setIsLoggedIn(false)
+    setAuthUser(null)
     navigate('/login');
   };
 

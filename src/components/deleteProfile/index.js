@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { AuthContext } from "../AuthContext";
+import { useAuth, AuthProvider } from '../AuthContext';
 import axios from "axios";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -126,11 +126,29 @@ const RegisterLink = styled.a`
     text-decoration: underline;
 `;
 
+const Title = styled.h2`
+  font-size: 1.5rem;
+  color: var(--black-color);
+  opacity: 1;
+  text-align: left;
+  margin-bottom: 40px;
+`;
+
+const CategoryTitle = styled.h2`
+  color: #3cb684;
+  display: flex;
+  font-family: 'Roboto', sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 27px;
+  text-align: left !important;
+  margin-top: 0px;
+`;
 
 const DeleteProfile = () => {
     const [errorMessage, setErrorMessage] = useState(null);
     const [deleteConfirmation, setDeleteConfirmation] = useState('');
-    const { logout } = useContext(AuthContext);
+    const { logout }= useAuth();
     const handleLogout = () => {
             logout();
             
@@ -164,7 +182,11 @@ const DeleteProfile = () => {
   
     return (
       
-          <><Grid container xs={12}>
+          <>
+          <Title>Delete Account</Title>
+          <CategoryTitle>
+            Deleting your account will remove all your data from our databases. This cannot be undone.
+          </CategoryTitle><Grid container xs={12}>
           <Grid xs={12}>
           <InputBox>
             <InputF

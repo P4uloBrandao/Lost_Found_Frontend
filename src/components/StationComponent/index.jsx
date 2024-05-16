@@ -153,7 +153,7 @@ export default function SationComponent() {
                 setErrorMessage("An unexpected error occurred. Please try again.");
             }
         }
-         window.location.reload();
+        //  window.location.reload();
     }
     const handleDeleteSubmit = async (event) => {
       console.log("stationId")

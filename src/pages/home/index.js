@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { AuthContext } from "../../components/AuthContext";
+import { useAuth, AuthProvider } from '../../components/AuthContext';
 import axios from "axios";
 import { useState, useContext } from "react";
 import { Navigate } from "react-router-dom"; 
@@ -23,7 +23,10 @@ import Layout from '../../components/Layout/Layout';
 const defaultTheme = createTheme();
 
 function Home() {
-    const { token, loading } = useContext(AuthContext);
+     const { setAuthUser,
+      authUser,
+      isLoggedIn,
+      setIisLoggedIn,token,loading } = useAuth();;
     if (loading) {
       return null;
     }

@@ -25,6 +25,7 @@ const colors = css`
   --black-color: #000000;
 `;
 
+
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
@@ -121,6 +122,7 @@ const InputBox = styled.div`
   display: flex;
   flex-direction: column;
   margin: 20px 0;
+  width: 100%;
   
 `;
 const Form = styled.form`
@@ -134,6 +136,26 @@ display: 'flex',
 flexDirection: 'column',
 alignItems: 'center',
 `;
+
+const Title = styled.h2`
+  font-size: 1.5rem;
+  color: var(--black-color);
+  opacity: 1;
+  text-align: left;
+  margin-bottom: 40px;
+`;
+
+const CategoryTitle = styled.h2`
+  color: #3cb684;
+  display: flex;
+  font-family: 'Roboto', sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 27px;
+  text-align: left !important;
+  margin-top: 0px;
+`;
+
 const genders = [
     {
       value: 'male',
@@ -239,11 +261,17 @@ export default function ProfileSettings({btnLabel, options}) {
 }
 
     return (
+      <>
+      <Title>Personal Information</Title>
+      <CategoryTitle>
+        You can edit your personal info in the fields that are not locked anytime! Remember to save all changes
+        in the end.
+      </CategoryTitle>
+      
         <Wrapper>
+         
         <LocalizationProvider dateAdapter={AdapterDayjs}>
 
-        
-      
         
         <Form onSubmit={handleSubmit}>
   <Grid container spacing={2}>
@@ -381,6 +409,6 @@ export default function ProfileSettings({btnLabel, options}) {
 
       </LocalizationProvider>
       </Wrapper>
-
+      </>
     );
 }
