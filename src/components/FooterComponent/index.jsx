@@ -84,8 +84,8 @@ const EmailInput = styled.div`
 
 const Footer = () => {
     return (
-        <FooterContainer>
-            <Container1>
+        <FooterContainer className={"footerContainer"}>
+            <Container1 className={"Container"}>
                 <img src={require('./logo.png')}alt=""/>
                 <p>Copyright © 2020 BiD Find.er</p>
                 <p>All rights reserved</p>
@@ -104,7 +104,7 @@ const Footer = () => {
                     </SocialMedia>
                 </SocialMediasContainer>
             </Container1>
-            <Container2>
+            <Container2 className={"Container"}>
                 <p href={"#"} className={"title"}>Company</p>
                 <a href={"#"} className={"link"}>Profile</a>
                 <a href={"#"} className={"link"}>Auctions</a>
@@ -112,14 +112,14 @@ const Footer = () => {
                 <a href={"#"} className={"link"}>Pricing</a>
                 <a href={"#"} className={"link"}>Testemonials</a>
             </Container2>
-            <Container2>
+            <Container2 className={"Container"}>
                 <p href={"#"} className={"title"}>Support</p>
                 <a href={"#"} className={"link"}>Terms of service</a>
                 <a href={"#"} className={"link"}>Legal</a>
                 <a href={"#"} className={"link"}>Privacy policy</a>
                 <a href={"#"} className={"link"}>Team</a>
             </Container2>
-            <Container3>
+            <Container3 className={"Container"}>
 
                 <p href={"#"} className={"title"}>Stay up to date</p>
                 <EmailInput>
