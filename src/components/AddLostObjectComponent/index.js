@@ -145,7 +145,7 @@ export default function LostObjectForm  ()  {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://35.219.162.80/api/category');
+        const response = await axios.get('http://localhost:3000/api/category');
         setCategories(response.data);
 
       } catch (error) {
@@ -164,7 +164,7 @@ export default function LostObjectForm  ()  {
     event.preventDefault();
     try {
       
-        const response = await axios.post("http://35.219.162.80/api/lost-objects",
+        const response = await axios.post("http://localhost:3000/api/lost-objects",
         {owner,
           title,
           category,
