@@ -9,11 +9,16 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import Grid from '@mui/material/Grid';
+import { AuthContext } from "../AuthContext";
 
-import { createTheme } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import LockIcon from '@mui/icons-material/Lock';
+import LockIconOpen from '@mui/icons-material/LockOpenRounded';
+import CalendarIcon from '@mui/icons-material/CalendarMonthRounded';
 import MailIcon from '@mui/icons-material/MailOutlineRounded';
 import PhoneIcon from '@mui/icons-material/PhoneAndroidRounded';
 import AddressIcon from '@mui/icons-material/HomeRounded';
+import HomeIcon from '@mui/icons-material/HomeRounded';
 
 import axios from "axios";
 import {PasswordStrength} from '../controllers/index'
@@ -201,6 +206,7 @@ export default function ProfileSettings({btnLabel, options}) {
 
 
           const userProfileData = response.data.currentUser; // Supondo que o endpoint forneça os detalhes do perfil do usuário
+          console.log(userProfileData.first_name)
           // // Defina os estados com base nas informações do perfil
           setFirstName(userProfileData.first_name);
           setLastName(userProfileData.last_name);
@@ -239,9 +245,9 @@ export default function ProfileSettings({btnLabel, options}) {
           data1.append('nif',nif);
           data1.append('token',token);
           data1.append('profileImage',profileImage);
-            const response = await axios.put("http://localhost:3000/api/users/update", data1);
+          const response = await axios.put("http://localhost:3000/api/users/update", data1);
 
-          } catch (error) {
+        } catch (error) {
             console.error("Update failed:", error);
              
              

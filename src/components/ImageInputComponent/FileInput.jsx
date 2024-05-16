@@ -33,8 +33,8 @@ const DefaultBox = styled.div`
   height: 200px;
   background: var(--secondary-grey-color);
   position: relative;
-    border-radius: 10px;
-  `;
+  border-radius: 10px;
+`;
 
 
 
@@ -46,7 +46,7 @@ const FileInputField = styled.input.attrs({
   top: 0;
   left: 0;
   width: 20pt;
-  
+
   height: 20pt;
   opacity: 0;
   cursor: pointer;
@@ -54,22 +54,22 @@ const FileInputField = styled.input.attrs({
 
 const ImagePreviewContainer = styled.div`
   display: flex;
-    align-items: center;
+  align-items: center;
   gap: 15px;
   padding: 20px;
   max-width: 520px;
   overflow-x: auto;
-  
-  
-  
+
+
+
 `;
 
 const ImageContainer = styled.div`
-    position: relative;
+  position: relative;
 
-    width: 150px;
-    max-width: 150px;
-    max-height: 150px;
+  width: 150px;
+  max-width: 150px;
+  max-height: 150px;
   img {
     width: 150px;
     max-width: 150px;
@@ -124,7 +124,7 @@ const RemoveIconWrapper = styled.div`
 `;
 
 function removeImage(index, setPreviews) {
-    setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
+  setPreviews((prevPreviews) => prevPreviews.filter((_, i) => i !== index));
 }
 
 
@@ -160,31 +160,31 @@ const CustomInputFiles = ({id, onChange, max = 1}) => {
   };
 
   return (
-    <InputBox>
-      <FileInputField id={id} onChange={handleImageChange} multiple={!(max===1)} ref={fileInputRef}  />
+      <InputBox>
+        <FileInputField id={id} onChange={handleImageChange} multiple={!(max===1)} ref={fileInputRef}  />
 
-      {previews.length>0 ? (
-        <ImagePreviewContainer>
-            {previews.map((preview, index) => (
-                <ImageContainer onClick={() => removeImage(index, setPreviews)}>
-                  <img key={index} src={preview} alt="preview" />
-                  <RemoveIconWrapper>
+        {previews.length>0 ? (
+            <ImagePreviewContainer>
+              {previews.map((preview, index) => (
+                  <ImageContainer onClick={() => removeImage(index, setPreviews)}>
+                    <img key={index} src={preview} alt="preview" />
+                    <RemoveIconWrapper>
 
-                    <DeleteIcon />
-                  </RemoveIconWrapper>
-                </ImageContainer>
-            ))}
-        </ImagePreviewContainer>
-      ) : (
-          <DefaultBox>
-            <AddIconWrapper onClick={() => { fileInputRef.current.click();}}>
-              &#x2B;
-            </AddIconWrapper>
-          </DefaultBox>
-      )}
+                      <DeleteIcon />
+                    </RemoveIconWrapper>
+                  </ImageContainer>
+              ))}
+            </ImagePreviewContainer>
+        ) : (
+            <DefaultBox>
+              <AddIconWrapper onClick={() => { fileInputRef.current.click();}}>
+                &#x2B;
+              </AddIconWrapper>
+            </DefaultBox>
+        )}
 
-    </InputBox>
-    
+      </InputBox>
+
   );
 };
 

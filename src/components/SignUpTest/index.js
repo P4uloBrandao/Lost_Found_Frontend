@@ -15,25 +15,15 @@ import './style.css'
 import styled, { keyframes, css} from 'styled-components';
 import LockIcon from '@mui/icons-material/Lock';
 import LockIconOpen from '@mui/icons-material/LockOpenRounded';
-import LoginImage from '../../assets/background/loginImage.svg'; 
-import GoogleButton from '../GoogleButtonComponent/index';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import Grid from '@mui/material/Grid';
-import CalendarIcon from '@mui/icons-material/CalendarMonthRounded';
 import MailIcon from '@mui/icons-material/MailOutlineRounded';
 import PhoneIcon from '@mui/icons-material/PhoneAndroidRounded';
 import AddressIcon from '@mui/icons-material/HomeRounded';
-import HomeIcon from '@mui/icons-material/HomeRounded';
-import {PasswordStrength} from '../controllers/index'
-import {validateBirthDate, validateEmail, validatePasswordCorrespondence} from "../../utils/inputValidations";
-import FileInput from "../ImageInputComponent/FileInput";
-import CustomInputFiles from "../ImageInputComponent/FileInput";
-// import {DropdownInput} from "../dropdownInputComponent";
+import {PasswordStrength} from '../controllers/index';
 import DropdownInput from "../dropdownInputComponent";
 
 import {ArrowDropDownIcon} from "@mui/x-date-pickers";
 import '../../assets/colors/colors.css'
+import {isValidPhoneNumber, validateBirthDate, validateEmail} from "../../utils/inputValidations";
 
 const Card = styled.div `
 
@@ -243,7 +233,7 @@ export default function SignUp() {
   const [last_name, setLastName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [gender, setGender] = React.useState('');
-  const [adddress, setAdddress] = React.useState('');
+  const [address, setAddress] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [checkPassword, setCheckPassword] = React.useState('');
   const [birth, setBirth] = React.useState('');
@@ -256,17 +246,19 @@ export default function SignUp() {
   const [googleId, setGoogleId] = React.useState('');
 
   // Validations
-  const [firstNameError, setFirstNameError ] = useState(null);
-  const [lastNameError, setLastNameError ] = useState(null);
-  const [emailError, setEmailError ] = useState(null);
-  const [genderError, setGenderError ] = useState(null);
-  const [adddressError, setAdddressError ] = useState(null);
-  const [passwordError, setPasswordError ] = useState(null);
-  const [checkPasswordError, setCheckPasswordError ] = useState(null);
-  const [birthError, setBirthError ] = useState(null);
-  const [nicError, setNicError ] = useState(null);
-  const [nifError, setNifError ] = useState(null);
-  const [phoneError, setPhoneError ] = useState(null);
+  const [firstNameError, setFirstNameError ] = useState(false);
+  const [lastNameError, setLastNameError ] = useState(false);
+  const [emailError, setEmailError ] = useState(false);
+  const [genderError, setGenderError ] = useState(false);
+  const [addressError, setAddressError ] = useState(false);
+  const [passwordError, setPasswordError ] = useState(false);
+  const [checkPasswordError, setCheckPasswordError ] = useState(false);
+  const [birthError, setBirthError ] = useState(false);
+  const [nicError, setNicError ] = useState(false);
+  const [nifError, setNifError ] = useState(false);
+  const [phoneError, setPhoneError ] = useState(false);
+
+  const validationSetter= [setFirstNameError, setLastNameError, setEmailError, setGenderError, setAddressError, setPasswordError, setCheckPasswordError, setBirthError, setNicError, setNifError, setPhoneError]
 
   const [userGoogleValidation, setGoogleValidation ] = useState(true);
 
@@ -284,6 +276,11 @@ export default function SignUp() {
       }
   ]
 
+    const clearErrors = () => {
+      for (let i = 0; i < validationSetter.length; i++) {
+        validationSetter[i](false);
+      }
+    }
 
   const toggleShowPassword = () => {
     setShowPassword((prevShowPassword) => {
@@ -299,6 +296,7 @@ export default function SignUp() {
   };
 
   
+  
   const [formStepsNum, setFormStepsNum] = useState(0);
   const formSteps = [
       { title: "1" },
@@ -307,9 +305,106 @@ export default function SignUp() {
       { title: "4" }
   ];
 
+  function validateStepOne() {
+      let isValid= true;
+      if (email==='' || !validateEmail(email) ) {
+          setEmailError(true);
+            isValid = false;
+      }
+
+        if (first_name === '') {
+            setFirstNameError(true);
+            isValid = false;
+        }
+
+        if (last_name === '') {
+            setLastNameError(true);
+            isValid = false;
+        }
+
+
+
+        return isValid;
+  }
+
+  function validateStepTwo() {
+      let isValid= true;
+      if (password==='') {
+          setPasswordError(true);
+            isValid = false;
+      }
+
+    if (checkPassword === '' || checkPassword !== password) {
+        setCheckPasswordError(true);
+        isValid = false;
+    }
+
+    return isValid;
+  }
+
+  function validateStepThird() {
+      let isValid= true;
+      if (birth==='' || !validateBirthDate(birth) ) {
+          setBirthError(true);
+            isValid = false;
+      }
+
+      if (gender==='') {
+          setGenderError(true);
+          isValid = false;
+      }
+
+      if (address==='') {
+          setAddressError(true);
+          isValid = false;
+      }
+
+        return isValid;
+  }
+
+  function validateStepFourth() {
+      let isValid= true;
+
+      if (phone==='' || !isValidPhoneNumber(phone) ) {
+          setPhoneError(true);
+          isValid = false;
+      }
+
+      if (nif==='' || nif.length!==9 ) {
+          setNifError(true);
+          isValid = false;
+      }
+
+      if (nic==='' || nic.length!==9 ) {
+          setNicError(true);
+          isValid = false;
+      }
+
+
+
+        return isValid;
+  }
+
   const nextStep = () => {
+      if (formStepsNum === 0) {
+            if (!validateStepOne()) {
+                return;
+            }
+      }
+
+      if (formStepsNum === 1) {
+            if (!validateStepTwo()) {
+                return;
+            }
+      }
+
+      if (formStepsNum === 2) {
+          if (!validateStepThird()) {
+              return;
+          }
+      }
+
       setFormStepsNum(prevStep => prevStep + 1);
-      console.log(formStepsNum)
   };
 
   const prevStep = () => {
@@ -322,32 +417,18 @@ export default function SignUp() {
 
 
   const handleSubmit = async (event) => {
-
-
       event.preventDefault();
 
-
-      //  Validations
-      setFirstNameError(first_name.length === 0 )
-      setLastNameError(last_name.length === 0)
-      setEmailError(email.length === 0 && !validateEmail(email))
-      setGenderError(gender.length === 0)
-      setAdddressError(adddress.length === 0)
-      setPasswordError(password.length === 0)
-      setCheckPasswordError(checkPassword.length === 0 && !validatePasswordCorrespondence(password, checkPassword))
-      setBirthError(!validateBirthDate(birth))
-      setNicError(nic.length === 0)
-      setNifError(nif.length === 0)
-      setPhoneError(phone.length === 0)
-
-      if (firstNameError || lastNameError || emailError || genderError || adddressError || passwordError || checkPasswordError || birthError || nicError || nifError || phoneError) {
+      clearErrors();
+      if (!validateStepFourth()) {
           return;
       }
+
       const data1 = new FormData();
       data1.append('first_name', first_name);
       data1.append('last_name', last_name);
       data1.append('email', email);
-      data1.append('adddress', adddress);
+      data1.append('adddress', address);
       data1.append('password', checkPassword);
       data1.append('birth', birth);
       data1.append('gender', gender);
@@ -408,8 +489,6 @@ export default function SignUp() {
                     setFirstName(tokenResponse.data.given_name);
                     setLastName(tokenResponse.data.family_name);
                     setEmail(tokenResponse.data.email);
-                    setProfileImage(tokenResponse.data.email);
-                    
                   }
               
                   console.error("Error getting user:", error);
@@ -493,7 +572,7 @@ export default function SignUp() {
         name="Last Name"
         value={last_name}
 
-        errorMessage={'Último inválido'}
+        errorMessage={'Último nome inválido'}
         errorValidation={lastNameError}
         />
         </InputBox>
@@ -581,7 +660,7 @@ export default function SignUp() {
                     onChange={handleDropdownChange}
                     onClick = {(e) => setGender(e.target.value)}
                     value={gender}
-                    errorValidation={adddressError}
+                    errorValidation={addressError}
                     errorMessage={'Gênero inválido'}
                     options={genderOptions}
                 ></DropdownInput>
@@ -593,9 +672,9 @@ export default function SignUp() {
               placeholder={'Enter your Address'}  
               id="address"
               required
-              onChange={(e) => setAdddress(e.target.value)}
-              value={adddress}
-              errorValidation={adddressError}
+              onChange={(e) => setAddress(e.target.value)}
+              value={address}
+              errorValidation={addressError}
               errorMessage={'Endereço inválido'}
               name="Address"/>
                 
@@ -626,6 +705,7 @@ export default function SignUp() {
         type={'number'} 
         placeholder={'Enter your NIF'}  
         id="nif"
+        maxlength="9"
         required
         onChange={(e) => setNif(e.target.value)}
         value={nif}
@@ -663,7 +743,7 @@ export default function SignUp() {
                 <button type="button" className="btn btn-next" onClick={nextStep}>Next</button>
             )}
             {index === formSteps.length - 1 && (
-                <input type="submit" value="Complete" className="btn btn-complete"/>
+                <input  type="submit" value="Complete" className="btn btn-complete"/>
             )}
         </div>
             ))}
