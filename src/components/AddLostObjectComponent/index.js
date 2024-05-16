@@ -280,7 +280,7 @@ export default function LostObjectForm  ()  {
         If you don’t have any, just select the “I don’t have pictures” option.</CategoryTitle>
         <InputBox>
 
-        <CustomInputFiles singleImage
+        <CustomInputFiles singleImage max={10}
         onChange={onImageUpload}></CustomInputFiles>
         </InputBox>
         <Title>How does it look?</Title>

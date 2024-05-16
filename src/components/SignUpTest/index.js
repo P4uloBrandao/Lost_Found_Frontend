@@ -365,7 +365,7 @@ export default function SignUp() {
   function validateStepFourth() {
       let isValid= true;
 
-      if (phone==='' || !isValidPhoneNumber(email) ) {
+      if (phone==='' || !isValidPhoneNumber(phone) ) {
           setPhoneError(true);
           isValid = false;
       }
