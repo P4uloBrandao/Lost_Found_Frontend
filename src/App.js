@@ -34,7 +34,6 @@ import'./assets/colors/colors.css'
 const AppContainer = styled.div`
     
     background-color: var(--white-color);
-    margin: 2em 9em 0 9em;
     transition: background 0.2s linear;
     overflow-y: auto;
     overflow-x: hidden;
