@@ -6,7 +6,7 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
-//import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
@@ -28,14 +28,20 @@ import "../../assets/colors/colors.css"
 const defaultTheme = createTheme();
 
 const Wrapper = styled.div`
-  align-items: center;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+
+  @media (max-width: 600px) {
+    display:grid 
+  }
 `;
 
 const PasswordStrengthWrapper = styled.div`
   margin-top: 20px; 
 `;
-
 
 const InputBox = styled.div`
   position: relative;
@@ -43,12 +49,11 @@ const InputBox = styled.div`
   flex-direction: column;
   margin: 20px 0;
   width: 100%;
-  
 `;
 
 const InputSubmit = styled.button`
 
-  width: 95%;
+  width: 100%;
   height: 40px;
   background: #c6c3c3;
   font-size: 16px;
@@ -62,6 +67,7 @@ const InputSubmit = styled.button`
     background: var(--white-color);
   }
 `;
+
 
 const Title = styled.h2`
   color: var(--black-color);
@@ -81,12 +87,6 @@ const CategoryTitle = styled.h2`
   margin-top: 0px;
 `;
 
-const Grid = styled.div`
-  display: grid;
-  align-items: center;
-  gap: 20px;
-  background: pink;
-`;
 
 export default function ChangePassword() {
     const [email, setEmail] = React.useState('');
@@ -138,14 +138,15 @@ export default function ChangePassword() {
     };
 
     return (
-            <>
-              <Title>Change Password</Title>
-              <CategoryTitle>
-                Please enter your old and new password and press “Save Changes” to make sure nothing is lost!
-              </CategoryTitle>
-              <Wrapper>
-            <Grid container spacing={2}>
-              
+      
+     
+        <> 
+        <Title>Change Password</Title>
+        <CategoryTitle>
+          Please enter your old and new password and press “Save Changes” to make sure nothing is lost!
+        </CategoryTitle>
+       
+        <Wrapper> 
             <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
                   <InputBox>
@@ -188,9 +189,9 @@ export default function ChangePassword() {
                 </InputBox>
               </Grid>
       </Grid>  
-      </Grid>  
-     </Wrapper>
-            </>
+      </Wrapper>  
+     </>
+          
         
     );
 }

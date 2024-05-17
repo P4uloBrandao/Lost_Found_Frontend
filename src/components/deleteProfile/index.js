@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import InputF  from '../inputFieldComponent/InputField';
 import Grid from '@mui/material/Grid';
 
-
+import "../../assets/colors/colors.css"
 
 import styled, { keyframes, css} from 'styled-components';
 
@@ -17,23 +17,13 @@ import styled, { keyframes, css} from 'styled-components';
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
-  background: pink;
-`;
 
-const LoginBox = styled.div`
-text-align: -webkit-center;
-  position: relative;
-  height: 155px;
-    width: 330px;
-  backdrop-filter: blur(25px);
-  border: 2px solid var(--primary-color);
-  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
-  border-radius: 15px;
-  padding: 7.5em 2.5em 4em 2.5em;
-  color: var(--second-color);
+  @media (max-width: 600px) {
+    display:grid 
+  }
 `;
 
 const InputBox = styled.div`
@@ -41,43 +31,9 @@ const InputBox = styled.div`
   display: flex;
   flex-direction: column;
   margin: 20px 0;
+  width: 100%;
 `;
 
-const LoginHeader = styled.div`
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--primary-color);
-  width: 240px;
-  height: 70px;
-  border-radius: 0 0 20px 20px;
-
-  &:before,
-  &:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    width: 30px;
-    height: 30px;
-    background: transparent;
-  }
-
-  &:before {
-    left: -30px;
-    border-top-right-radius: 50%;
-    box-shadow: 15px 0 0 0 var(--primary-color);
-  }
-
-  &:after {
-    right: -30px;
-    border-top-left-radius: 50%;
-    box-shadow: -15px 0 0 0 var(--primary-color);
-  }
-`;
 const InputSubmit = styled.button`
 width: 100%;
   height: 40px;
@@ -90,39 +46,8 @@ width: 100%;
   transition: 0.3s;
 
   &:hover {
-    background: var(--second-color);
+    background: var(--white-color);
   }
-`;
-const LoginHeaderText = styled.span`
-font-size: 30px;
-  color: var(--black-color);
-`;
-
-const Text = styled.span`
---primary-color: #c6c3c3;
-    --second-color: #ffffff;
-    --black-color: #000000;
-    font-size: 15px;
-    top: -20pt;
-    color: var(--black-color);
-    /* padding-bottom: 97px; */
-    position: relative;
-`;
-
-const RememberForgot = styled.div`
-  display: flex;
-  justify-content: space-between;
-  font-size: 15px;
-  margin-bottom: 14px;
-`;
-
-
-const RegisterLink = styled.a`
-  font-weight: 500;
-  text-decoration: none;
-  color: var(--second-color);
-  &:hover {
-    text-decoration: underline;
 `;
 
 const Title = styled.h2`
@@ -179,23 +104,23 @@ const DeleteProfile = () => {
   
     return (
       
-          <>
+      <>
           <Title>Delete Account</Title>
           <CategoryTitle>
             Deleting your account will remove all your data from our databases. This cannot be undone.
           </CategoryTitle>
 
-          <Wrapper>
+<Wrapper>
           <Grid container xs={12}>
           <Grid xs={12}>
           <InputBox>
             <InputF
               type="text"
-              placeholder="To confirm this, type DELETE"
+              placeholder="Type DELETE"
               id="deleteConfirmation"
               required
               onChange={(e) => setDeleteConfirmation(e.target.value)}
-              name="type DELETE"
+              name="DELETE"
               value={deleteConfirmation}
             />
           </InputBox>

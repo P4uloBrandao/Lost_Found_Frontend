@@ -38,58 +38,10 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: pink;
 `;
 
-const FormBox = styled.div`
-${colors};
-text-align: -webkit-center;
-  position: relative;
-  height: min-content;
-    width: 330px;
-  backdrop-filter: blur(25px);
-  border: 2px solid var(--primary-color);
-  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
-  border-radius: 15px;
-  padding: 7.5em 2.5em 4em 2.5em;
-  color: var(--second-color);
-`;
-const FormHeader = styled.div`
-  ${colors} 
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--primary-color);
-  width: 240px;
-  height: 70px;
-  border-radius: 0 0 20px 20px;
 
-  &:before,
-  &:after {
-    content: "";
-    position: absolute;
-    top: 0;
-    width: 30px;
-    height: 30px;
-    background: transparent;
-  }
 
-  &:before {
-    left: -30px;
-    border-top-right-radius: 50%;
-    box-shadow: 15px 0 0 0 var(--primary-color);
-  }
-
-  &:after {
-    right: -30px;
-    border-top-left-radius: 50%;
-    box-shadow: -15px 0 0 0 var(--primary-color);
-  }
-`;
 const InputSubmit = styled.button`
 ${colors};
 width: 100%;
@@ -106,22 +58,7 @@ width: 100%;
     background: var(--white-color);
   }
 `;
-const Register = styled.div`
-  text-align: center;
-`;
 
-const RegisterLink = styled.a`
-  font-weight: 500;
-  text-decoration: none;
-  color: var(--second-color);
-  &:hover {
-    text-decoration: underline;
-`;
-const FormHeaderText = styled.span`
-${colors}
-font-size: 30px;
-  color: var(--black-color);
-`;
 const InputBox = styled.div`
 
   position: relative;
@@ -134,14 +71,6 @@ const InputBox = styled.div`
 const Form = styled.form`
   display: grid;
   gap: 20px;
-  background: pink;
-`;
-const Formbox = styled.div`
-borderRadius: '10px',
-marginTop: 8,
-display: 'flex',
-flexDirection: 'column',
-alignItems: 'center',
 `;
 
 const Title = styled.h2`
@@ -367,17 +296,6 @@ export default function ProfileSettings({btnLabel, options}) {
         />
       </InputBox>
     </Grid>
-    {/* Adicione os outros campos de entrada aqui */}
-    <Grid item xs={12} sm={6}>
-      <InputBox>
-        <CustomInputFiles 
-        singleImage 
-        onChange={onImageUpload} 
-        width={200}
-        height={200}
-         position="absolute" />
-      </InputBox>
-    </Grid>
     <Grid item xs={12} sm={3}>
       <InputBox>
         <InputF 
@@ -402,6 +320,17 @@ export default function ProfileSettings({btnLabel, options}) {
           value={nic}
           name="Nic"
         />
+      </InputBox>
+    </Grid>
+    {/* Adicione os outros campos de entrada aqui */}
+    <Grid item xs={12} sm={12}>
+      <InputBox>
+        <CustomInputFiles 
+        singleImage 
+        onChange={onImageUpload} 
+        width={200}
+        height={200}
+         position="absolute" />
       </InputBox>
     </Grid>
     

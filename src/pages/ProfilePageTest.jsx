@@ -15,7 +15,8 @@ const PrimaryContainer = styled.div`
 const ChangeContainer = styled.div`
   opacity: 1;
   background-color: var(--white-color);  
-  margin: 4em ;
+  margin-top: 4em ;
+  padding: 2em ;
 `;
 
 const Title = styled.h2`
