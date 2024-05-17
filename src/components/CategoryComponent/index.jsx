@@ -21,94 +21,21 @@ import LockIcon from '@mui/icons-material/Lock';
 import LockIconOpen from '@mui/icons-material/LockOpenRounded';
 import "../../assets/colors/colors.css"
 import DropdownInput from "../dropdownInputComponent/index";
+import { InputSubmit, Container,InputBox ,Title,Form,CategoryTitle,CategorySection, Wrapper } from '../../assets/StylePopularComponent/style';
 
-const Container = styled.div`
-  width: 180vh;
- 
-  margin: 5em 0;
-  
-  border-radius: 20px 20px 20px 20px; 
-  opacity: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; 
-  justify-content: flex-start; 
-  box-sizing: border-box;
-  border: 1px solid #D3D3D3; 
-  background-color: white; 
-  padding: 40px; 
-`;
-const InputBox = styled.div`
-
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  margin: 20px 0;
-  
-`;
-const InputSubmit = styled.button`
-
-
-width: 12.93306rem;
-    height: 3.25rem;
-    background: var(--primary-green-color);
-    box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.11);
-    transition: background-color 0.218s, border-color 0.218s, box-shadow 0.218s;
-    text-align: center;
-    font-family: Roboto;
-    font-size: 1.2rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 135.5%;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    color: var(--white-color);
-    transition: 0.3s;
-  &:hover {
-    background: var(--white-color);
-    border: solid 2px var(--primary-green-color);
-    color:var(--primary-green-color);
-    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.30), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
-  }
-`;
-const Title = styled.h2`
-  font-size: 1.5rem;
-  color: var(--black-color); 
-  opacity: 1;
-  margin-bottom: 40px; 
-`;
-const CategoryTitle = styled.h2`
-color: #3CB684;
-display :flex;
-font-family: 'Roboto', sans-serif;
-font-size: 24px;
-font-weight: 400;
-line-height: 27px;
-text-align: left;
-
-margin-top: 0px;
-`;
-const CategorySection = styled.div`
-  display: grid;
-  grid-template-columns: repeat(6, 1fr); 
-  grid-gap: 10px; 
-  justify-content: center; 
-  margin-bottom: 20px;
-`;
 
 const CategoryButton = styled.button`
   width: 174px;
   height: 66px;
   padding: 16px 24px;
   border-radius: 33px;
-  border: 1px solid #3CB684;
-  background-color: ${props => props.isSelected ? '#3CB684' : 'white'};
-  color: ${props => props.isSelected ? 'white' : 'black'};
+  border: 1px solid var(--primary-green-color);
+  background-color: ${props => props.isSelected ? 'var(--primary-green-color)' : 'var(--white-color)'};
+  color: ${props => props.isSelected ? 'var(--white-color)' : 'var(--black-color)'};
   cursor: pointer;
   &:hover {
-    background-color: #3CB684;
-    color: white;
+    background-color: var(--primary-green-color);
+    color: var(--white-color);
   }
   font-size: 1rem;
   opacity: 1;

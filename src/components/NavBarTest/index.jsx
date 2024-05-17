@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect,useRef  } from 'react';
 import Logo from "../../assets/logo/logo.png"
-import teste from "../../assets/teste.png"
+
+import Teste from "../../assets/teste.png"
 import styled , { keyframes } from 'styled-components';
 import './style.css';
 import { useAuth } from '../AuthContext';
@@ -18,17 +19,17 @@ import "../../assets/colors/colors.css"
 
 const MenuOptions = styled.div`
 display: ${props => props.isOpen ? 'block' : 'none'};  border-radius: 20px;
-  position: relative;
-  top: ${props => props.userData === null ? '90pt !important' : '121pt !important'}; 
+  position: absolute;
+  top: ${props => props.authUser === null ? '73pt !important' : '121pt !important'}; 
     
-    left:${props => props.userData === null ? '-15pt !important' : '-7pt !important'}; 
+    right:${props => props.authUser === null ? '-22pt !important' : '34pt !important'}; 
   background-color: var(--white-color);
-  height: ${props => props.userData === null ? '93pt !important' : '168pt !important'}; 
+  height: ${props => props.authUser === null ? '93pt !important' : '168pt !important'}; 
   padding: 15pt 0pt 15pt 15pt ;
   width : 100vh;
   border: solid 1px black ;
 
-    
+  
   
 `;
 
@@ -79,7 +80,7 @@ function Navbar() {
     isLoggedIn,
     setIsLoggedIn,logout} = useAuth();
     
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef();
@@ -106,28 +107,7 @@ function Navbar() {
     };
   }, []);
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      const fetchUserProfile = async () => {
-        try {
-          const response = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
-          const userProfileData = response.data.currentUser;
-          setUserData(userProfileData);
-          setAuthUser(userProfileData)
-          setLoading(false);
-        } catch (error) {
-          console.error("Failed to fetch user profile:", error);
-          setLoading(false);
-          setUserData(null);
-        }
-      };
-
-      fetchUserProfile();
-    } else {
-      setLoading(false);
-    }
-  }, [userProfileData]);
+  
 
   const handleLogout = () => {
     logout()
@@ -169,60 +149,45 @@ function Navbar() {
   const handleMouseLeave = () => {
     setHoveredOption(null);
   };
-  const style = {marginRight:''};
+  if (loading) {
+    return <div>Carregando...</div>;
+  }
 
   return (
-    <div>
-      <nav id="navbar">
-        <div className='logoItem'>
-          <img src={Logo} alt="Brand logo" />
+    <nav class="mask">
+      <img className="logo" href='/' src={Logo} alt="" />
+      {location.pathname !== '/signup' &&location.pathname !== '/login' && (
+      <>
+      <ul class="list">
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Auctions</a></li>
+        <li><a href="#">I lost something!</a></li>
+        
+      </ul>
+      {authUser ? (
+        <div>
+          <img onClick={handleMenuItemClick} className={`svgButtons ${isOpen ? 'open' : 'closed'}'imgMenu'`} width='70px' height='70px' src={Teste} alt="" />
+        
         </div>
-        <MenuContainer style={style}>
-        {options.map((option) => (
-          <MenuItem
-            key={option}
-            onClick={() => handleClick(option)}
-          onMouseEnter={() => handleMouseEnter(option)}
-          onMouseLeave={handleMouseLeave}
-        >
-            {option}
+        ) : (
+        <p><a href="#">SIGN UP</a></p>
+      )}
+        
+        </>
+      )}
+         
+               
+         {isOpen && <MenuOptions className='noborder' isOpen={isOpen} userData={authUser} />}          
             
-          </MenuItem>
-          ))}
-        {selectedOption && (
-        <SelectedBar
-          style={{
-            width: `${100 / options.length}%`,
-            left: `${options.indexOf(selectedOption) * (100 / options.length)}%`,
-          }}
-        />)}
-      </MenuContainer>
-        {location.pathname !== '/signup' &&location.pathname !== '/login' && (
-        <div className='buttonsSide'>
-          <Toggle/>
-          { !userData && ( // Condição para ocultar botões na página de login
-            <div onClick={handleSignInClick} className='signInItem'>SIGN IN <FontAwesomeIcon className='svgButtons' icon={faArrowRight} /></div>
-          )}
-          
-            <div className='menuItem' onClick={handleMenuItemClick}>
-            <div className='menuItemText'>
-        MENU
-        <FontAwesomeIcon
-          className={`svgButtons ${isOpen ? 'open' : 'closed'}`}
-          icon={isOpen ? faMinus : faPlus}
-        />
-      </div>
-      {isOpen && <MenuOptions className='noborder' isOpen={isOpen} userData={userData} />}          
-            
-            <MenuOptions isOpen={isOpen} userData={userData} > 
-                  {userData && (
+            <MenuOptions isOpen={isOpen} authUser={authUser} > 
+                  {authUser && (
                      <div className='option1'>
                         <div>
-                          <img className='imgMenu' width='40px' height='40px' src={userData.profileImage} alt="" />
+                          <img className='imgMenu' width='40px' height='40px' src={authUser.profileImage} alt="" />
                         </div>
                       <div className='infoUser'>
-                        <p className='userNameText'>{userData.first_name} {userData.last_name}</p>
-                        <p className='userEmailText'>{userData.email}</p>
+                        <p className='userNameText'>{authUser.first_name} {authUser.last_name}</p>
+                        <p className='userEmailText'>{authUser.email}</p>
                       </div>
                     </div>
                     
@@ -247,7 +212,7 @@ function Navbar() {
                   </div>
                 </div>
 
-                {userData &&  <div className='option op3'>
+                {authUser &&  <div className='option op3'>
                <div className='optionMenu'>PROFILE<FontAwesomeIcon  className='svgArrow3' icon={faArrowLeft} /></div>
                <div className='subMenu2'>
 
@@ -257,20 +222,17 @@ function Navbar() {
                   </div>
                 </div>
               </div>}
-              {userData ? (
-  <div className=' option op4' onClick={handleLogout}><div className='optionMenu'>LOGOUT<FontAwesomeIcon className='svgArrow4' icon={faArrowLeft} /></div></div>
-) : (
-  <div onClick={handleSignUpClick} className=" option op4  sign-in-active"><div className='optionMenu' >SIGN UP<FontAwesomeIcon className='svgArrow4' icon={faArrowLeft} /></div></div>
-)}
+              {authUser ? (
+                  <div className=' option op4' onClick={handleLogout}><div className='optionMenu'>LOGOUT<FontAwesomeIcon className='svgArrow4' icon={faArrowLeft} /></div></div>
+                ) : (
+                  <div onClick={handleSignUpClick} className=" option op4  sign-in-active"><div className='optionMenu' >SIGN UP<FontAwesomeIcon className='svgArrow4' icon={faArrowLeft} /></div></div>
+                )}
               
-               </ MenuOptions>
-               
-            </div> 
-          
-        </div>
-        )}
-      </nav>
-    </div>
+               </ MenuOptions>  
+        
+                
+</nav>
+
   );
 }
 

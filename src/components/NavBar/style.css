@@ -1,432 +1,425 @@
-/* Main Styling */
-
-@import url('../../assets/colors/colors.css');
-html,
-body {
-    font-family: 'Roboto', sans-serif;
-}
-
-.noborder {
-    border: none!important;
-}
-
-
-/* Navbar */
-
-#navbar {
-    background: -webkit-linear-gradient(90deg, hsl(0deg 0% 100% / 28%) 19%, hsl(0deg 0% 100% / 55%) 44%, hsl(0deg 0% 100%) 64%, hsl(0deg 0% 100%) 81%, hsl(0deg 0% 100%) 81%, hsl(0deg 0% 100%) 100%);
-    z-index: 10000;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    /* margin-right: 185px; */
-    height: 79px;
-    /* margin-left: 80px; */
-    display: flex;
-    align-items: center;
-    /* text-align: center; */
-}
-
-.profileNavItem {
-    z-index: -1;
-    top: -17pt !important;
-    border-radius: 20px;
-    border: solid 1px black;
-}
-
-.menuItem {
-    display: flex;
-    width: 8em;
-    padding: 16px 24px;
-    justify-content: center;
-    height: 1em;
-    align-items: center;
-    /* gap: 10px; */
-    cursor: pointer;
-    flex-shrink: 0;
-    border-radius: 20px;
-    background: var(--black-color);
-}
-
-.menuItem:hover {
-    background-color: var( --primary-green-color);
-    color: var( --black-color);
-}
-
-.menuItem:active {
-    background-color: var( --primary-green-color);
-    color: var( --black-color);
-}
-
-.signInItem {
-    display: flex;
-    width: 7.889em;
-    height: 0.889em;
-    padding: 16px 24px;
-    justify-content: center;
-    align-items: center;
-    background-color: var( --white-color);
-    cursor: pointer;
-    flex-shrink: 0;
-    border-radius: 20px;
-    border: 1px solid var( --black-color);
-}
-
-.signInItem:hover {
-    background-color: var( --black-color);
-    ;
-    /* Mudar background ao passar o mouse */
-    border-color: var( --black-color);
-    ;
-    /* Mudar cor da borda ao passar o mouse */
-    color: var( --white-color);
-    ;
-    /* Mudar cor do texto ao passar o mouse */
-}
-
-.menuItemText {
-    color: var(--white-color) !important;
-    position: absolute;
-}
-
-.signInItemText {
-    color: var( --black-color) !important;
-}
-
-.imgMenu {
-    border-radius: 67pt;
-}
-
-.userNameText {
-    color: var(--Gray-Shades-Dark-Gray, var( --black-color));
-    font-size: 0.9375rem;
-    font-style: normal;
-    font-weight: 700;
-    line-height: normal;
-    margin-top: 0pt;
-    margin-bottom: 0pt;
-}
-
-.userEmailText {
-    color: var(--primary-green-color);
-    font-size: 0.875rem;
-    font-style: normal;
-    font-weight: 400;
-    margin-bottom: 0pt;
-    margin-top: 3pt;
-    line-height: normal;
-}
-
-.svgButtons {
-    transition: transform 0.3s ease;
-    /* Add a transition for the transform property */
-}
-
-
-/* Define the styles for the open and closed states */
-
-.open {
-    transform: rotate(180deg);
-    /* Adjust the rotation for the open state */
-}
-
-.closed {
-    transform: rotate(0deg);
-    /* Keep the rotation as it is for the closed state */
-}
-
-.buttonsSide {
-    gap: 1rem;
-    /* margin-right: 4rem; */
-    /* top: 1.2rem; */
-    scale: 0.7;
-    /* width: 18rem; */
-    position: relative;
-    /* height: 50pt; */
-    display: flex;
-    /* align-items: center; */
-    margin-left: auto;
-}
-
-.logoItem {
-    margin-left: -2rem;
-    transform: scale(0.5);
-    position: relative;
-}
-
-.menuOptions1 {
-    display: none;
-    border-radius: 14px;
-    position: relative;
-    /* border: solid 1px black; */
-    top: -9pt;
-    padding: 4px;
-    align-content: flex-end;
-    right: -21pt;
-    height: 67pt;
-    z-index: -1;
-    width: 141pt;
-    background-color: var(--white-color);
-}
-
-.subMenu1 {
-    width: 80pt;
-    left: -58pt;
-    /* border: 1px solid blue; */
-    height: 31pt;
-    /* background-color: aquamarine; */
-    position: relative;
-}
-
-.subMenu2 {
-    width: 80pt;
-    left: -79pt;
-    top: 7pt;
-    /* border: 1px solid blue; */
-    height: 31pt;
-    /* background-color: aquamarine; */
-    position: relative;
-}
-
-.op1:hover .menuOptions1 {
-    display: block;
-    right: 136pt;
-    z-index: 0;
-    border: 1px solid black;
-}
-
-.op2:hover .menuOptions2 {
-    display: block;
-    border: 1px solid black;
-}
-
-.op3:hover .menuOptions3 {
-    border: 1px solid black;
-    display: block;
-}
-
-.menuOptions2 {
-    display: none;
-    border-radius: 14px;
-    position: relative;
-    /* border: solid 1px black; */
-    top: -31pt;
-    padding: 4px;
-    align-content: flex-end;
-    right: 182pt;
-    padding-left: 9pt;
-    height: 67pt;
-    width: 171pt;
-    background-color: var(--white-color);
-}
-
-.menuOptions3 {
-    display: none;
-    border-radius: 14px;
-    position: relative;
-    /* border: solid 1px black; */
-    top: -3pt;
-    padding: 4px;
-    align-content: flex-end;
-    right: 171pt;
-    z-index: 1;
-    padding-left: 9pt;
-    height: 67pt;
-    width: 171pt;
-    background-color: var(--white-color);
-}
-
-.infoUser {
-    text-align: left;
-    padding-left: 10pt;
-}
-
-.option1 {
-    border-radius: 19px 19px 0px 0px;
-    display: flex;
-    align-items: center;
-    height: 45pt;
-    margin: 0pt 4pt 0pt;
-    width: 170pt;
-    background-color: var(--white-color);
-}
-
-.option {
-    display: flex;
-    align-items: center;
-    height: 32pt;
-    left: -22pt;
-    position: relative;
-    margin-left: 19pt;
-    width: 174pt;
-    background-color: var(--white-color);
-}
-
-.optionMenu {
-    position: relative;
-    left: 10pt;
-}
-
-.sign-in-active {
-    border-radius: 19px!important;
-    /* border-bottom: 1px solid black;
-    border-right: 1px solid black;
-    border-left: 1px solid black; */
-}
-
-.op1:hover .svgArrow1 {
-    display: block;
-}
-
-.menuOptions1:hover {
-    display: block;
-}
-
-.menuOptions2:hover {
-    display: block;
-}
-
-.menuOptions3:hover {
-    display: block;
-}
-
-.op1:hover,
-.op2:hover,
-.op3:hover,
-.op4:hover,
-.op11:hover,
-.op12:hover,
-.op21:hover,
-.op22:hover,
-.op31:hover,
-.op32:hover {
-    background-color: var(--grey-color);
-    border-radius: 15pt;
-}
-
-.op11,
-.op12 {
-    width: 136pt;
-    text-align: justify;
-    height: 32pt;
-    place-content: center;
-}
-
-.align11 {
-    margin-left: 14pt;
-}
-
-.op2:hover .svgArrow2,
-.op3:hover .svgArrow3,
-.op4:hover .svgArrow4,
-.op11:hover .svgArrow11,
-.op21:hover .svgArrow21,
-.op22:hover .svgArrow22,
-.op31:hover .svgArrow31,
-.op32:hover .svgArrow32 {
-    display: block;
-}
-
-.op12:hover .svgArrow12 {
-    display: block!important;
-}
-
-.svgArrow1,
-.svgArrow2,
-.svgArrow3,
-.svgArrow4,
-.svgArrow11,
-.svgArrow12,
-.svgArrow21,
-.svgArrow22,
-.svgArrow31,
-.svgArrow32 {
-    display: none;
-    position: absolute;
-    right: 0;
-    top: 0pt;
-    margin-right: 15pt;
-}
-
-.svgButtons {
-    left: 1em;
-    position: relative;
-}
-
-.svgArrow11 {
-    top: 15pt;
-    position: absolute;
-    /* right: -7pt; */
-}
-
-.svgArrow12 {
-    top: 48pt;
-}
-
-.svgArrow21 {
-    top: 10pt;
-}
-
-.svgArrow22 {
-    top: 10pt;
-}
-
-.op21 {
-    left: -27pt;
-}
-
-.ml-13 {
-    margin-left: 13pt;
-}
-
-.svgArrow31 {
-    top: 10pt;
-}
-
-.svgArrow32 {
-    top: 10pt;
-}
-
-.svgArrow1 {
-    right: -177px;
-}
-
-.svgArrow2 {
-    right: -136px;
-}
-
-.svgArrow3 {
-    right: -151px;
-}
-
-.svgArrow4 {
-    right: -152px;
-}
-
-.signbtn {
-    width: 183px;
-    left: -1pt;
-    top: 1pt;
-}
-
-.option:hover {
-    background-color: var(--grey-color);
-    border-radius: 15pt;
-}
-
-
-/* Media Query */
-
-@media(max-width: 600px) {
+    /* Main Styling */
+    
+    @import url('../../assets/colors/colors.css');
+    html,
+    body {
+        font-family: 'Roboto', sans-serif;
+    }
+    
+    .noborder {
+        border: none!important;
+    }
+    /* Navbar */
+    
     #navbar {
-        width: 100%;
-        text-align: left;
+        background: -webkit-linear-gradient(90deg, hsl(0deg 0% 100% / 28%) 19%, hsl(0deg 0% 100% / 55%) 44%, hsl(0deg 0% 100%) 64%, hsl(0deg 0% 100%) 81%, hsl(0deg 0% 100%) 81%, hsl(0deg 0% 100%) 100%);
+        z-index: 10000;
+        position: relative;
+        top: 0;
+        width: auto;
+        padding-top: 2rem;
+        margin-right: 5rem;
+        /* height: 79px; */
+        margin-left: 5rem;
+        display: flex;
     }
-    #navbar ul li {
-        display: block;
+    
+    .profileNavItem {
+        z-index: -1;
+        top: -17pt !important;
+        border-radius: 20px;
+        border: solid 1px black;
     }
-    #navbar ul li:hover ul {
-        width: 100%;
+    
+    .menuItem {
+        display: flex;
+        width: 9em;
+        padding: 16px 24px;
+        justify-content: center;
+        height: 1.5em;
+        align-items: center;
+        /* gap: 10px; */
+        cursor: pointer;
+        flex-shrink: 0;
+        border-radius: 25px;
+        background: var(--black-color);
+    }
+    
+    .menuItem:hover {
+        background-color: var( --primary-green-color);
+        color: var( --black-color);
+    }
+    
+    .menuItem:active {
+        background-color: var( --primary-green-color);
+        color: var( --black-color);
+    }
+    
+    .signInItem {
+        display: flex;
+        width: 7.889em;
+        height: 0.889em;
+        padding: 16px 24px;
+        justify-content: center;
+        align-items: center;
+        background-color: var( --white-color);
+        cursor: pointer;
+        flex-shrink: 0;
+        border-radius: 20px;
+        border: 1px solid var( --black-color);
+    }
+    
+    .signInItem:hover {
+        background-color: var( --black-color);
+        ;
+        /* Mudar background ao passar o mouse */
+        border-color: var( --black-color);
+        ;
+        /* Mudar cor da borda ao passar o mouse */
+        color: var( --white-color);
+        ;
+        /* Mudar cor do texto ao passar o mouse */
+    }
+    
+    .menuItemText {
+        color: var(--white-color) !important;
+        position: absolute;
+        font-size: larger;
+    }
+    
+    .signInItemText {
+        color: var( --black-color) !important;
+    }
+    
+    .imgMenu {
+        border-radius: 67pt;
+    }
+    
+    .userNameText {
+        color: var(--Gray-Shades-Dark-Gray, var( --black-color));
+        font-size: 0.9375rem;
+        font-style: normal;
+        font-weight: 700;
+        line-height: normal;
+        margin-top: 0pt;
+        margin-bottom: 0pt;
+    }
+    
+    .userEmailText {
+        color: var(--primary-green-color);
+        font-size: 0.875rem;
+        font-style: normal;
+        font-weight: 400;
+        margin-bottom: 0pt;
+        margin-top: 3pt;
+        line-height: normal;
+    }
+    
+    .svgButtons {
+        transition: transform 0.3s ease;
+        /* Add a transition for the transform property */
+    }
+    /* Define the styles for the open and closed states */
+    
+    .open {
+        transform: rotate(180deg);
+        /* Adjust the rotation for the open state */
+    }
+    
+    .closed {
+        transform: rotate(0deg);
+        /* Keep the rotation as it is for the closed state */
+    }
+    
+    .buttonsSide {
+        gap: 1rem;
+        /* margin-right: 4rem; */
+        /* top: 1.2rem; */
+        scale: 0.7;
+        /* width: 18rem; */
+        position: relative;
+        /* height: 50pt; */
+        display: flex;
+        /* align-items: center; */
+        margin-left: auto;
+    }
+    
+    .logoItem {
+        transform: scale(0.7);
         position: relative;
     }
-}
+    
+    .menuOptions1 {
+        display: none;
+        border-radius: 14px;
+        position: relative;
+        /* border: solid 1px black; */
+        top: -9pt;
+        padding: 4px;
+        align-content: flex-end;
+        right: -21pt;
+        height: 67pt;
+        z-index: -1;
+        width: 141pt;
+        background-color: var(--white-color);
+    }
+    
+    .subMenu1 {
+        width: 80pt;
+        left: -58pt;
+        /* border: 1px solid blue; */
+        height: 31pt;
+        /* background-color: aquamarine; */
+        position: relative;
+    }
+    
+    .subMenu2 {
+        width: 80pt;
+        left: -79pt;
+        top: 7pt;
+        /* border: 1px solid blue; */
+        height: 31pt;
+        /* background-color: aquamarine; */
+        position: relative;
+    }
+    
+    .op1:hover .menuOptions1 {
+        display: block;
+        right: 136pt;
+        z-index: 0;
+        border: 1px solid black;
+    }
+    
+    .op2:hover .menuOptions2 {
+        display: block;
+        border: 1px solid black;
+    }
+    
+    .op3:hover .menuOptions3 {
+        border: 1px solid black;
+        display: block;
+    }
+    
+    .menuOptions2 {
+        display: none;
+        border-radius: 14px;
+        position: relative;
+        /* border: solid 1px black; */
+        top: -31pt;
+        padding: 4px;
+        align-content: flex-end;
+        right: 182pt;
+        padding-left: 9pt;
+        height: 67pt;
+        width: 171pt;
+        background-color: var(--white-color);
+    }
+    
+    .menuOptions3 {
+        display: none;
+        border-radius: 14px;
+        position: relative;
+        /* border: solid 1px black; */
+        top: -3pt;
+        padding: 4px;
+        align-content: flex-end;
+        right: 171pt;
+        z-index: 1;
+        padding-left: 9pt;
+        height: 67pt;
+        width: 171pt;
+        background-color: var(--white-color);
+    }
+    
+    .infoUser {
+        text-align: left;
+        padding-left: 10pt;
+    }
+    
+    .option1 {
+        border-radius: 19px 19px 0px 0px;
+        display: flex;
+        align-items: center;
+        height: 45pt;
+        margin: 0pt 4pt 0pt;
+        width: 170pt;
+        background-color: var(--white-color);
+    }
+    
+    .option {
+        display: flex;
+        align-items: center;
+        height: 32pt;
+        left: -22pt;
+        position: relative;
+        margin-left: 19pt;
+        width: 174pt;
+        background-color: var(--white-color);
+    }
+    
+    .optionMenu {
+        position: relative;
+        left: 10pt;
+    }
+    
+    .sign-in-active {
+        border-radius: 19px!important;
+        /* border-bottom: 1px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black; */
+    }
+    
+    .op1:hover .svgArrow1 {
+        display: block;
+    }
+    
+    .menuOptions1:hover {
+        display: block;
+    }
+    
+    .menuOptions2:hover {
+        display: block;
+    }
+    
+    .menuOptions3:hover {
+        display: block;
+    }
+    
+    .op1:hover,
+    .op2:hover,
+    .op3:hover,
+    .op4:hover,
+    .op11:hover,
+    .op12:hover,
+    .op21:hover,
+    .op22:hover,
+    .op31:hover,
+    .op32:hover {
+        background-color: var(--grey-color);
+        border-radius: 15pt;
+    }
+    
+    .op11,
+    .op12 {
+        width: 136pt;
+        text-align: justify;
+        height: 32pt;
+        place-content: center;
+    }
+    
+    .align11 {
+        margin-left: 14pt;
+    }
+    
+    .op2:hover .svgArrow2,
+    .op3:hover .svgArrow3,
+    .op4:hover .svgArrow4,
+    .op11:hover .svgArrow11,
+    .op21:hover .svgArrow21,
+    .op22:hover .svgArrow22,
+    .op31:hover .svgArrow31,
+    .op32:hover .svgArrow32 {
+        display: block;
+    }
+    
+    .op12:hover .svgArrow12 {
+        display: block!important;
+    }
+    
+    .svgArrow1,
+    .svgArrow2,
+    .svgArrow3,
+    .svgArrow4,
+    .svgArrow11,
+    .svgArrow12,
+    .svgArrow21,
+    .svgArrow22,
+    .svgArrow31,
+    .svgArrow32 {
+        display: none;
+        position: absolute;
+        right: 0;
+        top: 0pt;
+        margin-right: 15pt;
+    }
+    
+    .svgButtons {
+        left: 1em;
+        position: relative;
+    }
+    
+    .svgArrow11 {
+        top: 15pt;
+        position: absolute;
+        /* right: -7pt; */
+    }
+    
+    .svgArrow12 {
+        top: 48pt;
+    }
+    
+    .svgArrow21 {
+        top: 10pt;
+    }
+    
+    .svgArrow22 {
+        top: 10pt;
+    }
+    
+    .op21 {
+        left: -27pt;
+    }
+    
+    .ml-13 {
+        margin-left: 13pt;
+    }
+    
+    .svgArrow31 {
+        top: 10pt;
+    }
+    
+    .svgArrow32 {
+        top: 10pt;
+    }
+    
+    .svgArrow1 {
+        right: -177px;
+    }
+    
+    .svgArrow2 {
+        right: -136px;
+    }
+    
+    .svgArrow3 {
+        right: -151px;
+    }
+    
+    .svgArrow4 {
+        right: -152px;
+    }
+    
+    .signbtn {
+        width: 183px;
+        left: -1pt;
+        top: 1pt;
+    }
+    
+    .option:hover {
+        background-color: var(--grey-color);
+        border-radius: 15pt;
+    }
+    /* Media Query */
+    
+    @media(max-width: 600px) {
+        #navbar {
+            width: 100%;
+            text-align: left;
+        }
+        #navbar ul li {
+            display: block;
+        }
+        #navbar ul li:hover ul {
+            width: 100%;
+            position: relative;
+        }
+    }

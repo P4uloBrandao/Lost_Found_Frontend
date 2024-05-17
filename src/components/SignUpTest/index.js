@@ -362,6 +362,7 @@ export default function SignUp() {
       data1.append('profileImage', profileImage);
       data1.append('role', 'User');
       data1.append('googleId', googleId);
+      data1.append('status', 'active');
 
       try {
           const response = await axios.post("http://localhost:3000/api/users/signup",

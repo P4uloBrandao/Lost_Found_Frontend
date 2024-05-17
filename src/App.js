@@ -13,8 +13,8 @@ import ProfileSettings from './components/profileSettings/index'
 // import ProfileMenu from './components/profileMenu/index'
 import {Cloudinary} from "@cloudinary/url-gen";
 import AddLostObjectComponent from './components/AddLostObjectComponent/index'
-import Navbar from './components/NavBar/index.jsx'
-import SignUp from './components/SignUpTest/index.js';
+import Navbar from './components/NavBarTest/index.jsx'
+import PolicePage from './pages/PolicePage.jsx';
 import LostObjectCatalogPage from './pages/lostObjectCatalogPage.jsx';
 import RegisterLostObjectPage from'./pages/RegisterLostObjectPage.jsx'; 
 import MatchObjectCatalogPage from'./pages/matchObjectCatalogPage.jsx'; 
@@ -25,20 +25,18 @@ import { AuthProvider } from "./components/AuthContext.jsx";
 // import  { AdminRoute, PublicRoute } from './components/protectedRoutes.jsx'
 import AdminRoute from './components/routeComponent/adminRoute/index.jsx'
 
+import PoliceRoute from './components/routeComponent/PoliceRoute/index.jsx'
+
 import PublicRoute from './components/routeComponent/publicRoute/index.jsx'
 import PrivateRoute from './components/routeComponent/privateRoute/index.jsx'
-
-const LayoutContainer = styled.div`
-@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-
-
-`;
-
-const GlobalStyles = styled.div`
-  @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
-  /* Add any global styles or overrides here */
-`;
-
+import Footer from './components/FooterComponent/index.jsx'
+const AppContainer = styled.div`
+    width: 100vw;
+    height: 100vh;
+    background-color: #f5f5f5;
+    overflow-y: auto;
+    overflow-x: hidden;
+    `
 function App() {
   // const { role } = useContext(AuthContext); // Use o contexto de autenticação para acessar o papel do usuário
     // Create a Cloudinary instance and set your cloud name.
@@ -51,12 +49,14 @@ function App() {
     });
 
     return (
+      <AppContainer>
       <AuthProvider> {/* Envolve seus componentes com o AuthProvider */}
         <GoogleOAuthProvider clientId = "535834422242-dfvm3g9s3dv6hpob73povmrmgqbmiuha.apps.googleusercontent.com">
           <Router>
             <Navbar />
             <Routes>
-              
+              <Route path="/police" element={<PoliceRoute><PolicePage/></PoliceRoute> }/>
+
               <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute> }/>
               <Route path="/AdminPage" element={<AdminRoute><AdminPage /></AdminRoute>} />
               <Route path="/addFoundObject" element={<PrivateRoute><AddLostObjectComponent /></PrivateRoute>} />
@@ -69,8 +69,10 @@ function App() {
               <Route path="/signup" element={<PublicRoute><SignUpPage /></PublicRoute>} />
             </Routes>
           </Router>
+          {/* <Footer/> */}
         </GoogleOAuthProvider>
       </AuthProvider>
+      </AppContainer>
     );
   }
   

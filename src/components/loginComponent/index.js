@@ -252,9 +252,11 @@ export default function SignIn() {
               setIsAdmin(true);
               setUserRole("Admin");
               navigate("/adminPage");
-            } else {
+            } else if (response1.data.user.role === 'Police') {
               setIsAdmin(false);
-              navigate("/home");
+              navigate("/police");
+            }else{
+               navigate("/");
             }
     
             login(response1.data);
@@ -301,13 +303,15 @@ export default function SignIn() {
           
           localStorage.setItem("token", response.data.token);
           if (response.data.user.role === 'Admin') {
-            setIsAdmin(true);
-            setUserRole("Admin")
-            navigate("/adminPage");
-          }else{
-            navigate("/home");
-            setIsAdmin(false);
-          }
+              setIsAdmin(true);
+              setUserRole("Admin");
+              navigate("/adminPage");
+            } else if (response.data.user.role === 'Police') {
+              setIsAdmin(false);
+              navigate("/police");
+            }else{
+               navigate("/");
+            }
           login(response.data);
           
            
@@ -325,7 +329,6 @@ export default function SignIn() {
           }
       }
       setAuthUser(authUser)
-      console.log( authUser,token , setIsLoggedIn, userRole)
      
       
     
