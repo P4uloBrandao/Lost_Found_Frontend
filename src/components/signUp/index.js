@@ -277,7 +277,7 @@ export default function SignUp() {
 
 
         try {
-            const response = await axios.post("http://35.219.162.80/api/users/signup",
+            const response = await axios.post("http://localhost:3000/api/users/signup",
             data1);
 
           } catch (error) {

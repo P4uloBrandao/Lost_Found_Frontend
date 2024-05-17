@@ -203,7 +203,7 @@ export default function ProfileSettings({btnLabel, options}) {
       const fetchUserProfile = async () => {
         try {
          
-          const response = await axios.get(`http://35.219.162.80/api/users/profile/${token}`);
+          const response = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
 
 
           const userProfileData = response.data.currentUser; // Supondo que o endpoint forneça os detalhes do perfil do usuário
@@ -234,22 +234,21 @@ export default function ProfileSettings({btnLabel, options}) {
         event.preventDefault();
        
         try {
-            const response = await axios.put("http://35.219.162.80/api/users/update",
-            {   first_name,
-                last_name,
-                email,
-                adddress,
-                birth,
-                gender,
-                phone,
-                nic,
-                nif,
-                token
+          const data1 = new FormData();
+          data1.append('first_name',first_name);
+          data1.append('last_name',last_name);
+          data1.append('email',email);
+          data1.append('adddress',adddress);
+          data1.append('birth',birth);
+          data1.append('gender',gender);
+          data1.append('phone',phone);
+          data1.append('nic',nic);
+          data1.append('nif',nif);
+          data1.append('token',token);
+          data1.append('profileImage',profileImage);
+          const response = await axios.put("http://localhost:3000/api/users/update", data1);
 
-            });
-            
-            console.log(response.data)
-          } catch (error) {
+        } catch (error) {
             console.error("Update failed:", error);
              
              

@@ -120,7 +120,7 @@ export default function SationComponent() {
     useEffect(() => {
         const fetchStations = async () => {
           try {
-            const response = await axios.get('http://35.219.162.80/api/police/police-stations');
+            const response = await axios.get('http://localhost:3000/api/police/police-stations');
             setStations(response.data);
             console.log(response.data)
     
@@ -135,7 +135,7 @@ export default function SationComponent() {
     const handleCreateSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post(`http://35.219.162.80/api/police/police-stations`,{
+            const response = await axios.post(`http://localhost:3000/api/police/police-stations`,{
               "name": stationName,
               "address": location,
               "zip_code" : "0000-00",
@@ -159,7 +159,7 @@ export default function SationComponent() {
       console.log("stationId")
         event.preventDefault();
         try {
-            const response = await axios.delete(`http://35.219.162.80/api/police/police-stations/${stationId}`);
+            const response = await axios.delete(`http://localhost:3000/api/police/police-stations/${stationId}`);
             
             console.log(stationId)
         } catch (error) {
