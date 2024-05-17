@@ -84,6 +84,7 @@ a:focus::after {
 .list li {
     margin: 0 40px;
     font-weight: 500;
+    cursor: pointer;
 }
 
 .profileComponent {
@@ -110,12 +111,10 @@ a:focus::after {
     }
 }
 
-img {
-    transform: scale(0.7);
-}
-
 .logo {
     margin-right: auto;
+    transform: scale(0.7);
+    cursor: pointer;
 }
 
 @media (min-width: 640px) {
@@ -227,6 +226,7 @@ img {
 }
 
 .svgButtons {
+    object-fit: cover;
     border-radius: 36px;
     border: black 2px solid;
     transition: transform 0.3s ease;

@@ -92,6 +92,7 @@ function Navbar() {
   const [selectedOption, setSelectedOption] = useState('Home');
   const options = ['Home','Ojects', 'Police station','Profile'];
   const [hoveredOption, setHoveredOption] = useState(null);
+  const [profilePhoto, setProfilePhoto] = useState(null);
 
   const handleMenuItemClick = () => {
     console.log(isOpen)
@@ -112,7 +113,43 @@ function Navbar() {
     };
   }, []);
 
-  
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const fetchUserProfile = async () => {
+        try {
+          const response = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
+          const userProfileData = response.data.currentUser;
+          if (!!userProfileData.profileImage) {
+            axios.get(`http://localhost:3000/api/users/profileImage/${userProfileData.profileImage}`)
+                .then((response) => {
+                  setProfilePhoto(response.data.image)
+                  setUserData(userProfileData);
+                  setAuthUser(userProfileData)
+                  setLoading(false);
+                })
+                .catch((error) => {
+                  console.log("Failed to fetch user profile:", error);
+                  setLoading(false);
+                  setUserData(null);
+                });
+          } else {
+            setUserData(userProfileData);
+            setAuthUser(userProfileData)
+            setLoading(false);
+          }
+        } catch (error) {
+          console.error("Failed to fetch user profile:", error);
+          setLoading(false);
+          setUserData(null);
+        }
+      };
+
+      fetchUserProfile();
+    } else {
+      setLoading(false);
+    }
+  }, []);
 
   const handleLogout = () => {
     logout()
@@ -177,12 +214,14 @@ function Navbar() {
         
       </ul>
       {authUser ? (
-        <div class='imgMenu'>
-          <img onClick={handleMenuItemClick} className={`svgButtons ${isOpen ? 'open' : 'closed'}`} width='65px' height='65px' src={Teste} alt="" />
         
-        </div>
+          
+          <div>
+            {!!profilePhoto && <img onClick={handleMenuItemClick} className={`svgButtons ${isOpen ? 'open' : 'closed'}`} width='45px'  height='45px' src={profilePhoto} alt="" />}
+            {!profilePhoto && <img onClick={handleMenuItemClick}className={`svgButtons ${isOpen ? 'open' : 'closed'}`} width='45px' height='45px' src="https://res.cloudinary.com/dkyu0tmfx/image/upload/v1715205192/profileImages/profile_1_i39bhb.png" alt="" />}
+          </div>
         ) : (
-        <p><a style={{marginRight:"5pt"}} onClick={handleSignUpClick}>SIGN UP</a>|<a style={{marginLeft:"5pt"}}onClick={handleSignInClick}>SIGN IN</a></p>
+        <p><a style={{marginRight:"5pt"}} onClick={handleSignUpClick}>SIGN UP</a>|<a style={{marginLeft:"5pt" , marginRight:"15pt"}}onClick={handleSignInClick}>SIGN IN</a></p>
       )}
         
         </>
