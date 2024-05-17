@@ -7,19 +7,16 @@ import Grid from '@mui/material/Unstable_Grid2/Grid2';
 import "./LoginPage.css"
 import  { useEffect } from "react";
 import AddLostObjectComponent  from '../components/AddLostObjectComponent' ; 
-
+import  '../assets/colors/colors.css' ; 
 
 export default function RegisterLostObjectPage() {
   
   return (
    
-    <Grid sx={{ textAlign: '-webkit-center'}} container  spacing={2}>
-    <Grid  xs={12} >
-  </Grid>
-  <Grid xs={12} >
-  <  AddLostObjectComponent />
-
-  </Grid>
-    </Grid>
+    
+    <div style={{ marginTop: '65pt', backgroundColor: 'var(--white-color)' }}> {/* Adiciona margem superior */}
+    <AddLostObjectComponent />
+  </div>
+  
   );
 }

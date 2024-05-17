@@ -17,7 +17,7 @@ export function AuthProvider(props) {
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [authUser, setAuthUser] = useState(null);
+  const [authUser, setAuthUser] = useState('');
   const [isContextReady, setIsContextReady] = useState(false); // Indica se o contexto está pronto
   const [userRole, setUserRole] = useState('');
 
@@ -28,6 +28,7 @@ export function AuthProvider(props) {
     setToken(null);
     setIsAdmin(false);
     localStorage.removeItem("token");
+    window.location.reload();
   };
 
   const login = (userData) => {
@@ -45,8 +46,7 @@ export function AuthProvider(props) {
     else{
       setUserRole('User')
     }
-   console.log('------>',isAdmin, isLoggedIn)
-   console.log(token)
+    window.location.reload();
   };
 
   const contextValue = {
@@ -63,7 +63,6 @@ export function AuthProvider(props) {
     setUserRole,
     login,
   };
-
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
   
@@ -96,10 +95,12 @@ export function AuthProvider(props) {
         setIsContextReady(true);
       }
     };
-  
+    if (authUser === ''){
+
     fetchData();
-  }, [userRole, isAdmin, isLoggedIn]);
-  
+    }
+  }, [userRole, isAdmin, isLoggedIn,authUser]);
+
 
 // Log isAdmin após setIsAdmin(true)
   

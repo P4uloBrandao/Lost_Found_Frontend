@@ -10,7 +10,6 @@ const MenuContainer = styled.div`
   overflow: hidden;
   position: relative;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Adding shadow */
-  width: 100%; /* Adjusted width */
   height: 6vh;
 `;
 
@@ -35,7 +34,7 @@ const SelectedBar = styled.div`
   transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
 `;
 
-const Menu = ({ options, selectedOption, setSelectedOption }) => {
+const Menu = ({ options, selectedOption, setSelectedOption , style }) => {
 
   setSelectedOption(selectedOption);
 
@@ -46,8 +45,7 @@ const Menu = ({ options, selectedOption, setSelectedOption }) => {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'white' }}>
-      <MenuContainer>
+      <MenuContainer style={style}>
         {options.map((option) => (
           <MenuItem
             key={option}
@@ -65,7 +63,6 @@ const Menu = ({ options, selectedOption, setSelectedOption }) => {
           />
         )}
       </MenuContainer>
-    </div>
   );
 };
 

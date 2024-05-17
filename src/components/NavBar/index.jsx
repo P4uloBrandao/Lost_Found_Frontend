@@ -24,10 +24,49 @@ const MenuOptions = styled.div`
   background-color: var(--white-color);
   height: ${props => props.userData === null ? '93pt !important' : '168pt !important'};
   padding: 15pt 0pt 15pt 15pt ;
-  width : 15em;
+  width : 100vh;
   border: solid 1px black ;
 
 
+
+`;
+
+const MenuItem = styled.div`
+  flex: 1;
+  padding: 10px;
+  cursor: pointer;
+  text-align: center;
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+background-color:var(--white-color);
+  display: flex;
+  border-radius: 25px;
+  align-items: center;
+  justify-content: center;
+`;
+
+const SelectedBar = styled.div`
+
+  position: absolute;
+  /* bottom: 0; */
+  margin: 0 3em border-radius: 20px;
+  height: 8px;
+  top: 24pt;
+  background: linear-gradient(90deg, #039baf, #f7db61);
+  transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+`;
+const MenuContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 47pt;
+  flex-direction: row; 
+  background-color: white;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  height: 6vh;
+  margin: 0.3em 4em  0em 4em;
+  width : 100%;
 
 `;
 function Navbar() {
@@ -43,6 +82,9 @@ function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [profilePhoto, setProfilePhoto] = useState(null);
   const menuRef = useRef();
+  const [selectedOption, setSelectedOption] = useState('Home');
+  const options = ['Home','Ojects', 'Police station','Profile'];
+  const [hoveredOption, setHoveredOption] = useState(null);
 
   const handleMenuItemClick = () => {
     setIsOpen(!isOpen);
@@ -128,6 +170,20 @@ function Navbar() {
   const registerLost = () => {
     navigate('/addLostObject');
   };
+  const handleClick = (option) => {
+    
+    setSelectedOption(option); 
+
+  };
+  const handleMouseEnter = (option) => {
+    setHoveredOption(option);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredOption(null);
+  };
+  const style = {marginRight:''};
+
   return (
       <div>
         <nav id="navbar">

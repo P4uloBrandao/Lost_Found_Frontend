@@ -54,16 +54,18 @@ const Wrapper = styled.div`
 
 const LoginBox = styled.div`
 
-  text-align: -webkit-center;
-  position: relative;
-  height:  100vh;
-  width: 100%; 
 
+  text-align: -webkit-center;
+  position: absolute;
+  height: 100vh;
   background-color: var(--white-color);
-  
+  width: 100%;
+  max-width: 93vh;
+  left: 0;
   backdrop-filter: blur(25px);
   box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
-  padding: 7.5em 5em;
+  padding: 6.5em 4.5em 5.5em 4.5em;
+
 `;
 const LoginHeader = styled.div`
 
@@ -193,8 +195,7 @@ const RegisterLink = styled.a`
   color: var(--primary-green-color);
   cursor:pointer;
   margin-right: 11px;
-  &:hover {
-    text-decoration: underline;
+ 
 `;
 
 const HrDivison = styled.div`
@@ -437,6 +438,7 @@ export default function SignUp() {
       data1.append('phone', phone);
       data1.append('role', 'User');
       data1.append('googleId', googleId);
+      data1.append('status', 'active');
 
       try {
           const response = await axios.post("http://localhost:3000/api/users/signup",

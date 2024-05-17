@@ -9,6 +9,7 @@ const AdminRoute = ({children}) =>{
         setIsLoggedIn} = useAuth();
       
     if (isAdmin && isLoggedIn){
+      
         return (children )
     }
     else{
