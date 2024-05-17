@@ -45,6 +45,8 @@ const InputField = styled.input`
     border-radius: 30px;
     padding: 0 10px;
     transition: 0.2s;
+
+    
   }
   ${({ type }) =>
     type === 'date' &&

@@ -13,11 +13,10 @@ const PrimaryContainer = styled.div`
 `;
 
 const ChangeContainer = styled.div`
-  width: 190vh;
-  margin: 5em 0;
   opacity: 1;
-  background-color: white;
-  padding: 40px;
+  background-color: var(--white-color);  
+  margin-top: 4em ;
+  padding: 2em ;
 `;
 
 const Title = styled.h2`
