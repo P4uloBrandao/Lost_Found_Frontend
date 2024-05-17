@@ -28,6 +28,7 @@ export function AuthProvider(props) {
     setToken(null);
     setIsAdmin(false);
     localStorage.removeItem("token");
+    window.location.reload();
   };
 
   const login = (userData) => {
@@ -45,8 +46,7 @@ export function AuthProvider(props) {
     else{
       setUserRole('User')
     }
-   console.log('------>',isAdmin, isLoggedIn)
-   console.log(token)
+    window.location.reload();
   };
 
   const contextValue = {

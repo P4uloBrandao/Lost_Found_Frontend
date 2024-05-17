@@ -3,22 +3,17 @@ nav {
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 10;
     width: -webkit-fill-available;
     padding: 16px 20px 30px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     transition: 0.3s ease-out;
-    backdrop-filter: blur(8px) brightness(1.2);
-    -webkit-backdrop-filter: blur(8px) brightness(1.2);
     color: var(--black-color);
     font-size: 22px;
+    background: linear-gradient(to bottom, #ffffff, #ffffff, #ffffff, #ffffff, rgba(255, 255, 255, 0));
     font-weight: 300;
-}
-
-.imgMenu {
-    border-radius: 67pt;
-    border: 2px solid var(--black-color)
 }
 
 
@@ -154,15 +149,6 @@ img {
 /* Main Styling */
 
 @import url('../../assets/colors/colors.css');
-html,
-body {
-    font-family: 'Roboto', sans-serif;
-}
-
-.noborder {
-    border: none!important;
-}
-
 
 /* Navbar */
 
@@ -216,6 +202,10 @@ body {
     border-radius: 67pt;
 }
 
+.imgMenu:hover {
+    transform: scale(1.05);
+}
+
 .userNameText {
     color: var(--Gray-Shades-Dark-Gray, var( --black-color));
     font-size: 0.9375rem;
@@ -237,7 +227,13 @@ body {
 }
 
 .svgButtons {
+    border-radius: 36px;
+    border: black 2px solid;
     transition: transform 0.3s ease;
+    /* Add a transition for the transform property */
+}
+
+.svgButtons:hover {
     /* Add a transition for the transform property */
 }
 
@@ -245,12 +241,11 @@ body {
 /* Define the styles for the open and closed states */
 
 .open {
-    transform: rotate(180deg);
     /* Adjust the rotation for the open state */
 }
 
 .closed {
-    transform: rotate(0deg);
+    /* transform: rotate(0deg); */
     /* Keep the rotation as it is for the closed state */
 }
 
@@ -356,7 +351,7 @@ body {
 
 .infoUser {
     text-align: left;
-    padding-left: 10pt;
+    padding-left: 2pt;
 }
 
 .option1 {
@@ -365,7 +360,7 @@ body {
     align-items: center;
     height: 45pt;
     margin: 0pt 4pt 0pt;
-    width: 170pt;
+    width: 140pt;
     background-color: var(--white-color);
 }
 
@@ -376,7 +371,7 @@ body {
     left: -22pt;
     position: relative;
     margin-left: 19pt;
-    width: 174pt;
+    width: 140pt;
     background-color: var(--white-color);
 }
 
@@ -509,11 +504,11 @@ body {
 }
 
 .svgArrow3 {
-    right: -151px;
+    right: -128px;
 }
 
 .svgArrow4 {
-    right: -152px;
+    right: -128px;
 }
 
 .signbtn {

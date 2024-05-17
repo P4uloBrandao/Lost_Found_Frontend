@@ -30,10 +30,12 @@ import PoliceRoute from './components/routeComponent/PoliceRoute/index.jsx'
 import PublicRoute from './components/routeComponent/publicRoute/index.jsx'
 import PrivateRoute from './components/routeComponent/privateRoute/index.jsx'
 import Footer from './components/FooterComponent/index.jsx'
+import'./assets/colors/colors.css'
 const AppContainer = styled.div`
-    width: 100vw;
-    height: 100vh;
-    background-color: #f5f5f5;
+    
+    background-color: var(--white-color);
+    margin: 2em 9em 0 9em;
+    transition: background 0.2s linear;
     overflow-y: auto;
     overflow-x: hidden;
     `

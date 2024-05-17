@@ -127,7 +127,7 @@ function Navbar() {
     } else {
       setLoading(false);
     }
-  }, [userProfileData]);
+  }, []);
 
   const handleLogout = () => {
     logout()

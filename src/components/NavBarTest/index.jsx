@@ -15,21 +15,26 @@ import { faPlus, faMinus  } from '@fortawesome/free-solid-svg-icons'
 import { Toggle } from "../darkmode/index";
 import { useLocation } from 'react-router-dom';
 import "../../assets/colors/colors.css"
+import { left } from '@cloudinary/url-gen/qualifiers/textAlignment';
 
 
 const MenuOptions = styled.div`
 display: ${props => props.isOpen ? 'block' : 'none'};  border-radius: 20px;
   position: absolute;
-  top: ${props => props.authUser === null ? '73pt !important' : '121pt !important'}; 
+  top: ${props => props.authUser === null ? '70pt !important' : '68pt !important'}; 
     
-    right:${props => props.authUser === null ? '-22pt !important' : '34pt !important'}; 
+    right:${props => props.authUser === null ? '-22pt !important' : '38pt !important'}; 
   background-color: var(--white-color);
-  height: ${props => props.authUser === null ? '93pt !important' : '168pt !important'}; 
+  height: ${props => props.authUser === null ? '93pt !important' : '102pt !important'}; 
   padding: 15pt 0pt 15pt 15pt ;
-  width : 100vh;
+  width : auto;
+ 
+  font-size: smaller;
   border: solid 1px black ;
 
-  
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: ${props => props.isOpen ? '1' : '0'};
+  transform: ${props => props.isOpen ? 'scale(1)' : 'scale(0.9)'};
   
 `;
 
@@ -125,7 +130,9 @@ function Navbar() {
   if (loading) {
     return <div>Carregando...</div>;
   }
-  
+  const handleHomeClick = () => {
+    navigate('/');
+  };
 
   const redirectToProfile = () => {
     navigate('/profile'); 
@@ -142,6 +149,7 @@ function Navbar() {
     setSelectedOption(option); 
 
   };
+  
   const handleMouseEnter = (option) => {
     setHoveredOption(option);
   };
@@ -154,37 +162,39 @@ function Navbar() {
   }
 
   return (
-    <nav class="mask">
-      <img className="logo" href='/' src={Logo} alt="" />
+   
+    <nav >
+     
+      <img onClick={handleHomeClick} className="logo"  src={Logo} alt="" />
       {location.pathname !== '/signup' &&location.pathname !== '/login' && (
       <>
       <ul class="list">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Auctions</a></li>
-        <li><a href="#">I lost something!</a></li>
+        <li><a onClick={handleHomeClick}>Home</a></li>
+        <li><a >Lost</a></li>
+
+        <li><a >Auctions</a></li>
+        <li><a onClick={registerLost} >I lost something!</a></li>
         
       </ul>
       {authUser ? (
-        <div>
-          <img onClick={handleMenuItemClick} className={`svgButtons ${isOpen ? 'open' : 'closed'}'imgMenu'`} width='70px' height='70px' src={Teste} alt="" />
+        <div class='imgMenu'>
+          <img onClick={handleMenuItemClick} className={`svgButtons ${isOpen ? 'open' : 'closed'}`} width='65px' height='65px' src={Teste} alt="" />
         
         </div>
         ) : (
-        <p><a href="#">SIGN UP</a></p>
+        <p><a style={{marginRight:"5pt"}} onClick={handleSignUpClick}>SIGN UP</a>|<a style={{marginLeft:"5pt"}}onClick={handleSignInClick}>SIGN IN</a></p>
       )}
         
         </>
       )}
          
                
-         {isOpen && <MenuOptions className='noborder' isOpen={isOpen} userData={authUser} />}          
+         {isOpen && authUser && <div className='noborder' isOpen={isOpen} userData={authUser} />}          
             
-            <MenuOptions isOpen={isOpen} authUser={authUser} > 
+            <MenuOptions isOpen={isOpen} userData={authUser} > 
                   {authUser && (
                      <div className='option1'>
-                        <div>
-                          <img className='imgMenu' width='40px' height='40px' src={authUser.profileImage} alt="" />
-                        </div>
+                        
                       <div className='infoUser'>
                         <p className='userNameText'>{authUser.first_name} {authUser.last_name}</p>
                         <p className='userEmailText'>{authUser.email}</p>
@@ -193,34 +203,11 @@ function Navbar() {
                     
                   )}
                 
-                <div className='option op1'>
-                 <div className='optionMenu'> LOST <FontAwesomeIcon className='svgArrow1' icon={faArrowLeft} /></div>
-                  <div className='subMenu1'>
-                    <div className='menuOptions1'>
-                    <div  className=' op11' onClick={registerLost}> <div className='align11' >REGISTER LOST<FontAwesomeIcon className='svgArrow11' icon={faArrowLeft} /></div></div>
-                    <div  className=' op12'onClick={redirectToLostObjects} > <div className='align11'>MY LOST<FontAwesomeIcon className='svgArrow12' icon={faArrowLeft} /></div></div>
-                  </div></div>
-                  
-                </div>
-                <div className='option op2'>
-                 <div className='optionMenu'> AUCTIONS<FontAwesomeIcon className='svgArrow2' icon={faArrowLeft} /></div>
-                 <div className='subMenu2'>
-                  <div className='menuOptions2'>
-                    <div className='option op21'> <div className='ml-13'>BROWSE AUCTIONS <FontAwesomeIcon className='svgArrow21' icon={faArrowLeft} /></div></div>
-                    <div  className='option op22'> <div className='ml-13'>MY AUCTIONS <FontAwesomeIcon className='svgArrow22' icon={faArrowLeft} /></div></div>
-                  </div>
-                  </div>
-                </div>
+               
 
                 {authUser &&  <div className='option op3'>
-               <div className='optionMenu'>PROFILE<FontAwesomeIcon  className='svgArrow3' icon={faArrowLeft} /></div>
-               <div className='subMenu2'>
-
-                <div className=' menuOptions3'>
-                  <div  className='option op31 'onClick={redirectToProfile}> <div className='ml-13'>EDIT PROFILE<FontAwesomeIcon className='svgArrow31' icon={faArrowLeft} /></div></div>
-                  <div  className='option op32'> <div className='ml-13'>PRIVACY SETTINGS<FontAwesomeIcon className='svgArrow32' icon={faArrowLeft} /></div></div>
-                  </div>
-                </div>
+               <div onClick={redirectToProfile} className='optionMenu'>PROFILE<FontAwesomeIcon  className='svgArrow3' icon={faArrowLeft} /></div>
+               
               </div>}
               {authUser ? (
                   <div className=' option op4' onClick={handleLogout}><div className='optionMenu'>LOGOUT<FontAwesomeIcon className='svgArrow4' icon={faArrowLeft} /></div></div>

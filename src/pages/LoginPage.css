@@ -3,9 +3,9 @@
 }
 
 .image {
-    bottom: 0;
-    right: 0;
-    z-index: -1;
+    bottom: -105px;
+    right: -175px;
+    z-index: 0;
     position: absolute;
-    width: 55vw;
+    width: 77vw;
 }
