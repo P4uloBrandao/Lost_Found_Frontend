@@ -22,6 +22,7 @@ import LockIconOpen from '@mui/icons-material/LockOpenRounded';
 import "../../assets/colors/colors.css"
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import { InputSubmit, Container,CategoryTitle,InputBox, CategorySection,Title } from '../../assets/StylePopularComponent/style';
+import SearchInput from "../SearchInputFieldComponent/index";
 import DropdownInput from "../dropdownInputComponent/index";
 
 
@@ -58,6 +59,7 @@ export default function StationComponent() {
     const [stationNumber, setStationNumber] = React.useState('');
     const [station, setStation] = React.useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [placeholderSearch, setPlaceholder] = useState(true);
 
     useEffect(() => {
         const fetchStations = async () => {
@@ -114,7 +116,7 @@ export default function StationComponent() {
             <CategoryTitle> Choose new station  </CategoryTitle>
             <InputBox>
             
-            <DropdownInput 
+            {/* <DropdownInput 
                 
                 placeholder={'Choose your station'}  
                 id="station"
@@ -125,9 +127,21 @@ export default function StationComponent() {
                 name="Station"
                 options={stations}
               
-              />
+              /> */}
+           
+            <SearchInput 
+                
+                placeholder={'Choose your station'}  
+                id="station"
+                required
+                onClick = {(e) => setStationName(e.target.value)}
+                value={station}
+                onChange={handleDropdownChange}
+                name="Station"
+                options={stations}
+              
+              /> 
             </InputBox>
-            
         
           <InputSubmit type="submit" onClick={handleCreateSubmit}>
               Update station
