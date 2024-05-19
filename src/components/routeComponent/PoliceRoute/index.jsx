@@ -14,7 +14,7 @@ const PoliceRoute = ({children}) =>{
         return children
         
     }
-   
+    
         return <Navigate to={'/login'}/>
         
     

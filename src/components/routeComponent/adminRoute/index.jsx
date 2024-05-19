@@ -12,9 +12,7 @@ const AdminRoute = ({children}) =>{
       
         return (children )
     }
-    else{
-        logout()
-    }
+   
    return(
             
          <Navigate to={'/login'}/>

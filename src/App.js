@@ -37,6 +37,7 @@ const AppContainer = styled.div`
     transition: background 0.2s linear;
     overflow-y: auto;
     overflow-x: hidden;
+   
     `
 function App() {
   // const { role } = useContext(AuthContext); // Use o contexto de autenticação para acessar o papel do usuário
