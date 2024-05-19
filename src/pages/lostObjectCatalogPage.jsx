@@ -22,6 +22,8 @@ export default function LostObjectCatalogPage() {
   
         // Buscar os dados dos objetos perdidos
         const objectsResponse = await axios.get(`http://localhost:3000/api/lost-objects/user/${token}`);
+
+        console.log(token);
         const objectsData = objectsResponse.data;
   
         // Atualizar o estado dos objetos com os dados buscados
@@ -86,3 +88,6 @@ export default function LostObjectCatalogPage() {
     </Container>
   );
 }
+
+
+

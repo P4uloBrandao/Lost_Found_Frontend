@@ -4,6 +4,7 @@ import ProfileMenu from '../components/profileMenu/index';
 import ChangePassword from '../components/ChangePasswordComponent';
 import ProfileSettings from '../components/profileSettings/index';
 import DeleteProfile from '../components/deleteProfile/index';
+import CardComponent from '../pages/lostObjectCatalogPage.jsx';
 import styled from 'styled-components';
 
 const PrimaryContainer = styled.div`
@@ -56,7 +57,7 @@ const ProfilePage = () => {
       case 'My Auctions':
         return <ChangePassword />;
       case 'My Lost Objects':
-        return <DeleteProfile />;
+        return <CardComponent />;
       case 'Payments Details':
           return <DeleteProfile />;
       case 'Privacy Settings':
