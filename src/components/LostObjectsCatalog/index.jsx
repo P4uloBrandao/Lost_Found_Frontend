@@ -1,16 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
-import FilterButtons from "../components/SearchFilters/index";
-import Card from "../components/CardComponent/index";
+import FilterButtons from "../SearchFilters/index";
+import Card from "../CardComponent/index";
 import axios from "axios";
 
+
 const Container = styled.div`
-    top: 3em;
     position: relative;
 `;
 
-export default function LostObjectCatalogPage() {
+const Title = styled.h2`
+  color: var(--black-color);
+  opacity: 1;
+  text-align: left;
+  margin-bottom: 40px;
+`;
+
+const CategoryTitle = styled.h2`
+  color: #3cb684;
+  display: flex;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 27px;
+  text-align: left !important;
+  margin-top: 0px;
+`;
+
+export default function LostObjectCatalog() {
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [objects, setObjects] = useState([]);
 
@@ -23,7 +41,6 @@ export default function LostObjectCatalogPage() {
         // Buscar os dados dos objetos perdidos
         const objectsResponse = await axios.get(`http://localhost:3000/api/lost-objects/user/${token}`);
 
-        console.log(token);
         const objectsData = objectsResponse.data;
   
         // Atualizar o estado dos objetos com os dados buscados
@@ -61,7 +78,10 @@ export default function LostObjectCatalogPage() {
 
   return (
     <Container>
-      <h1>Lost Object Catalogue</h1>
+      <Title>My Lost Objects</Title>
+        <CategoryTitle>
+        Here you can view all your lost objects. Remember to never lose hope!
+        </CategoryTitle>
       <FilterButtons  filters={filters} handleFilterClick={handleFilterClick} />
       <Grid sx={{ textAlign: '-webkit-center',placeContent: 'center' }} container spacing={5}>
         {objects.map((object, index) => (

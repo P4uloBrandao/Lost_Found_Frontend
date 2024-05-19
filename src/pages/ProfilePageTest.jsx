@@ -4,7 +4,7 @@ import ProfileMenu from '../components/profileMenu/index';
 import ChangePassword from '../components/ChangePasswordComponent';
 import ProfileSettings from '../components/profileSettings/index';
 import DeleteProfile from '../components/deleteProfile/index';
-import CardComponent from '../pages/lostObjectCatalogPage.jsx';
+import CardComponent from '../components/LostObjectsCatalog/index.jsx';
 import styled from 'styled-components';
 
 const PrimaryContainer = styled.div`
