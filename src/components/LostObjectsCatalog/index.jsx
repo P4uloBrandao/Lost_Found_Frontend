@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
 import FilterButtons from "../SearchFilters/index";
 import Card from "../CardComponent/index";
+import SearchInput from "../SearchInputFieldComponent/index";
 import axios from "axios";
 
 
@@ -29,8 +30,12 @@ const CategoryTitle = styled.h2`
 `;
 
 export default function LostObjectCatalog() {
+  const [errorMessage, setErrorMessage]= useState("")
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [objects, setObjects] = useState([]);
+  const [objectName, setObjectName] = React.useState('');
+  const [object, setObject] = React.useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const filters = ['Filter 1', 'Filter 2', 'Filter 3'];
   useEffect(() => {
@@ -45,6 +50,8 @@ export default function LostObjectCatalog() {
   
         // Atualizar o estado dos objetos com os dados buscados
         setObjects(objectsData);
+
+        setIsLoading(false);
   
         // Para cada objeto, buscar o nome da categoria associada
         const updatedObjects = await Promise.all(objectsData.map(async (object) => {
@@ -59,7 +66,6 @@ export default function LostObjectCatalog() {
             catId: catId
           };
         }));
-  
         // Atualizar o estado dos objetos com os dados das categorias atualizados
         setObjects(updatedObjects);
       } catch (error) {
@@ -76,12 +82,54 @@ export default function LostObjectCatalog() {
     // Add code to apply the selected filter
   };
 
+  const handleCreateSubmit = async (event) => {
+    event.preventDefault();
+    try {
+        const response = await axios.put(`http://localhost:3000/api/lost-objects/${getLostObjectID(objectName,objects)}`);
+    } catch (error) {
+        console.error( error);
+
+        if (error.response && error.response.data) {
+            setErrorMessage(error.response.data); // Set the error message if present in the error response
+        } else {
+            setErrorMessage("An unexpected error occurred. Please try again.");
+        }
+    }
+    //  window.location.reload();
+  }
+
+  const handleDropdownChange = (selectedOptionName) => {
+    setObjectName(selectedOptionName)
+  };
+
+  function  getLostObjectID(name,objects){
+    const foundItem = objects.find(item => item.name === name);
+    return foundItem ? foundItem._id : null;
+  }
+
+  const LostObjectArray = Object.entries(objects);
+  if (isLoading) {
+    return <div>Carregando...</div>;
+}
+
   return (
     <Container>
       <Title>My Lost Objects</Title>
         <CategoryTitle>
         Here you can view all your lost objects. Remember to never lose hope!
         </CategoryTitle>
+        <SearchInput 
+                
+                placeholder={'Search your Lost Objects'}  
+                id="Objects"
+                required
+                onClick = {(e) => setObjectName(e.target.value)}
+                value={object}
+                onChange={handleDropdownChange}
+                name="Lost Object"
+                options={objects}
+              
+              />
       <FilterButtons  filters={filters} handleFilterClick={handleFilterClick} />
       <Grid sx={{ textAlign: '-webkit-center',placeContent: 'center' }} container spacing={5}>
         {objects.map((object, index) => (

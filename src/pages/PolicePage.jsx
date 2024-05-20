@@ -45,9 +45,7 @@ export default function AdminPage() {
     
   };
   return (
-   
-    
-    
+
     
     <PrimaryContainer>
       <AdminMenu  options={menuOptions} selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
