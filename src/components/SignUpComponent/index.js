@@ -20,7 +20,7 @@ import PhoneIcon from '@mui/icons-material/PhoneAndroidRounded';
 import AddressIcon from '@mui/icons-material/HomeRounded';
 import {PasswordStrength} from '../controllers/index';
 import DropdownInput from "../dropdownInputComponent";
-
+import PopAlert from "../PopAlertComponent"
 import {ArrowDropDownIcon} from "@mui/x-date-pickers";
 import '../../assets/colors/colors.css'
 import {isValidPhoneNumber, validateBirthDate, validateEmail} from "../../utils/inputValidations";
@@ -60,6 +60,7 @@ const LoginBox = styled.div`
   height: 100vh;
   background-color: var(--white-color);
   width: 100%;
+  top: 30pt;
   max-width: 93vh;
   left: 0;
   backdrop-filter: blur(25px);
@@ -245,6 +246,7 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
   const [showPassword2, setShowPassword2] = useState(null); // New state for handling error messages
   const [googleId, setGoogleId] = React.useState('');
+  const navigate = useNavigate();
 
   // Validations
   const [firstNameError, setFirstNameError ] = useState(false);
@@ -262,6 +264,7 @@ export default function SignUp() {
   const validationSetter= [setFirstNameError, setLastNameError, setEmailError, setGenderError, setAddressError, setPasswordError, setCheckPasswordError, setBirthError, setNicError, setNifError, setPhoneError]
 
   const [userGoogleValidation, setGoogleValidation ] = useState(true);
+  const [userCreated, setUserCreated ] = useState(false);
 
 
   const genderOptions= [
@@ -443,7 +446,10 @@ export default function SignUp() {
       try {
           const response = await axios.post("http://localhost:3000/api/users/signup",
           data1);
+          setUserCreated(true);
+          setTimeout(() => navigate('/login'), 2500); // Define setGoogleValid de volta para true após 2500ms
 
+          
         } catch (error) {
           console.error("Registration failed:", error);
 
@@ -479,8 +485,10 @@ export default function SignUp() {
                   if (userExistValidation)  {
                     console.log("User exists");
                     setGoogleValidation(false);
-                    // Assuming tokenResponse contains user information
-                   
+                    
+                    setTimeout(() => setGoogleValidation(true), 2500); // Define setGoogleValid de volta para true após 2500ms
+                    
+                
                   }
                 } catch (error) {
                   
@@ -531,8 +539,15 @@ export default function SignUp() {
     }}
     cookiePolicy={'single_host_origin'}
     scope={'profile email'} // Requesting 'profile' and 'email' scopes
-/>{userGoogleValidation === false && (<p> User already exist, please use other email</p>)}
-        <HrDivison ><hr /> <p> OR</p> <hr /></HrDivison>
+/>
+{userGoogleValidation === false && (
+        <PopAlert message="User already exists, please use another email" />
+      )}  
+      {userCreated === true && (
+        <PopAlert message="User created successfully" />
+      )}
+      
+            <HrDivison ><hr /> <p> OR</p> <hr /></HrDivison>
             
         <Card className="card" >
         <Form  onSubmit={handleSubmit} >
@@ -549,7 +564,7 @@ export default function SignUp() {
                     {/* Campos do formulário para cada etapa */}
                     {step.title === "1" && (
                         <>
-                            <InputBox >
+                            <InputBox>
         <InputF 
         icon={<PersonOutlineRoundedIcon />} 
         type={'text'} 

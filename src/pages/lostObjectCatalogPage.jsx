@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
-import FilterButtons from "../components/SearchFilters/index";
 import Card from "../components/CardComponent/index";
 import axios from "axios";
 
@@ -14,7 +13,6 @@ export default function LostObjectCatalogPage() {
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [objects, setObjects] = useState([]);
 
-  const filters = ['Filter 1', 'Filter 2', 'Filter 3'];
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -60,7 +58,6 @@ export default function LostObjectCatalogPage() {
   return (
     <Container>
       <h1>Lost Object Catalogue</h1>
-      <FilterButtons  filters={filters} handleFilterClick={handleFilterClick} />
       <Grid sx={{ textAlign: '-webkit-center',placeContent: 'center' }} container spacing={5}>
         {objects.map((object, index) => (
           

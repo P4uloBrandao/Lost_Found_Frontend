@@ -26,7 +26,7 @@ import MailIcon from '@mui/icons-material/MailOutlineRounded';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import '../../assets/colors/colors.css'
-import DropdownInput from "../dropdownInputComponent";
+import SearchInput from "../SearchInputFieldComponent";
 import AddressIcon from '@mui/icons-material/HomeRounded';
 import { InputSubmit, Container,InputBox ,Title,Form, Wrapper } from '../../assets/StylePopularComponent/style';
 
@@ -126,6 +126,7 @@ if (error) {
     return <div>Erro ao carregar as estações de polícia.</div>;
 }
 function  getStationID(name,stations){
+  console.log("aqui:", name)
     const foundItem = stations.find(item => item.name === name);
     return foundItem ? foundItem._id : null;
 
@@ -140,7 +141,7 @@ function  getStationID(name,stations){
               "phone":phone,
               "email":email,
               
-              "station" : getStationID(station,stations),
+              "station" : station,
               "password": password,
               "police_id" : policeId,
               "role": "Police",
@@ -257,13 +258,12 @@ function  getStationID(name,stations){
       </Grid>
     <Grid item xs={12} sm={6}>
       <InputBox>
-        <DropdownInput 
+        <SearchInput 
           
           placeholder={'Choose your station'}  
           id="station"
           required
           onClick = {(e) => setNameOfStation(e.target.value)}
-          value={station}
           onChange={handleDropdownChange}
           name="Station"
           options={stations}

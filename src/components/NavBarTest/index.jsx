@@ -79,26 +79,20 @@ const MenuContainer = styled.div`
 function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { 
-    setAuthUser,
-    authUser,
-    isLoggedIn,
-    setIsLoggedIn,logout} = useAuth();
-    
+  const { setAuthUser, authUser, isLoggedIn, setIsLoggedIn, logout, userRole } = useAuth();
+
   const [loading, setLoading] = useState(false);
   const [userData, setUserData] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef();
   const [selectedOption, setSelectedOption] = useState('Home');
-  const options = ['Home','Ojects', 'Police station','Profile'];
   const [hoveredOption, setHoveredOption] = useState(null);
   const [profilePhoto, setProfilePhoto] = useState(null);
 
   const handleMenuItemClick = () => {
-    console.log(isOpen)
     setIsOpen(!isOpen);
   };
-  
+
   const handleDocumentClick = (event) => {
     if (menuRef.current && !menuRef.current.contains(event.target)) {
       setIsOpen(false);
@@ -122,20 +116,20 @@ function Navbar() {
           const userProfileData = response.data.currentUser;
           if (!!userProfileData.profileImage) {
             axios.get(`http://localhost:3000/api/users/profileImage/${userProfileData.profileImage}`)
-                .then((response) => {
-                  setProfilePhoto(response.data.image)
-                  setUserData(userProfileData);
-                  setAuthUser(userProfileData)
-                  setLoading(false);
-                })
-                .catch((error) => {
-                  console.log("Failed to fetch user profile:", error);
-                  setLoading(false);
-                  setUserData(null);
-                });
+              .then((response) => {
+                setProfilePhoto(response.data.image);
+                setUserData(userProfileData);
+                setAuthUser(userProfileData);
+                setLoading(false);
+              })
+              .catch((error) => {
+                console.log("Failed to fetch user profile:", error);
+                setLoading(false);
+                setUserData(null);
+              });
           } else {
             setUserData(userProfileData);
-            setAuthUser(userProfileData)
+            setAuthUser(userProfileData);
             setLoading(false);
           }
         } catch (error) {
@@ -152,41 +146,40 @@ function Navbar() {
   }, []);
 
   const handleLogout = () => {
-    logout()
-    setIsLoggedIn(false)
-    setAuthUser(null)
+    logout();
+    setIsLoggedIn(false);
+    setAuthUser(null);
     navigate('/login');
   };
 
   const handleSignInClick = () => {
     navigate('/login');
   };
+
   const handleSignUpClick = () => {
     navigate('/signup');
   };
-  if (loading) {
-    return <div>Carregando...</div>;
-  }
+
   const handleHomeClick = () => {
     navigate('/');
   };
 
   const redirectToProfile = () => {
-    navigate('/profile'); 
+    navigate('/profile');
   };
 
   const redirectToLostObjects = () => {
-    navigate('/myLostObjects'); 
+    navigate('/myLostObjects');
   };
-  const registerLost = () => {
-    navigate('/addLostObject'); 
-  };
-  const handleClick = (option) => {
-    
-    setSelectedOption(option); 
 
+  const registerLost = () => {
+    navigate('/addLostObject');
   };
-  
+
+  const handlerAdminPage = () => {
+    navigate('/adminPage');
+  };
+
   const handleMouseEnter = (option) => {
     setHoveredOption(option);
   };
@@ -194,71 +187,79 @@ function Navbar() {
   const handleMouseLeave = () => {
     setHoveredOption(null);
   };
+
   if (loading) {
     return <div>Carregando...</div>;
   }
 
-  return (
-   
-    <nav >
-     
-      <img onClick={handleHomeClick} className="logo"  src={Logo} alt="" />
-      {location.pathname !== '/signup' &&location.pathname !== '/login' && (
-      <>
-      <ul class="list">
-        <li><a onClick={handleHomeClick}>Home</a></li>
-        <li><a >Lost</a></li>
+  const options = [
+    { label: 'Home', path: '/' },
+    { label: userRole !== "Police" ? 'Lost' : 'New found object', path: '/lost' },
+    { label: userRole !== "Police" ? 'Auctions' : '', path: '/auctions' },
+    { label: userRole !== "Police" ? 'I lost something!' : '', path: '/addLostObject' },
+    { label: userRole === "Admin" ? 'Admin settings' : '', path: '/adminPage' }
+  ].filter(option => option.label);
 
-        <li><a >Auctions</a></li>
-        <li><a onClick={registerLost} >I lost something!</a></li>
-        
-      </ul>
-      {authUser ? (
-        
-          
-          <div>
-            {!!profilePhoto && <img onClick={handleMenuItemClick} className={`svgButtons ${isOpen ? 'open' : 'closed'}`} width='45px'  height='45px' src={profilePhoto} alt="" />}
-            {!profilePhoto && <img onClick={handleMenuItemClick}className={`svgButtons ${isOpen ? 'open' : 'closed'}`} width='45px' height='45px' src="https://res.cloudinary.com/dkyu0tmfx/image/upload/v1715205192/profileImages/profile_1_i39bhb.png" alt="" />}
-          </div>
-        ) : (
-        <p><a style={{marginRight:"5pt"}} onClick={handleSignUpClick}>SIGN UP</a>|<a style={{marginLeft:"5pt" , marginRight:"15pt"}}onClick={handleSignInClick}>SIGN IN</a></p>
-      )}
-        
+  return (
+    <nav>
+      <img onClick={handleHomeClick} className="logo" src={Logo} alt="Logo" />
+      {location.pathname !== '/signup' && location.pathname !== '/login' && (
+        <>
+          <ul className="list">
+            {options.map((option) => (
+              <li
+                key={option.label}
+                className={location.pathname === option.path ? 'active' : ''}
+                onMouseEnter={() => handleMouseEnter(option.label)}
+                onMouseLeave={handleMouseLeave}
+              >
+                <a onClick={() => navigate(option.path)}>{option.label}</a>
+              </li>
+            ))}
+          </ul>
+          {authUser ? (
+            <div>
+              {profilePhoto ? (
+                <img onClick={handleMenuItemClick} className={`svgButtons ${isOpen ? 'open' : 'closed'}`} width='45px' height='45px' src={profilePhoto} alt="Profile" />
+              ) : (
+                <img onClick={handleMenuItemClick} className={`svgButtons ${isOpen ? 'open' : 'closed'}`} width='45px' height='45px' src="https://res.cloudinary.com/dkyu0tmfx/image/upload/v1715205192/profileImages/profile_1_i39bhb.png" alt="Default Profile" />
+              )}
+            </div>
+          ) : (
+            <p>
+              <a style={{ marginRight: "5pt" }} onClick={handleSignUpClick}>SIGN UP</a>|
+              <a style={{ marginLeft: "5pt", marginRight: "15pt" }} onClick={handleSignInClick}>SIGN IN</a>
+            </p>
+          )}
         </>
       )}
-         
-               
-         {isOpen && authUser && <div className='noborder' isOpen={isOpen} userData={authUser} />}          
-            
-            <MenuOptions isOpen={isOpen} userData={authUser} > 
-                  {authUser && (
-                     <div className='option1'>
-                        
-                      <div className='infoUser'>
-                        <p className='userNameText'>{authUser.first_name} {authUser.last_name}</p>
-                        <p className='userEmailText'>{authUser.email}</p>
-                      </div>
-                    </div>
-                    
-                  )}
-                
-               
 
-                {authUser &&  <div className='option op3'>
-               <div onClick={redirectToProfile} className='optionMenu'>PROFILE<FontAwesomeIcon  className='svgArrow3' icon={faArrowLeft} /></div>
-               
-              </div>}
-              {authUser ? (
-                  <div className=' option op4' onClick={handleLogout}><div className='optionMenu'>LOGOUT<FontAwesomeIcon className='svgArrow4' icon={faArrowLeft} /></div></div>
-                ) : (
-                  <div onClick={handleSignUpClick} className=" option op4  sign-in-active"><div className='optionMenu' >SIGN UP<FontAwesomeIcon className='svgArrow4' icon={faArrowLeft} /></div></div>
-                )}
-              
-               </ MenuOptions>  
-        
-                
-</nav>
-
+      {isOpen && authUser && <div className='noborder' isOpen={isOpen} userData={authUser} />}
+      <MenuOptions isOpen={isOpen} userData={authUser}>
+        {authUser && (
+          <div className='option1'>
+            <div className='infoUser'>
+              <p className='userNameText'>{authUser.first_name} {authUser.last_name}</p>
+              <p className='userEmailText'>{authUser.email}</p>
+            </div>
+          </div>
+        )}
+        {authUser && (
+          <div className='option op3'>
+            <div onClick={redirectToProfile} className='optionMenu'>PROFILE<FontAwesomeIcon className='svgArrow3' icon={faArrowLeft} /></div>
+          </div>
+        )}
+        {authUser ? (
+          <div className='option op4' onClick={handleLogout}>
+            <div className='optionMenu'>LOGOUT<FontAwesomeIcon className='svgArrow4' icon={faArrowLeft} /></div>
+          </div>
+        ) : (
+          <div onClick={handleSignUpClick} className="option op4 sign-in-active">
+            <div className='optionMenu'>SIGN UP<FontAwesomeIcon className='svgArrow4' icon={faArrowLeft} /></div>
+          </div>
+        )}
+      </MenuOptions>
+    </nav>
   );
 }
 

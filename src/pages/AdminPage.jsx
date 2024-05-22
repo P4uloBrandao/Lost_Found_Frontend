@@ -8,7 +8,7 @@ import "./LoginPage.css"
 import  { useEffect, useState } from "react";
 import AddFoundObjectComponent  from '../components/AddFoundObjectComponent/index' ; 
 import CategoryComponent  from '../components/CategoryComponent/index' ; 
-import SationComponent  from '../components/StationComponent/index' ; 
+import StationCreateComponent  from '../components/StationCreateComponent/index' ; 
 import PoliceComponent  from '../components/PoliceComponent/index' ; 
 import AdminMenu from '../components/profileMenu/index'
 import Statistics from '../components/StatisticsComponent/index'
@@ -38,7 +38,7 @@ export default function AdminPage() {
       case 'My Categories':
         return <  CategoryComponent/>
       case 'Police station':
-          return < SationComponent/> ;
+          return < StationCreateComponent/> ;
       case 'Police Officer':
           return <PoliceComponent />;
       default:
