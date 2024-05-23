@@ -157,7 +157,7 @@ function  getStationID(name,stations){
                 setErrorMessage("An unexpected error occurred. Please try again.");
             }
         }
-        //  window.location.reload();
+          window.location.reload();
     }
     // const handleDeleteSubmit = async (event) => {
     //     event.preventDefault();

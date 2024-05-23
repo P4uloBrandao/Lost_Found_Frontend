@@ -117,22 +117,24 @@ export default function SationComponent() {
     const [stationId, setStationId] = React.useState('');
     const [stationNumber, setStationNumber] = React.useState('');
     const [station, setStation] = React.useState('');
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchStations = async () => {
-          try {
-            const response = await axios.get('http://localhost:3000/api/police/police-stations');
-            setStations(response.data);
-            console.log(response.data)
-    
-          } catch (error) {
-            console.error('Failed to fetch stations', error);
-            // Lide com erros conforme necessário
-          }
-        };
-    
-        fetchStations();
-      }, []);
+      const fetchStations = async () => {
+        try {
+          const response = await axios.get('http://localhost:3000/api/police/police-stations');
+          setStations(response.data);
+          console.log(response.data);
+        } catch (error) {
+          console.error('Failed to fetch stations', error);
+          // Handle errors as necessary
+        } finally {
+          setLoading(false); // Set loading to false after the data is fetched or if an error occurs
+        }
+      };
+  
+      fetchStations();
+    }, []);
     const handleCreateSubmit = async (event) => {
         event.preventDefault();
         try {
@@ -158,8 +160,7 @@ export default function SationComponent() {
         //  window.location.reload();
     }
     const handleDeleteSubmit = async (event) => {
-      console.log("stationId")
-     console.log(stationId)  
+
       event.preventDefault();
         try {
             const response = await axios.delete(`http://localhost:3000/api/police/police-stations/${stationId}`);
@@ -210,7 +211,7 @@ export default function SationComponent() {
         }
       };
       const handleDropdownChange = (selectedOptionName) => {
-        setStationName(selectedOptionName)
+        setStationId(selectedOptionName)
         // Faça o que for necessário com o nome da opção selecionada
       };
       function  getStationID(name,stations){
@@ -220,6 +221,9 @@ export default function SationComponent() {
     }
     if (loadError) return <div className="contain">Error loading maps</div>;
     if (!isLoaded) return <div className="contain">Loading maps</div>;
+    if (loading) {
+      return <div>Loading...</div>; // Show a loading message or spinner while data is being fetched
+    }
     return (<>
         <Container>
         <Title>Add Station</Title>

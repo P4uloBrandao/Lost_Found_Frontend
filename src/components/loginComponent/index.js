@@ -257,12 +257,12 @@ export default function SignIn() {
             if (response1.data.user.role === 'Admin') {
               setIsAdmin(true);
               setUserRole("Admin");
-              // navigate("/adminPage");
+               navigate("/adminPage");
             } else if (response1.data.user.role === 'Police') {
               setIsAdmin(false);
-              // navigate("/police");
+               navigate("/police");
             }else{
-              //  navigate("/");
+                navigate("/");
             }
     
             login(response1.data);
