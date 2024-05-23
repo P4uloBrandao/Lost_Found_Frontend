@@ -240,14 +240,16 @@ export default function SignIn() {
       console.log('Google Response:', response); // Log the entire response
     
       try {
-        const userExistValidation = await axios.post("http://localhost:3000/api/users/getUser", { googleId: response.clientId });
+        const tokenResponse = await axios.get(`http://localhost:3000/api/auth/token/${response.credential}`);
+        console.log("tokenResponse",tokenResponse)
+        const userExistValidation = await axios.post("http://localhost:3000/api/users/getUser", { googleId: tokenResponse.data.sub });
     
         if (userExistValidation) {
           console.log("User is valid");
           console.log(userExistValidation);
     
           try {
-            const response1 = await axios.post("http://localhost:3000/api/auth/login", { clientId: response.clientId });
+            const response1 = await axios.post("http://localhost:3000/api/auth/login", { clientId: tokenResponse.data.sub });
     
             localStorage.setItem("token", response1.data.token);
             console.log(response1);

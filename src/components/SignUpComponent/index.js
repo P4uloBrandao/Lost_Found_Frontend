@@ -7,7 +7,8 @@ import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swiper from 'swiper';
 import 'swiper/css';
-import { GoogleLogin } from '@react-oauth/google';
+import {  GoogleLogin } from '@react-oauth/google';
+
 
 import InputF  from '../inputFieldComponent/InputField';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
@@ -265,7 +266,12 @@ export default function SignUp() {
 
   const [userGoogleValidation, setGoogleValidation ] = useState(true);
   const [userCreated, setUserCreated ] = useState(false);
+// Usage example:  https://www.google.com/search?sca_esv=00efb85e6f8ba711&rlz=1C1FCXM_pt-PTPT998PT998&sxsrf=ADLYWIIu-yUr15MzaGDmcnkp3qHxBjc6yA:1716451841507&q=request+access+token+from+google&tbm=vid&source=lnms&prmd=vinbz&sa=X&ved=2ahUKEwjfz6WyqaOGAxWycfEDHV-CAsUQ0pQJegQIDRAB&biw=1536&bih=695&dpr=1.25#fpstate=ive&vld=cid:3fa747f1,vid:C0DUNy6RjNw,st:0
 
+const authorizationCode = 'AUTHORIZATION_CODE_FROM_GOOGLE';
+const CLIENT_ID = '535834422242-s5ag44thlgt8i0av3kqu057olvejo0l0.apps.googleusercontent.com';
+const clientSecret = 'YOUR_CLIENT_SECRET';
+const redirectUri = 'YOUR_REDIRECT_URI';
 
   const genderOptions= [
       {
@@ -461,25 +467,31 @@ export default function SignUp() {
           }
         }
   };
+
+
   const handleDropdownChange = (selectedOptionName) => {
     setGender(selectedOptionName)
     // Faça o que for necessário com o nome da opção selecionada
   };
+
+
+  
+  
   const showUserInformation = async (response) => {
     
     // Check if the response contains the user's profile information
     if (response) {
         const credential = response.credential;
-        setGoogleId(response.clientId)
+       
         if (credential) {
           
             try {
                 const tokenResponse = await axios.get(`http://localhost:3000/api/auth/token/${credential}`);
                 
-                
+               
                 console.log(tokenResponse.data); // Assuming the token is returned in the response data
                 const tempEmail = tokenResponse.data.email
-                
+                setGoogleId(tokenResponse.data.sub)
                 try {
                   const userExistValidation = await axios.post("http://localhost:3000/api/users/getUser", { email: tempEmail, });
                   if (userExistValidation)  {
@@ -529,17 +541,14 @@ export default function SignUp() {
       </LoginHeader>
       <LoginBody>
         
-      
-<GoogleLogin
-    className="google-login-button"
-    clientId="535834422242-dfvm3g9s3dv6hpob73povmrmgqbmiuha.apps.googleusercontent.com"
-    onSuccess={showUserInformation}
-    onFailure={(error) => {
-        console.log('Login Failed:', error);
-    }}
-    cookiePolicy={'single_host_origin'}
-    scope={'profile email'} // Requesting 'profile' and 'email' scopes
-/>
+  <GoogleLogin
+      className="google-login-button"
+      clientId = {CLIENT_ID}
+      onSuccess={showUserInformation}
+      onFailure={(error) => {
+          console.log('Login Failed:', error);
+      }}
+  />
 {userGoogleValidation === false && (
         <PopAlert message="User already exists, please use another email" />
       )}  
@@ -780,3 +789,4 @@ export default function SignUp() {
             
     );
 }
+
