@@ -36,10 +36,21 @@ const AppContainer = styled.div`
     
     background-color: var(--white-color);
     transition: background 0.2s linear;
-    overflow-y: auto;
-    overflow-x: hidden;
    
     `
+
+const ContentContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 0 0 0;
+  padding-top: 103px;
+    margin: 0 0 0 0;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+`
+
 function App() {
   // const { role } = useContext(AuthContext); // Use o contexto de autenticação para acessar o papel do usuário
 
@@ -49,22 +60,24 @@ function App() {
         <GoogleOAuthProvider clientId = "535834422242-dfvm3g9s3dv6hpob73povmrmgqbmiuha.apps.googleusercontent.com">
           <Router>
             <Navbar />
-            <Routes>
-              <Route path="/police" element={<PoliceRoute><PolicePage/></PoliceRoute> }/>
+            <ContentContainer>
+              <Routes>
+                <Route path="/police" element={<PoliceRoute><PolicePage/></PoliceRoute> }/>
 
-              <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute> }/>
-              <Route path="/AdminPage" element={<AdminRoute><AdminPage /></AdminRoute>} />
-              <Route path="/addFoundObject" element={<PrivateRoute><AddLostObjectComponent /></PrivateRoute>} />
-              <Route path="/matchObjects" element={<PrivateRoute><MatchObjectCatalogPage /></PrivateRoute>} />
-              <Route path="/addLostObject" element={<PrivateRoute><RegisterLostObjectPage /></PrivateRoute>} />
-              <Route path="/myLostObjects" element={<PrivateRoute><LostObjectCatalogPage /></PrivateRoute>} />
-              <Route path="/auctions" element={<PublicRoute><AuctionsPage /></PublicRoute>} />
-              
-              <Route path="/" element={<PublicRoute><Home /></PublicRoute>} />
-              <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
-              <Route path="/signup" element={<PublicRoute><SignUpPage /></PublicRoute>} />
-            </Routes>
-          <Footer></Footer>
+                <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute> }/>
+                <Route path="/AdminPage" element={<AdminRoute><AdminPage /></AdminRoute>} />
+                <Route path="/addFoundObject" element={<PrivateRoute><AddLostObjectComponent /></PrivateRoute>} />
+                <Route path="/matchObjects" element={<PrivateRoute><MatchObjectCatalogPage /></PrivateRoute>} />
+                <Route path="/addLostObject" element={<PrivateRoute><RegisterLostObjectPage /></PrivateRoute>} />
+                <Route path="/myLostObjects" element={<PrivateRoute><LostObjectCatalogPage /></PrivateRoute>} />
+                <Route path="/auctions" element={<PublicRoute><AuctionsPage /></PublicRoute>} />
+
+                <Route path="/" element={<PublicRoute><Home /></PublicRoute>} />
+                <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
+                <Route path="/signup" element={<PublicRoute><SignUpPage /></PublicRoute>} />
+              </Routes>
+              <Footer></Footer>
+            </ContentContainer>
           </Router>
           {/* <Footer/> */}
         </GoogleOAuthProvider>

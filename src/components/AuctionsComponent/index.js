@@ -17,9 +17,8 @@ const colors = css`
 const defaultTheme = createTheme();
 
 const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
-  //padding: 32px 32px 32px 32px;
+  width: 100%;
+  padding: 32px 64px;
   display: flex;
     flex-direction: column;
   align-items: center;
