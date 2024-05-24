@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
-import FilterButtons from "../components/SearchFilters/index";
 import Card from "../components/CardComponent/index";
 import axios from "axios";
 import { useLocation } from 'react-router-dom';

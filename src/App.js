@@ -31,6 +31,7 @@ import PublicRoute from './components/routeComponent/publicRoute/index.jsx'
 import PrivateRoute from './components/routeComponent/privateRoute/index.jsx'
 import Footer from './components/FooterComponent/index.jsx'
 import'./assets/colors/colors.css'
+import AuctionsPage from "./pages/AuctionsPage";
 const AppContainer = styled.div`
     
     background-color: var(--white-color);
@@ -57,6 +58,7 @@ function App() {
               <Route path="/matchObjects" element={<PrivateRoute><MatchObjectCatalogPage /></PrivateRoute>} />
               <Route path="/addLostObject" element={<PrivateRoute><RegisterLostObjectPage /></PrivateRoute>} />
               <Route path="/myLostObjects" element={<PrivateRoute><LostObjectCatalogPage /></PrivateRoute>} />
+              <Route path="/auctions" element={<PublicRoute><AuctionsPage /></PublicRoute>} />
               
               <Route path="/" element={<PublicRoute><Home /></PublicRoute>} />
               <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />

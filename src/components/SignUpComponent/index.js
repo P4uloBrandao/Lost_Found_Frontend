@@ -7,7 +7,8 @@ import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swiper from 'swiper';
 import 'swiper/css';
-import { GoogleLogin } from '@react-oauth/google';
+import {  GoogleLogin } from '@react-oauth/google';
+
 
 import InputF  from '../inputFieldComponent/InputField';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
@@ -20,7 +21,7 @@ import PhoneIcon from '@mui/icons-material/PhoneAndroidRounded';
 import AddressIcon from '@mui/icons-material/HomeRounded';
 import {PasswordStrength} from '../controllers/index';
 import DropdownInput from "../dropdownInputComponent";
-
+import PopAlert from "../PopAlertComponent"
 import {ArrowDropDownIcon} from "@mui/x-date-pickers";
 import '../../assets/colors/colors.css'
 import {isValidPhoneNumber, validateBirthDate, validateEmail} from "../../utils/inputValidations";
@@ -60,6 +61,7 @@ const LoginBox = styled.div`
   height: 100vh;
   background-color: var(--white-color);
   width: 100%;
+  top: 30pt;
   max-width: 93vh;
   left: 0;
   backdrop-filter: blur(25px);
@@ -245,6 +247,7 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
   const [showPassword2, setShowPassword2] = useState(null); // New state for handling error messages
   const [googleId, setGoogleId] = React.useState('');
+  const navigate = useNavigate();
 
   // Validations
   const [firstNameError, setFirstNameError ] = useState(false);
@@ -262,7 +265,13 @@ export default function SignUp() {
   const validationSetter= [setFirstNameError, setLastNameError, setEmailError, setGenderError, setAddressError, setPasswordError, setCheckPasswordError, setBirthError, setNicError, setNifError, setPhoneError]
 
   const [userGoogleValidation, setGoogleValidation ] = useState(true);
+  const [userCreated, setUserCreated ] = useState(false);
+// Usage example:  https://www.google.com/search?sca_esv=00efb85e6f8ba711&rlz=1C1FCXM_pt-PTPT998PT998&sxsrf=ADLYWIIu-yUr15MzaGDmcnkp3qHxBjc6yA:1716451841507&q=request+access+token+from+google&tbm=vid&source=lnms&prmd=vinbz&sa=X&ved=2ahUKEwjfz6WyqaOGAxWycfEDHV-CAsUQ0pQJegQIDRAB&biw=1536&bih=695&dpr=1.25#fpstate=ive&vld=cid:3fa747f1,vid:C0DUNy6RjNw,st:0
 
+const authorizationCode = 'AUTHORIZATION_CODE_FROM_GOOGLE';
+const CLIENT_ID = '535834422242-s5ag44thlgt8i0av3kqu057olvejo0l0.apps.googleusercontent.com';
+const clientSecret = 'YOUR_CLIENT_SECRET';
+const redirectUri = 'YOUR_REDIRECT_URI';
 
   const genderOptions= [
       {
@@ -443,7 +452,10 @@ export default function SignUp() {
       try {
           const response = await axios.post("http://localhost:3000/api/users/signup",
           data1);
+          setUserCreated(true);
+          setTimeout(() => navigate('/login'), 2500); // Define setGoogleValid de volta para true após 2500ms
 
+          
         } catch (error) {
           console.error("Registration failed:", error);
 
@@ -455,32 +467,40 @@ export default function SignUp() {
           }
         }
   };
+
+
   const handleDropdownChange = (selectedOptionName) => {
     setGender(selectedOptionName)
     // Faça o que for necessário com o nome da opção selecionada
   };
+
+
+  
+  
   const showUserInformation = async (response) => {
     
     // Check if the response contains the user's profile information
     if (response) {
         const credential = response.credential;
-        setGoogleId(response.clientId)
+       
         if (credential) {
           
             try {
                 const tokenResponse = await axios.get(`http://localhost:3000/api/auth/token/${credential}`);
                 
-                
+               
                 console.log(tokenResponse.data); // Assuming the token is returned in the response data
                 const tempEmail = tokenResponse.data.email
-                
+                setGoogleId(tokenResponse.data.sub)
                 try {
                   const userExistValidation = await axios.post("http://localhost:3000/api/users/getUser", { email: tempEmail, });
                   if (userExistValidation)  {
                     console.log("User exists");
                     setGoogleValidation(false);
-                    // Assuming tokenResponse contains user information
-                   
+                    
+                    setTimeout(() => setGoogleValidation(true), 2500); // Define setGoogleValid de volta para true após 2500ms
+                    
+                
                   }
                 } catch (error) {
                   
@@ -521,18 +541,22 @@ export default function SignUp() {
       </LoginHeader>
       <LoginBody>
         
+  <GoogleLogin
+      className="google-login-button"
+      clientId = {CLIENT_ID}
+      onSuccess={showUserInformation}
+      onFailure={(error) => {
+          console.log('Login Failed:', error);
+      }}
+  />
+{userGoogleValidation === false && (
+        <PopAlert message="User already exists, please use another email" />
+      )}  
+      {userCreated === true && (
+        <PopAlert message="User created successfully" />
+      )}
       
-<GoogleLogin
-    className="google-login-button"
-    clientId="535834422242-dfvm3g9s3dv6hpob73povmrmgqbmiuha.apps.googleusercontent.com"
-    onSuccess={showUserInformation}
-    onFailure={(error) => {
-        console.log('Login Failed:', error);
-    }}
-    cookiePolicy={'single_host_origin'}
-    scope={'profile email'} // Requesting 'profile' and 'email' scopes
-/>{userGoogleValidation === false && (<p> User already exist, please use other email</p>)}
-        <HrDivison ><hr /> <p> OR</p> <hr /></HrDivison>
+            <HrDivison ><hr /> <p> OR</p> <hr /></HrDivison>
             
         <Card className="card" >
         <Form  onSubmit={handleSubmit} >
@@ -549,7 +573,7 @@ export default function SignUp() {
                     {/* Campos do formulário para cada etapa */}
                     {step.title === "1" && (
                         <>
-                            <InputBox >
+                            <InputBox>
         <InputF 
         icon={<PersonOutlineRoundedIcon />} 
         type={'text'} 
@@ -662,7 +686,7 @@ export default function SignUp() {
                     onChange={handleDropdownChange}
                     onClick = {(e) => setGender(e.target.value)}
                     value={gender}
-                    errorValidation={addressError}
+                    errorValidation={genderError}
                     errorMessage={'Gênero inválido'}
                     options={genderOptions}
                 ></DropdownInput>
@@ -765,3 +789,4 @@ export default function SignUp() {
             
     );
 }
+

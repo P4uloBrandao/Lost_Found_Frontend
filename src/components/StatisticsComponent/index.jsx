@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { InputSubmit, Container,InputBox ,Title,Form, Wrapper,SubCategoryTitle,CategoryTitle } from '../../assets/StylePopularComponent/style';
 import styled from 'styled-components';
-
+import BarChart from '../BarChartComponent';
 const Grid = styled.div`
 display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -19,6 +19,7 @@ const Estatistics = () => {
     foundObjectsByCategory: [],
     usersByGender: [],
     usersByStatus: [],
+
   });
 
   useEffect(() => {
@@ -26,6 +27,7 @@ const Estatistics = () => {
       try {
         const response = await axios.get('http://localhost:3000/api/stats');
         setStats(response.data);
+        console.log(response)
       } catch (error) {
         console.error('Error fetching statistics:', error);
       }
@@ -41,51 +43,33 @@ const Estatistics = () => {
       <Grid>
       <div>
         <SubCategoryTitle>Users by Role</SubCategoryTitle>
-        <ul>
-          {stats.usersByRole.map(role => (
-            <li key={role._id}>{role._id}: {role.count}</li>
-          ))}
-        </ul>
+        <BarChart data={stats.usersByRole} />
+
       </div>
       <div>
         <SubCategoryTitle>Police Officers by Station</SubCategoryTitle>
-        <ul>
-          {stats.policeOfficersByStation.map(police => (
-            <li key={police._id}>{police.stationName}: {police.count}</li>
-          ))}
-        </ul>
+        <BarChart data={stats.policeOfficersByStation} />
+          
       </div>
       <div>
         <SubCategoryTitle>Lost Objects by Category</SubCategoryTitle>
-        <ul>
-          {stats.lostObjectsByCategory.map(category => (
-            <li key={category._id}>{category.categoryName}: {category.count}</li>
-          ))}
-        </ul>
+        <BarChart data={stats.lostObjectsByCategory} />
+
       </div>
       <div>
         <SubCategoryTitle>Found Objects by Category</SubCategoryTitle>
-        <ul>
-          {stats.foundObjectsByCategory.map(category => (
-            <li key={category._id}>{category.categoryName}: {category.count}</li>
-          ))}
-        </ul>
+        <BarChart data={stats.lofoundObjectsByCategorystObjectsByCategory} />
+          
+        
       </div>
       <div>
         <SubCategoryTitle>Users by Gender</SubCategoryTitle>
-        <ul>
-          {stats.usersByGender.map(gender => (
-            <li key={gender._id}>{gender._id || 'Not specified'}: {gender.count}</li>
-          ))}
-        </ul>
+        <BarChart data={stats.usersByGender} />
+
       </div>
       <div>
         <SubCategoryTitle>Users by Status</SubCategoryTitle>
-        <ul>
-          {stats.usersByStatus.map(status => (
-            <li key={status._id}>{status._id || 'Not specified'}: {status.count}</li>
-          ))}
-        </ul>
+        <BarChart data={stats.usersByStatus} />
       </div></Grid>
     </Container>
   );

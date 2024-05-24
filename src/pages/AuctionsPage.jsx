@@ -5,13 +5,13 @@ import LoginImage from '../assets/background/loginImage.svg';
 import Grid from '@mui/material/Unstable_Grid2/Grid2';
 import "./LoginPage.css"
 import  { useEffect } from "react";
+import AuctionsComponent from "../components/AuctionsComponent";
 
 
 
-export default function LoginPage() {
+export default function AuctionsPage() {
   useEffect(() => {
     // Bloquear scroll horizontal e vertical
-    document.body.style.overflow = 'hidden';
 
     // Retornar a função de limpeza no desmonte do componente
     return () => {
@@ -22,10 +22,9 @@ export default function LoginPage() {
    
     <Grid  container  spacing={0}>
     <Grid className="logincontainer" xs={12} md={5}>
-    <SignUp/>
+    <AuctionsComponent/>
   </Grid>
   <Grid xs={12} md={7}>
-  <img className='image' src={LoginImage} alt="" />
 
   </Grid>
     </Grid>

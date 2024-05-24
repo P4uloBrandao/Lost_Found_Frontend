@@ -46,7 +46,7 @@ export function AuthProvider(props) {
     else{
       setUserRole('User')
     }
-    window.location.reload();
+     window.location.reload();
   };
 
   const contextValue = {

@@ -79,18 +79,20 @@ left: -9px;
   
 `;
 const DropdownContainer = styled.div`
-position: relative;
+position: absolute; 
+ box-shadow: 0px 0px 10px 2px rgba(1, 0, 0, 0.2);
+
 width: -webkit-fill-available;
 left: 0;
 margin: 0 12px;
-top: -20pt;
+top: 51pt;
   border-radius: 17px;
-    overflow: hidden;
+  overflow: hidden;
   display: ${(props) => (props.active ? 'block' : 'none')};
   max-height: 144px;
   overflow-y: auto;
   z-index: ${(props) => (props.active ? "4" : "0")};
-    padding: 0;
+  padding: 0;
   color: var(--black-color);
   background-color:var(--primary-grey-color);
   list-style: none;
@@ -98,9 +100,11 @@ top: -20pt;
   
 `;
 const DropdownItem = styled.li`
-  padding: 10px;
-  transition: all 0.2s ease-in-out;
-  cursor: pointer;
+margin-left: 18px;
+padding: 10px;
+border-radius: 18px;
+transition: all 0.2s ease-in-out;
+cursor: pointer;
 
   &:hover {
     background-color: #f2f2f2;
@@ -122,7 +126,7 @@ const Pholder = styled.span`
 
   
   
-  const DropdownComponent = ({ icon, options, placeholder,onChange, onClick }) => {
+  const DropdownComponent = ({ name,icon, options, placeholder,onChange, onClick }) => {
     const [isDropdownActive, setIsDropdownActive] = useState(false);
     const [selectedOption, setSelectedOption] = useState(null);
     const [results, setResults] = useState([]);
@@ -190,6 +194,7 @@ const Pholder = styled.span`
             type="text" 
             placeholder={ placeholder } 
             value={text} 
+            name={name}
             onChange={(e) => setText(e.target.value)} 
           />
         </InputBox>
