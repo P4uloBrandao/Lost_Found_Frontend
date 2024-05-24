@@ -20,6 +20,7 @@ import RegisterLostObjectPage from'./pages/RegisterLostObjectPage.jsx';
 import MatchObjectCatalogPage from'./pages/matchObjectCatalogPage.jsx'; 
 import AdminPage from'./pages/AdminPage.jsx'; 
 import { GoogleOAuthProvider } from '@react-oauth/google';
+
 // import AddLostObjectCatalogPage from'./pages/AddLostObjectCatalogPage.jsx'; 
 import { AuthProvider } from "./components/AuthContext.jsx";
 // import  { AdminRoute, PublicRoute } from './components/protectedRoutes.jsx'
@@ -28,6 +29,7 @@ import AdminRoute from './components/routeComponent/adminRoute/index.jsx'
 import PublicRoute from './components/routeComponent/publicRoute/index.jsx'
 import PrivateRoute from './components/routeComponent/privateRoute/index.jsx'
 import Footer from "./components/FooterComponent";
+
 
 const LayoutContainer = styled.div`
 @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
@@ -49,7 +51,7 @@ const AppContainer = styled.div`
     `
 
 function App() {
-  // const { role } = useContext(AuthContext); // Use o contexto de autenticação para acessar o papel do usuário
+  
 
     return (
         <AppContainer>

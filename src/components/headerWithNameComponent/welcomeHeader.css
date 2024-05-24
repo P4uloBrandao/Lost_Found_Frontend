@@ -1,0 +1,49 @@
+.header-component{
+    display: flex;
+    justify-content: start;
+    width:100%;
+    margin:100px 150px 30px 100px;
+}
+
+.header-component-left{
+    display: flex;
+    flex-direction: column;    
+    width: 40%;
+    justify-content: start;
+
+}
+
+
+.header-component-rigth{
+    width: 60%;
+    display: flex;
+    
+}
+
+.hi-component{
+    color: #0C0C20;
+    font-family: Roboto;
+    font-size: 72px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 70px; /* 97.222% */
+}
+
+.name-component{
+    color: #2BA269;
+    font-family: Roboto;
+    font-size: 72px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 70px; 
+}
+
+.text-component{
+    color: var(--Heading-H3, #0C0C20);
+    font-family: Roboto;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin-top: 15px;
+}
