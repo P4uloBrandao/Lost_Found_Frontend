@@ -686,7 +686,7 @@ const redirectUri = 'YOUR_REDIRECT_URI';
                     onChange={handleDropdownChange}
                     onClick = {(e) => setGender(e.target.value)}
                     value={gender}
-                    errorValidation={addressError}
+                    errorValidation={genderError}
                     errorMessage={'Gênero inválido'}
                     options={genderOptions}
                 ></DropdownInput>
