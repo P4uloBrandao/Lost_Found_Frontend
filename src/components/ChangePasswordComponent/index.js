@@ -12,7 +12,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { AuthContext } from "../AuthContext";
+import { useAuth, AuthProvider } from '../AuthContext';
 import axios from "axios";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
@@ -51,6 +51,25 @@ width: 100%;
     background: var(--second-color);
   }
 `;
+
+const Title = styled.h2`
+  font-size: 1.5rem;
+  color: var(--black-color);
+  opacity: 1;
+  text-align: left;
+  margin-bottom: 40px;
+`;
+
+const CategoryTitle = styled.h2`
+  color: #3cb684;
+  display: flex;
+  font-family: 'Roboto', sans-serif;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 27px;
+  text-align: left !important;
+  margin-top: 0px;
+`;
 export default function ChangePassword() {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -81,7 +100,7 @@ export default function ChangePassword() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.put("http://35.219.162.80/api/users/updatePass",{token,newPassword,password});
+            const response = await axios.put("http://localhost:3000/api/users/updatePass",{token,newPassword,password});
             setErrorMessage(response.data.message);
             setEmail('');
             setPassword('');
@@ -101,7 +120,11 @@ export default function ChangePassword() {
     };
 
     return (
-       
+            <>
+              <Title>Change Password</Title>
+              <CategoryTitle>
+                Please enter your old and new password and press “Save Changes” to make sure nothing is lost!
+              </CategoryTitle>
             <Grid container >
                 
                 <Grid item xs={6}>
@@ -144,6 +167,7 @@ export default function ChangePassword() {
       </InputBox>
     </Grid>
             </Grid>
+            </>
         
     );
 }

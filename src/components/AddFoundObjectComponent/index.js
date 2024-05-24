@@ -158,7 +158,7 @@ export default function AddFoundObject  ()  {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/category');
+        const response = await axios.get('http://35.219.162.80/api/category');
         setCategories(response.data);
 
       } catch (error) {
@@ -177,7 +177,7 @@ export default function AddFoundObject  ()  {
     event.preventDefault();
     try {
       
-        const response = await axios.post("http://localhost:3000/api/found-objects",
+        const response = await axios.post("http://35.219.162.80/api/found-objects",
         {userWhoFound,
           title,
           category,
@@ -209,7 +209,7 @@ export default function AddFoundObject  ()  {
     event.preventDefault();
     try {
       
-        const response = await axios.post("http://localhost:3000/api/users/getUser/",
+        const response = await axios.post("http://35.219.162.80/api/users/getUser/",
         {email,
           nic,
           
@@ -236,7 +236,7 @@ export default function AddFoundObject  ()  {
   };
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: 'AIzaSyC6QRYQechnlxkaivlAkIyKhMcB3iGaSZM',
+    googleMapsApiKey: 'AIzaSyDPUTFHLcj71rpOYKfPwigaRF8uiOKDvWo',
     libraries,
   });
 
@@ -244,9 +244,9 @@ export default function AddFoundObject  ()  {
       const lat = event.latLng.lat();
       const lng = event.latLng.lng();
       setObjLoc({ lat: event.latLng.lat(), lng: event.latLng.lng() });
-
+      const geocodingApiKey = "AIzaSyDPUTFHLcj71rpOYKfPwigaRF8uiOKDvWo"
       try {
-        const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyC6QRYQechnlxkaivlAkIyKhMcB3iGaSZM`);
+        const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${geocodingApiKey}`);
         const address = response.data.results[0].formatted_address;
         console.log('Address:', address);
         setObjLoc(address);
@@ -431,11 +431,7 @@ export default function AddFoundObject  ()  {
         {location && <Marker position={location} />}
       </GoogleMap>
       {/* Display selected location coordinates (optional) */}
-      {location && (
-        <p>
-          Selected Location: {`lat: ${location.lat}, lng: ${location.lng}`}
-        </p>
-      )}
+      
     
         </InputBox>
         </Container>

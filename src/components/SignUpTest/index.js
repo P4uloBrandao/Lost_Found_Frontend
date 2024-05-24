@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { AuthContext } from "../AuthContext";
+import { useAuth, AuthProvider } from '../AuthContext';
 import axios from "axios";
 import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -28,7 +28,9 @@ import {PasswordStrength} from '../controllers/index'
 import {validateBirthDate, validateEmail, validatePasswordCorrespondence} from "../../utils/inputValidations";
 import FileInput from "../ImageInputComponent/FileInput";
 import CustomInputFiles from "../ImageInputComponent/FileInput";
-import {DropdownInput} from "../dropdownInputComponent";
+// import {DropdownInput} from "../dropdownInputComponent";
+import DropdownInput from "../dropdownInputComponent";
+
 import {ArrowDropDownIcon} from "@mui/x-date-pickers";
 import '../../assets/colors/colors.css'
 
@@ -74,16 +76,9 @@ const LoginBox = styled.div`
 `;
 const LoginHeader = styled.div`
 
-  top: 0rem;
+  top: -3rem;
   position: relative;
-  ${({ formStepsNum }) =>
-    formStepsNum == 0
-      ? css`
-          display: block;
-        `
-      : css`
-          display: none;
-        `}
+  display:block;
 `;
 
 const LoginHeaderText = styled.span`
@@ -191,13 +186,14 @@ height: 3.25rem;
 `;
 const Form = styled.form`
   display: grid;
+  margin-bottom: 1rem;
 `;
 const Register = styled.div`
   text-align: center;
 `;
 const LoginBody = styled.div`
   position:relative;
-  top:1rem;
+  top:-2rem;
 `;
 
 const RegisterLink = styled.a`
@@ -273,29 +269,16 @@ export default function SignUp() {
 
   const genderOptions= [
       {
-          value: "masculino",
-          label: "Masculino"
+          
+          name: "Male"
       },
       {
-          value: "feminino",
-          label: "Feminino"
+          name: "Female",
       },
       {
-          value: "outro",
-          label: "Outro"
+          name: "Other",
       }
   ]
-
-
-
-  const formatDate = (inputDate) => {
-      const dateObject = new Date(inputDate);
-      const day = String(dateObject.getDate()).padStart(2, '0');
-      const month = String(dateObject.getMonth() + 1).padStart(2, '0');
-      const year = dateObject.getFullYear();
-      return `${day}-${month}-${year}`;
-    };
-
 
 
   const toggleShowPassword = () => {
@@ -311,11 +294,7 @@ export default function SignUp() {
     });
   };
 
-  const onImageUpload = (event) => {
-      setProfileImage(event)
-
-
-  }
+  
   
   const [formStepsNum, setFormStepsNum] = useState(0);
   const formSteps = [
@@ -376,10 +355,10 @@ export default function SignUp() {
       data1.append('nif', nif);
       data1.append('phone', phone);
       data1.append('profileImage', profileImage);
-
+      data1.append('role', 'Admin');
 
       try {
-          const response = await axios.post("http://localhost:3000/api/users/signup",
+          const response = await axios.post("http://35.219.162.80/api/users/signup",
           data1);
 
         } catch (error) {
@@ -393,13 +372,17 @@ export default function SignUp() {
           }
         }
   };
-
+  const handleDropdownChange = (selectedOptionName) => {
+    console.log("Opção selecionada:", selectedOptionName);
+    setGender(selectedOptionName)
+    // Faça o que for necessário com o nome da opção selecionada
+  };
     return (
         <Wrapper>
            
                 
         <LoginBox>
-      <LoginHeader formStepsNum={formStepsNum}>
+      <LoginHeader >
         <LoginHeaderText>Sign up</LoginHeaderText>
         
       </LoginHeader>
@@ -476,11 +459,7 @@ export default function SignUp() {
             )}
 
             {step.title === "2" && (
-                <><InputBox>
-
-                <CustomInputFiles singleImage
-                onChange={onImageUpload}></CustomInputFiles>
-            </InputBox>
+                <>
                     <InputBox>
                 <InputF
                     icon={showPassword ? <LockIconOpen /> : <LockIcon />}
@@ -543,7 +522,8 @@ export default function SignUp() {
                     placeholder={'Gender'}
                     id="gender"
                     required
-                    onChange={(e) => setGender(e.target.value)}
+                    onChange={handleDropdownChange}
+                    onClick = {(e) => setGender(e.target.value)}
                     value={gender}
                     errorValidation={adddressError}
                     errorMessage={'Gênero inválido'}
@@ -551,20 +531,20 @@ export default function SignUp() {
                 ></DropdownInput>
             </InputBox>
           <InputBox>
-        <InputF 
-        icon={<AddressIcon />} 
-        type={'text'} 
-        placeholder={'Enter your Address'}  
-        id="address"
-        required
-        onChange={(e) => setAdddress(e.target.value)}
-        value={adddress}
-        errorValidation={adddressError}
-        errorMessage={'Endereço inválido'}
-        name="Address"/>
-          
-          
-        
+              <InputF 
+              icon={<AddressIcon />} 
+              type={'text'} 
+              placeholder={'Enter your Address'}  
+              id="address"
+              required
+              onChange={(e) => setAdddress(e.target.value)}
+              value={adddress}
+              errorValidation={adddressError}
+              errorMessage={'Endereço inválido'}
+              name="Address"/>
+                
+                
+              
          </InputBox>
                 </>
             )}

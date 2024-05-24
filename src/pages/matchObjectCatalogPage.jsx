@@ -16,7 +16,7 @@ export default function LostObjectCatalogPage() {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const param1 = searchParams.get('param1'); 
-
+  
   return (
     <Container>
       {/* Add filter buttons if needed based on your implementation */}

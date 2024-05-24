@@ -1,11 +1,10 @@
 import * as React from 'react';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { AuthContext } from "../AuthContext";
+import { useAuth, AuthProvider } from '../AuthContext';
 import axios from "axios";
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-
 import InputF  from '../inputFieldComponent/InputField';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 
@@ -16,6 +15,7 @@ import GoogleButton from '../GoogleButtonComponent/index'
 import '../../assets/colors/colors.css'
 import { hasGrantedAllScopesGoogle } from '@react-oauth/google';
 import { GoogleLogin } from '@react-oauth/google';
+
 
 const Wrapper = styled.div`
   width: 100%;
@@ -207,15 +207,20 @@ export default function SignIn() {
   const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
     const [errorMessage, setErrorMessage] = useState(null); // New state for handling error messages
-    const { setToken, setAuth } = useContext(AuthContext);
-    const {login } = useContext(AuthContext);
+    const {
+      setAuthUser,authUser,
+      setIsLoggedIn,
+      setToken,setIsAdmin,login,isAdmin,setUserRole,token,userRole} = useAuth();
+
+
     const defaultTheme = createTheme();
     const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
     const [checked, setChecked] = useState(false);
-    
+
     const handleCheckboxClick = () => {
       setChecked(!checked);
     };
+   
     
     const navigate = useNavigate();
     const toggleShowPassword = () => {
@@ -225,9 +230,22 @@ export default function SignIn() {
         return newShowPassword;
       });
     };
-    const setLoginGoogle = () => {
+    const showUserInformation = (response) => {
+      console.log('Google Response:', response); // Log the entire response
       
-    };
+      // Check if the response contains the user's profile information
+      if (response.profileObj && response.profileObj.email) {
+          // Access the user's email address from the profile information
+          const userEmail = response.profileObj.email;
+          console.log('User Email:', userEmail);
+          // You can access other profile information as well, if needed
+          console.log('User Profile:', response.profileObj);
+      } else {
+          console.log('User profile information not available');
+      }
+  }
+
+
     const handleSubmit = async (event) => {
       event.preventDefault();
   
@@ -241,19 +259,25 @@ export default function SignIn() {
       });
   
       try {
-        const response = await axios.post("http://localhost:3000/api/auth/login", {email,password});
+        const response = await axios.post("http://35.219.162.80/api/auth/login", {email,password});
     
         // Process the response as needed
-          console.log(response.data);
           
-           localStorage.setItem("token", response.data.token);
-           setToken(response.data.token);
-           const userData = {
-            username: 'GONcalo',
-            userEmail: 'joao@example.com', // Substitua isso pelo e-mail real do usuário
-          };
-          login(userData);
-           navigate("/home");
+          localStorage.setItem("token", response.data.token);
+          console.log('teste -->',response.data.user.role)
+          if (response.data.user.role === 'Admin') {
+          // navigate("/adminPage");
+            setIsAdmin(true);
+            setUserRole("Admin")
+            console.log("-login----->", isAdmin)
+          }else{
+            // navigate("/home");
+            setIsAdmin(false);
+            console.log("-login----->", isAdmin)
+          }
+          login(response.data);
+          
+           
      
         } catch (error) {
           console.error("Authentication failed:", error);
@@ -267,6 +291,11 @@ export default function SignIn() {
               setErrorMessage("An unexpected error occurred. Please try again.");
           }
       }
+      setAuthUser(authUser)
+      console.log( authUser,token , setIsLoggedIn, userRole)
+     
+      
+    
   };
 
     return (
@@ -297,21 +326,14 @@ export default function SignIn() {
 
 
 
-        <GoogleLogin
-        onSuccess={response => {
-          // Check if the response contains the user's profile information
-          if (response.profileObj) {
-            console.log(response.profileObj)
-            // Access the user's email address from the profile information
-            const userEmail = response.profileObj.email;
-            console.log('User Email:', userEmail);
-          } else {
-            console.log('User profile information not available');
-          }}}
-  
-  onError={() => {
-    console.log('Login Failed');
-  }}
+<GoogleLogin
+    clientId="535834422242-dfvm3g9s3dv6hpob73povmrmgqbmiuha.apps.googleusercontent.com"
+    onSuccess={showUserInformation}
+    onFailure={(error) => {
+        console.log('Login Failed:', error);
+    }}
+    cookiePolicy={'single_host_origin'}
+    scope={'profile email'} // Requesting 'profile' and 'email' scopes
 />
        
 
