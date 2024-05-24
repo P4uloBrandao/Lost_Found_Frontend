@@ -7,7 +7,6 @@ import Grid from '@mui/material/Unstable_Grid2/Grid2';
 import "./LoginPage.css"
 import  { useEffect, useState } from "react";
 import AddFoundObjectComponent  from '../components/AddFoundObjectComponent/index' ; 
-import CategoryComponent  from '../components/CategoryComponent/index' ; 
 import SationComponent  from '../components/StationComponent/index' ; 
 import PoliceComponent  from '../components/PoliceComponent/index' ; 
 import AdminMenu from '../components/profileMenu/index'
