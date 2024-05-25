@@ -9,7 +9,7 @@ const LostItemDetails = ({status,description,location }) => {
 
   return (
     <div className="lost-item-details">
-
+      <div className="first_row">
       <div className="lost-item-status">
         <div>
           <span className='status-title'>Status:</span>
@@ -22,6 +22,20 @@ const LostItemDetails = ({status,description,location }) => {
             <span className='remove-Item'>Remove Item</span>
         </div>
       </div>
+      <div className="lost-item-status">
+        <div>
+          <span className='status-title'>Status:</span>
+          <span className='status-value'>{dataItem[0]}</span>
+        </div>
+        <div>
+          <span className='matches'>10 Matches Found</span>
+        </div>
+        <div>
+            <span className='remove-Item'>Remove Item</span>
+        </div>
+      </div>
+      </div>
+
 
       <div className="lost-item-location">
         <div className='location-data'>
@@ -38,11 +52,15 @@ const LostItemDetails = ({status,description,location }) => {
       
       </div>
 
-      {/* Lost item description */}
-      <div className="lost-item-description">
-        <span className='description-title'>Description:</span>
-        <p className='description-value'>{dataItem[1]}</p>
-      </div>
+
+        <div className="lost-item-description">
+          <span className='description-title'>Description:</span>
+          <p className='description-value'>{dataItem[1]}</p>
+        </div>
+
+      
+
+
 
       {/* Lost item location */}
    

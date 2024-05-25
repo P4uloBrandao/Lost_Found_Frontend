@@ -1,5 +1,4 @@
-// Menu.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const MenuContainer = styled.div`
@@ -35,18 +34,15 @@ const SelectedBar = styled.div`
   transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
 `;
 
-const Menu = ({ options, selectedOption, setSelectedOption }) => {
-
-  setSelectedOption(selectedOption);
+const Menu = ({ options, selected}) => {
+  const [selectedOption, setSelectedOption] = useState(selected);
 
   const handleClick = (option) => {
-    
-    setSelectedOption(option); 
-
+    setSelectedOption(option);
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', background: 'white' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom:'50px'}}>
       <MenuContainer>
         {options.map((option) => (
           <MenuItem

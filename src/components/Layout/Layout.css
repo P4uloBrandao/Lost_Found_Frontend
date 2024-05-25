@@ -1,0 +1,14 @@
+/* components/Layout/Layout.css */
+
+.layoutContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .contentContainer {
+    flex: 1;
+    margin:80px 120px 80px 120px;
+    justify-content: center;
+  }
+  

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import LostItemDetails from './LostItemDetails/LostItemDetails';
 import LostItemPicture from './LostPictureComponent/LostItemPictures'; // Assuming renamed to plural
 import axios from "axios";
@@ -14,7 +14,7 @@ const LostItemComponent = ({ itemid }) => { // Pass itemid as a prop
     "location": "Rua da Alfândega, 123",
     "price": 0,
     "status": "Lost",
-    "objectImage":imageSrc 
+    "objectImage": imageSrc 
   });
   const [isLoading, setIsLoading] = useState(false); // Track loading state
   const [error, setError] = useState(null); // Track errors
@@ -39,8 +39,6 @@ const LostItemComponent = ({ itemid }) => { // Pass itemid as a prop
   //   fetchData();
   // }, [itemid]); // Dependency array: fetch data when itemid changes
 
-
-
   if (isLoading) {
     return <div>Carregando... (Loading...)</div>;
   }
@@ -54,15 +52,17 @@ const LostItemComponent = ({ itemid }) => { // Pass itemid as a prop
   }
 
   return (
-
     <div className="lost-item-container" style={{display:'flex',flexDirection:'column', width:'100%'}} >
       <LostItemHeader title={lostObject.title}/>
-      <div style={{display:'flex', justifyContent:'space-between',alignItems:'start' }}>
-        <LostItemPicture images={lostObject.objectImage ? [lostObject.objectImage] : []} // Handle single image gracefully
-                        nome={lostObject.title} />
-        <LostItemDetails status={lostObject.status} description={lostObject.description} location={lostObject.location} /> 
+      <div style={{display:'flex', alignItems:'start' , marginTop:'0px'}}>
+        <div style={{ flex: '30%' }}>
+          <LostItemPicture images={lostObject.objectImage ? [lostObject.objectImage] : []} // Handle single image gracefully
+                          nome={lostObject.title} />
+        </div>
+        <div style={{ flex: '70%',marginTop:'20px'}}>
+          <LostItemDetails status={lostObject.status} description={lostObject.description} location={lostObject.location} />
+        </div>
       </div>
-     
     </div>
   );
 };
