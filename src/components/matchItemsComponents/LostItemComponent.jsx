@@ -4,9 +4,10 @@ import LostItemPicture from './LostPictureComponent/LostItemPictures'; // Assumi
 import axios from "axios";
 import imageSrc from './LostPictureComponent/Image.svg'; 
 import LostItemHeader from './LostItemHeader/LostItemHeader';
+import MatchFoundComponent from './MatchFoundComponent';
 
 const LostItemComponent = ({ itemid }) => { // Pass itemid as a prop
-  const [lostObject, setLostObject] = useState( {
+  const [lostObject, setLostObject] = useState({
     "owner": "12345",
     "category": "2",
     "title": "Chaves perdidas",
@@ -16,6 +17,40 @@ const LostItemComponent = ({ itemid }) => { // Pass itemid as a prop
     "status": "Lost",
     "objectImage": imageSrc 
   });
+
+  const [matches, setMatches] = useState([
+    {
+      id: 1,
+      image: 'https://via.placeholder.com/100', // Placeholder image
+      title: 'Cartier Wallet',
+      date: '05/04/2023',
+      location: 'Campo Grande, Lisboa',
+      descriptionLink: '#description1',
+      matchesLink: '#matches1',
+      onRemove: (id) => console.log(`Remove item with id ${id}`),
+    },
+    {
+      id: 2,
+      image: 'https://via.placeholder.com/100', // Placeholder image
+      title: 'Gucci Bag',
+      date: '12/03/2023',
+      location: 'Avenida da Liberdade, Lisboa',
+      descriptionLink: '#description2',
+      matchesLink: '#matches2',
+      onRemove: (id) => console.log(`Remove item with id ${id}`),
+    },
+    {
+      id: 3,
+      image: 'https://via.placeholder.com/100', // Placeholder image
+      title: 'Ray-Ban Sunglasses',
+      date: '20/02/2023',
+      location: 'Rossio Square, Lisboa',
+      descriptionLink: '#description3',
+      matchesLink: '#matches3',
+      onRemove: (id) => console.log(`Remove item with id ${id}`),
+    }
+  ]);
+
   const [isLoading, setIsLoading] = useState(false); // Track loading state
   const [error, setError] = useState(null); // Track errors
 
@@ -52,17 +87,17 @@ const LostItemComponent = ({ itemid }) => { // Pass itemid as a prop
   }
 
   return (
-    <div className="lost-item-container" style={{display:'flex',flexDirection:'column', width:'100%'}} >
-      <LostItemHeader title={lostObject.title}/>
-      <div style={{display:'flex', alignItems:'start' , marginTop:'0px'}}>
-        <div style={{ flex: '30%' }}>
-          <LostItemPicture images={lostObject.objectImage ? [lostObject.objectImage] : []} // Handle single image gracefully
-                          nome={lostObject.title} />
+    <div className="lost-item-container" style={{ display: 'flex', flexDirection: 'column', width: '100%',}}>
+      <LostItemHeader title={lostObject.title} />
+      <div style={{ display: 'flex', alignItems: 'start', marginTop: '20px', gap: '40px' }}>
+        <div style={{ flex: '0 0 40%', padding:'0' }}>
+          <LostItemPicture images={lostObject.objectImage ? [lostObject.objectImage] : []} nome={lostObject.title} />
         </div>
-        <div style={{ flex: '70%',marginTop:'20px'}}>
+        <div style={{ flex: '1 1 55%', marginTop:'1%' }}>
           <LostItemDetails status={lostObject.status} description={lostObject.description} location={lostObject.location} />
         </div>
       </div>
+      <MatchFoundComponent matches={matches} />
     </div>
   );
 };
