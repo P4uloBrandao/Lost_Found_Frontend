@@ -1,0 +1,54 @@
+.lost-item-header{
+    display:flex;
+    width:100%;
+    height: auto;
+    flex-direction: column;
+    align-items: start;
+    margin-bottom:30px;
+}
+.name{
+    color: #0C0C20;
+    font-family: Roboto;
+    font-size: 40px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: normal;
+
+}
+.title-name{
+    margin-bottom: 10px;
+}
+
+.number{
+margin-left:5px ;
+color: #2BA269;
+font-family: Roboto;
+font-size: 24px;
+font-style: normal;
+font-weight: 700;
+line-height: normal;
+}
+
+.page-link a{
+color: #2BA269;
+font-family: Roboto;
+font-size: 18px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+text-decoration-line: underline;
+}
+.page-link span{
+    color: #2BA269;
+    font-family: Roboto;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+
+    margin-left: 7px;
+    }
+
+.link-nome{
+    margin-left: 10px;
+}
