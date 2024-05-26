@@ -7,6 +7,8 @@ import { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Swiper from 'swiper';
 import 'swiper/css';
+import {  GoogleLogin } from '@react-oauth/google';
+
 
 import InputF  from '../inputFieldComponent/InputField';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
@@ -14,25 +16,15 @@ import './style.css'
 import styled, { keyframes, css} from 'styled-components';
 import LockIcon from '@mui/icons-material/Lock';
 import LockIconOpen from '@mui/icons-material/LockOpenRounded';
-import LoginImage from '../../assets/background/loginImage.svg'; 
-import GoogleButton from '../GoogleButtonComponent/index';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import Grid from '@mui/material/Grid';
-import CalendarIcon from '@mui/icons-material/CalendarMonthRounded';
 import MailIcon from '@mui/icons-material/MailOutlineRounded';
 import PhoneIcon from '@mui/icons-material/PhoneAndroidRounded';
 import AddressIcon from '@mui/icons-material/HomeRounded';
-import HomeIcon from '@mui/icons-material/HomeRounded';
-import {PasswordStrength} from '../controllers/index'
-import {validateBirthDate, validateEmail, validatePasswordCorrespondence} from "../../utils/inputValidations";
-import FileInput from "../ImageInputComponent/FileInput";
-import CustomInputFiles from "../ImageInputComponent/FileInput";
-// import {DropdownInput} from "../dropdownInputComponent";
+import {PasswordStrength} from '../controllers/index';
 import DropdownInput from "../dropdownInputComponent";
-
+import PopAlert from "../PopAlertComponent"
 import {ArrowDropDownIcon} from "@mui/x-date-pickers";
 import '../../assets/colors/colors.css'
+import {isValidPhoneNumber, validateBirthDate, validateEmail} from "../../utils/inputValidations";
 
 const Card = styled.div `
 
@@ -63,16 +55,19 @@ const Wrapper = styled.div`
 
 const LoginBox = styled.div`
 
-  text-align: -webkit-center;
-  position: relative;
-  height:  100vh;
-  width: 100%; 
 
+  text-align: -webkit-center;
+  position: absolute;
+  height: 100vh;
   background-color: var(--white-color);
-  
+  width: 100%;
+  top: 30pt;
+  max-width: 93vh;
+  left: 0;
   backdrop-filter: blur(25px);
   box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
-  padding: 7.5em 5em;
+  padding: 6.5em 4.5em 5.5em 4.5em;
+
 `;
 const LoginHeader = styled.div`
 
@@ -202,8 +197,7 @@ const RegisterLink = styled.a`
   color: var(--primary-green-color);
   cursor:pointer;
   margin-right: 11px;
-  &:hover {
-    text-decoration: underline;
+ 
 `;
 
 const HrDivison = styled.div`
@@ -238,12 +232,11 @@ const MediaQueryLoginBox = styled.div`
 
 
 export default function SignUp() {
-  const [profileImage, setProfileImage] = React.useState(null);
   const [first_name, setFirstName] = React.useState('');
   const [last_name, setLastName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [gender, setGender] = React.useState('');
-  const [adddress, setAdddress] = React.useState('');
+  const [address, setAddress] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [checkPassword, setCheckPassword] = React.useState('');
   const [birth, setBirth] = React.useState('');
@@ -253,19 +246,32 @@ export default function SignUp() {
   const [phone, setPhone] = React.useState('');
   const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
   const [showPassword2, setShowPassword2] = useState(null); // New state for handling error messages
+  const [googleId, setGoogleId] = React.useState('');
+  const navigate = useNavigate();
+
   // Validations
-  const [firstNameError, setFirstNameError ] = useState(null);
-  const [lastNameError, setLastNameError ] = useState(null);
-  const [emailError, setEmailError ] = useState(null);
-  const [genderError, setGenderError ] = useState(null);
-  const [adddressError, setAdddressError ] = useState(null);
-  const [passwordError, setPasswordError ] = useState(null);
-  const [checkPasswordError, setCheckPasswordError ] = useState(null);
-  const [birthError, setBirthError ] = useState(null);
-  const [nicError, setNicError ] = useState(null);
-  const [nifError, setNifError ] = useState(null);
-  const [phoneError, setPhoneError ] = useState(null);
-  
+  const [firstNameError, setFirstNameError ] = useState(false);
+  const [lastNameError, setLastNameError ] = useState(false);
+  const [emailError, setEmailError ] = useState(false);
+  const [genderError, setGenderError ] = useState(false);
+  const [addressError, setAddressError ] = useState(false);
+  const [passwordError, setPasswordError ] = useState(false);
+  const [checkPasswordError, setCheckPasswordError ] = useState(false);
+  const [birthError, setBirthError ] = useState(false);
+  const [nicError, setNicError ] = useState(false);
+  const [nifError, setNifError ] = useState(false);
+  const [phoneError, setPhoneError ] = useState(false);
+
+  const validationSetter= [setFirstNameError, setLastNameError, setEmailError, setGenderError, setAddressError, setPasswordError, setCheckPasswordError, setBirthError, setNicError, setNifError, setPhoneError]
+
+  const [userGoogleValidation, setGoogleValidation ] = useState(true);
+  const [userCreated, setUserCreated ] = useState(false);
+// Usage example:  https://www.google.com/search?sca_esv=00efb85e6f8ba711&rlz=1C1FCXM_pt-PTPT998PT998&sxsrf=ADLYWIIu-yUr15MzaGDmcnkp3qHxBjc6yA:1716451841507&q=request+access+token+from+google&tbm=vid&source=lnms&prmd=vinbz&sa=X&ved=2ahUKEwjfz6WyqaOGAxWycfEDHV-CAsUQ0pQJegQIDRAB&biw=1536&bih=695&dpr=1.25#fpstate=ive&vld=cid:3fa747f1,vid:C0DUNy6RjNw,st:0
+
+const authorizationCode = 'AUTHORIZATION_CODE_FROM_GOOGLE';
+const CLIENT_ID = '535834422242-s5ag44thlgt8i0av3kqu057olvejo0l0.apps.googleusercontent.com';
+const clientSecret = 'YOUR_CLIENT_SECRET';
+const redirectUri = 'YOUR_REDIRECT_URI';
 
   const genderOptions= [
       {
@@ -280,6 +286,11 @@ export default function SignUp() {
       }
   ]
 
+    const clearErrors = () => {
+      for (let i = 0; i < validationSetter.length; i++) {
+        validationSetter[i](false);
+      }
+    }
 
   const toggleShowPassword = () => {
     setShowPassword((prevShowPassword) => {
@@ -304,9 +315,106 @@ export default function SignUp() {
       { title: "4" }
   ];
 
+  function validateStepOne() {
+      let isValid= true;
+      if (email==='' || !validateEmail(email) ) {
+          setEmailError(true);
+            isValid = false;
+      }
+
+        if (first_name === '') {
+            setFirstNameError(true);
+            isValid = false;
+        }
+
+        if (last_name === '') {
+            setLastNameError(true);
+            isValid = false;
+        }
+
+
+
+        return isValid;
+  }
+
+  function validateStepTwo() {
+      let isValid= true;
+      if (password==='') {
+          setPasswordError(true);
+            isValid = false;
+      }
+
+    if (checkPassword === '' || checkPassword !== password) {
+        setCheckPasswordError(true);
+        isValid = false;
+    }
+
+    return isValid;
+  }
+
+  function validateStepThird() {
+      let isValid= true;
+      if (birth==='' || !validateBirthDate(birth) ) {
+          setBirthError(true);
+            isValid = false;
+      }
+
+      if (gender==='') {
+          setGenderError(true);
+          isValid = false;
+      }
+
+      if (address==='') {
+          setAddressError(true);
+          isValid = false;
+      }
+
+        return isValid;
+  }
+
+  function validateStepFourth() {
+      let isValid= true;
+
+      if (phone==='' || !isValidPhoneNumber(phone) ) {
+          setPhoneError(true);
+          isValid = false;
+      }
+
+      if (nif==='' || nif.length!==9 ) {
+          setNifError(true);
+          isValid = false;
+      }
+
+      if (nic==='' || nic.length!==9 ) {
+          setNicError(true);
+          isValid = false;
+      }
+
+
+
+        return isValid;
+  }
+
   const nextStep = () => {
+      if (formStepsNum === 0) {
+            if (!validateStepOne()) {
+                return;
+            }
+      }
+
+      if (formStepsNum === 1) {
+            if (!validateStepTwo()) {
+                return;
+            }
+      }
+
+      if (formStepsNum === 2) {
+          if (!validateStepThird()) {
+              return;
+          }
+      }
+
       setFormStepsNum(prevStep => prevStep + 1);
-      console.log(formStepsNum)
   };
 
   const prevStep = () => {
@@ -319,48 +427,35 @@ export default function SignUp() {
 
 
   const handleSubmit = async (event) => {
-
-
       event.preventDefault();
 
-
-      //  Validations
-      setFirstNameError(first_name.length === 0 )
-      setLastNameError(last_name.length === 0)
-      setEmailError(email.length === 0 && !validateEmail(email))
-      setGenderError(gender.length === 0)
-      setAdddressError(adddress.length === 0)
-      setPasswordError(password.length === 0)
-      setCheckPasswordError(checkPassword.length === 0 && !validatePasswordCorrespondence(password, checkPassword))
-      setBirthError(!validateBirthDate(birth))
-      setNicError(nic.length === 0)
-      setNifError(nif.length === 0)
-      setPhoneError(phone.length === 0)
-
-      if (firstNameError || lastNameError || emailError || genderError || adddressError || passwordError || checkPasswordError || birthError || nicError || nifError || phoneError) {
+      clearErrors();
+      if (!validateStepFourth()) {
           return;
       }
-      if (profileImage === null){
-        setProfileImage('https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png')
-      }
+
       const data1 = new FormData();
       data1.append('first_name', first_name);
       data1.append('last_name', last_name);
       data1.append('email', email);
-      data1.append('adddress', adddress);
+      data1.append('adddress', address);
       data1.append('password', checkPassword);
       data1.append('birth', birth);
       data1.append('gender', gender);
       data1.append('nic', nic);
       data1.append('nif', nif);
       data1.append('phone', phone);
-      data1.append('profileImage', profileImage);
-      data1.append('role', 'Admin');
+      data1.append('role', 'User');
+      data1.append('googleId', googleId);
+      data1.append('status', 'active');
 
       try {
-          const response = await axios.post("http://35.219.162.80/api/users/signup",
+          const response = await axios.post("http://localhost:3000/api/users/signup",
           data1);
+          setUserCreated(true);
+          setTimeout(() => navigate('/login'), 2500); // Define setGoogleValid de volta para true após 2500ms
 
+          
         } catch (error) {
           console.error("Registration failed:", error);
 
@@ -372,11 +467,69 @@ export default function SignUp() {
           }
         }
   };
+
+
   const handleDropdownChange = (selectedOptionName) => {
-    console.log("Opção selecionada:", selectedOptionName);
     setGender(selectedOptionName)
     // Faça o que for necessário com o nome da opção selecionada
   };
+
+
+  
+  
+  const showUserInformation = async (response) => {
+    
+    // Check if the response contains the user's profile information
+    if (response) {
+        const credential = response.credential;
+       
+        if (credential) {
+          
+            try {
+                const tokenResponse = await axios.get(`http://localhost:3000/api/auth/token/${credential}`);
+                
+               
+                console.log(tokenResponse.data); // Assuming the token is returned in the response data
+                const tempEmail = tokenResponse.data.email
+                setGoogleId(tokenResponse.data.sub)
+                try {
+                  const userExistValidation = await axios.post("http://localhost:3000/api/users/getUser", { email: tempEmail, });
+                  if (userExistValidation)  {
+                    console.log("User exists");
+                    setGoogleValidation(false);
+                    
+                    setTimeout(() => setGoogleValidation(true), 2500); // Define setGoogleValid de volta para true após 2500ms
+                    
+                
+                  }
+                } catch (error) {
+                  
+                
+                  // Check the status in the response data
+                  if (error.response.data.error === "User not found") {
+                    setGoogleValidation(true);
+                    setFirstName(tokenResponse.data.given_name);
+                    setLastName(tokenResponse.data.family_name);
+                    setEmail(tokenResponse.data.email);
+                  }
+              
+                  console.error("Error getting user:", error);
+                  
+                }
+              } catch (error) {
+                console.error("Failed to get token:", error);
+
+                if (error.response && error.response.data) {
+                    setMessage(error.response.data.error); // Set the error message if present in the error response
+                } else {
+                    setMessage("An unexpected error occurred. Please try again.");
+                }
+            }
+        }
+    } else {
+        console.log('User profile information not available');
+    }
+}
     return (
         <Wrapper>
            
@@ -388,14 +541,22 @@ export default function SignUp() {
       </LoginHeader>
       <LoginBody>
         
-      <GoogleButton formStepsNum={formStepsNum}
-        placeholder={'Continue with Google'}  
-        id="googleButtonLogin"
-        
-        // onClick={(e) => setLoginGoogle(e.target.value)}
-        
-        name="googleButtonLogin"/>
-        <HrDivison ><hr /> <p> OR</p> <hr /></HrDivison>
+  <GoogleLogin
+      className="google-login-button"
+      clientId = {CLIENT_ID}
+      onSuccess={showUserInformation}
+      onFailure={(error) => {
+          console.log('Login Failed:', error);
+      }}
+  />
+{userGoogleValidation === false && (
+        <PopAlert message="User already exists, please use another email" />
+      )}  
+      {userCreated === true && (
+        <PopAlert message="User created successfully" />
+      )}
+      
+            <HrDivison ><hr /> <p> OR</p> <hr /></HrDivison>
             
         <Card className="card" >
         <Form  onSubmit={handleSubmit} >
@@ -412,7 +573,7 @@ export default function SignUp() {
                     {/* Campos do formulário para cada etapa */}
                     {step.title === "1" && (
                         <>
-                            <InputBox >
+                            <InputBox>
         <InputF 
         icon={<PersonOutlineRoundedIcon />} 
         type={'text'} 
@@ -437,7 +598,7 @@ export default function SignUp() {
         name="Last Name"
         value={last_name}
 
-        errorMessage={'Último inválido'}
+        errorMessage={'Último nome inválido'}
         errorValidation={lastNameError}
         />
         </InputBox>
@@ -525,7 +686,7 @@ export default function SignUp() {
                     onChange={handleDropdownChange}
                     onClick = {(e) => setGender(e.target.value)}
                     value={gender}
-                    errorValidation={adddressError}
+                    errorValidation={genderError}
                     errorMessage={'Gênero inválido'}
                     options={genderOptions}
                 ></DropdownInput>
@@ -537,9 +698,9 @@ export default function SignUp() {
               placeholder={'Enter your Address'}  
               id="address"
               required
-              onChange={(e) => setAdddress(e.target.value)}
-              value={adddress}
-              errorValidation={adddressError}
+              onChange={(e) => setAddress(e.target.value)}
+              value={address}
+              errorValidation={addressError}
               errorMessage={'Endereço inválido'}
               name="Address"/>
                 
@@ -570,6 +731,7 @@ export default function SignUp() {
         type={'number'} 
         placeholder={'Enter your NIF'}  
         id="nif"
+        maxlength="9"
         required
         onChange={(e) => setNif(e.target.value)}
         value={nif}
@@ -607,7 +769,7 @@ export default function SignUp() {
                 <button type="button" className="btn btn-next" onClick={nextStep}>Next</button>
             )}
             {index === formSteps.length - 1 && (
-                <input type="submit" value="Complete" className="btn btn-complete"/>
+                <input  type="submit" value="Complete" className="btn btn-complete"/>
             )}
         </div>
             ))}
@@ -627,3 +789,4 @@ export default function SignUp() {
             
     );
 }
+

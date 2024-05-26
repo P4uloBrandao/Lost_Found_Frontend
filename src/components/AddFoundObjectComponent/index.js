@@ -8,10 +8,14 @@ import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
 import RadioButton from '../RadioButtonComponent';
 import ProfileSettings from '../profileSettings/index'
+import DropdownInput from "../dropdownInputComponent/index";
+import Grid from '@mui/material/Grid';
+import { InputSubmit, Container,InputBox ,Title,Form, Wrapper,SubCategoryTitle,CategoryTitle } from '../../assets/StylePopularComponent/style';
+
 const StyledTextArea = styled.textarea`
     height: ${props => props.height}px;
     font-size: 16px;
-    background: #ECECEC;
+    background: var(--white-color);
     color: var(--black-color);
     padding: 12px 0px;
     padding-inline: 12px; /* Utilize padding-inline para compatibilidade com navegadores mais antigos */
@@ -23,104 +27,32 @@ const StyledTextArea = styled.textarea`
     word-wrap: break-word; /* Quebra de palavra automática */
     overflow-wrap: break-word; /* Quebra de palavra automática para navegadores mais antigos */
 `;
-const Container = styled.div`
-  width: 180vh;
- 
-  margin: 5em 0;
-  
-  border-radius: 20px 20px 20px 20px; 
-  opacity: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; 
-  justify-content: flex-start; 
-  box-sizing: border-box;
-  border: 1px solid #D3D3D3; 
-  background-color: white; 
-  padding: 40px; 
-`;
 
-const CategoryTitle = styled.h2`
-color: #3CB684;
-display :flex;
-font-family: 'Roboto', sans-serif;
-font-size: 24px;
-font-weight: 400;
-line-height: 27px;
-text-align: left;
 
-margin-top: 0px;
-`;
-
-const Title = styled.h2`
-  font-size: 1.5rem;
-  color: var(--black-color); 
-  opacity: 1;
-  margin-bottom: 40px; 
-`;
 const RadioBtn = styled.span`
   position: relative;
   display:flex; 
 `;
 
 
-const CategorySection = styled.div`
-  display: grid;
-  grid-template-columns: repeat(6, 1fr); 
-  grid-gap: 10px; 
-  justify-content: center; 
-  margin-bottom: 20px;
-`;
 
 const CategoryButton = styled.button`
   width: 174px;
   height: 66px;
   padding: 16px 24px;
   border-radius: 33px;
-  border: 1px solid #3CB684;
-  background-color: ${props => props.isSelected ? '#3CB684' : 'white'};
-  color: ${props => props.isSelected ? 'white' : 'black'};
+  border: 1px solid var(--primary-green-color);
+  background-color: ${props => props.isSelected ? 'var(--primary-green-color)' : 'var(--white-color)'};
+  color: ${props => props.isSelected ? 'var(--white-color)' : 'var(--black-color)'};
   cursor: pointer;
   &:hover {
-    background-color: #3CB684;
-    color: white;
+    background-color: var(--primary-green-color);
+    color: var(--white-color);
   }
   font-size: 1rem;
   opacity: 1;
 `;
 
-const InputBox = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  margin: 20px 0;
-  width: -webkit-fill-available;
-`;
-const InputSubmit = styled.button`
-
-width: 12.93306rem;
-    height: 3.25rem;
-    background: var(--primary-green-color);
-    box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.11);
-    transition: background-color 0.218s, border-color 0.218s, box-shadow 0.218s;
-    text-align: center;
-    font-family: Roboto;
-    font-size: 1.2rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 135.5%;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    color: var(--white-color);
-    transition: 0.3s;
-  &:hover {
-    background: var(--white-color);
-    border: solid 2px var(--primary-green-color);
-    color:var(--primary-green-color);
-    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.30), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
-  }
-`;
 const ResetButton = styled.a`
   font-weight: 500;
   text-decoration: none;
@@ -139,7 +71,7 @@ export default function AddFoundObject  ()  {
   const [endDate, setEndDate]= React.useState('01/01/2001');
   //VARIVEIS DE TESTE
   const [title, setTitle] = React.useState('');  //FALTA BD
-  const [category, setSelectedCategory] = React.useState('');
+  const [category, setSelectedCategory] = React.useState(null);
   const [location, setObjLoc] = React.useState('');
   const [description, setObjDesc] = React.useState('');
   const [price, setObjPrice] = React.useState(0);
@@ -153,22 +85,43 @@ export default function AddFoundObject  ()  {
   const [mapCenter, setMapCenter] = useState({ lat: 38.72, lng: -9.14 }); // Initial center (Lisbon)
   const libraries = ['places']; // Include places library for location search
   const [activeButton, setActiveButton] = useState(null);
-  const [selectedValue,setSelectedValue ] = useState("yes");
+  const [selectedValue,setSelectedValue ] = useState("no");
+  const [subCategories, setSubCategories] = React.useState('');
+  const [subCategory, setSelectedSubCategory] = React.useState('');
+  const [loading, setLoading] = useState(true);
 
+  function fetchSubCategories() {
+        try {
+       
+          const response =  axios.get(`http://localhost:3000/api/category/subCat/${category}`);
+          setSubCategories(response.data);
+          console.error(response.data);
+          setLoading(false)
+        } catch (error) {
+          console.error('Failed to fetch categories', error);
+          // Lide com erros conforme necessário
+        }
+        
+      };
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://35.219.162.80/api/category');
+        const response = await axios.get('http://localhost:3000/api/category');
         setCategories(response.data);
+        setLoading(false)
 
+        console.error(response.data);
       } catch (error) {
         console.error('Failed to fetch categories', error);
         // Lide com erros conforme necessário
       }
     };
-
-    fetchCategories();
+    
+     fetchCategories();
+    setLoading(false)
   }, []);
+
+ 
  const onImageUpload = (event) => {
     setObjImage("https://www.totalprotex.pt/media/catalog/product/cache/default/image/500x500/9df78eab33525d08d6e5fb8d27136e95/s/t/steelite-taskforce-boot-s3-hro-0_3.jpg")
 }
@@ -177,7 +130,7 @@ export default function AddFoundObject  ()  {
     event.preventDefault();
     try {
       
-        const response = await axios.post("http://35.219.162.80/api/found-objects",
+        const response = await axios.post("http://localhost:3000/api/found-objects",
         {userWhoFound,
           title,
           category,
@@ -205,22 +158,16 @@ export default function AddFoundObject  ()  {
   };
   
   const handleUserValidation = async (event) => {
-    
-    event.preventDefault();
+   event.preventDefault();
     try {
-      
-        const response = await axios.post("http://35.219.162.80/api/users/getUser/",
+         const response = await axios.post("http://localhost:3000/api/users/getUser/",
         {email,
-          nic,
-          
-        });
-
+          nic,});
         setUserWhoFound(response._id)
         
       } catch (error) {
         console.error("User Validation failed:", error);
-         
-         
+                
         if (error.response && error.response.data) {
           setMessage(error.response.data.error); // Set the error message if present in the error response
         } else {
@@ -264,6 +211,10 @@ export default function AddFoundObject  ()  {
   
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
+    fetchSubCategories(category)
+  };
+  const handleSubCategoryClick = (subCategory) => {
+    setSelectedSubCategory(subCategory);
   };
   const options = [
     { id: "yesOpt", value: "yes", text: "Yes", defaultSelection: true },
@@ -276,12 +227,23 @@ export default function AddFoundObject  ()  {
   console.log(selectedValue)
 
  }
+ const handleDropdownChange = (selectedOptionName) => {
+  setSelectedCategory(selectedOptionName)
+  // Faça o que for necessário com o nome da opção selecionada
+};
+const handleDropdownChangeSubCategory = (selectedOptionName) => {
+  setSelectedSubCategory(selectedOptionName)
+  // Faça o que for necessário com o nome da opção selecionada
+};
+if (loading) {
+  return <div>Carregando...</div>; // Ou qualquer indicador de carregamento que você preferir
+}
   return ( <>
   <Container>
   <Title>Finder’s Information</Title>
       <CategoryTitle>Does the finder have an <span>BIDFIND.er</span> account? 
       <RadioBtn >
-      <RadioButton
+       <RadioButton
   options={options}
   onChange={(selectedValue) => test(selectedValue)}
   value="option1"
@@ -345,6 +307,8 @@ export default function AddFoundObject  ()  {
 
  
         </InputBox>
+        
+ 
         <Title>Write the price of the lost object.</Title>
       <InputBox>
         <InputF
@@ -360,22 +324,73 @@ export default function AddFoundObject  ()  {
 
  
         </InputBox>
+         <Grid container spacing={2}>
+       <Grid item xs={12} sm={12}> 
       <Title>In what category does it fit in?</Title>
-      <CategoryTitle>Choose the category of the found object.</CategoryTitle>
-      <CategorySection>
-      {categoriesArray.map(([key, value], index) => (
-        <CategoryButton
-          key={index}
-          isSelected={category === value._id}
-          onClick={() => handleCategoryClick(value._id)}
-          active={activeButton === value._id}
-        >
-          {value.name}
-        </CategoryButton>
-      ))}
-       
-      </CategorySection>
+      </Grid>
+      <Grid item xs={12} sm={4}> 
+      <SubCategoryTitle>Choose the category of the found object.</SubCategoryTitle>
       
+     
+       <InputBox>
+              <DropdownInput 
+                
+                placeholder={'Categories'}  
+                id="category"
+                required
+                onClick = {(e) => handleCategoryClick(e.target.value)}
+                value={category}
+                onChange={handleDropdownChange}
+                name="Categories"
+                options={categories}
+                
+              />
+            </InputBox>   
+      
+      </Grid>
+      
+      <Grid item xs={12} sm={4}>
+        
+  {category !== null && ( <>
+        <SubCategoryTitle>Choose the subcategory of the found object.</SubCategoryTitle>
+        <InputBox>
+          <DropdownInput 
+            
+            placeholder={'Subcategories'}  
+            id="subcategory"
+            required
+            onClick = {(e) => handleSubCategoryClick(e.target.value)}
+            value={subCategory}
+            onChange={handleDropdownChangeSubCategory}
+            name="Sub categories"
+            options={subCategories}
+            
+          />
+        </InputBox> </>
+  )}
+      </Grid>
+      <Grid item xs={12} sm={4}> 
+      {/* {subCategory !== null && ( <>
+      <SubCategoryTitle>Write something to describe.</SubCategoryTitle>
+      
+      
+       <InputBox>
+              <InputF
+                
+                placeholder={'Categories'}  
+                id="category"
+                required
+                onClick = {(e) => handleCategoryClick(e.target.value)}
+                value={category}
+                onChange={handleDropdownChange}
+                name="Categories"
+               
+                
+              />
+            </InputBox> </>
+      )} */}
+      </Grid> 
+      </Grid>
     </Container>
       <Container>
       <Title>How does it look?</Title>

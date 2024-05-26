@@ -1,0 +1,17 @@
+.pop-alert {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--primary-green-color);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    transition: top 0.3s ease-in-out;
+}
+
+.pop-alert.visible {
+    top: 0;
+    /* You can remove this if not using position: fixed */
+}

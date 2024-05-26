@@ -1,7 +1,7 @@
 import { useAuth, AuthProvider } from '../../AuthContext';
 import {Navigate} from 'react-router-dom'
 
-const PrivateRoute = ({children}) =>{
+const PoliceRoute = ({children}) =>{
     const { 
         setAuthUser,
         authUser,
@@ -9,12 +9,14 @@ const PrivateRoute = ({children}) =>{
         isLoggedIn,
         setIsLoggedIn,logout} = useAuth();
         
-    if (!isLoggedIn){
+    if (isLoggedIn && userRole === "Police"){
        
-        return <Navigate to={'/login'}/>
+        return children
+        
     }
-    return(
-        children
-    )
+    
+        return <Navigate to={'/login'}/>
+        
+    
 }
-export default PrivateRoute
+export default PoliceRoute

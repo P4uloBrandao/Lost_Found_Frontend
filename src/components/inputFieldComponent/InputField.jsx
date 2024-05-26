@@ -45,6 +45,8 @@ const InputField = styled.input`
     border-radius: 30px;
     padding: 0 10px;
     transition: 0.2s;
+
+    
   }
   ${({ type }) =>
     type === 'date' &&
@@ -78,7 +80,9 @@ const ErrorMessage = styled.p`
   font-weight: 500;
   margin: 0;
   padding: 0;
+  padding-right: 15px;
   margin-top: 5px;
+  text-align: end;
 `;
 
 

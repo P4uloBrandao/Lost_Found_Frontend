@@ -8,11 +8,10 @@ import "./LoginPage.css"
 import  { useEffect, useState } from "react";
 import AddFoundObjectComponent  from '../components/AddFoundObjectComponent/index' ; 
 import CategoryComponent  from '../components/CategoryComponent/index' ; 
-import StationCreateComponent  from '../components/StationCreateComponent/index' ; 
+import SationComponent  from '../components/StationComponent/index' ; 
 import PoliceComponent  from '../components/PoliceComponent/index' ; 
 import AdminMenu from '../components/profileMenu/index'
-import Statistics from '../components/StatisticsComponent/index'
-
+import ProfileSettings from '../components/profileSettings';
 const PrimaryContainer = styled.div`
   margin: 9em 7em;
   text-align: -webkit-center;
@@ -34,22 +33,19 @@ const ChangeContainer = styled.div`
   padding: 40px;
 `;
 export default function AdminPage() {
-  const menuOptions = ['Estatistics','Found Object', 'My Categories', 'Police station','Police Officer'];
+  const menuOptions = ['Found Object', 'Police station','Profile'];
 
   const [selectedOption, setSelectedOption] = useState(menuOptions[0]);
   const renderComponent = () => {
     switch (selectedOption) {
       
-      case 'Found Object':
-        return < AddFoundObjectComponent />;
-      case 'My Categories':
-        return <  CategoryComponent/>
+     
       case 'Police station':
-          return < StationCreateComponent/> ;
-      case 'Police Officer':
-          return <PoliceComponent />;
+          return <SationComponent/> ;
+      case 'Profile':
+          return <ProfileSettings />;
       default:
-        return <Statistics />
+        return < AddFoundObjectComponent />;
       
     }
     

@@ -26,86 +26,13 @@ import MailIcon from '@mui/icons-material/MailOutlineRounded';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import '../../assets/colors/colors.css'
-import DropdownInput from "../dropdownInputComponent";
+import SearchInput from "../SearchInputFieldComponent";
 import AddressIcon from '@mui/icons-material/HomeRounded';
+import { InputSubmit, Container,InputBox ,Title,Form, Wrapper } from '../../assets/StylePopularComponent/style';
 
-const Form = styled.form`
-  display: grid;
-  gap: 20px;
-`;
 
-const Wrapper = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: max-content;  
-`;
 
-const Container = styled.div`
-  width: 180vh;
- 
-  margin: 5em 0;
-  
-  border-radius: 20px 20px 20px 20px; 
-  opacity: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; 
-  justify-content: flex-start; 
-  box-sizing: border-box;
-  border: 1px solid #D3D3D3; 
-  background-color: white; 
-  padding: 40px; 
-`;
 
-const InputSubmit = styled.button`
-
-width: 100%;
-  height: 40px;
-  background: #c6c3c3;
-  font-size: 16px;
-  font-weight: 500;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: 0.3s;
-
-  &:hover {
-    background: var(--second-color);
-  }
-`;
-const Title = styled.h2`
-  font-size: 1.5rem;
-  color: var(--black-color); 
-  opacity: 1;
-  margin-bottom: 40px; 
-`;
-const CategoryTitle = styled.h2`
-color: #3CB684;
-display :flex;
-font-family: 'Roboto', sans-serif;
-font-size: 24px;
-font-weight: 400;
-line-height: 27px;
-text-align: left;
-
-margin-top: 0px;
-`;
-const CategorySection = styled.div`
-  display: grid;
-  grid-template-columns: repeat(6, 1fr); 
-  grid-gap: 10px; 
-  justify-content: center; 
-  margin-bottom: 20px;
-`;
-const InputBox = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  margin: 20px 0;
-  width: -webkit-fill-available;
-`;
 const CategoryButton = styled.button`
   width: 174px;
   height: 66px;
@@ -117,7 +44,7 @@ const CategoryButton = styled.button`
   cursor: pointer;
   &:hover {
     background-color: #3CB684;
-    color: white;
+    color: white; 
   }
   font-size: 1rem;
   opacity: 1;
@@ -199,6 +126,7 @@ if (error) {
     return <div>Erro ao carregar as estações de polícia.</div>;
 }
 function  getStationID(name,stations){
+  console.log("aqui:", name)
     const foundItem = stations.find(item => item.name === name);
     return foundItem ? foundItem._id : null;
 
@@ -213,7 +141,7 @@ function  getStationID(name,stations){
               "phone":phone,
               "email":email,
               
-              "station" : getStationID(station,stations),
+              "station" : station,
               "password": password,
               "police_id" : policeId,
               "role": "Police",
@@ -229,7 +157,7 @@ function  getStationID(name,stations){
                 setErrorMessage("An unexpected error occurred. Please try again.");
             }
         }
-        //  window.location.reload();
+          window.location.reload();
     }
     // const handleDeleteSubmit = async (event) => {
     //     event.preventDefault();
@@ -330,13 +258,12 @@ function  getStationID(name,stations){
       </Grid>
     <Grid item xs={12} sm={6}>
       <InputBox>
-        <DropdownInput 
+        <SearchInput 
           
           placeholder={'Choose your station'}  
           id="station"
           required
           onClick = {(e) => setNameOfStation(e.target.value)}
-          value={station}
           onChange={handleDropdownChange}
           name="Station"
           options={stations}

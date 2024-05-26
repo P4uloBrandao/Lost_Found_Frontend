@@ -1,12 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat&display=swap");
 @import url('../../assets/colors/colors.css');
-body {
-    font-family: "Roboto", sans-serif;
-    background-color: var(--white-color);
-    margin: 0;
-    transition: background 0.2s linear;
-}
-
 body.dark {
     background-color: var(--black-color);
 }

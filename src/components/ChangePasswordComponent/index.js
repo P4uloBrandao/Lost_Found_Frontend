@@ -27,17 +27,33 @@ import "../../assets/colors/colors.css"
 
 const defaultTheme = createTheme();
 
-const InputBox = styled.div`
+const Wrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 
+  @media (max-width: 600px) {
+    display:grid 
+  }
+`;
+
+const PasswordStrengthWrapper = styled.div`
+  margin-top: 20px; 
+`;
+
+const InputBox = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
   margin: 20px 0;
-  
+  width: 100%;
 `;
+
 const InputSubmit = styled.button`
 
-width: 100%;
+  width: 100%;
   height: 40px;
   background: #c6c3c3;
   font-size: 16px;
@@ -48,12 +64,12 @@ width: 100%;
   transition: 0.3s;
 
   &:hover {
-    background: var(--second-color);
+    background: var(--white-color);
   }
 `;
 
+
 const Title = styled.h2`
-  font-size: 1.5rem;
   color: var(--black-color);
   opacity: 1;
   text-align: left;
@@ -64,12 +80,14 @@ const CategoryTitle = styled.h2`
   color: #3cb684;
   display: flex;
   font-family: 'Roboto', sans-serif;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 400;
   line-height: 27px;
   text-align: left !important;
   margin-top: 0px;
 `;
+
+
 export default function ChangePassword() {
     const [email, setEmail] = React.useState('');
     const [password, setPassword] = React.useState('');
@@ -120,31 +138,36 @@ export default function ChangePassword() {
     };
 
     return (
-            <>
-              <Title>Change Password</Title>
-              <CategoryTitle>
-                Please enter your old and new password and press “Save Changes” to make sure nothing is lost!
-              </CategoryTitle>
-            <Grid container >
-                
-                <Grid item xs={6}>
-            <InputBox>
-                <InputF
-                    icon={showPassword ? <LockIconOpen /> : <LockIcon />}
-
-                    placeholder={'Password'}
-                    id="Password"
-                    required
-                    onChange={(e) => setPassword(e.target.value)}
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
-                    name="Password"
-                    setShowPassword={toggleShowPassword}
-                />
-            </InputBox>
-           <PasswordStrength text={password} />
+      
+     
+        <> 
+        <Title>Change Password</Title>
+        <CategoryTitle>
+          Please enter your old and new password and press “Save Changes” to make sure nothing is lost!
+        </CategoryTitle>
+       
+        <Wrapper> 
+            <Grid container spacing={2}>
+                <Grid item xs={12} sm={6}>
+                  <InputBox>
+                      <InputF
+                          icon={showPassword ? <LockIconOpen /> : <LockIcon />}
+                          placeholder={'Password'}
+                          id="Password"
+                          required
+                          onChange={(e) => setPassword(e.target.value)}
+                          type={showPassword ? 'text' : 'password'}
+                          value={password}
+                          name="Password"
+                          setShowPassword={toggleShowPassword}
+                      />
+                  <PasswordStrengthWrapper>
+                    <PasswordStrength text={password} />
+                  </PasswordStrengthWrapper>
+                  </InputBox>
+                  
            </Grid>  
-           <Grid item xs={6}>
+           <Grid item xs={12} sm={6}>
              <InputBox>
                 <InputF
                     icon={showPassword ? <LockIconOpen /> : <LockIcon />}
@@ -159,15 +182,16 @@ export default function ChangePassword() {
                     setShowPassword={toggleShowPassword}
                 />
             </InputBox>
-               </Grid>         
-                        
-               <Grid item xs={12}>
-      <InputBox>
-        <InputSubmit type="submit" onClick={handleSubmit} className="input-submit" value="Register" label="Register">Save Changes</InputSubmit>
-      </InputBox>
-    </Grid>
-            </Grid>
-            </>
+              </Grid>              
+              <Grid item xs={12} >
+                <InputBox>
+                  <InputSubmit type="submit" onClick={handleSubmit} className="input-submit" value="Register" label="Register">Save Changes</InputSubmit>
+                </InputBox>
+              </Grid>
+      </Grid>  
+      </Wrapper>  
+     </>
+          
         
     );
 }
