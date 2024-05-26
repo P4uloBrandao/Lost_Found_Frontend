@@ -4,6 +4,8 @@ import Grid from '@mui/material/Grid';
 import FilterButtons from "../components/SearchFilters/index";
 import Card from "../components/CardComponent/index";
 import axios from "axios";
+import WelcomeHeaderComponent from '../components/headerWithNameComponent/welcomeHeader.jsx';
+import Menu from '../components/profileMenu/index.jsx'; 
 
 const Container = styled.div`
     top: 3em;
@@ -19,7 +21,8 @@ export default function LostObjectCatalogPage() {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-  
+        console.log(`http://35.219.162.80/api/lost-objects/user/${token}`)
+
         // Buscar os dados dos objetos perdidos
         const objectsResponse = await axios.get(`http://35.219.162.80/api/lost-objects/user/${token}`);
         const objectsData = objectsResponse.data;
@@ -31,6 +34,7 @@ export default function LostObjectCatalogPage() {
         const updatedObjects = await Promise.all(objectsData.map(async (object) => {
           const catId = object.category;
           const categoryResponse = await axios.get(`http://35.219.162.80/api/category/${catId}`);
+     
           const categoryName = categoryResponse.data.name;
   
           // Retornar um novo objeto com o nome da categoria atualizado
@@ -56,14 +60,20 @@ export default function LostObjectCatalogPage() {
     setSelectedFilter(filter);
     // Add code to apply the selected filter
   };
-
+  const option =['My Account','Payment Details','Privacy Settings','My Auctions','My Lost Objects'] 
   return (
-    <Container>
-      <h1>Lost Object Catalogue</h1>
-      <FilterButtons  filters={filters} handleFilterClick={handleFilterClick} />
-      <Grid sx={{ textAlign: '-webkit-center',placeContent: 'center' }} container spacing={5}>
-        {objects.map((object, index) => (
-          
+  
+
+    <div className="lost-item-container" style={{ display: 'flex', flexDirection: 'column', width: '100%',}}>
+      <WelcomeHeaderComponent name={'Carlos'} description={'Did you know that over 30 milion wallets are lost every year?'}/>
+      <Menu options={option} selected={'My Lost Objects'} />
+      <div>
+            <span>My Lost Objects</span>
+            <br />
+            <span>Here you can view all your lost objects. Don't lose hope!</span>
+      </div>
+      <div>
+      {objects.map((object, index) => (
           <Grid spacing={2} sx={{justifyContent: 'center'        
           }} item  xs={10} md={10} key={index}>
             <Card  spacing={2}
@@ -81,8 +91,9 @@ export default function LostObjectCatalogPage() {
             />
           </Grid>
         ))}
-      </Grid>
-
-    </Container>
+      </div>
+     
+  </div>
+   
   );
 }
