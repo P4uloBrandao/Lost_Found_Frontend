@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
+import WelcomeHeaderComponent from '../components/headerWithNameComponent/welcomeHeader.jsx';
+import Menu from '../components/profileMenu/index.jsx'; 
 import Card from "../components/CardComponent/index";
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
-
-
- 
-
-
+import LostItemComponent from '../components/matchItemsComponents/LostItemComponent';
 const Container = styled.div`
-    top: 3em;
-    position: relative;
+  top: 3em;
+  position: relative;
 `;
 
 export default function LostObjectCatalogPage() {
-  const [selectedFilter, setSelectedFilter] = useState(null);
-  const [objects, setObjects] = useState([]);
+
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
+  const param1 = searchParams.get('param1'); 
+  const option =['My Account','Payment Details','Privacy Settings','My Auctions','My Lost Objects']
   const param1 = searchParams.get('param1');
   const param2 = searchParams.get('param2');
 
@@ -64,31 +63,15 @@ export default function LostObjectCatalogPage() {
     setSelectedFilter(filter);
     // Add code to apply the selected filter
   };
-  
-  return (
-    <Container>
-      <h1>Similar Object: {param2}</h1>
-       <Grid sx={{ textAlign: '-webkit-center',placeContent: 'center' }} container spacing={5}>
-        {objects.map((object, index) => (
-          
-          <Grid spacing={2} sx={{justifyContent: 'center'        
-          }} item  xs={10} md={10} key={index}>
-            <Card  spacing={2}
-              name={object.title}
-              description={object.description}
-              location={object.location}
-              category={object.category}
-              id={object._id}
-              date ={object.date}
-              photo ={object.objectImage}
-              status={object.status}
-              matchButton = {false}
-              policeOfficer={object.policeOfficerThatReceived}
-            />
-          </Grid>
-        ))}
-      </Grid>
 
-    </Container>
+  return (
+    <div>
+      <WelcomeHeaderComponent name={'Carlos'} description={'Did you know that over 30 milion wallets are lost every year?'}/>
+      <Menu options={option} selected={'My Lost Objects'} />
+      <LostItemComponent/>
+    </div>
+   
+
+
   );
 }

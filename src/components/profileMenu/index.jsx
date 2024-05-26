@@ -1,5 +1,4 @@
-// Menu.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const MenuContainer = styled.div`
@@ -10,6 +9,7 @@ const MenuContainer = styled.div`
   overflow: hidden;
   position: relative;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Adding shadow */
+  width: 100%; /* Adjusted width */
   height: 6vh;
 `;
 
@@ -34,18 +34,16 @@ const SelectedBar = styled.div`
   transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
 `;
 
-const Menu = ({ options, selectedOption, setSelectedOption , style }) => {
-
-  setSelectedOption(selectedOption);
+const Menu = ({ options, selected}) => {
+  const [selectedOption, setSelectedOption] = useState(selected);
 
   const handleClick = (option) => {
-    
-    setSelectedOption(option); 
-
+    setSelectedOption(option);
   };
 
   return (
-      <MenuContainer style={style}>
+    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom:'50px'}}>
+      <MenuContainer>
         {options.map((option) => (
           <MenuItem
             key={option}
@@ -63,6 +61,7 @@ const Menu = ({ options, selectedOption, setSelectedOption , style }) => {
           />
         )}
       </MenuContainer>
+    </div>
   );
 };
 

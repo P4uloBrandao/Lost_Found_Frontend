@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
 import Card from "../components/CardComponent/index";
 import axios from "axios";
+import WelcomeHeaderComponent from '../components/headerWithNameComponent/welcomeHeader.jsx';
+import Menu from '../components/profileMenu/index.jsx'; 
 
 const Container = styled.div`
     top: 3em;
@@ -17,7 +19,7 @@ export default function LostObjectCatalogPage() {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-  
+       
         // Buscar os dados dos objetos perdidos
         const objectsResponse = await axios.get(`http://localhost:3000/api/lost-objects/user/${token}`);
         const objectsData = objectsResponse.data;
@@ -54,13 +56,19 @@ export default function LostObjectCatalogPage() {
     setSelectedFilter(filter);
     // Add code to apply the selected filter
   };
-
+  const option =['My Account','Payment Details','Privacy Settings','My Auctions','My Lost Objects'] 
   return (
-    <Container>
-      <h1>Lost Object Catalogue</h1>
-      <Grid sx={{ textAlign: '-webkit-center',placeContent: 'center' }} container spacing={5}>
-        {objects.map((object, index) => (
-          
+    <div className="lost-item-container" style={{ display: 'flex', flexDirection: 'column', width: '100%',}}>
+      <WelcomeHeaderComponent name={'Carlos'} description={'Did you know that over 30 milion wallets are lost every year?'}/>
+      <Menu options={option} selected={'My Lost Objects'} />
+      <div>
+            <span>My Lost Objects</span>
+            <br />
+            <span>Here you can view all your lost objects. Don't lose hope!</span>
+      </div>
+      <div>
+      {objects.map((object, index) => (
+
           <Grid spacing={2} sx={{justifyContent: 'center'        
           }} item  xs={10} md={10} key={index}>
             <Card  spacing={2}
@@ -78,8 +86,9 @@ export default function LostObjectCatalogPage() {
             />
           </Grid>
         ))}
-      </Grid>
-
-    </Container>
+      </div>
+     
+  </div>
+   
   );
 }

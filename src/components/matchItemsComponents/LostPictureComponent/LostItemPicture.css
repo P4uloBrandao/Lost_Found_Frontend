@@ -1,0 +1,128 @@
+.lostitem-picture-container {
+  position: relative;
+  width: 600px;
+  height: 760px;
+  flex-shrink: 0;
+  border-radius: 20px;
+  background: #FFF;
+  box-shadow: 4px 4px 27.1px 0px rgba(0, 0, 0, 0.25);
+  margin-right: 30px;
+  }
+
+  .lostitem-picture-selected  {
+    width:350;
+    height: 400.04px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    margin:20px 20px 50px 20px;
+    border-radius: 20px;
+    background: #ECECEC;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    position: relative;
+    top: 3%;
+
+    
+  }
+
+  .lostitem-picture-selected img{
+
+    display: flex;
+    width:170px;
+    height: 100px;
+    max-width: 100%; /* Adjust as needed */
+    height: auto;
+  }
+  
+  
+  .lostitem-picture-carousel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    left:35px;
+    right:35px;
+    bottom:70px;
+    
+  }
+  
+  .lostitem-picture-item {
+    width: 167.871px;
+    height: 178.972px;
+    flex-shrink: 0;
+    border-radius: 20px;
+    background: #ECECEC;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .lostitem-picture-item img {
+    width:110px;
+    height: 110px;
+   
+  }
+   
+  .lostItem-name{
+   width: auto;
+   height: 30.15px;
+   flex-shrink: 0;
+   color: #ECECEC;
+   border-radius: 20px;
+   border: 2px red;
+    background: #000;
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    top: 7%; /* Align the top of the name with the container */
+    left: 3%; 
+    z-index: 3;
+    padding: 2px 5px;
+  }
+
+  .lostItem-icon{
+    width: auto;
+    height: 30.15px;
+    flex-shrink: 0;;
+     position: absolute;
+     top: 7%; /* Align the top of the name with the container */
+     right: 8%; 
+     z-index: 3;
+     padding: 2px 5px;
+ 
+   }
+ 
+   .lostItem-icon button {
+    border: none; /* Remove button border */
+    background-color: transparent; /* Optional: remove default background */
+    padding: 0; /* Optional: remove default padding */
+  }
+  .lost-item-description{
+    display: flex;
+    align-items: start;
+    padding: 20px 20px;
+  }
+  
+  .description-title{
+    color: var(--Heading-H3, #0C0C20);
+    font-family: Roboto;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    flex-shrink: 0;
+    height:20%;
+
+  }
+  .description-value{
+    color: #0C0C20;
+    font-family: Roboto;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 200px;
+    line-height: 135.5%;
+    height:70%; /* 24.39px */
+  }
