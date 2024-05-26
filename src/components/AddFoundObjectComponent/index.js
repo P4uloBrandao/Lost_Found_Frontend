@@ -11,6 +11,9 @@ import ProfileSettings from '../profileSettings/index'
 import DropdownInput from "../dropdownInputComponent/index";
 import Grid from '@mui/material/Grid';
 import { InputSubmit, Container,InputBox ,Title,Form, Wrapper,SubCategoryTitle,CategoryTitle } from '../../assets/StylePopularComponent/style';
+import Loader from '../LoadingComponent/index';
+import  SearchInput  from '../../components/SearchInputFieldComponent/index';
+import { useAuth } from '../AuthContext';
 
 const StyledTextArea = styled.textarea`
     height: ${props => props.height}px;
@@ -67,7 +70,7 @@ export default function AddFoundObject  ()  {
   
   //VARIVEIS DE TESTE
   const [userWhoFound, setUserWhoFound] = React.useState(null);
-  const [policeOfficerThatReceived, setPolice] = React.useState('65fb1e5829c52b172fe02f44');
+  const [policeOfficerThatReceived, setPolice] = React.useState('');
   const [endDate, setEndDate]= React.useState('01/01/2001');
   //VARIVEIS DE TESTE
   const [title, setTitle] = React.useState('');  //FALTA BD
@@ -89,20 +92,31 @@ export default function AddFoundObject  ()  {
   const [subCategories, setSubCategories] = React.useState('');
   const [subCategory, setSelectedSubCategory] = React.useState('');
   const [loading, setLoading] = useState(true);
+  const [fullDataCategories, setFullDataCategories] = useState([]);
+  const [objectSubCategories, setObjectSubCategories] = useState([]);
 
-  function fetchSubCategories() {
-        try {
-       
-          const response =  axios.get(`http://localhost:3000/api/category/subCat/${category}`);
-          setSubCategories(response.data);
-          console.error(response.data);
-          setLoading(false)
-        } catch (error) {
-          console.error('Failed to fetch categories', error);
-          // Lide com erros conforme necessário
-        }
-        
-      };
+  const {  authUser } = useAuth();
+
+  const fetchSubCategories = async (data) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/api/category/subCat/${getCategoryNameFromId(data)}`);
+      setFullDataCategories(response.data);
+     
+      setSubCategories(extractSubcategories (response.data));
+      setLoading(false); // Definir o estado de carregamento como falso quando o fetch estiver concluído
+    } catch (error) {
+      console.error('Failed to fetch categories', error);
+      // Lide com erros conforme necessário
+    }
+  }
+  // Função para buscar subcategorias do json que vem da api
+  function extractSubcategories(categories) {
+    return categories.map(category => ({
+        _id: category.subcategory._id,
+        name: category.subcategory.name
+    }));
+  }
+  
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -131,16 +145,16 @@ export default function AddFoundObject  ()  {
     try {
       
         const response = await axios.post("http://localhost:3000/api/found-objects",
-        {userWhoFound,
-          title,
-          category,
-          endDate,
-          description,
-          location,
-          price,
-          status,
-          objectImage,
-          policeOfficerThatReceived,
+        {"userWhoFound": userWhoFound,
+          "title": title,
+          "category": category,
+          "endDate": endDate,
+          "description": description,
+          "location":location,
+          " price": price,
+          "status": status,
+          "objectImage": objectImage,
+          "policeOfficerThatReceived":authUser._id,
           //FALTA OBJ_NAME OU TITLE & PHOTOS
         });
         
@@ -163,6 +177,7 @@ export default function AddFoundObject  ()  {
          const response = await axios.post("http://localhost:3000/api/users/getUser/",
         {email,
           nic,});
+          console.log(response._id)
         setUserWhoFound(response._id)
         
       } catch (error) {
@@ -206,12 +221,13 @@ export default function AddFoundObject  ()  {
       }
     };
 
-  if (loadError) return <div className="contain">Error loading maps</div>;
-  if (!isLoaded) return <div className="contain">Loading maps</div>;
-  
-  const handleCategoryClick = (category) => {
+ 
+  const handleDropdownChangeCategory = (category) => {
+    console.log(category)
     setSelectedCategory(category);
+    setLoading(true);
     fetchSubCategories(category)
+
   };
   const handleSubCategoryClick = (subCategory) => {
     setSelectedSubCategory(subCategory);
@@ -234,24 +250,31 @@ export default function AddFoundObject  ()  {
 const handleDropdownChangeSubCategory = (selectedOptionName) => {
   setSelectedSubCategory(selectedOptionName)
   // Faça o que for necessário com o nome da opção selecionada
-};
+}; 
+function getCategoryNameFromId(categoryName) {
+  const category = categories.find(category => category._id === categoryName);
+  return category ? category.name : null;
+ }
+if (loadError) return <div className="contain">Error loading maps</div>;
+if (!isLoaded) return <div className="contain"><Loader/></div>;
+  
 if (loading) {
-  return <div>Carregando...</div>; // Ou qualquer indicador de carregamento que você preferir
+  return <Loader/>; // Ou qualquer indicador de carregamento que você preferir
 }
+  const newLocal = <RadioBtn>
+    <RadioButton
+      options={options}
+      onChange={(selectedValue) => test(selectedValue)}
+      value="option1" />
+  </RadioBtn>;
   return ( <>
   <Container>
   <Title>Finder’s Information</Title>
-      <CategoryTitle>Does the finder have an <span>BIDFIND.er</span> account? 
-      <RadioBtn >
-       <RadioButton
-  options={options}
-  onChange={(selectedValue) => test(selectedValue)}
-  value="option1"
-/>
-        </RadioBtn>
+      <CategoryTitle>Does the finder have an BIDFIND.er account? 
       </CategoryTitle>
+      {newLocal}
       {selectedValue !== "no" && (<>
-      <InputBox>
+      <InputBox style={{marginTop:'15px'}}>
         <InputF 
         type={'number'} 
         placeholder={'Insert your NIC'}  
@@ -333,14 +356,14 @@ if (loading) {
       
      
        <InputBox>
-              <DropdownInput 
+              <SearchInput 
                 
                 placeholder={'Categories'}  
                 id="category"
                 required
-                onClick = {(e) => handleCategoryClick(e.target.value)}
+                onClick = {(e) => handleDropdownChangeCategory(e.target.value)}
                 value={category}
-                onChange={handleDropdownChange}
+                onChange={handleDropdownChangeCategory}
                 name="Categories"
                 options={categories}
                 
@@ -354,7 +377,7 @@ if (loading) {
   {category !== null && ( <>
         <SubCategoryTitle>Choose the subcategory of the found object.</SubCategoryTitle>
         <InputBox>
-          <DropdownInput 
+          <SearchInput 
             
             placeholder={'Subcategories'}  
             id="subcategory"

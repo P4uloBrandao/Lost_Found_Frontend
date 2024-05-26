@@ -28,7 +28,8 @@ display: ${props => props.isOpen ? 'block' : 'none'};  border-radius: 20px;
   height: ${props => props.authUser === null ? '93pt !important' : '102pt !important'}; 
   padding: 15pt 0pt 15pt 15pt ;
   width : auto;
- 
+ maring : 0 auto;
+
   font-size: smaller;
   border: solid 1px black ;
 
@@ -74,6 +75,20 @@ const MenuContainer = styled.div`
   height: 6vh;
   margin: 0.3em 4em  0em 4em;
   width : 100%;
+
+`;
+const MenuPages = styled.div`
+width: -webkit-fill-available;
+max-width: 622pt;
+margin: auto;
+display: flex;
+flex-direction: row;
+background-color: white;
+border-radius: 20px;
+overflow: hidden;
+position: relative;
+height: 8vh;
+
 
 `;
 function Navbar() {
@@ -149,10 +164,12 @@ function Navbar() {
     logout();
     setIsLoggedIn(false);
     setAuthUser(null);
+    setIsOpen(!isOpen)
     navigate('/login');
   };
 
   const handleSignInClick = () => {
+    
     navigate('/login');
   };
 
@@ -165,6 +182,7 @@ function Navbar() {
   };
 
   const redirectToProfile = () => {
+    setIsOpen(!isOpen)
     navigate('/profile');
   };
 
@@ -205,7 +223,7 @@ function Navbar() {
       <img onClick={handleHomeClick} className="logo" src={Logo} alt="Logo" />
       {location.pathname !== '/signup' && location.pathname !== '/login' && (
         <>
-          <ul className="list">
+        <MenuPages><ul className="list">
             {options.map((option) => (
               <li
                 key={option.label}
@@ -216,9 +234,10 @@ function Navbar() {
                 <a onClick={() => navigate(option.path)}>{option.label}</a>
               </li>
             ))}
-          </ul>
+          </ul></MenuPages>
+          
           {authUser ? (
-            <div>
+            <div  style={{margin: 'auto'}}>
               {profilePhoto ? (
                 <img onClick={handleMenuItemClick} className={`svgButtons ${isOpen ? 'open' : 'closed'}`} width='45px' height='45px' src={profilePhoto} alt="Profile" />
               ) : (

@@ -9,8 +9,8 @@ const Wrapper = styled.div`
 margin: 0px 18px 0px 41px;
 `;
 
-const Input = styled.input`
- 
+const Options = styled.div`
+ margin:10px;
 `;
 
 const Label = styled.label`
@@ -37,7 +37,7 @@ const RadioButton = ({ options, onChange, value }) => {
     return (
       <RadioGroup>
         {options.map((option) => (
-          <div key={option.id}>
+          <Options key={option.id}>
             <input
               className="state"
               type="radio"
@@ -47,11 +47,11 @@ const RadioButton = ({ options, onChange, value }) => {
               checked={selectedOption === option.value}
               onChange={handleOptionChange}
             />
-            <label className="label" htmlFor={option.id}>
+            <label style={{margin:"10px"}} className="label" htmlFor={option.id}>
               <span className="indicator" />
               <span className="text">{option.text}</span>
             </label>
-          </div>
+          </Options>
         ))}
       </RadioGroup>
     );
