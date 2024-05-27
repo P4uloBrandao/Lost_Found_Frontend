@@ -85,7 +85,7 @@ position: absolute;
 width: -webkit-fill-available;
 left: 0;
 margin: 0 12px;
-top: 51pt;
+top: 37pt!important;
   border-radius: 17px;
   overflow: hidden;
   display: ${(props) => (props.active ? 'block' : 'none')};
@@ -124,83 +124,89 @@ const Pholder = styled.span`
 `;
 
 
-  
-  
-  const DropdownComponent = ({ name,icon, options, placeholder,onChange, onClick }) => {
-    const [isDropdownActive, setIsDropdownActive] = useState(false);
-    const [selectedOption, setSelectedOption] = useState(null);
-    const [results, setResults] = useState([]);
-    const [text, setText] = useState('');
-    const deb = useDebounce(text,500)
-    const searchInputRef = useRef(null);
-    const dropdownRef = useRef(null);
-    useEffect(() => {
+const DropdownComponent = ({ name,disable, icon, options, placeholder, onChange, onClick,errorMessage }) => {
+  const [isDropdownActive, setIsDropdownActive] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [results, setResults] = useState([]);
+  const [text, setText] = useState('');
+  const deb = useDebounce(text, 500);
+  const searchInputRef = useRef(null);
+  const dropdownRef = useRef(null);
+  useEffect(() => {
+    if (options) {
       const filteredOptions = options.filter(option =>
         option.name.toLowerCase().includes(text.toLowerCase())
       );
       setResults(filteredOptions);
-      console.log(text)
-      if (text ===''){
-        setIsDropdownActive(false);
-      }else{
-        setIsDropdownActive(true);
+    } else {
+      setResults([]);
+    }
 
-      }
-
-    }, [text, options]);
-   
-    useEffect(() =>{
-      const d =  options.filter(el => el.name.toLowerCase().includes(deb))
-      setResults(d)
-    },[deb])
-    const handleOptionClick = (option) => {
-      
-      console.log(option)
-      setSelectedOption(option._id);
+    if (text === '') {
       setIsDropdownActive(false);
-      onChange(option._id);
-      setText(option.name)
+    } else {
+      setIsDropdownActive(true);
+    }
+  }, [text, options]);
+
+  useEffect(() => {
+    if (options) {
+      const d = options.filter(el => el.name.toLowerCase().includes(deb));
+      setResults(d);
+    } else {
+      setResults([]);
+    }
+  }, [deb, options]);
+
+  const handleOptionClick = (option) => {
+    console.log(option);
+    setSelectedOption(option._id);
+    setIsDropdownActive(false);
+    onChange(option._id);
+   
+    setText(option.name);
+  };
+
+  const handleClickOutside = (event) => {
+    if (
+      dropdownRef.current && !dropdownRef.current.contains(event.target) &&
+      searchInputRef.current && !searchInputRef.current.contains(event.target)
+    ) {
+      setIsDropdownActive(false);
+    }
+  };
+
+  useEffect(() => {
+    if (isDropdownActive) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-    const handleClickOutside = (event) => {
-      if (
-        dropdownRef.current && !dropdownRef.current.contains(event.target) &&
-        searchInputRef.current && !searchInputRef.current.contains(event.target)
-      ) {
-        setIsDropdownActive(false);
-      }
-    };
-  
-    useEffect(() => {
-      if (isDropdownActive) {
-        document.addEventListener('mousedown', handleClickOutside);
-      } else {
-        document.removeEventListener('mousedown', handleClickOutside);
-      }
-  
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }, [isDropdownActive]);
-  
-  
-    
-    return (
-      <>
-        <InputBox 
+  }, [isDropdownActive]);
+
+  return (
+    <>
+      <InputBox
         className={isDropdownActive || text ? 'dropdown active' : 'dropdown'}
         onClick={() => setIsDropdownActive(!isDropdownActive)}>
-          <InputF 
-           id='searchInput'
-            type="text" 
-            placeholder={ placeholder } 
-            value={text} 
-            name={name}
-            onChange={(e) => setText(e.target.value)} 
-          />
-        </InputBox>
-        
-        <DropdownContainer ref={dropdownRef} active={isDropdownActive}>
+        <InputF
+          id='searchInput'
+          type="text"
+          placeholder={placeholder}
+          value={text}
+          name={name}
+          disable={disable}
+          onChange={(e) => setText(e.target.value)}
+        />
+      </InputBox>
+
+      <DropdownContainer ref={dropdownRef} active={isDropdownActive}>
         <DropdownMenu onChange={onChange} active={isDropdownActive}>
+        {errorMessage && <div className="error">{errorMessage}</div>}
           {results.length > 0 ? 
             results.map((option, index) => (
               <DropdownItem key={index} onClick={() => handleOptionClick(option)} id={option.name}>
@@ -213,9 +219,9 @@ const Pholder = styled.span`
             )
           }
         </DropdownMenu>
-        </DropdownContainer>
-      </>
-    );
-  };
-  
-  export default DropdownComponent;
+      </DropdownContainer>
+    </>
+  );
+};
+
+export default DropdownComponent;
