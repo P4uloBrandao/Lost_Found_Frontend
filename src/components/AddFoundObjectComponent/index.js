@@ -10,7 +10,11 @@ import RadioButton from '../RadioButtonComponent';
 import ProfileSettings from '../profileSettings/index'
 import DropdownInput from "../dropdownInputComponent/index";
 import Grid from '@mui/material/Grid';
-import { InputSubmit, Container,InputBox ,Title,Form, Wrapper,SubCategoryTitle,CategoryTitle } from '../../assets/StylePopularComponent/style';
+import { InputSubmit, Container,InputBox ,Title,Form, Wrapper,SubCategoryTitle,CategoryTitle , CategorySection } from '../../assets/StylePopularComponent/style';
+import Loader from '../LoadingComponent/index';
+import  SearchInput  from '../../components/SearchInputFieldComponent/index';
+import { useAuth } from '../AuthContext';
+import { create } from '@mui/material/styles/createTransitions';
 
 const StyledTextArea = styled.textarea`
     height: ${props => props.height}px;
@@ -34,23 +38,26 @@ const RadioBtn = styled.span`
   display:flex; 
 `;
 
-
+    
 
 const CategoryButton = styled.button`
-  width: 174px;
-  height: 66px;
-  padding: 16px 24px;
-  border-radius: 33px;
-  border: 1px solid var(--primary-green-color);
-  background-color: ${props => props.isSelected ? 'var(--primary-green-color)' : 'var(--white-color)'};
-  color: ${props => props.isSelected ? 'var(--white-color)' : 'var(--black-color)'};
-  cursor: pointer;
-  &:hover {
-    background-color: var(--primary-green-color);
-    color: var(--white-color);
-  }
-  font-size: 1rem;
-  opacity: 1;
+    width: max-content;
+    padding: 4px 9px;
+    border-radius: 33px;
+    border: 1px solid var(--primary-green-color);
+    background-color: var(--white-color);
+    color: var(--black-color);
+    cursor: pointer;
+    font-size: 1rem;
+    opacity: 1;
+    background-color: ${props => props.isSelected ? 'var(--primary-green-color)' : 'var(--white-color)'};
+    color: ${props => props.isSelected ? 'var(--white-color)' : 'var(--black-color)'};
+    &:hover {
+      background-color: var(--primary-green-color);
+      color: var(--white-color);
+    }
+    font-size: 1rem;
+    opacity: 1;
 `;
 
 const ResetButton = styled.a`
@@ -66,9 +73,8 @@ export default function AddFoundObject  ()  {
   const [objectImage, setObjImage] = React.useState("");
   
   //VARIVEIS DE TESTE
-  const [userWhoFound, setUserWhoFound] = React.useState(null);
-  const [policeOfficerThatReceived, setPolice] = React.useState('65fb1e5829c52b172fe02f44');
-  const [endDate, setEndDate]= React.useState('01/01/2001');
+  const [userWhoFound, setUserWhoFound] = React.useState('');
+  const [policeOfficerThatReceived, setPolice] = React.useState('');
   //VARIVEIS DE TESTE
   const [title, setTitle] = React.useState('');  //FALTA BD
   const [category, setSelectedCategory] = React.useState(null);
@@ -89,20 +95,38 @@ export default function AddFoundObject  ()  {
   const [subCategories, setSubCategories] = React.useState('');
   const [subCategory, setSelectedSubCategory] = React.useState('');
   const [loading, setLoading] = useState(true);
+  const [fullDataCategories, setFullDataCategories] = useState([]);
+  const [subSubCategories, setSubSubCategories] = useState([]);
 
-  function fetchSubCategories() {
-        try {
-       
-          const response =  axios.get(`http://localhost:3000/api/category/subCat/${category}`);
-          setSubCategories(response.data);
-          console.error(response.data);
-          setLoading(false)
-        } catch (error) {
-          console.error('Failed to fetch categories', error);
-          // Lide com erros conforme necessário
-        }
-        
-      };
+  const [objectCategories, setObjectCategories] = useState({});
+  //DATAS
+  const today = new Date();
+  const formattedDate = today.toISOString().split('T')[0];
+  const nextMonthDate = (new Date(today.setMonth(today.getMonth() + 1))).toISOString().split('T')[0];
+
+  const {  authUser } = useAuth();
+  
+//GET SUBCATEGORIES AND SUBSUBCATEGORIES
+  const fetchSubCategories = async (data) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/api/category/subCat/${getCategoryNameFromId(data)}`);
+      setFullDataCategories(response.data);
+     console.log(response.data)
+      setSubCategories(extractSubcategories (response.data));
+      setLoading(false); // Definir o estado de carregamento como falso quando o fetch estiver concluído
+    } catch (error) {
+      console.error('Failed to fetch categories', error);
+      // Lide com erros conforme necessário
+    }
+  }
+  // Função para buscar subcategorias do json que vem da api
+  function extractSubcategories(categories) {
+    return categories.map(category => ({
+        _id: category.subcategory._id,
+        name: category.subcategory.name
+    }));
+  }
+  //GET CATEGORIES
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -125,22 +149,25 @@ export default function AddFoundObject  ()  {
  const onImageUpload = (event) => {
     setObjImage("https://www.totalprotex.pt/media/catalog/product/cache/default/image/500x500/9df78eab33525d08d6e5fb8d27136e95/s/t/steelite-taskforce-boot-s3-hro-0_3.jpg")
 }
+//CREATE FOUND OBJECT
   const handleSubmit = async (event) => {
     
     event.preventDefault();
     try {
       
         const response = await axios.post("http://localhost:3000/api/found-objects",
-        {userWhoFound,
-          title,
-          category,
-          endDate,
-          description,
-          location,
-          price,
-          status,
-          objectImage,
-          policeOfficerThatReceived,
+        {"userWhoFound": userWhoFound,
+          "title": title,
+          "category": getCategoryNameFromId(category),
+          "endDate": nextMonthDate,
+          "foundDate": formattedDate,
+          "description": description,
+          "location":location,
+          " price": price,
+          "status": status,
+          "objectImage": objectImage,
+          "policeOfficerThatReceived":"6650cb6c82b8e44086723f1e",
+          "subCategory": objectCategories
           //FALTA OBJ_NAME OU TITLE & PHOTOS
         });
         
@@ -156,14 +183,15 @@ export default function AddFoundObject  ()  {
         }
       } 
   };
-  
+  //VALIDAÇÃO DO FOUNDER
   const handleUserValidation = async (event) => {
    event.preventDefault();
     try {
          const response = await axios.post("http://localhost:3000/api/users/getUser/",
         {email,
           nic,});
-        setUserWhoFound(response._id)
+        console.log(response.data._id)
+        setUserWhoFound(response.data._id)
         
       } catch (error) {
         console.error("User Validation failed:", error);
@@ -175,7 +203,6 @@ export default function AddFoundObject  ()  {
         }
       } 
   };
-  const categoriesArray = Object.entries(categories);
   const mapContainerStyle = {
     width: '50vw',
     height: '50vh',
@@ -206,15 +233,68 @@ export default function AddFoundObject  ()  {
       }
     };
 
-  if (loadError) return <div className="contain">Error loading maps</div>;
-  if (!isLoaded) return <div className="contain">Loading maps</div>;
-  
-  const handleCategoryClick = (category) => {
+ 
+  const handleDropdownChangeCategory = (category) => {
+    console.log(category)
     setSelectedCategory(category);
+    setLoading(true);
     fetchSubCategories(category)
+
   };
+
+  function createObjectSubCategories(subCategory){
+    console.log(subCategory)
+    console.log(fullDataCategories)
+    const subCategories = fullDataCategories.find(category => category.subcategory._id === subCategory);
+    console.log(subCategories) 
+    console.log(getSubSubCategories(getCategoryNameFromId(category),subCategory) )
+
+  }
+  function getSubSubCategories(categoryName, subcategoryId) {
+      console.log('subCategories:', fullDataCategories);
+      for (const item of fullDataCategories) {
+        console.log('item:', item);
+       
+        if (item.category.name === categoryName && item.subcategory._id === subcategoryId) {
+
+          setSubSubCategories(Object.entries(item.subSubCategories));
+          setLoading(false);
+              return item.subSubCategories;
+          }
+      }
+      setLoading(false);
+
+      return [];
+  }
+  function getSubSubCategoryNameFromId(categoryName) {
+    const flattenedSubSubCategories = subSubCategories.flat();
+    const category = flattenedSubSubCategories.find(category => category._id === categoryName);
+    return category ? category.name : null;
+  }
+  function getSubCategoryNameFromId(categoryName) {
+    const category = subCategories.find(category => category._id === categoryName);
+    return category ? category.name : null;
+   }
+  function handleSubSubCategoryClick(subSubCategory) {
+    console.log(subSubCategory)
+    const subSubCategoryObject = {
+      "name": getSubCategoryNameFromId(subCategory),
+      "subSubCategory": getSubSubCategoryNameFromId(subSubCategory),
+    }
+    // Determine the new key (next index)
+    const newKey = Object.keys(objectCategories).length;
+
+    // Update the state immutably
+    setObjectCategories(prevState => ({
+      ...prevState,
+      [newKey]: subSubCategoryObject
+    }));
+    console.log(objectCategories)
+  }
   const handleSubCategoryClick = (subCategory) => {
     setSelectedSubCategory(subCategory);
+    createObjectSubCategories(subCategory)
+      
   };
   const options = [
     { id: "yesOpt", value: "yes", text: "Yes", defaultSelection: true },
@@ -233,25 +313,33 @@ export default function AddFoundObject  ()  {
 };
 const handleDropdownChangeSubCategory = (selectedOptionName) => {
   setSelectedSubCategory(selectedOptionName)
+  handleSubCategoryClick(selectedOptionName)
   // Faça o que for necessário com o nome da opção selecionada
-};
+}; 
+function getCategoryNameFromId(categoryName) {
+  const category = categories.find(category => category._id === categoryName);
+  return category ? category.name : null;
+ }
+if (loadError) return <div className="contain">Error loading maps</div>;
+if (!isLoaded) return <div className="contain"><Loader/></div>;
+  
 if (loading) {
-  return <div>Carregando...</div>; // Ou qualquer indicador de carregamento que você preferir
+  return <Loader/>; // Ou qualquer indicador de carregamento que você preferir
 }
+  const newLocal = <RadioBtn>
+    <RadioButton
+      options={options}
+      onChange={(selectedValue) => test(selectedValue)}
+      value="option1" />
+  </RadioBtn>;
   return ( <>
   <Container>
   <Title>Finder’s Information</Title>
-      <CategoryTitle>Does the finder have an <span>BIDFIND.er</span> account? 
-      <RadioBtn >
-       <RadioButton
-  options={options}
-  onChange={(selectedValue) => test(selectedValue)}
-  value="option1"
-/>
-        </RadioBtn>
+      <CategoryTitle>Does the finder have an BIDFIND.er account? 
       </CategoryTitle>
+      {newLocal}
       {selectedValue !== "no" && (<>
-      <InputBox>
+      <InputBox style={{marginTop:'15px'}}>
         <InputF 
         type={'number'} 
         placeholder={'Insert your NIC'}  
@@ -333,14 +421,14 @@ if (loading) {
       
      
        <InputBox>
-              <DropdownInput 
+              <SearchInput 
                 
                 placeholder={'Categories'}  
                 id="category"
                 required
-                onClick = {(e) => handleCategoryClick(e.target.value)}
+                onClick = {(e) => handleDropdownChangeCategory(e.target.value)}
                 value={category}
-                onChange={handleDropdownChange}
+                onChange={handleDropdownChangeCategory}
                 name="Categories"
                 options={categories}
                 
@@ -354,7 +442,7 @@ if (loading) {
   {category !== null && ( <>
         <SubCategoryTitle>Choose the subcategory of the found object.</SubCategoryTitle>
         <InputBox>
-          <DropdownInput 
+          <SearchInput 
             
             placeholder={'Subcategories'}  
             id="subcategory"
@@ -370,25 +458,21 @@ if (loading) {
   )}
       </Grid>
       <Grid item xs={12} sm={4}> 
-      {/* {subCategory !== null && ( <>
-      <SubCategoryTitle>Write something to describe.</SubCategoryTitle>
-      
-      
-       <InputBox>
-              <InputF
-                
-                placeholder={'Categories'}  
-                id="category"
-                required
-                onClick = {(e) => handleCategoryClick(e.target.value)}
-                value={category}
-                onChange={handleDropdownChange}
-                name="Categories"
-               
-                
-              />
-            </InputBox> </>
-      )} */}
+       {subCategory !== null && ( <>
+     <CategorySection>
+      {subSubCategories.map(([key, value], index) => (
+        <CategoryButton
+          key={index}
+          isSelected={category === value._id}
+          onClick={() => handleSubSubCategoryClick(value._id)}
+          active={activeButton === value._id}
+        >
+          {value.name}
+        </CategoryButton>
+      ))}
+       
+      </CategorySection> </>
+      )}
       </Grid> 
       </Grid>
     </Container>

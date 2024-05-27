@@ -6,7 +6,7 @@ import "../../../assets/colors/colors.css"
 import SearchInput from "../../SearchInputFieldComponent/index";
 import { InputSubmit, Container,InputBox ,Title,Form,CategoryTitle,CategorySection, Wrapper } from '../../../assets/StylePopularComponent/style';
 import Grid from '@mui/material/Grid';
-
+import Loader from '../../LoadingComponent/index';
 
 const CategoryButton = styled.button`
   width: 174px;
@@ -218,7 +218,7 @@ const handleDeleteSubSubCategory = async (event) => {
     
    
     if (loading) {
-      return <div>Carregando...</div>; // Ou qualquer indicador de carregamento que você preferir
+      return <Loader/>; // Ou qualquer indicador de carregamento que você preferir
     }
   
     return (<>
@@ -299,7 +299,7 @@ const handleDeleteSubSubCategory = async (event) => {
         <Grid item xs={12} sm={12}> <Title>Delete Subcategory label</Title></Grid>
         <Grid item xs={12} sm={4}>
        
-            <CategoryTitle> Choose main category </CategoryTitle>
+            <CategoryTitle> Choose main category first </CategoryTitle>
                           <InputBox>
               <SearchInput 
                 placeholder={mainCategoryToDelete ? getCategoryNameFromId(mainCategoryToDelete) : 'Insert category'} 
@@ -317,7 +317,7 @@ const handleDeleteSubSubCategory = async (event) => {
             {mainCategoryToDelete && (  
             <Grid item xs={12} sm={4}>
              
-            <CategoryTitle> select subcategory   </CategoryTitle>
+            <CategoryTitle> select subcategory  </CategoryTitle>
             
             <InputBox>
             <SearchInput

@@ -30,7 +30,6 @@ const ChangeContainer = styled.div`
   width: auto;
   margin: 5em 0;
   opacity: 1;
-  
   padding: 40px;
 `;
 export default function AdminPage() {

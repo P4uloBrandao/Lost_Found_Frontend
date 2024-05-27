@@ -85,7 +85,7 @@ position: absolute;
 width: -webkit-fill-available;
 left: 0;
 margin: 0 12px;
-top: 51pt;
+top: 37pt!important;
   border-radius: 17px;
   overflow: hidden;
   display: ${(props) => (props.active ? 'block' : 'none')};
@@ -124,7 +124,7 @@ const Pholder = styled.span`
 `;
 
 
-const DropdownComponent = ({ name, icon, options, placeholder, onChange, onClick,errorMessage }) => {
+const DropdownComponent = ({ name,disable, icon, options, placeholder, onChange, onClick,errorMessage }) => {
   const [isDropdownActive, setIsDropdownActive] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [results, setResults] = useState([]);
@@ -199,6 +199,7 @@ const DropdownComponent = ({ name, icon, options, placeholder, onChange, onClick
           placeholder={placeholder}
           value={text}
           name={name}
+          disable={disable}
           onChange={(e) => setText(e.target.value)}
         />
       </InputBox>
