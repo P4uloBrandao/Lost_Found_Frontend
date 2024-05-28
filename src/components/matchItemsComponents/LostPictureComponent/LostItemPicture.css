@@ -23,17 +23,16 @@
     z-index: 1;
     position: relative;
     top: 3%;
-
-    
   }
+
 
   .lostitem-picture-selected img{
 
-    display: flex;
-    width:170px;
-    height: 100px;
-    max-width: 100%; /* Adjust as needed */
-    height: auto;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    box-shadow: 4px 4px 27.1px 0px rgba(0, 0, 0, 0.25);
+    border-radius: 1.25rem;
   }
   
   
@@ -60,8 +59,11 @@
   }
   
   .lostitem-picture-item img {
-    width:110px;
-    height: 110px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    box-shadow: 4px 4px 27.1px 0px rgba(0, 0, 0, 0.25);
+    border-radius: 1.25rem;
    
   }
    

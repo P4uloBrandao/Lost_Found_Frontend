@@ -1,44 +1,25 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useAuth, AuthProvider } from '../../components/AuthContext';
-import axios from "axios";
-import { useState, useContext } from "react";
-import { Navigate } from "react-router-dom"; 
-import Layout from '../../components/Layout/Layout';
+import React from 'react';
+import WelcomeHeaderComponent from '../../components/headerWithNameComponent/welcomeHeader.jsx'
+import { useLocation } from 'react-router-dom';
+import { useAuth } from '../../components/AuthContext.jsx'
 
-// TODO remove, this demo shouldn't need to reset the theme.
+const capitalizeFirstLetter = (str) => {
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};
 
-const defaultTheme = createTheme();
+export default function Home() {
+  const { authUser } = useAuth();
+  const location = useLocation();
 
-function Home() {
-     const { setAuthUser,
-      authUser,
-      isLoggedIn,
-      setIisLoggedIn,token,loading } = useAuth();;
-    if (loading) {
-      return null;
-    }
-  
-    if (!token) {
-      return <Navigate to="/home" replace />;
-    }
-    else{
-      <Navigate to="/profile" replace />;
-    }
-  
-    return <></>;
-  }
-  
-  export default Home;
+  // Verifica se authUser não é undefined antes de renderizar o componente
+  const formattedName = authUser ? capitalizeFirstLetter(authUser.first_name) : null;
+ 
+  return (
+    <div>
+      {/* Renderiza o componente somente se authUser não for undefined */}
+      {authUser !== undefined && (
+        <WelcomeHeaderComponent name={formattedName} description={'Did you know that over 30 million wallets are lost every year?'}/>
+      )}
+    </div>
+  );
+}

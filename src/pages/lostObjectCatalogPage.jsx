@@ -14,7 +14,7 @@ const Container = styled.div`
 export default function LostObjectCatalogPage() {
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [objects, setObjects] = useState([]);
-
+  console.log(objects)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -61,31 +61,27 @@ export default function LostObjectCatalogPage() {
     <div className="lost-item-container" style={{ display: 'flex', flexDirection: 'column', width: '100%',}}>
       <WelcomeHeaderComponent name={'Carlos'} description={'Did you know that over 30 milion wallets are lost every year?'}/>
       <Menu options={option} selected={'My Lost Objects'} />
-      <div>
-            <span>My Lost Objects</span>
-            <br />
-            <span>Here you can view all your lost objects. Don't lose hope!</span>
-      </div>
-      <div>
-      {objects.map((object, index) => (
 
-          <Grid spacing={2} sx={{justifyContent: 'center'        
-          }} item  xs={10} md={10} key={index}>
-            <Card  spacing={2}
-              name={object.title}
-              description={object.description}
-              location={object.location}
-              category={object.category}
-              id={object._id}
-              catId={object.catId}
-              date ={object.date}
-              photo ={object.objectImage}
-              status={object.status}
-              policeOfficer={object.policeOfficerThatReceived}
-              matchButton = {true}
-            />
-          </Grid>
-        ))}
+      <div>
+        {objects.map((object, index) => (
+
+            <Grid spacing={2} sx={{justifyContent: 'center'        
+            }} item  xs={10} md={10} key={index}>
+              <Card  spacing={2}
+                name={object.title}
+                description={object.description}
+                location={object.location}
+                category={object.category}
+                id={object.object_id}
+                catId={object.catId}
+                date ={object.date}
+                photo ={object.objectImage}
+                status={object.status}
+                policeOfficer={object.policeOfficerThatReceived}
+                matchButton = {true}
+              />
+            </Grid>
+          ))}
       </div>
      
   </div>

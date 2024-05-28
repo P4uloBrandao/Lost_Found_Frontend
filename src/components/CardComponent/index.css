@@ -1,63 +1,58 @@
 @import url('../../assets/colors/colors.css');
-.objectCategory {}
 
 .p-absolute {
-    margin: 9pt;
-    background: var(--black-color);
-    position: absolute;
-    border-radius: 1.24rem;
-    color: var(--white-color);
-    padding: 0.2rem 0.5rem;
+  margin: 9pt;
+  background: var(--black-color);
+  position: absolute;
+  border-radius: 1.24rem;
+  color: var(--white-color);
+  padding: 0.2rem 0.5rem;
 }
 
 .mapsBtn {
-    color: var(--secondary-grey-color);
-    font-size: 0.6rem;
-    font-weight: 300;
-    line-height: normal;
-    cursor: pointer;
+  color: var(--secondary-grey-color);
+  font-size: 0.8rem;
+  font-weight: 300;
+  line-height: normal;
+  cursor: pointer;
 }
 
 .mapsBtn:hover {
-    font-weight: 400;
+  font-weight: 400;
 }
 
 .descriptionBtn {
-    color: var(--primary-green-color);
-    font-size: 0.8rem;
-    font-style: normal;
-    text-decoration-line: underline;
-    font-weight: 400;
-    line-height: normal;
-    top: 11px;
-    position: relative;
-    cursor: pointer;
+  color: var(--primary-green-color);
+  font-size: 0.8rem;
+  font-style: normal;
+  text-decoration-line: underline;
+  font-weight: 400;
+  line-height: normal;
+  cursor: pointer;
 }
 
 .removeBtn {
-    position: absolute;
-    font-size: 0.8rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
-    color: var(--secondary-grey-color);
-    right: 290px;
-    margin-top: 16px;
-    cursor: pointer;
+  font-size: 0.8rem;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  color: var(--secondary-grey-color);
+  cursor: pointer;
+  text-decoration: underline;
 }
 
-.removeBtn span:hover {
-    font-weight: 'bold';
-    color: var(--primary-green-color);
+.removeBtn:hover {
+  font-weight: bold;
+  color: var(--primary-green-color);
 }
 
 .matchesBtn {
-    color: var(--primary-green-color);
-    font-size: 0.8rem;
-    font-style: normal;
-    margin-top: 51px;
-    font-weight: 400;
-    line-height: normal;
-    cursor: pointer;
-    text-decoration-line: underline;
+  color: var(--primary-green-color);
+  font-size: 0.8rem;
+  font-style: normal;
+  margin-top: 0.5rem;
+  font-weight: 400;
+  line-height: normal;
+  cursor: pointer;
+  text-decoration-line: underline;
 }

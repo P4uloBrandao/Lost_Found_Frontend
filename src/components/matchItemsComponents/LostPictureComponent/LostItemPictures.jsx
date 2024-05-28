@@ -9,7 +9,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 
 const LostItemPicture = ({ images,nome }) => {
   const [isFavorite, setIsFavorite] = useState(false);
-  const [selectedImage, setSelectedImage] = useState([0]); 
+  const [selectedImage, setSelectedImage] = useState(images[0]); 
   const [selectedname, setSelectedname] = useState(nome); 
 
   const handleImageClick = (image) => {
@@ -32,7 +32,6 @@ const LostItemPicture = ({ images,nome }) => {
           </button>
       </div>
       <div className="lostitem-picture-selected" >
-        
         <img src={selectedImage} alt={selectedImage} />
       </div>
 
