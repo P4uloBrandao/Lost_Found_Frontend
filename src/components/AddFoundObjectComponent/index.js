@@ -243,10 +243,23 @@ function getCategoryNameFromId(categoryName) {
   return category ? category.name : null;
  }
 
+const handleCategoryChange = (index, category) => {
+  setSelectedCategory(category);
+   console.log(category)
+  };
+  const handleUpdateCategories = (newCategories) => {
+    setObjectCategories(newCategories);
+    console.log(objectCategories)
 
+  };
  const addCategory = () => {
   setCategories([...categories, {}]);
 };
+useEffect(() => {
+  console.log(objectCategories)
+}, [objectCategories]);
+
+
 if (loadError) return <div className="contain">Error loading maps</div>;
 if (!isLoaded) return <div className="contain"><Loader/></div>;
   
@@ -346,11 +359,20 @@ if (loading) {
       <Title>In what category does it fit in?</Title>
       </Grid>
     <div>
+        <AddCategory  
+        onUpdateCategories={handleUpdateCategories}
+          removeCategory={removeCategory} 
+          onCategoryChange={handleCategoryChange}
+          existCategory = {false}
+          />
           {components.map((_, index) => (
             <AddCategory 
+            onUpdateCategories={handleUpdateCategories}
               key={index} 
               index={index} 
               removeCategory={removeCategory} 
+              onCategoryChange={handleCategoryChange}
+              existCategory = {category ? true : false}
             />
           ))}
           <button onClick={addComponent}>Add Category</button>

@@ -39,7 +39,7 @@ const RemoveButton = styled.button`
       background-color: darkred;
     }
 `;
-export default function AddCategory  ({ index, removeCategory })  {
+export default function AddCategory  ({ index, removeCategory,onCategoryChange,existCategory ,onUpdateCategories })  {
     const [loading, setLoading] = useState(true);
 
 
@@ -50,9 +50,9 @@ export default function AddCategory  ({ index, removeCategory })  {
     const [subSubCategories, setSubSubCategories] = useState([]);
     const [subSubCategory, setSubSubCategory] = useState(null);
     //List with objectCategories
+    const [localObjectCategories, setLocalObjectCategories] = useState({});
     const [objectCategories, setObjectCategories] = useState({});
-
-
+    
     const [fullDataCategories, setFullDataCategories] = useState([]);
     const [activeButton, setActiveButton] = useState(null);
 
@@ -75,22 +75,16 @@ export default function AddCategory  ({ index, removeCategory })  {
       
     }, [categories]);
   function getCategoryNameFromId(categoryName) {
-    console.log(categories)
-    console.log(categoryName)
     const category = categories.find(category => category._id === categoryName);
-    console.log(category)
     return category ? category.name : null;
    }
     //GET SUBCATEGORIES AND SUBSUBCATEGORIES
     const fetchSubCategories = async (data) => {
         try {
-        console.log(data)
         const response = await axios.get(`http://localhost:3000/api/category/subCat/${getCategoryNameFromId(data)}`);
         setFullDataCategories(response.data);
-        console.log(response.data)
         setSubCategories(extractSubcategories (response.data));
         setLoading(false); // Definir o estado de carregamento como falso quando o fetch estiver concluído
-        console.log(data)
         setSelectedCategory(data) 
         
     } catch (error) {
@@ -105,7 +99,6 @@ export default function AddCategory  ({ index, removeCategory })  {
           if (item.category.name === categoryName && item.subcategory._id === subcategoryId) {
   
             setSubSubCategories(Object.entries(item.subSubCategories));
-            console.log(subSubCategories)
             setLoading(false);
                 return item.subSubCategories;
             }
@@ -122,7 +115,8 @@ export default function AddCategory  ({ index, removeCategory })  {
         }));
     }
     const handleDropdownChangeCategory = (category) => {
-        console.log(getCategoryNameFromId(category))
+        handleCategorySelect(category)
+        getCategoryNameFromId(category)
         setSelectedCategory(getCategoryNameFromId(category));
         setLoading(true);
         fetchSubCategories(category)
@@ -139,15 +133,12 @@ export default function AddCategory  ({ index, removeCategory })  {
         // Faça o que for necessário com o nome da opção selecionada
       }; 
       function createObjectSubCategories(subCategory){
-        console.log(subCategory)
-        console.log(fullDataCategories)
         const subCategories = fullDataCategories.find(category => category.subcategory._id === subCategory);
-        console.log(category) 
-        console.log(getSubSubCategories(getCategoryNameFromId(category),subCategory) )
+        getSubSubCategories(getCategoryNameFromId(category),subCategory)
     
       }
       function handleSubSubCategoryClick(subSubCategory) {
-        console.log(subSubCategory)
+       
         setSubSubCategory(subSubCategory);
         const subSubCategoryObject = {
           "name": getSubCategoryNameFromId(subCategory),
@@ -161,8 +152,16 @@ export default function AddCategory  ({ index, removeCategory })  {
           ...prevState,
           [newKey]: subSubCategoryObject
         }));
-        console.log(objectCategories)
+
+        // Pass the updated categories to the parent component
       }
+
+      useEffect(() => {
+        console.log('objectCategories', objectCategories)
+        onUpdateCategories(objectCategories);
+
+      }, [objectCategories,]);
+    
       function getSubSubCategoryNameFromId(categoryName) {
         const flattenedSubSubCategories = subSubCategories.flat();
         const category = flattenedSubSubCategories.find(category => category._id === categoryName);
@@ -172,18 +171,21 @@ export default function AddCategory  ({ index, removeCategory })  {
         const category = subCategories.find(category => category._id === categoryName);
         return category ? category.name : null;
        }
+       function  handleCategorySelect(event) {
+        const category = event;
+        onCategoryChange(index, category);
+      };
 if (loading) {
     return <Loader/>; // Ou qualquer indicador de carregamento que você preferir
   }
 return (
 <>
-<Grid container spacing={2}>
+<Grid container spacing={3}>
        
       <Grid item xs={12} sm={3}> 
       <SubCategoryTitle>Choose the category of the found object.</SubCategoryTitle>
       
-     
-       <InputBox>
+      {existCategory == false && ( <><InputBox>
               <SearchInput 
                 
                 placeholder={category ? getCategoryNameFromId(category) : 'Insert category'} 
@@ -197,6 +199,8 @@ return (
                 
               />
             </InputBox>   
+            </>)}
+       
       
       </Grid>
       
@@ -220,7 +224,7 @@ return (
         </InputBox> </>
   )}
       </Grid>
-      <Grid item xs={12} sm={5}> 
+      <Grid item xs={12} sm={3}> 
        {subCategory !== null && ( <>
      <CategorySection>
       {subSubCategories.map(([key, value], index) => (
@@ -236,14 +240,14 @@ return (
        
       </CategorySection> </>
       )}
-      <Grid item xs={12} sm={1}> 
+      </Grid> 
+      <Grid item xs={12} sm={3}> 
       <div>
-      <span>Categoria {index + 1}</span>
-      <RemoveButton onClick={() => removeCategory(index)}>Remover</RemoveButton>
+      <span>Delete</span>
+      <RemoveButton onClick={() => removeCategory(index)}>x</RemoveButton>
         </div>
         </Grid> 
       </Grid> 
-      </Grid>
 
 </>);
 }
