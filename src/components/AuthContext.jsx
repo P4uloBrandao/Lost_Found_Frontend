@@ -20,6 +20,7 @@ export function AuthProvider(props) {
   const [authUser, setAuthUser] = useState('');
   const [isContextReady, setIsContextReady] = useState(false); // Indica se o contexto está pronto
   const [userRole, setUserRole] = useState('');
+  const [policeId, setPoliceId] = useState('');
 
 
   const logout = () => {
@@ -72,14 +73,27 @@ export function AuthProvider(props) {
           setIsLoggedIn(true);
           const response = await axios.get(`http://localhost:3000/api/users/profile/${storedToken}`);
           const userProfileData = response.data.currentUser;
-  
           setToken(storedToken);
           setAuthUser(userProfileData);
-          
           setUserRole(userProfileData.role);
   
           if (userProfileData.role === "Admin") {
             setIsAdmin(true);
+          }
+          else if (userProfileData.role === "Police") {
+            const getPoliceUser = async () => {
+              try {
+                const response = await axios.get(`http://localhost:3000/api/police/police-officers/users/${authUser._id}`);
+                setPoliceId(response.data._id);
+                console.log(response.data._id)
+               
+                setLoading(false); // Definir o estado de carregamento como falso quando o fetch estiver concluído
+              } catch (error) {
+                console.error('Failed to fetch categories', error);
+                // Lide com erros conforme necessário
+              }
+            }
+            getPoliceUser();
           }
         } else {
           setIsLoggedIn(false);
@@ -99,7 +113,7 @@ export function AuthProvider(props) {
 
     fetchData();
     }
-  }, [userRole, isAdmin, isLoggedIn,authUser]);
+  }, [userRole, isAdmin, isLoggedIn,authUser, policeId]);
 
 
 // Log isAdmin após setIsAdmin(true)

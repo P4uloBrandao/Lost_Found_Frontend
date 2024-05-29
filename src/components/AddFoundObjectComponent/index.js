@@ -15,6 +15,7 @@ import Loader from '../LoadingComponent/index';
 import  SearchInput  from '../../components/SearchInputFieldComponent/index';
 import { useAuth } from '../AuthContext';
 import { create } from '@mui/material/styles/createTransitions';
+import AddCategory from '../CategoriesComponents/AddCategoriesObjectComponent/index.jsx';
 
 const StyledTextArea = styled.textarea`
     height: ${props => props.height}px;
@@ -104,46 +105,37 @@ export default function AddFoundObject  ()  {
   const formattedDate = today.toISOString().split('T')[0];
   const nextMonthDate = (new Date(today.setMonth(today.getMonth() + 1))).toISOString().split('T')[0];
 
+  const [displayedCategories, setDisplayedCategories] = useState([]);
+
   const {  authUser } = useAuth();
-  
-//GET SUBCATEGORIES AND SUBSUBCATEGORIES
-  const fetchSubCategories = async (data) => {
-    try {
-      const response = await axios.get(`http://localhost:3000/api/category/subCat/${getCategoryNameFromId(data)}`);
-      setFullDataCategories(response.data);
-     console.log(response.data)
-      setSubCategories(extractSubcategories (response.data));
-      setLoading(false); // Definir o estado de carregamento como falso quando o fetch estiver concluído
-    } catch (error) {
-      console.error('Failed to fetch categories', error);
-      // Lide com erros conforme necessário
-    }
-  }
-  // Função para buscar subcategorias do json que vem da api
-  function extractSubcategories(categories) {
-    return categories.map(category => ({
-        _id: category.subcategory._id,
-        name: category.subcategory.name
-    }));
-  }
-  //GET CATEGORIES
+ 
+  const [components, setComponents] = useState([]);
+
+  const addComponent = () => {
+    setComponents([...components, <AddCategory key={components.length} />]);
+  };
+  const removeCategory = (indexToRemove) => {
+    setComponents(components.filter((_, index) => index !== indexToRemove));
+  };
   useEffect(() => {
     const fetchCategories = async () => {
-      try {
+    try {
         const response = await axios.get('http://localhost:3000/api/category');
         setCategories(response.data);
+        setDisplayedCategories(Object.entries(response.data))
         setLoading(false)
-
+        console.log(displayedCategories)
         console.error(response.data);
-      } catch (error) {
+    } catch (error) {
         console.error('Failed to fetch categories', error);
         // Lide com erros conforme necessário
-      }
+    }
     };
-    
-     fetchCategories();
-    setLoading(false)
-  }, []);
+  if(displayedCategories.length === 0){
+    fetchCategories();
+      }
+setLoading(false)
+}, []);
 
  
  const onImageUpload = (event) => {
@@ -234,68 +226,6 @@ export default function AddFoundObject  ()  {
     };
 
  
-  const handleDropdownChangeCategory = (category) => {
-    console.log(category)
-    setSelectedCategory(category);
-    setLoading(true);
-    fetchSubCategories(category)
-
-  };
-
-  function createObjectSubCategories(subCategory){
-    console.log(subCategory)
-    console.log(fullDataCategories)
-    const subCategories = fullDataCategories.find(category => category.subcategory._id === subCategory);
-    console.log(subCategories) 
-    console.log(getSubSubCategories(getCategoryNameFromId(category),subCategory) )
-
-  }
-  function getSubSubCategories(categoryName, subcategoryId) {
-      console.log('subCategories:', fullDataCategories);
-      for (const item of fullDataCategories) {
-        console.log('item:', item);
-       
-        if (item.category.name === categoryName && item.subcategory._id === subcategoryId) {
-
-          setSubSubCategories(Object.entries(item.subSubCategories));
-          setLoading(false);
-              return item.subSubCategories;
-          }
-      }
-      setLoading(false);
-
-      return [];
-  }
-  function getSubSubCategoryNameFromId(categoryName) {
-    const flattenedSubSubCategories = subSubCategories.flat();
-    const category = flattenedSubSubCategories.find(category => category._id === categoryName);
-    return category ? category.name : null;
-  }
-  function getSubCategoryNameFromId(categoryName) {
-    const category = subCategories.find(category => category._id === categoryName);
-    return category ? category.name : null;
-   }
-  function handleSubSubCategoryClick(subSubCategory) {
-    console.log(subSubCategory)
-    const subSubCategoryObject = {
-      "name": getSubCategoryNameFromId(subCategory),
-      "subSubCategory": getSubSubCategoryNameFromId(subSubCategory),
-    }
-    // Determine the new key (next index)
-    const newKey = Object.keys(objectCategories).length;
-
-    // Update the state immutably
-    setObjectCategories(prevState => ({
-      ...prevState,
-      [newKey]: subSubCategoryObject
-    }));
-    console.log(objectCategories)
-  }
-  const handleSubCategoryClick = (subCategory) => {
-    setSelectedSubCategory(subCategory);
-    createObjectSubCategories(subCategory)
-      
-  };
   const options = [
     { id: "yesOpt", value: "yes", text: "Yes", defaultSelection: true },
     { id: "noOpt", value: "no", text: "No", defaultSelection: false },
@@ -307,19 +237,16 @@ export default function AddFoundObject  ()  {
   console.log(selectedValue)
 
  }
- const handleDropdownChange = (selectedOptionName) => {
-  setSelectedCategory(selectedOptionName)
-  // Faça o que for necessário com o nome da opção selecionada
-};
-const handleDropdownChangeSubCategory = (selectedOptionName) => {
-  setSelectedSubCategory(selectedOptionName)
-  handleSubCategoryClick(selectedOptionName)
-  // Faça o que for necessário com o nome da opção selecionada
-}; 
+
 function getCategoryNameFromId(categoryName) {
   const category = categories.find(category => category._id === categoryName);
   return category ? category.name : null;
  }
+
+
+ const addCategory = () => {
+  setCategories([...categories, {}]);
+};
 if (loadError) return <div className="contain">Error loading maps</div>;
 if (!isLoaded) return <div className="contain"><Loader/></div>;
   
@@ -412,70 +339,24 @@ if (loading) {
 
  
         </InputBox>
-         <Grid container spacing={2}>
-       <Grid item xs={12} sm={12}> 
+    </Container>
+<Container>
+{/* //COMPONENTE PARA ADICIONAR CATEGORIAS  */}
+<Grid item xs={12} sm={12}> 
       <Title>In what category does it fit in?</Title>
       </Grid>
-      <Grid item xs={12} sm={4}> 
-      <SubCategoryTitle>Choose the category of the found object.</SubCategoryTitle>
-      
-     
-       <InputBox>
-              <SearchInput 
-                
-                placeholder={'Categories'}  
-                id="category"
-                required
-                onClick = {(e) => handleDropdownChangeCategory(e.target.value)}
-                value={category}
-                onChange={handleDropdownChangeCategory}
-                name="Categories"
-                options={categories}
-                
-              />
-            </InputBox>   
-      
-      </Grid>
-      
-      <Grid item xs={12} sm={4}>
-        
-  {category !== null && ( <>
-        <SubCategoryTitle>Choose the subcategory of the found object.</SubCategoryTitle>
-        <InputBox>
-          <SearchInput 
-            
-            placeholder={'Subcategories'}  
-            id="subcategory"
-            required
-            onClick = {(e) => handleSubCategoryClick(e.target.value)}
-            value={subCategory}
-            onChange={handleDropdownChangeSubCategory}
-            name="Sub categories"
-            options={subCategories}
-            
-          />
-        </InputBox> </>
-  )}
-      </Grid>
-      <Grid item xs={12} sm={4}> 
-       {subCategory !== null && ( <>
-     <CategorySection>
-      {subSubCategories.map(([key, value], index) => (
-        <CategoryButton
-          key={index}
-          isSelected={category === value._id}
-          onClick={() => handleSubSubCategoryClick(value._id)}
-          active={activeButton === value._id}
-        >
-          {value.name}
-        </CategoryButton>
-      ))}
-       
-      </CategorySection> </>
-      )}
-      </Grid> 
-      </Grid>
-    </Container>
+    <div>
+          {components.map((_, index) => (
+            <AddCategory 
+              key={index} 
+              index={index} 
+              removeCategory={removeCategory} 
+            />
+          ))}
+          <button onClick={addComponent}>Add Category</button>
+        </div>
+
+        </Container>
       <Container>
       <Title>How does it look?</Title>
       <CategoryTitle>Upload pictures of the lost object.
