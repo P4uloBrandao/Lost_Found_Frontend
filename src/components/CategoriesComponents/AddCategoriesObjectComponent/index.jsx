@@ -45,7 +45,7 @@ export default function AddCategory  ({ index, removeCategory })  {
 
     const [subCategories, setSubCategories] = React.useState('');
     const [subCategory, setSelectedSubCategory] = React.useState('');
-    const [categories, setCategories] = React.useState('');
+    const [categories, setCategories] = React.useState([]);
     const [category, setSelectedCategory] = React.useState('');
     const [subSubCategories, setSubSubCategories] = useState([]);
     const [subSubCategory, setSubSubCategory] = useState(null);
@@ -57,23 +57,23 @@ export default function AddCategory  ({ index, removeCategory })  {
     const [activeButton, setActiveButton] = useState(null);
 
      //GET CATEGORIES
-    useEffect(() => {
-        const fetchCategories = async () => {
+     useEffect(() => {
+      
+      const fetchCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/category');
-            setCategories(response.data);
-            setLoading(false)
-
-            console.error(response.data);
+          const response = await axios.get('http://localhost:3000/api/category');
+          setCategories(response.data);
+          setLoading(false); // Definir o estado de carregamento como falso quando o fetch estiver concluído
         } catch (error) {
-            console.error('Failed to fetch categories', error);
-            // Lide com erros conforme necessário
+          console.error('Failed to fetch categories', error);
+          // Lide com erros conforme necessário
         }
-        };
-    
-     fetchCategories();
-    setLoading(false)
-  }, []);
+      };
+  if (categories.length === 0){
+    fetchCategories();
+  }
+      
+    }, [categories]);
   function getCategoryNameFromId(categoryName) {
     console.log(categories)
     console.log(categoryName)
