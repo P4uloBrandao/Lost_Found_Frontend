@@ -15,7 +15,7 @@ import {Cloudinary} from "@cloudinary/url-gen";
 import AddLostObjectComponent from './components/AddLostObjectComponent/index'
 import Navbar from './components/NavBarTest/index.jsx'
 import PolicePage from './pages/PolicePage.jsx';
-import LostObjectCatalogPage from './pages/LostObjCatalogPage.jsx';
+
 import RegisterLostObjectPage from'./pages/RegisterLostObjectPage.jsx'; 
 import MatchObjectCatalogPage from'./pages/matchObjectCatalogPage.jsx'; 
 import AdminPage from'./pages/AdminPage.jsx'; 
@@ -69,7 +69,7 @@ function App() {
                 <Route path="/addFoundObject" element={<PrivateRoute><AddLostObjectComponent /></PrivateRoute>} />
                 <Route path="/matchObjects" element={<PrivateRoute><MatchObjectCatalogPage /></PrivateRoute>} />
                 <Route path="/addLostObject" element={<PrivateRoute><RegisterLostObjectPage /></PrivateRoute>} />
-                <Route path="/myLostObjects" element={<PrivateRoute><LostObjectCatalogPage /></PrivateRoute>} />
+                <Route path="/myLostObjects" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
                 <Route path="/auctions" element={<PublicRoute><AuctionsPage /></PublicRoute>} />
 
                 <Route path="/" element={<PublicRoute><Home /></PublicRoute>} />

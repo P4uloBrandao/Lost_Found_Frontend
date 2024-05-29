@@ -6,7 +6,8 @@ import ProfileMenu from '../components/profileMenu/index';
 import ChangePassword from '../components/ChangePasswordComponent';
 import ProfileSettings from '../components/profileSettings/index';
 import DeleteProfile from '../components/deleteProfile/index';
-import CardComponent from '../components/LostObjectsCatalog/index.jsx';
+import MyAuctions from "../components/AuctionsCatalog/index.jsx";
+import MyLost from '../components/LostObjectsCatalog/index.jsx';
 import WelcomeHeaderComponent from '../components/headerWithNameComponent/welcomeHeader.jsx';
 import styled from 'styled-components';
 
@@ -79,9 +80,9 @@ const ProfilePage = () => {
           <DeleteProfile />
         ];
       case 'My Auctions':
-        return <ChangePassword />;
+        return <MyAuctions />;
       case 'My Lost Objects':
-        return <CardComponent />;
+        return <MyLost />;
       case 'Payments Details':
           return <DeleteProfile />;
       case 'Privacy Settings':
