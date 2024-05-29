@@ -15,7 +15,7 @@ import {Cloudinary} from "@cloudinary/url-gen";
 import AddLostObjectComponent from './components/AddLostObjectComponent/index'
 import Navbar from './components/NavBarTest/index.jsx'
 import PolicePage from './pages/PolicePage.jsx';
-import LostObjectCatalogPage from './components/LostObjectsCatalog/index.jsx';
+import LostObjectCatalogPage from './pages/LostObjCatalogPage.jsx';
 import RegisterLostObjectPage from'./pages/RegisterLostObjectPage.jsx'; 
 import MatchObjectCatalogPage from'./pages/matchObjectCatalogPage.jsx'; 
 import AdminPage from'./pages/AdminPage.jsx'; 

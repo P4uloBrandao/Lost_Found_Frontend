@@ -1,5 +1,4 @@
 @import url('../../assets/colors/colors.css');
-.objectCategory {}
 
 .p-absolute {
     margin: 9pt;
@@ -35,13 +34,13 @@
 }
 
 .removeBtn {
-    position: absolute;
+   
     font-size: 0.8rem;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
     color: var(--secondary-grey-color);
-    right: 290px;
+    
     margin-top: 16px;
     cursor: pointer;
 }

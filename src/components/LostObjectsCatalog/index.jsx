@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
-import FilterButtons from "../SearchFilters/index";
+
 import Card from "../CardComponent/index";
 import SearchInput from "../SearchInputFieldComponent/index";
 import axios from "axios";
@@ -37,7 +37,7 @@ export default function LostObjectCatalog() {
   const [object, setObject] = React.useState('');
   const [isLoading, setIsLoading] = useState(true);
 
-  const filters = ['Filter 1', 'Filter 2', 'Filter 3'];
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -55,9 +55,9 @@ export default function LostObjectCatalog() {
   
         // Para cada objeto, buscar o nome da categoria associada
         const updatedObjects = await Promise.all(objectsData.map(async (object) => {
-          const catId = object.category;
-          const categoryResponse = await axios.get(`http://localhost:3000/api/category/${catId}`);
-          const categoryName = categoryResponse.data.name;
+        const catId = object.category_id;
+        const categoryResponse = await axios.get(`http://localhost:3000/api/category/${catId}`);
+        const categoryName = categoryResponse.data.name;
   
           // Retornar um novo objeto com o nome da categoria atualizado
           return {
@@ -77,10 +77,7 @@ export default function LostObjectCatalog() {
     fetchData();
   }, []);
   
-  const handleFilterClick = (filter) => {
-    setSelectedFilter(filter);
-    // Add code to apply the selected filter
-  };
+  
 
   const handleCreateSubmit = async (event) => {
     event.preventDefault();
@@ -129,12 +126,12 @@ export default function LostObjectCatalog() {
                 name="Lost Object"
                 options={objects}
               
-              />
-      <FilterButtons  filters={filters} handleFilterClick={handleFilterClick} />
-      <Grid sx={{ textAlign: '-webkit-center',placeContent: 'center' }} container spacing={5}>
+          />
+      
+       <Grid sx={{ textAlign: '-webkit-center', pt: 7, width:'100%' }} container spacing={5}>
         {objects.map((object, index) => (
           
-          <Grid spacing={2} sx={{justifyContent: 'center'        
+         <Grid spacing={2} sx={{justifyContent: 'center'        
           }} item  xs={10} md={10} key={index}>
             <Card  spacing={2}
               name={object.title}
@@ -142,17 +139,15 @@ export default function LostObjectCatalog() {
               location={object.location}
               category={object.category}
               id={object._id}
-              catId={object.catId}
+              catId={object.category_id}
               date ={object.date}
               photo ={object.objectImage}
               status={object.status}
-              policeOfficer={object.policeOfficerThatReceived}
               matchButton = {true}
             />
           </Grid>
-        ))}
-      </Grid>
-
+          ))}  
+      </Grid> 
     </Container>
   );
 }
