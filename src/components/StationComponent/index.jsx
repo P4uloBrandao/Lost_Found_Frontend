@@ -100,8 +100,7 @@ export default function StationComponent() {
     function  getStationID(name,stations){
       const foundItem = stations.find(item => item.name === name);
       return foundItem ? foundItem._id : null;
-  
-  }
+    }
     const handleStationClick = (station) => {
       setStationId(station);
       };
