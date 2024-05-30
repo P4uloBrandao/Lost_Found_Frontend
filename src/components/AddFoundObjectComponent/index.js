@@ -7,7 +7,7 @@ import CustomInputFiles from "../ImageInputComponent/FileInput";
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
 import RadioButton from '../RadioButtonComponent';
-import ProfileSettings from '../profileSettings/index'
+import ProfileCreationComponent from '../ProfileCreationComponent/index'
 import DropdownInput from "../dropdownInputComponent/index";
 import Grid from '@mui/material/Grid';
 import { InputSubmit, Container,InputBox ,Title,Form, Wrapper,SubCategoryTitle,CategoryTitle , CategorySection } from '../../assets/StylePopularComponent/style';
@@ -17,7 +17,7 @@ import { useAuth } from '../AuthContext';
 import { create } from '@mui/material/styles/createTransitions';
 import AddCategory from '../CategoriesComponents/AddCategoriesObjectComponent/index.jsx';
 import  AddIcon  from '../../assets/icons/add50.png';
-
+import PopupAlert from '../PopUpAlertComponent/index.jsx';
 import './App.css';
 const StyledTextArea = styled.textarea`
     height: ${props => props.height}px;
@@ -112,6 +112,7 @@ export default function AddFoundObject  ()  {
   const [fullDataCategories, setFullDataCategories] = useState([]);
   const [subSubCategories, setSubSubCategories] = useState([]);
 
+  const [objectCreated, setObjectCreated] = useState(false);
   const [objectCategories, setObjectCategories] = useState({});
   //DATAS
   const today = new Date();
@@ -121,6 +122,7 @@ export default function AddFoundObject  ()  {
   const [displayedCategories, setDisplayedCategories] = useState([]);
   const {  authUser } = useAuth();
   const [components, setComponents] = useState([]);
+  const [user, setUser] = useState("");
 
   let counter = 0; // Mantido no escopo do componente pai
 
@@ -175,7 +177,7 @@ setLoading(false)
           "subCategory": items
           //FALTA OBJ_NAME OU TITLE & PHOTOS
         });
-        
+        setObjectCreated(true)
         
       } catch (error) {
         console.error("Object Registration failed:", error);
@@ -197,10 +199,18 @@ setLoading(false)
           nic,});
         console.log(response.data._id)
         setUserWhoFound(response.data._id)
+        setUser("true")
+        setTimeout(() => {
+          setUser("");
+      }, 3000);
+      
         
       } catch (error) {
         console.error("User Validation failed:", error);
-                
+        setUser("false")
+        setTimeout(() => {
+          setUser("");
+      }, 3000);
         if (error.response && error.response.data) {
           setMessage(error.response.data.error); // Set the error message if present in the error response
         } else {
@@ -271,12 +281,15 @@ const handleCategoryChange = (index, category) => {
   };;
 useEffect(() => {
   console.log(items)
-}, [items]);
+}, [items,user]);
 
 
 if (loadError) return <div className="contain">Error loading maps</div>;
 if (!isLoaded) return <div className="contain"><Loader/></div>;
   
+if (objectCreated) return <PopupAlert message={"Object registered"} />
+
+ 
 if (loading) {
   return <Loader/>; // Ou qualquer indicador de carregamento que você preferir
 }
@@ -286,7 +299,10 @@ if (loading) {
       onChange={(selectedValue) => test(selectedValue)}
       value="option1" />
   </RadioBtn>;
+
   return ( <>
+  {user === "true" && (<>  <PopupAlert message={"Valid User"} /></>)}
+  {user === "false" && (<>  <PopupAlert message={"Invalid User"} /></>)}
   <Container>
   <Title>Finder’s Information</Title>
       <CategoryTitle>Does the finder have an BIDFIND.er account? 
@@ -326,7 +342,7 @@ if (loading) {
           </InputSubmit></>
         )}
       {selectedValue !== "yes" && (<>
-      <ProfileSettings /></>)}
+      <ProfileCreationComponent setUserWhoFound ={setUserWhoFound} /></>)}
   </Container>
   
   {userWhoFound !== null && (
