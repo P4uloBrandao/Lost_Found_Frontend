@@ -16,7 +16,9 @@ import  SearchInput  from '../../components/SearchInputFieldComponent/index';
 import { useAuth } from '../AuthContext';
 import { create } from '@mui/material/styles/createTransitions';
 import AddCategory from '../CategoriesComponents/AddCategoriesObjectComponent/index.jsx';
+import  AddIcon  from '../../assets/icons/add50.png';
 
+import './App.css';
 const StyledTextArea = styled.textarea`
     height: ${props => props.height}px;
     font-size: 16px;
@@ -70,6 +72,17 @@ const ResetButton = styled.a`
   &:hover {
     text-decoration: underline;
 `;
+const AddBtn = styled.img`
+transform: scale(0.7);
+
+    transition: transform 0.2s;
+    &:hover {
+      transform: scale(0.9);
+    }
+`;
+const AddCategoryContainer = styled.div`
+ width: 100%;
+`;
 export default function AddFoundObject  ()  {
   const [objectImage, setObjImage] = React.useState("");
   
@@ -100,7 +113,6 @@ export default function AddFoundObject  ()  {
   const [subSubCategories, setSubSubCategories] = useState([]);
 
   const [objectCategories, setObjectCategories] = useState({});
-  const [teste] = useState({});
   //DATAS
   const today = new Date();
   const formattedDate = today.toISOString().split('T')[0];
@@ -360,7 +372,7 @@ if (loading) {
 <Grid item xs={12} sm={12}> 
       <Title>In what category does it fit in?</Title>
       </Grid>
-    <div>
+    <AddCategoryContainer>
         <AddCategory  
           key={0} 
           addItem={addItem}
@@ -386,8 +398,12 @@ if (loading) {
             
             />
           ))}
-          <button onClick={addComponent}>Add Category</button>
-        </div>
+          
+       {Object.keys(items).length > 0 && (
+           <AddBtn src={AddIcon} className='addBtn' onClick={addComponent}alt="add category" />
+
+)}
+       </AddCategoryContainer>
 
         </Container>
       <Container>

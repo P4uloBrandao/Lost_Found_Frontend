@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
+import  DeleteBtn  from '../../../assets/icons/deleteBtn.png';
 
 import axios from "axios";
 import Loader from '../../LoadingComponent/index';
@@ -28,16 +29,13 @@ const CategoryButton = styled.button`
     opacity: 1;
 `;
 
-const RemoveButton = styled.button`
-    margin-left: 10px;
-    background-color: red;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    &:hover {
-      background-color: darkred;
-    }
+const RemoveButton = styled.img`
+transform: scale(0.7);
+
+transition: transform 0.2s;
+&:hover {
+  transform: scale(0.9);
+}
 `;
 export default function AddCategory  ({ key, removeCategory,index, onCategoryChange, existCategory, objectCategories, setObjectCategories,mainCategory, addItem})  {
     const [loading, setLoading] = useState(true);
@@ -239,11 +237,13 @@ return (
       )}
       </Grid> 
       <Grid item xs={12} sm={1}> 
-      <div>
-      <span>Delete</span>
-      <RemoveButton onClick={() => removeCategory(index)}>x</RemoveButton>
-        </div>
+
+           <RemoveButton src={DeleteBtn} onClick={() => removeCategory(index)} className='deleteBtn' alt="delete category" />
+
+        
         </Grid> 
+
+
       </Grid> 
 
 </>);
