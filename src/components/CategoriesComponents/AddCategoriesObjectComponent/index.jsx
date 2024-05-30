@@ -39,7 +39,7 @@ const RemoveButton = styled.button`
       background-color: darkred;
     }
 `;
-export default function AddCategory  ({ index, removeCategory,onCategoryChange,existCategory ,onUpdateCategories })  {
+export default function AddCategory  ({ key, removeCategory,index, onCategoryChange, existCategory, objectCategories, setObjectCategories,mainCategory, addItem})  {
     const [loading, setLoading] = useState(true);
 
 
@@ -51,14 +51,17 @@ export default function AddCategory  ({ index, removeCategory,onCategoryChange,e
     const [subSubCategory, setSubSubCategory] = useState(null);
     //List with objectCategories
     const [localObjectCategories, setLocalObjectCategories] = useState({});
-    const [objectCategories, setObjectCategories] = useState({});
     
     const [fullDataCategories, setFullDataCategories] = useState([]);
     const [activeButton, setActiveButton] = useState(null);
 
      //GET CATEGORIES
      useEffect(() => {
-      
+      if (existCategory === true){
+        setSelectedCategory(mainCategory)
+        setLoading(true);
+        fetchSubCategories(mainCategory)
+      }
       const fetchCategories = async () => {
         try {
           const response = await axios.get('http://localhost:3000/api/category');
@@ -137,28 +140,21 @@ export default function AddCategory  ({ index, removeCategory,onCategoryChange,e
         getSubSubCategories(getCategoryNameFromId(category),subCategory)
     
       }
-      function handleSubSubCategoryClick(subSubCategory) {
-       
+
+      const handleSubSubCategoryClick = (subSubCategory) => {
         setSubSubCategory(subSubCategory);
         const subSubCategoryObject = {
           "name": getSubCategoryNameFromId(subCategory),
           "subSubCategory": getSubSubCategoryNameFromId(subSubCategory),
         }
-        // Determine the new key (next index)
-        const newKey = Object.keys(objectCategories).length;
-    
-        // Update the state immutably
-        setObjectCategories(prevState => ({
-          ...prevState,
-          [newKey]: subSubCategoryObject
-        }));
-
-        // Pass the updated categories to the parent component
-      }
+        addItem(subSubCategoryObject);
+        
+       
+        
+        // Passe as categorias atualizadas para o componente pai
+    };
 
       useEffect(() => {
-        console.log('objectCategories', objectCategories)
-        onUpdateCategories(objectCategories);
 
       }, [objectCategories,]);
     
@@ -183,9 +179,10 @@ return (
 <Grid container spacing={3}>
        
       <Grid item xs={12} sm={3}> 
-      <SubCategoryTitle>Choose the category of the found object.</SubCategoryTitle>
       
-      {existCategory == false && ( <><InputBox>
+      {existCategory === false && ( <>
+      <SubCategoryTitle>Choose the category of the found object.</SubCategoryTitle>
+      <InputBox>
               <SearchInput 
                 
                 placeholder={category ? getCategoryNameFromId(category) : 'Insert category'} 
@@ -207,7 +204,7 @@ return (
       <Grid item xs={12} sm={3}>
         
   {category !== null && ( <>
-        <SubCategoryTitle>Choose the subcategory of the found object.</SubCategoryTitle>
+        <SubCategoryTitle>Choose the subcategory .</SubCategoryTitle>
         <InputBox>
           <SearchInput 
             
@@ -224,7 +221,7 @@ return (
         </InputBox> </>
   )}
       </Grid>
-      <Grid item xs={12} sm={3}> 
+      <Grid item xs={12} sm={5}> 
        {subCategory !== null && ( <>
      <CategorySection>
       {subSubCategories.map(([key, value], index) => (
@@ -241,7 +238,7 @@ return (
       </CategorySection> </>
       )}
       </Grid> 
-      <Grid item xs={12} sm={3}> 
+      <Grid item xs={12} sm={1}> 
       <div>
       <span>Delete</span>
       <RemoveButton onClick={() => removeCategory(index)}>x</RemoveButton>

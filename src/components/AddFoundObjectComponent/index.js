@@ -100,16 +100,17 @@ export default function AddFoundObject  ()  {
   const [subSubCategories, setSubSubCategories] = useState([]);
 
   const [objectCategories, setObjectCategories] = useState({});
+  const [teste] = useState({});
   //DATAS
   const today = new Date();
   const formattedDate = today.toISOString().split('T')[0];
   const nextMonthDate = (new Date(today.setMonth(today.getMonth() + 1))).toISOString().split('T')[0];
 
   const [displayedCategories, setDisplayedCategories] = useState([]);
-
   const {  authUser } = useAuth();
- 
   const [components, setComponents] = useState([]);
+
+  let counter = 0; // Mantido no escopo do componente pai
 
   const addComponent = () => {
     setComponents([...components, <AddCategory key={components.length} />]);
@@ -159,7 +160,7 @@ setLoading(false)
           "status": status,
           "objectImage": objectImage,
           "policeOfficerThatReceived":"6650cb6c82b8e44086723f1e",
-          "subCategory": objectCategories
+          "subCategory": items
           //FALTA OBJ_NAME OU TITLE & PHOTOS
         });
         
@@ -245,19 +246,20 @@ function getCategoryNameFromId(categoryName) {
 
 const handleCategoryChange = (index, category) => {
   setSelectedCategory(category);
-   console.log(category)
   };
-  const handleUpdateCategories = (newCategories) => {
-    setObjectCategories(newCategories);
-    console.log(objectCategories)
+ 
 
-  };
- const addCategory = () => {
-  setCategories([...categories, {}]);
-};
+  const [items, setItems] = useState({});
+  const addItem = (item) => {
+    console.log(item);
+    setItems(prevItems => {
+      const newIndex = Object.keys(prevItems).length;
+      return { ...prevItems, [newIndex]: item };
+    });
+  };;
 useEffect(() => {
-  console.log(objectCategories)
-}, [objectCategories]);
+  console.log(items)
+}, [items]);
 
 
 if (loadError) return <div className="contain">Error loading maps</div>;
@@ -360,19 +362,28 @@ if (loading) {
       </Grid>
     <div>
         <AddCategory  
-        onUpdateCategories={handleUpdateCategories}
+          key={0} 
+          addItem={addItem}
           removeCategory={removeCategory} 
           onCategoryChange={handleCategoryChange}
-          existCategory = {false}
+          existCategory={false}
+          objectCategories={objectCategories}
+          setObjectCategories={setObjectCategories}
+          
+
           />
           {components.map((_, index) => (
             <AddCategory 
-            onUpdateCategories={handleUpdateCategories}
-              key={index} 
-              index={index} 
-              removeCategory={removeCategory} 
-              onCategoryChange={handleCategoryChange}
-              existCategory = {category ? true : false}
+            key={index }
+            addItem={addItem} 
+            index={index} 
+            mainCategory={category}
+            removeCategory={removeCategory} 
+            onCategoryChange={handleCategoryChange}
+            existCategory={category ? true : false}
+            objectCategories={objectCategories}
+            setObjectCategories={setObjectCategories}
+            
             />
           ))}
           <button onClick={addComponent}>Add Category</button>
