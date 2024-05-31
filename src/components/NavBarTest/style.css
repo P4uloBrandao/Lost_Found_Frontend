@@ -114,7 +114,7 @@ a:focus::after {
 }
 
 .logo {
-    margin: 0 auto 0 auto;
+    margin: 0 1em 0 1em;
     transform: scale(0.7);
     cursor: pointer;
 }

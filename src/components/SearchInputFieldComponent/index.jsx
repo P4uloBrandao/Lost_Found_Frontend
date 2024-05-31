@@ -75,12 +75,11 @@ left: -9px;
   color: var(--black-color);
   background-color:var(--primary-grey-color);
   list-style: none;
-
-  
 `;
+
 const DropdownContainer = styled.div`
 position: absolute; 
- box-shadow: 0px 0px 10px 2px rgba(1, 0, 0, 0.2);
+box-shadow: 0px 0px 10px 2px rgba(1, 0, 0, 0.2);
 
 width: -webkit-fill-available;
 left: 0;
@@ -96,9 +95,8 @@ top: 37pt!important;
   color: var(--black-color);
   background-color:var(--primary-grey-color);
   list-style: none;
-
-  
 `;
+
 const DropdownItem = styled.li`
 margin-left: 18px;
 padding: 10px;
@@ -124,7 +122,7 @@ const Pholder = styled.span`
 `;
 
 
-const DropdownComponent = ({ name,disable, icon, options, placeholder, onChange, onClick,errorMessage }) => {
+const DropdownComponent = ({ name,disable, icon, options, placeholder, onChange, onClick,errorMessage,field_name}) => {
   const [isDropdownActive, setIsDropdownActive] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [results, setResults] = useState([]);
@@ -161,9 +159,9 @@ const DropdownComponent = ({ name,disable, icon, options, placeholder, onChange,
 
   const handleOptionClick = (option) => {
     console.log(option);
-    setSelectedOption(option._id);
+    setSelectedOption(option[field_name]);
     setIsDropdownActive(false);
-    onChange(option._id);
+    onChange(option[field_name]);
     setText(option.title);
   };
 

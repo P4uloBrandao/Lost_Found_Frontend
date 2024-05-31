@@ -253,6 +253,7 @@ function  getStationID(name,stations){
           onChange={handleDropdownChange}
           name="Station"
           options={stations}
+          field_name="id"
          
         />
       </InputBox>
