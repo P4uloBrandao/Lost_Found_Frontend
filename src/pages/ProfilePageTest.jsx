@@ -15,7 +15,7 @@ const token = localStorage.getItem("token");
 
 
 const PrimaryContainer = styled.div`
-  margin: 9em 7em;
+  margin: 0.1em 7em;
   text-align: -webkit-center;
   place-content: center;
 `;

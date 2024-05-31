@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
 
 import Card from "../CardComponent/index";
 import SearchInput from "../SearchInputFieldComponent/index";
 import axios from "axios";
-
 
 const Container = styled.div`
     position: relative;
@@ -29,14 +28,46 @@ const CategoryTitle = styled.h2`
   margin-top: 0px;
 `;
 
-export default function LostObjectCatalog() {
-  const [errorMessage, setErrorMessage]= useState("")
-  const [selectedFilter, setSelectedFilter] = useState(null);
-  const [objects, setObjects] = useState([]);
-  const [objectName, setObjectName] = React.useState('');
-  const [object, setObject] = React.useState('');
-  const [isLoading, setIsLoading] = useState(true);
+const SearchButton = styled.button`
 
+  
+  bottom: 50px;
+  margin-left: 10px;
+  padding: 10px 20px;
+  background-color: #3cb684;
+  color: white;
+  border: none;
+  border-radius: 33px;
+  cursor: pointer;
+  &:hover {
+    background-color: #34a26a;
+  }
+`;
+
+const ResetButton = styled.a`
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--primary-green-color);
+  cursor:pointer;
+  margin-right: 11px;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export default function LostObjectCatalog() {
+  const [errorMessage, setErrorMessage] = useState("");
+  const [objects, setObjects] = useState([]);
+  const [objectName, setObjectName] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [filteredObjects, setFilteredObjects] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const searchInputRef = useRef(null); // UseRef para o campo de busca
 
   useEffect(() => {
     const fetchData = async () => {
@@ -45,29 +76,14 @@ export default function LostObjectCatalog() {
   
         // Buscar os dados dos objetos perdidos
         const objectsResponse = await axios.get(`http://localhost:3000/api/lost-objects/user/${token}`);
-
         const objectsData = objectsResponse.data;
   
         // Atualizar o estado dos objetos com os dados buscados
         setObjects(objectsData);
-
+        setFilteredObjects(objectsData); // Inicialmente, mostrar todos os objetos
+  
         setIsLoading(false);
   
-        // Para cada objeto, buscar o nome da categoria associada
-        const updatedObjects = await Promise.all(objectsData.map(async (object) => {
-        const catId = object.category_id;
-        const categoryResponse = await axios.get(`http://localhost:3000/api/category/${catId}`);
-        const categoryName = categoryResponse.data.name;
-  
-          // Retornar um novo objeto com o nome da categoria atualizado
-          return {
-            ...object,
-            category: categoryName,
-            catId: catId
-          };
-        }));
-        // Atualizar o estado dos objetos com os dados das categorias atualizados
-        setObjects(updatedObjects);
       } catch (error) {
         console.error('Failed to fetch data:', error);
         // Lidar com erros conforme necessário
@@ -78,13 +94,21 @@ export default function LostObjectCatalog() {
   }, []);
   
   
+  useEffect(() => {
+    console.log("Current objectName:", objectName); // Print objectName to the console whenever it changes
+  }, [objectName]);
+
+  useEffect(() => {
+    console.log("Current searchTerm:", searchTerm); // Print searchTerm to the console whenever it changes
+  }, [searchTerm]);
+
 
   const handleCreateSubmit = async (event) => {
     event.preventDefault();
     try {
         const response = await axios.put(`http://localhost:3000/api/lost-objects/${getLostObjectID(objectName,objects)}`);
     } catch (error) {
-        console.error( error);
+        console.error(error);
 
         if (error.response && error.response.data) {
             setErrorMessage(error.response.data); // Set the error message if present in the error response
@@ -99,41 +123,54 @@ export default function LostObjectCatalog() {
     setObjectName(selectedOptionName)
   };
 
-  function  getLostObjectID(name,objects){
+  const handleSearch = (value) => {
+    const filtered = objects.filter(obj =>
+      obj.title.toLowerCase() === (value.toLowerCase())
+    );
+    setFilteredObjects(filtered);
+  };
+
+  const handleResetFilters = () => {
+    setSearchTerm('');
+    setFilteredObjects(objects); // Exibir todos os objetos novamente
+  };
+
+  function getLostObjectID(name, objects){
     const foundItem = objects.find(item => item.name === name);
     return foundItem ? foundItem._id : null;
   }
 
-  const LostObjectArray = Object.entries(objects);
   if (isLoading) {
     return <div>Carregando...</div>;
-}
+  }
 
   return (
     <Container>
       <Title>My Lost Objects</Title>
-        <CategoryTitle>
+      <CategoryTitle>
         Here you can view all your lost objects. Remember to never lose hope!
-        </CategoryTitle>
+      </CategoryTitle>
+      <div>
+      <ButtonContainer>
         <SearchInput 
-                
-                placeholder={'Search your Lost Objects'}  
-                id="Objects"
-                required
-                onClick = {(e) => setObjectName(e.target.value)}
-                value={object}
-                onChange={handleDropdownChange}
-                name="Lost Object"
-                options={objects}
-              
-          />
-      
-       <Grid sx={{ textAlign: '-webkit-center', pt: 7, width:'100%' }} container spacing={5}>
-        {objects.map((object, index) => (
-          
-         <Grid spacing={2} sx={{justifyContent: 'center'        
-          }} item  xs={10} md={10} key={index}>
-            <Card  spacing={2}
+          placeholder={'Search your Lost Objects'}  
+          id="Objects"
+          required
+          onChange={handleDropdownChange}
+          name="Lost Object"
+          options={objects}
+          field_name = 'title'
+          ref={searchInputRef}
+        />
+          <SearchButton onClick={() => {setObjectName(objectName); handleSearch(objectName); }}>Search</SearchButton>
+          <ResetButton onClick={handleResetFilters}>Reset Filters</ResetButton>
+        </ButtonContainer>
+      </div>
+      <Grid sx={{ textAlign: '-webkit-center', pt: 7, width:'100%' }} container spacing={5}>
+        {filteredObjects.map((object, index) => (
+          <Grid spacing={2} sx={{justifyContent: 'center'}} item xs={10} md={10} key={index}>
+            <Card  
+              spacing={2}
               name={object.title}
               description={object.description}
               location={object.location}
@@ -146,11 +183,8 @@ export default function LostObjectCatalog() {
               matchButton = {true}
             />
           </Grid>
-          ))}  
+        ))}  
       </Grid> 
     </Container>
   );
 }
-
-
-
