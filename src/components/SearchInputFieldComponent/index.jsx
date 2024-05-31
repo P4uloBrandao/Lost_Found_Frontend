@@ -132,9 +132,9 @@ const DropdownComponent = ({ name,disable, icon, options, placeholder, onChange,
   const dropdownRef = useRef(null);
   useEffect(() => {
     if (options) {
-      
+      console.log(options)
       const filteredOptions = options.filter(option =>
-        option[name]?.toLowerCase().includes(text.toLowerCase())
+        option.name.toLowerCase().includes(text.toLowerCase())
       );
       setResults(filteredOptions);
     } else {
@@ -150,7 +150,7 @@ const DropdownComponent = ({ name,disable, icon, options, placeholder, onChange,
 
   useEffect(() => {
     if (options) {
-      const d = options.filter(el => el.title.toLowerCase().includes(deb));
+      const d = options.filter(el => el.name.toLowerCase().includes(deb));
       setResults(d);
     } else {
       setResults([]);
@@ -163,6 +163,7 @@ const DropdownComponent = ({ name,disable, icon, options, placeholder, onChange,
     setIsDropdownActive(false);
     onChange(option[field_name]);
     setText(option.title);
+
   };
 
   const handleClickOutside = (event) => {
@@ -207,8 +208,8 @@ const DropdownComponent = ({ name,disable, icon, options, placeholder, onChange,
         {errorMessage && <div className="error">{errorMessage}</div>}
           {results.length > 0 ? 
             results.map((option, index) => (
-              <DropdownItem key={index} onClick={() => handleOptionClick(option)} id={option.title}>
-                {option.title}
+              <DropdownItem key={index} onClick={() => handleOptionClick(option)} id={option.name}>
+                {option.name}
               </DropdownItem>
             )) : (
               <DropdownItem>
