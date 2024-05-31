@@ -34,6 +34,7 @@ const Container = styled.div`
   p {
     color: #000;
     margin: 0;
+    //text-align: start;
   }
 `
 
@@ -113,6 +114,7 @@ export default function AuctionsComponent() {
     const [showFilters, setShowFilters] = React.useState(false);  //FALTA BD
 
     useEffect(() => {
+
     }, []);
 
     const handleShowFilters = () => {

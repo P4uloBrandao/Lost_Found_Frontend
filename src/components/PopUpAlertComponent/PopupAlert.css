@@ -20,16 +20,6 @@
     animation: slideIn 0.5s ease-out, slideOut 0.5s ease-out 4.5s forwards;
 }
 
-p {
-    align-content: center;
-    text-align: center;
-    font-family: Roboto;
-    font-size: 1.2rem;
-    color: white;
-    font-style: normal;
-    font-weight: 400;
-}
-
 @keyframes slideIn {
     0% {
         transform: translateY(-120%);
