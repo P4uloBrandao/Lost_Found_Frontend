@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import './style.css'
 const RadioGroup = styled.div`
@@ -13,16 +13,6 @@ const Options = styled.div`
  margin:10px;
 `;
 
-const Label = styled.label`
-  
-`;
-
-const Text = styled.span`
-  `;
-
-const Indicator = styled.div`
- 
-`;
 const RadioButton = ({ options, onChange, value }) => {
     const [selectedOption, setSelectedOption] = useState(value);
   
@@ -33,7 +23,12 @@ const RadioButton = ({ options, onChange, value }) => {
         onChange(selectedValue);
       }
     };
-  
+    useEffect(() => {
+      const defaultOption = options.find(option => option.defaultSelection);
+      if (defaultOption) {
+        setSelectedOption(defaultOption.value);
+      }
+    }, [options]);
     return (
       <RadioGroup>
         {options.map((option) => (

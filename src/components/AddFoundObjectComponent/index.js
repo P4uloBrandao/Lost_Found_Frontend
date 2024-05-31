@@ -7,7 +7,7 @@ import CustomInputFiles from "../ImageInputComponent/FileInput";
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
 import RadioButton from '../RadioButtonComponent';
-import ProfileSettings from '../profileSettings/index'
+import ProfileCreationComponent from '../ProfileCreationComponent/index'
 import DropdownInput from "../dropdownInputComponent/index";
 import Grid from '@mui/material/Grid';
 import { InputSubmit, Container,InputBox ,Title,Form, Wrapper,SubCategoryTitle,CategoryTitle , CategorySection } from '../../assets/StylePopularComponent/style';
@@ -16,7 +16,9 @@ import  SearchInput  from '../../components/SearchInputFieldComponent/index';
 import { useAuth } from '../AuthContext';
 import { create } from '@mui/material/styles/createTransitions';
 import AddCategory from '../CategoriesComponents/AddCategoriesObjectComponent/index.jsx';
-
+import  AddIcon  from '../../assets/icons/add50.png';
+import PopupAlert from '../PopUpAlertComponent/index.jsx';
+import './App.css';
 const StyledTextArea = styled.textarea`
     height: ${props => props.height}px;
     font-size: 16px;
@@ -70,11 +72,22 @@ const ResetButton = styled.a`
   &:hover {
     text-decoration: underline;
 `;
+const AddBtn = styled.img`
+transform: scale(0.7);
+
+    transition: transform 0.2s;
+    &:hover {
+      transform: scale(0.9);
+    }
+`;
+const AddCategoryContainer = styled.div`
+ width: 100%;
+`;
 export default function AddFoundObject  ()  {
   const [objectImage, setObjImage] = React.useState("");
   
   //VARIVEIS DE TESTE
-  const [userWhoFound, setUserWhoFound] = React.useState('');
+  const [userWhoFound, setUserWhoFound] = React.useState(null);
   const [policeOfficerThatReceived, setPolice] = React.useState('');
   //VARIVEIS DE TESTE
   const [title, setTitle] = React.useState('');  //FALTA BD
@@ -92,13 +105,14 @@ export default function AddFoundObject  ()  {
   const [mapCenter, setMapCenter] = useState({ lat: 38.72, lng: -9.14 }); // Initial center (Lisbon)
   const libraries = ['places']; // Include places library for location search
   const [activeButton, setActiveButton] = useState(null);
-  const [selectedValue,setSelectedValue ] = useState("no");
+  const [selectedValue,setSelectedValue ] = useState("yes");
   const [subCategories, setSubCategories] = React.useState('');
   const [subCategory, setSelectedSubCategory] = React.useState('');
   const [loading, setLoading] = useState(true);
   const [fullDataCategories, setFullDataCategories] = useState([]);
   const [subSubCategories, setSubSubCategories] = useState([]);
 
+  const [objectCreated, setObjectCreated] = useState(false);
   const [objectCategories, setObjectCategories] = useState({});
   //DATAS
   const today = new Date();
@@ -106,10 +120,12 @@ export default function AddFoundObject  ()  {
   const nextMonthDate = (new Date(today.setMonth(today.getMonth() + 1))).toISOString().split('T')[0];
 
   const [displayedCategories, setDisplayedCategories] = useState([]);
-
   const {  authUser } = useAuth();
- 
   const [components, setComponents] = useState([]);
+  const [user, setUser] = useState("");
+  const [popupMessage, setPopupMessage] = useState('');
+
+  let counter = 0; // Mantido no escopo do componente pai
 
   const addComponent = () => {
     setComponents([...components, <AddCategory key={components.length} />]);
@@ -124,7 +140,6 @@ export default function AddFoundObject  ()  {
         setCategories(response.data);
         setDisplayedCategories(Object.entries(response.data))
         setLoading(false)
-        console.log(displayedCategories)
         console.error(response.data);
     } catch (error) {
         console.error('Failed to fetch categories', error);
@@ -159,10 +174,10 @@ setLoading(false)
           "status": status,
           "objectImage": objectImage,
           "policeOfficerThatReceived":"6650cb6c82b8e44086723f1e",
-          "subCategory": objectCategories
+          "subCategory": items
           //FALTA OBJ_NAME OU TITLE & PHOTOS
         });
-        
+        setObjectCreated(true)
         
       } catch (error) {
         console.error("Object Registration failed:", error);
@@ -182,12 +197,19 @@ setLoading(false)
          const response = await axios.post("http://localhost:3000/api/users/getUser/",
         {email,
           nic,});
-        console.log(response.data._id)
         setUserWhoFound(response.data._id)
+        setUser("true")
+        setTimeout(() => {
+          setUser("");
+      }, 3000);
+      
         
       } catch (error) {
         console.error("User Validation failed:", error);
-                
+        setUser("false")
+        setTimeout(() => {
+          setUser("");
+      }, 3000);
         if (error.response && error.response.data) {
           setMessage(error.response.data.error); // Set the error message if present in the error response
         } else {
@@ -214,7 +236,6 @@ setLoading(false)
       try {
         const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${geocodingApiKey}`);
         const address = response.data.results[0].formatted_address;
-        console.log('Address:', address);
         setObjLoc(address);
 
         // Faça o que você precisa com o endereço, como definir o estado
@@ -234,7 +255,6 @@ setLoading(false)
   
  function test(value){
   setSelectedValue(value)
-  console.log(selectedValue)
 
  }
 
@@ -243,13 +263,42 @@ function getCategoryNameFromId(categoryName) {
   return category ? category.name : null;
  }
 
+const handleCategoryChange = (index, category) => {
+  setSelectedCategory(category);
+  };
+ 
 
- const addCategory = () => {
-  setCategories([...categories, {}]);
-};
+  const [items, setItems] = useState({});
+  
+  const addItem = (item) => {
+  
+
+    setItems(prevItems => {
+      const existingKey = Object.keys(prevItems).find(key => prevItems[key].name === item.name);
+
+      if (existingKey !== undefined) {
+        setPopupMessage(`Item with name "${item.name}" was already selected. This operation will replace it.`);
+        setTimeout(() => {
+          setPopupMessage('');
+      }, 5000);
+        return { ...prevItems, [existingKey]: item }; // Replace the existing item
+      }
+
+      const newIndex = Object.keys(prevItems).length;
+      return { ...prevItems, [newIndex]: item };
+    });
+  };
+  
+useEffect(() => {
+}, [items,user]);
+
+
 if (loadError) return <div className="contain">Error loading maps</div>;
 if (!isLoaded) return <div className="contain"><Loader/></div>;
   
+if (objectCreated) return <PopupAlert message={"Object registered"} />
+
+ 
 if (loading) {
   return <Loader/>; // Ou qualquer indicador de carregamento que você preferir
 }
@@ -259,7 +308,11 @@ if (loading) {
       onChange={(selectedValue) => test(selectedValue)}
       value="option1" />
   </RadioBtn>;
+
   return ( <>
+  {popupMessage && <PopupAlert message={popupMessage}   />}
+  {user === "true" && (<>  <PopupAlert message={"Valid User"} /></>)}
+  {user === "false" && (<>  <PopupAlert message={"Invalid User"} /></>)}
   <Container>
   <Title>Finder’s Information</Title>
       <CategoryTitle>Does the finder have an BIDFIND.er account? 
@@ -299,7 +352,7 @@ if (loading) {
           </InputSubmit></>
         )}
       {selectedValue !== "yes" && (<>
-      <ProfileSettings /></>)}
+      <ProfileCreationComponent setUserWhoFound ={setUserWhoFound} /></>)}
   </Container>
   
   {userWhoFound !== null && (
@@ -345,16 +398,37 @@ if (loading) {
 <Grid item xs={12} sm={12}> 
       <Title>In what category does it fit in?</Title>
       </Grid>
-    <div>
+    <AddCategoryContainer>
+        <AddCategory  
+          index={0} 
+          addItem={addItem}
+          removeCategory={removeCategory} 
+          onCategoryChange={handleCategoryChange}
+          existCategory={false}
+          objectCategories={objectCategories}
+          setObjectCategories={setObjectCategories}
+          
+
+          />
           {components.map((_, index) => (
             <AddCategory 
-              key={index} 
-              index={index} 
-              removeCategory={removeCategory} 
+            addItem={addItem} 
+            index={index +1} 
+            mainCategory={category}
+            removeCategory={removeCategory} 
+            onCategoryChange={handleCategoryChange}
+            existCategory={category ? true : false}
+            objectCategories={objectCategories}
+            setObjectCategories={setObjectCategories}
+            
             />
           ))}
-          <button onClick={addComponent}>Add Category</button>
-        </div>
+          
+       {Object.keys(items).length > 0 && (
+           <AddBtn src={AddIcon} className='addBtn' onClick={addComponent}alt="add category" />
+
+)}
+       </AddCategoryContainer>
 
         </Container>
       <Container>
