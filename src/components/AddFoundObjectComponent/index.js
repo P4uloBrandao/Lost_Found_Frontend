@@ -87,7 +87,7 @@ export default function AddFoundObject  ()  {
   const [objectImage, setObjImage] = React.useState("");
   
   //VARIVEIS DE TESTE
-  const [userWhoFound, setUserWhoFound] = React.useState('');
+  const [userWhoFound, setUserWhoFound] = React.useState(null);
   const [policeOfficerThatReceived, setPolice] = React.useState('');
   //VARIVEIS DE TESTE
   const [title, setTitle] = React.useState('');  //FALTA BD
@@ -105,7 +105,7 @@ export default function AddFoundObject  ()  {
   const [mapCenter, setMapCenter] = useState({ lat: 38.72, lng: -9.14 }); // Initial center (Lisbon)
   const libraries = ['places']; // Include places library for location search
   const [activeButton, setActiveButton] = useState(null);
-  const [selectedValue,setSelectedValue ] = useState("no");
+  const [selectedValue,setSelectedValue ] = useState("yes");
   const [subCategories, setSubCategories] = React.useState('');
   const [subCategory, setSelectedSubCategory] = React.useState('');
   const [loading, setLoading] = useState(true);
@@ -123,6 +123,7 @@ export default function AddFoundObject  ()  {
   const {  authUser } = useAuth();
   const [components, setComponents] = useState([]);
   const [user, setUser] = useState("");
+  const [popupMessage, setPopupMessage] = useState('');
 
   let counter = 0; // Mantido no escopo do componente pai
 
@@ -139,7 +140,6 @@ export default function AddFoundObject  ()  {
         setCategories(response.data);
         setDisplayedCategories(Object.entries(response.data))
         setLoading(false)
-        console.log(displayedCategories)
         console.error(response.data);
     } catch (error) {
         console.error('Failed to fetch categories', error);
@@ -197,7 +197,6 @@ setLoading(false)
          const response = await axios.post("http://localhost:3000/api/users/getUser/",
         {email,
           nic,});
-        console.log(response.data._id)
         setUserWhoFound(response.data._id)
         setUser("true")
         setTimeout(() => {
@@ -237,7 +236,6 @@ setLoading(false)
       try {
         const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${geocodingApiKey}`);
         const address = response.data.results[0].formatted_address;
-        console.log('Address:', address);
         setObjLoc(address);
 
         // Faça o que você precisa com o endereço, como definir o estado
@@ -257,7 +255,6 @@ setLoading(false)
   
  function test(value){
   setSelectedValue(value)
-  console.log(selectedValue)
 
  }
 
@@ -272,15 +269,27 @@ const handleCategoryChange = (index, category) => {
  
 
   const [items, setItems] = useState({});
+  
   const addItem = (item) => {
-    console.log(item);
+  
+
     setItems(prevItems => {
+      const existingKey = Object.keys(prevItems).find(key => prevItems[key].name === item.name);
+
+      if (existingKey !== undefined) {
+        setPopupMessage(`Item with name "${item.name}" was already selected. This operation will replace it.`);
+        setTimeout(() => {
+          setPopupMessage('');
+      }, 5000);
+        return { ...prevItems, [existingKey]: item }; // Replace the existing item
+      }
+
       const newIndex = Object.keys(prevItems).length;
       return { ...prevItems, [newIndex]: item };
     });
-  };;
+  };
+  
 useEffect(() => {
-  console.log(items)
 }, [items,user]);
 
 
@@ -301,6 +310,7 @@ if (loading) {
   </RadioBtn>;
 
   return ( <>
+  {popupMessage && <PopupAlert message={popupMessage}   />}
   {user === "true" && (<>  <PopupAlert message={"Valid User"} /></>)}
   {user === "false" && (<>  <PopupAlert message={"Invalid User"} /></>)}
   <Container>
@@ -390,7 +400,7 @@ if (loading) {
       </Grid>
     <AddCategoryContainer>
         <AddCategory  
-          key={0} 
+          index={0} 
           addItem={addItem}
           removeCategory={removeCategory} 
           onCategoryChange={handleCategoryChange}
@@ -402,9 +412,8 @@ if (loading) {
           />
           {components.map((_, index) => (
             <AddCategory 
-            key={index }
             addItem={addItem} 
-            index={index} 
+            index={index +1} 
             mainCategory={category}
             removeCategory={removeCategory} 
             onCategoryChange={handleCategoryChange}

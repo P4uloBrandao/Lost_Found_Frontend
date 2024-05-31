@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './PopupAlert.css';
 
-function PopupAlert({ message, duration = 100000 }) {
+function PopupAlert({ message, duration = 5000 }) {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {

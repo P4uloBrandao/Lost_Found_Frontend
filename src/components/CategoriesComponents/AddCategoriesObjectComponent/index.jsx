@@ -55,6 +55,7 @@ export default function AddCategory  ({ key, removeCategory,index, onCategoryCha
 
      //GET CATEGORIES
      useEffect(() => {
+     
       if (existCategory === true){
         setSelectedCategory(mainCategory)
         setLoading(true);
@@ -237,9 +238,10 @@ return (
       )}
       </Grid> 
       <Grid item xs={12} sm={1}> 
-
-           <RemoveButton src={DeleteBtn} onClick={() => removeCategory(index)} className='deleteBtn' alt="delete category" />
-
+      {index !== 0 && ( <>          
+       <RemoveButton src={DeleteBtn} onClick={() => removeCategory(index)} className='deleteBtn' alt="delete category" />
+      </>
+      )}
         
         </Grid> 
 

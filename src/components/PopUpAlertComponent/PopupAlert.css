@@ -13,7 +13,7 @@
 .popup-content {
     background-color: var(--primary-green-color);
     width: 300px;
-    height: 57px;
+    height: auto;
     border-radius: 8px;
     padding: 3px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -32,7 +32,7 @@ p {
 
 @keyframes slideIn {
     0% {
-        transform: translateY(-100%);
+        transform: translateY(-120%);
     }
     100% {
         transform: translateY(0);
@@ -44,11 +44,6 @@ p {
         transform: translateY(0);
     }
     100% {
-        transform: translateY(-100%);
+        transform: translateY(-120%);
     }
-}
-
-button {
-    margin-top: 10px;
-    cursor: pointer;
 }

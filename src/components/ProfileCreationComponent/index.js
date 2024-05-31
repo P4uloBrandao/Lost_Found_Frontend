@@ -19,6 +19,7 @@ import MailIcon from '@mui/icons-material/MailOutlineRounded';
 import PhoneIcon from '@mui/icons-material/PhoneAndroidRounded';
 import AddressIcon from '@mui/icons-material/HomeRounded';
 import HomeIcon from '@mui/icons-material/HomeRounded';
+import PopupAlert from '../PopUpAlertComponent/index.jsx';
 
 import axios from "axios";
 import {PasswordStrength} from '../controllers/index'
@@ -123,6 +124,7 @@ export default function ProfileCreationComponent({setUserWhoFound, options}) {
     const [message, setMessage] = useState("");
     const [phone, setPhone] = React.useState('');
     const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
+    const [objectCreated, setObjectCreated] = useState("");
 
     const token = localStorage.getItem("token");
    
@@ -150,9 +152,16 @@ export default function ProfileCreationComponent({setUserWhoFound, options}) {
           data1);
           console.log(response.data._id);
           setUserWhoFound(response.data._id)
+          setObjectCreated("true");
+          setTimeout(() => {
+            setObjectCreated("");
+        }, 3000);
         } catch (error) {
             console.error("Update failed:", error);
-             
+             setObjectCreated("false")
+             setTimeout(() => {
+              setObjectCreated("");
+          }, 3000);
              
             if (error.response && error.response.data) {
               setMessage(error.response.data.error); // Set the error message if present in the error response
@@ -164,9 +173,12 @@ export default function ProfileCreationComponent({setUserWhoFound, options}) {
 
 
  
+    if (objectCreated==="true") return <PopupAlert message={"User created"} />
+    if (objectCreated==="false") return <PopupAlert message={"User not created"} />
 
     return (
       <>
+      
       <Title>Personal Information</Title>
       <CategoryTitle>
         You can edit your personal info in the fields that are not locked anytime! Remember to save all changes
@@ -295,7 +307,7 @@ export default function ProfileCreationComponent({setUserWhoFound, options}) {
     
     <Grid item xs={12}>
       <InputBox>
-        <InputSubmit type="submit" className="input-submit" value="Register" label="Register">Save Canges</InputSubmit>
+        <InputSubmit type="submit" className="input-submit" value="Register" label="Register">Create user</InputSubmit>
       </InputBox>
     </Grid>
   </Grid>
