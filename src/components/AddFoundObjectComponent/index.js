@@ -290,6 +290,7 @@ const handleCategoryChange = (index, category) => {
   };
   
 useEffect(() => {
+  console.log(items)
 }, [items,user]);
 
 

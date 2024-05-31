@@ -7,7 +7,10 @@ import CustomInputFiles from "../ImageInputComponent/FileInput";
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
 import { InputSubmit, Container,InputBox ,Title,Form,CategoryTitle,CategorySection, Wrapper } from '../../assets/StylePopularComponent/style';
-
+import AddCategory from '../CategoriesComponents/AddCategoriesObjectComponent/index.jsx';
+import  AddIcon  from '../../assets/icons/add50.png';
+import PopupAlert from '../PopUpAlertComponent/index.jsx';
+import Grid from '@mui/material/Grid';
 const StyledTextArea = styled.textarea`
     height: ${props => props.height}px;
     font-size: 16px;
@@ -50,6 +53,17 @@ const ResetButton = styled.a`
   &:hover {
     text-decoration: underline;
 `;
+const AddBtn = styled.img`
+transform: scale(0.7);
+
+    transition: transform 0.2s;
+    &:hover {
+      transform: scale(0.9);
+    }
+`;
+const AddCategoryContainer = styled.div`
+ width: 100%;
+`;
 export default function LostObjectForm  ()  {
   const [objectImage, setObjImage] = React.useState("");
 
@@ -68,6 +82,20 @@ export default function LostObjectForm  ()  {
   const libraries = ['places']; // Include places library for location search
   const [activeButton, setActiveButton] = useState(null);
 
+  const [items, setItems] = useState({});
+  const [objectCreated, setObjectCreated] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
+  const [components, setComponents] = useState([]);
+  const [objectCategories, setObjectCategories] = useState({});
+  const today = new Date();
+  const formattedDate = today.toISOString().split('T')[0];
+  
+  const addComponent = () => {
+    setComponents([...components, <AddCategory key={components.length} />]);
+  };
+  const removeCategory = (indexToRemove) => {
+    setComponents(components.filter((_, index) => index !== indexToRemove));
+  };
   useEffect(() => {
     const fetchCategories = async () => {
       try {
@@ -82,6 +110,10 @@ export default function LostObjectForm  ()  {
 
     fetchCategories();
   }, []);
+  function getCategoryNameFromId(categoryName) {
+    const category = categories.find(category => category._id === categoryName);
+    return category ? category.name : null;
+   }
  const onImageUpload = (event) => {
     setObjImage("https://www.totalprotex.pt/media/catalog/product/cache/default/image/500x500/9df78eab33525d08d6e5fb8d27136e95/s/t/steelite-taskforce-boot-s3-hro-0_3.jpg")
 }
@@ -91,14 +123,16 @@ export default function LostObjectForm  ()  {
     try {
       
         const response = await axios.post("http://localhost:3000/api/lost-objects",
-        {owner,
-          title,
-          category,
-          description,
-          location,
-          price,
-          status,
-          objectImage,
+        {"owner": owner,
+          "title": title,
+          "subCategory":items,
+          "category": getCategoryNameFromId(category),
+          "description": description,
+          "location": location,
+          "price": price,
+          "status":status,
+          "lostDate": formattedDate,
+          "objectImage": objectImage,
           //FALTA OBJ_NAME OU TITLE & PHOTOS
         });
         
@@ -122,7 +156,7 @@ export default function LostObjectForm  ()  {
   };
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: 'AIzaSyC6QRYQechnlxkaivlAkIyKhMcB3iGaSZM',
+    googleMapsApiKey: 'AIzaSyDPUTFHLcj71rpOYKfPwigaRF8uiOKDvWo',
     libraries,
   });
 
@@ -130,11 +164,11 @@ export default function LostObjectForm  ()  {
       const lat = event.latLng.lat();
       const lng = event.latLng.lng();
       setObjLoc({ lat: event.latLng.lat(), lng: event.latLng.lng() });
+      const geocodingApiKey = "AIzaSyDPUTFHLcj71rpOYKfPwigaRF8uiOKDvWo"
 
       try {
-        const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyC6QRYQechnlxkaivlAkIyKhMcB3iGaSZM`);
+        const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${geocodingApiKey}`);
         const address = response.data.results[0].formatted_address;
-        console.log('Address:', address);
         setObjLoc(address);
 
         // Faça o que você precisa com o endereço, como definir o estado
@@ -145,9 +179,35 @@ export default function LostObjectForm  ()  {
       }
     };
 
+    const addItem = (item) => {
+  
+
+      setItems(prevItems => {
+        const existingKey = Object.keys(prevItems).find(key => prevItems[key].name === item.name);
+  
+        if (existingKey !== undefined) {
+          setPopupMessage(`Item with name "${item.name}" was already selected. This operation will replace it.`);
+          setTimeout(() => {
+            setPopupMessage('');
+        }, 5000);
+          return { ...prevItems, [existingKey]: item }; // Replace the existing item
+        }
+  
+        const newIndex = Object.keys(prevItems).length;
+        return { ...prevItems, [newIndex]: item };
+      });
+    };
+  const handleCategoryChange = (index, category) => {
+    setSelectedCategory(category);
+    };
+  useEffect(() => {
+    console.log(items)
+  }, [items]);
+
   if (loadError) return <div className="contain">Error loading maps</div>;
   if (!isLoaded) return <div className="contain">Loading maps</div>;
-  
+  if (objectCreated) return <PopupAlert message={"Object registered"} />
+
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
   };
@@ -170,20 +230,40 @@ export default function LostObjectForm  ()  {
  
         </InputBox>
       <Title>What did you lose?</Title>
-      <CategoryTitle>Choose the category of the found object.</CategoryTitle>
-      <CategorySection>
-      {categoriesArray.map(([key, value], index) => (
-        <CategoryButton
-          key={index}
-          isSelected={category === value._id}
-          onClick={() => handleCategoryClick(value._id)}
-          active={activeButton === value._id}
-        >
-          {value.name}
-        </CategoryButton>
-      ))}
-       
-      </CategorySection>
+      <Grid item xs={12} sm={12}> 
+      <Title>In what category does it fit in?</Title>
+      </Grid>
+    <AddCategoryContainer>
+        <AddCategory  
+          index={0} 
+          addItem={addItem}
+          removeCategory={removeCategory} 
+          onCategoryChange={handleCategoryChange}
+          existCategory={false}
+          objectCategories={objectCategories}
+          setObjectCategories={setObjectCategories}
+          
+
+          />
+          {components.map((_, index) => (
+            <AddCategory 
+            addItem={addItem} 
+            index={index +1} 
+            mainCategory={category}
+            removeCategory={removeCategory} 
+            onCategoryChange={handleCategoryChange}
+            existCategory={category ? true : false}
+            objectCategories={objectCategories}
+            setObjectCategories={setObjectCategories}
+            
+            />
+          ))}
+          
+       {Object.keys(items).length > 0 && (
+           <AddBtn src={AddIcon} className='addBtn' onClick={addComponent}alt="add category" />
+
+)}
+       </AddCategoryContainer>
       <Title>Write the price of the lost object.</Title>
       <InputBox>
         <InputF

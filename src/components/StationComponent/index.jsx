@@ -80,7 +80,7 @@ export default function StationComponent() {
         event.preventDefault();
         try {
             const response = await axios.put(`http://localhost:3000/api/police/police-officers/${getStationID(stationName,stations)}`);
-            
+            console.log(response.data);
             
         } catch (error) {
             console.error( error);
@@ -97,8 +97,8 @@ export default function StationComponent() {
       setStationName(selectedOptionName)
       // Faça o que for necessário com o nome da opção selecionada
     };
-    function  getStationID(name,stations){
-      const foundItem = stations.find(item => item.name === name);
+    function  getStationID(id,stations){
+      const foundItem = stations.find(item => item._id === id);
       return foundItem ? foundItem._id : null;
     }
     const handleStationClick = (station) => {
@@ -107,7 +107,7 @@ export default function StationComponent() {
     const stationsArray = Object.entries(stations);
     if (isLoading) {
       return <div>Carregando...</div>;
-  }
+    }
   
     return (<>
         <Container>
