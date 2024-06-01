@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
 
-import Card from "../CardComponent/index";
+import Card from "../CardComponentAuction/index";
 import SearchInput from "../SearchInputFieldComponent/index";
 import axios from "axios";
 
@@ -68,6 +68,8 @@ export default function AuctionsCatalog() {
   const [filteredAuctions, setFilteredAuctions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const searchInputRef = useRef(null); // UseRef para o campo de busca
+  const [foundObjectsList, setfoundObjectsList] = useState([]);
+  const [foundObjectsListF, setfoundObjectsListF] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,23 +87,23 @@ export default function AuctionsCatalog() {
         setAuctions(auctionsData);
         setFilteredAuctions(auctionsData); // Inicialmente, mostrar todos os objetos
 
-        // /// Array para armazenar as promessas de solicitação HTTP
-        // const requests = [];
+        /// Array para armazenar as promessas de solicitação HTTP
+        const requests = [];
 
-        // // Iterar sobre os dados dos leilões e adicionar as promessas de solicitação HTTP ao array
-        // auctionsData.forEach(auction => {
-        //     const foundObject = auction.foundObject;
-        //     const requestPromise = axios.get(`http://localhost:3000/api/lost-objects/${foundObject}`);
-        //     requests.push(requestPromise);
-        // });
+        // Iterar sobre os dados dos leilões e adicionar as promessas de solicitação HTTP ao array
+        auctionsData.forEach(auction => {
+            const foundObject = auction.foundObject;
+            const requestPromise = axios.get(`http://localhost:3000/api/found-objects/${foundObject}`);
+            requests.push(requestPromise);
+        });
 
-        // // Aguardar que todas as solicitações sejam concluídas
-        // const responses = await Promise.all(requests);
+        // Aguardar que todas as solicitações sejam concluídas
+        const responses = await Promise.all(requests);
 
-        // // Iterar sobre as respostas e extrair os objetos encontrados
-        // const foundObjectsList = responses.map(response => response.data.foundObject);
-        // console.log(foundObjectsList);
-  
+        // Iterar sobre as respostas e extrair os objetos encontrados
+        const obgf = responses.map(response => response.data);
+        setfoundObjectsList(obgf);
+        setfoundObjectsListF(obgf);
         setIsLoading(false);
   
       } catch (error) {
@@ -119,6 +121,7 @@ export default function AuctionsCatalog() {
   }, [auctionName]);
 
   useEffect(() => {
+
     console.log("Current searchTerm:", searchTerm); // Print searchTerm to the console whenever it changes
   }, [searchTerm]);
 
@@ -128,15 +131,22 @@ export default function AuctionsCatalog() {
   };
 
   const handleSearch = (value) => {
-    const filtered = auctions.filter(obj =>
-      obj._id.toLowerCase() === (value.toLowerCase())
-    );
-    setFilteredAuctions(filtered);
+    const filtered = auctions.filter((auction, index) => {
+      const foundObject = foundObjectsList[index];
+      return foundObject.title.toLowerCase() === value.toLowerCase();
+    });
+
+   setfoundObjectsListF(foundObjectsList.filter((fo, index) => {
+      return fo.title.toLowerCase() === value.toLowerCase();
+    }));
+
+   setFilteredAuctions(filtered); 
   };
 
   const handleResetFilters = () => {
     setSearchTerm('');
     setFilteredAuctions(auctions); // Exibir todos os objetos novamente
+    setfoundObjectsListF(foundObjectsList);
   };
 
   if (isLoading) {
@@ -157,28 +167,29 @@ export default function AuctionsCatalog() {
           required
           onChange={handleDropdownChange}
           name="Auction"
-          options={auctions}
-          field_name = '_id'
+          options={foundObjectsList}
+          value = {(e) => setAuctionName(e.target.value)}
+          field_name = 'title'
           ref={searchInputRef}
         />
-          <SearchButton onClick={() => {setAuctionName(auctionName); handleSearch(auctionName); }}>Search</SearchButton>
+          <SearchButton onClick={() => handleSearch(auctionName) }>Search</SearchButton>
           <ResetButton onClick={handleResetFilters}>Reset Filters</ResetButton>
         </ButtonContainer>
       </div>
       <Grid sx={{ textAlign: '-webkit-center', pt: 7, width:'100%' }} container spacing={5}>
-        {filteredAuctions.map((auction, index) => (
+        {filteredAuctions.map((auction, index) => ( 
           <Grid spacing={2} sx={{justifyContent: 'center'}} item xs={10} md={10} key={index}>
             <Card  
               spacing={2}
-              name={auction._id}
+              name={foundObjectsListF[index].title}
               description={auction.description}
-              location={auction.location}
+              location={foundObjectsListF[index].location}
               category={auction.status}
               id={auction._id}
               catId={auction.status}
               date ={auction.endDate}
-              photo ={auction.objectImage}
-              status={auction.startDate}
+              photo ={foundObjectsListF[index].objectImage}
+              status={auction.status}
               matchButton = {true}
             />
           </Grid>
