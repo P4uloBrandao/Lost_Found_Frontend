@@ -9,7 +9,7 @@ import './index.css';
 
 
 
-const CardLostObjecs = ({ matchButton, catId,name, description, location, date, category, id,photo, status }) => {
+const CardLostObjecs = ({ matchButton, catId,name, description, location, date, category, id,photo, status,highbid }) => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState(null);
   const handleViewMatches = () => {
@@ -52,8 +52,9 @@ const CardLostObjecs = ({ matchButton, catId,name, description, location, date, 
           <h2>{name}</h2>
           </Grid>
           <Grid  style={{ textAlignLast: 'left',paddingLeft: '1rem',    fontWeight: '300'}}xs={12} md={6} mdOffset="auto">
+            <p>Highest bid: {highbid}</p>
             <p>Ends on: {date}</p>
-            <p>Lost at: {location}</p>
+            {/* <p>Lost at: {location}</p> */}
             <p className='descriptionBtn' onClick={handleViewMatches}>View more{'>'}</p>
           </Grid>
           <Grid xs={12} style={{textAlignLast: 'left',paddingLeft: '5rem',    fontWeight: '300'}} xsOffset={4} md={6} mdOffset={0}>

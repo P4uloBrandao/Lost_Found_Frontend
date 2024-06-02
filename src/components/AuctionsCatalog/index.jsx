@@ -89,21 +89,32 @@ export default function AuctionsCatalog() {
 
         /// Array para armazenar as promessas de solicitação HTTP
         const requests = [];
+        const requestsbid = [];
 
         // Iterar sobre os dados dos leilões e adicionar as promessas de solicitação HTTP ao array
         auctionsData.forEach(auction => {
             const foundObject = auction.foundObject;
             const requestPromise = axios.get(`http://localhost:3000/api/found-objects/${foundObject}`);
             requests.push(requestPromise);
+            const requestPromisebid = axios.get(`http://localhost:3000/api/auction/${auction._id}/bid`);
+            requestsbid.push(requestPromisebid);
         });
 
         // Aguardar que todas as solicitações sejam concluídas
         const responses = await Promise.all(requests);
+        const responsesbid = await Promise.all(requestsbid);
 
         // Iterar sobre as respostas e extrair os objetos encontrados
         const obgf = responses.map(response => response.data);
+        const bid = responsesbid.map(response => response.data);
+
+        auctionsData.forEach((auction,index) => {
+          auction.winnerBid = bid[index].value;
+      });
+
         setfoundObjectsList(obgf);
         setfoundObjectsListF(obgf);
+
         setIsLoading(false);
   
       } catch (error) {
@@ -191,6 +202,7 @@ export default function AuctionsCatalog() {
               photo ={foundObjectsListF[index].objectImage}
               status={auction.status}
               matchButton = {true}
+              highbid={auction.winnerBid + " EUR"}
             />
           </Grid>
         ))}  
