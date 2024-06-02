@@ -65,7 +65,7 @@ const AddCategoryContainer = styled.div`
  width: 100%;
 `;
 export default function LostObjectForm  ()  {
-  const [objectImage, setObjImage] = React.useState("");
+  const [objectImage, setObjImage] = React.useState([]);
 
   const [owner, setOwner] = React.useState(localStorage.getItem("token"));
   const [title, setTitle] = React.useState('');  //FALTA BD
@@ -111,30 +111,38 @@ export default function LostObjectForm  ()  {
     fetchCategories();
   }, []);
   function getCategoryNameFromId(categoryName) {
-    const category = categories.find(category => category._id === categoryName);
+    const category = categories.find(category => category.name === categoryName);
     return category ? category.name : null;
    }
  const onImageUpload = (event) => {
-    setObjImage("https://www.totalprotex.pt/media/catalog/product/cache/default/image/500x500/9df78eab33525d08d6e5fb8d27136e95/s/t/steelite-taskforce-boot-s3-hro-0_3.jpg")
+    let filesArray= []
+
+   for (let i = 0; i < event.length; i++) {
+        filesArray.push(event[i])
+   }
+
+    setObjImage(filesArray);
 }
   const handleSubmit = async (event) => {
     
     event.preventDefault();
     try {
-      
-        const response = await axios.post("http://localhost:3000/api/lost-objects",
-        {"owner": owner,
-          "title": title,
-          "subCategory":items,
-          "category": getCategoryNameFromId(category),
-          "description": description,
-          "location": location,
-          "price": price,
-          "status":status,
-          "lostDate": formattedDate,
-          "objectImage": objectImage,
-          //FALTA OBJ_NAME OU TITLE & PHOTOS
+        const formData = new FormData();
+        formData.append("owner", owner);
+        formData.append("title", title);
+        formData.append("subCategory", items);
+        formData.append("category", getCategoryNameFromId(category));
+        formData.append("description", description);
+        formData.append("location", location);
+        formData.append("price", price);
+        formData.append("status", status);
+        formData.append("lostDate", formattedDate);
+        objectImage.forEach((image) => {
+            formData.append("objectImage[]", image);
         });
+
+        const response = await axios.post("http://localhost:3000/api/lost-objects",
+          formData,);
         
         // console.log(response.data)
       } catch (error) {
@@ -180,6 +188,7 @@ export default function LostObjectForm  ()  {
     };
 
     const addItem = (item) => {
+      console.log(item)
   
 
       setItems(prevItems => {
