@@ -141,11 +141,9 @@ export default function LostObjectForm  ()  {
         formData.append("price", price);
         formData.append("status", status);
         formData.append("lostDate", formattedDate);
-        //teste
-        formData.append("objectImage[]", "image");
-        // objectImage.forEach((image) => {
-        //     formData.append("objectImage[]", image);
-        // });
+        objectImage.forEach((image) => {
+            formData.append("objectImage[]", image);
+        });
 
         const response = await axios.post("http://localhost:3000/api/lost-objects",
           formData,);
