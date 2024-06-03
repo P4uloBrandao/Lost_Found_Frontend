@@ -136,7 +136,7 @@ export default function AddFoundObject  ()  {
   useEffect(() => {
     const fetchCategories = async () => {
     try {
-        const response = await axios.get('http://localhost:3000/api/category');
+        const response = await axios.get('https://bidfinderbackend.ddns.net/api/category');
         setCategories(response.data);
         setDisplayedCategories(Object.entries(response.data))
         setLoading(false)
@@ -186,7 +186,7 @@ setLoading(false)
         formData.append("subCategory", items);
       console.log(formData.get("subCategory"))
 
-        const response = await axios.post("http://localhost:3000/api/found-objects",
+        const response = await axios.post("https://bidfinderbackend.ddns.net/api/found-objects",
         formData);
         setObjectCreated(true)
         
@@ -205,7 +205,7 @@ setLoading(false)
   const handleUserValidation = async (event) => {
    event.preventDefault();
     try {
-         const response = await axios.post("http://localhost:3000/api/users/getUser/",
+         const response = await axios.post("https://bidfinderbackend.ddns.net/api/users/getUser/",
         {email,
           nic,});
         setUserWhoFound(response.data._id)

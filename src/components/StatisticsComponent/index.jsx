@@ -25,7 +25,7 @@ const Estatistics = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('https://10.182.0.39/api/stats');
+        const response = await axios.get('https://bidfinderbackend.ddns.net/api/stats');
         setStats(response.data);
         console.log(response)
       } catch (error) {

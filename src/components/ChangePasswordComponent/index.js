@@ -118,7 +118,7 @@ export default function ChangePassword() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.put("https://10.182.0.39/api/users/updatePass",{token,newPassword,password});
+            const response = await axios.put("https://bidfinderbackend.ddns.net/api/users/updatePass",{token,newPassword,password});
             setErrorMessage(response.data.message);
             setEmail('');
             setPassword('');

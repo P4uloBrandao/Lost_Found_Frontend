@@ -24,7 +24,7 @@ const CardLostObjecs = ({ matchButton, catId,name, description, location, date, 
   const handleRemoveLostObject = async () => {
     try {
       // Make an API call to delete the user profile
-      const response = await axios.delete(`https://10.182.0.39/api/lost-objects/${id}`);
+      const response = await axios.delete(`https://bidfinderbackend.ddns.net/api/lost-objects/${id}`);
       console.log(response.data); // Log the response from the server
       // Handle success, e.g., redirect to login or show a success message
     } catch (error) {

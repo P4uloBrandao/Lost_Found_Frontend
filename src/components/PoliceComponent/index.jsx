@@ -92,7 +92,7 @@ const toggleShowPassword2 = () => {
 useEffect(() => {
     const fetchStations = async () => {
         try {
-            const response = await axios.get('https://10.182.0.39/api/police/police-stations');
+            const response = await axios.get('https://bidfinderbackend.ddns.net/api/police/police-stations');
             setStations(response.data);
             setIsLoading(false);
             console.log(stations)
@@ -123,7 +123,7 @@ function  getStationID(name,stations){
         event.preventDefault();
        
         try {
-            const response = await axios.post(`https://10.182.0.39/api/police/police-officers`,{
+            const response = await axios.post(`https://bidfinderbackend.ddns.net/api/police/police-officers`,{
               "firstName" :first_name,
               "lastName":last_name,
               "phone":phone,
@@ -151,7 +151,7 @@ function  getStationID(name,stations){
     // const handleDeleteSubmit = async (event) => {
     //     event.preventDefault();
     //     try {
-    //         const response = await axios.delete(`https://10.182.0.39/api/police/police-stations/${stationId}`);
+    //         const response = await axios.delete(`https://bidfinderbackend.ddns.net/api/police/police-stations/${stationId}`);
             
     //     } catch (error) {
     //         console.error( error);

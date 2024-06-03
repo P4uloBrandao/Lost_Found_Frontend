@@ -60,7 +60,7 @@ const LostItemComponent = ({ itemid }) => { // Pass itemid as a prop
   //     setError(null); // Clear any previous errors
 
   //     try {
-  //       const response = await axios.get(`https://10.182.0.39/api/lost-objects/${itemid}`);
+  //       const response = await axios.get(`https://bidfinderbackend.ddns.net/api/lost-objects/${itemid}`);
   //       const objectData = response.data;
   //       setLostObject(objectData);
   //     } catch (error) {

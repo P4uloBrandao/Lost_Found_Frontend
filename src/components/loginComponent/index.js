@@ -241,16 +241,16 @@ export default function SignIn() {
       console.log('Google Response:', response); // Log the entire response
     
       try {
-        const tokenResponse = await axios.get(`https://10.182.0.39/api/auth/token/${response.credential}`);
+        const tokenResponse = await axios.get(`https://bidfinderbackend.ddns.net/api/auth/token/${response.credential}`);
         console.log("tokenResponse",tokenResponse)
-        const userExistValidation = await axios.post("https://10.182.0.39/api/users/getUser", { googleId: tokenResponse.data.sub });
+        const userExistValidation = await axios.post("https://bidfinderbackend.ddns.net/api/users/getUser", { googleId: tokenResponse.data.sub });
     
         if (userExistValidation) {
           console.log("User is valid");
           console.log(userExistValidation);
     
           try {
-            const response1 = await axios.post("https://10.182.0.39/api/auth/login", { clientId: tokenResponse.data.sub });
+            const response1 = await axios.post("https://bidfinderbackend.ddns.net/api/auth/login", { clientId: tokenResponse.data.sub });
     
             localStorage.setItem("token", response1.data.token);
             console.log(response1);
@@ -304,7 +304,7 @@ export default function SignIn() {
       });
   
       try {
-        const response = await axios.post("https://10.182.0.39/api/auth/login", {email,password});
+        const response = await axios.post("https://bidfinderbackend.ddns.net/api/auth/login", {email,password});
     
         // Process the response as needed
           

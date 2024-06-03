@@ -88,7 +88,7 @@ const DeleteProfile = () => {
         const token = localStorage.getItem("token");
         console.log(token)
         // Make an API call to delete the user profile
-        const response = await axios.delete(`https://10.182.0.39/api/users/delete/${token}`);
+        const response = await axios.delete(`https://bidfinderbackend.ddns.net/api/users/delete/${token}`);
         console.log(response.data); // Log the response from the server
         handleLogout()
         // Handle success, e.g., redirect to login or show a success message

@@ -23,7 +23,7 @@ export default function LostObjectCatalogPage() {
         const token = localStorage.getItem("token");
   
         // Buscar os dados dos objetos perdidos
-        const objectsResponse = await axios.post(`https://10.182.0.39/api/match`, {
+        const objectsResponse = await axios.post(`https://bidfinderbackend.ddns.net/api/match`, {
           "category": param1
       });
         const objectsData = objectsResponse.data;
@@ -34,7 +34,7 @@ export default function LostObjectCatalogPage() {
         // Para cada objeto, buscar o nome da categoria associada
         const updatedObjects = await Promise.all(objectsData.map(async (object) => {
           const catId = object.category;
-          const categoryResponse = await axios.get(`https://10.182.0.39/api/category/${catId}`);
+          const categoryResponse = await axios.get(`https://bidfinderbackend.ddns.net/api/category/${catId}`);
           const categoryName = categoryResponse.data.name;
   
           // Retornar um novo objeto com o nome da categoria atualizado
