@@ -122,7 +122,7 @@ const Pholder = styled.span`
 `;
 
 
-const DropdownComponent = ({ name,disable, icon, options, placeholder, onChange, onClick,errorMessage,field_name}) => {
+const DropdownComponent = ({ name,disable, icon, options, placeholder, onChange, onClick,errorMessage}) => {
   const [isDropdownActive, setIsDropdownActive] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
   const [results, setResults] = useState([]);
@@ -133,7 +133,7 @@ const DropdownComponent = ({ name,disable, icon, options, placeholder, onChange,
   useEffect(() => {
     if (options) {
       const filteredOptions = options.filter(option =>
-        option[field_name].toLowerCase().includes(text.toLowerCase())
+        option.name.toLowerCase().includes(text.toLowerCase())
       );
       setResults(filteredOptions);
     } else {
@@ -149,7 +149,7 @@ const DropdownComponent = ({ name,disable, icon, options, placeholder, onChange,
 
   useEffect(() => {
     if (options) {
-      const d = options.filter(el => el[field_name].toLowerCase().includes(deb));
+      const d = options.filter(el => el.name.toLowerCase().includes(deb));
       setResults(d);
     } else {
       setResults([]);
@@ -158,10 +158,10 @@ const DropdownComponent = ({ name,disable, icon, options, placeholder, onChange,
 
   const handleOptionClick = (option) => {
     console.log(option);
-    setSelectedOption(option[field_name]);
+    setSelectedOption(option.name);
     setIsDropdownActive(false);
-    onChange(option[field_name]);
-    setText(option[field_name]);
+    onChange(option.name);
+    setText(option.name);
 
   };
 
@@ -207,8 +207,8 @@ const DropdownComponent = ({ name,disable, icon, options, placeholder, onChange,
         {errorMessage && <div className="error">{errorMessage}</div>}
           {results.length > 0 ? 
             results.map((option, index) => (
-              <DropdownItem key={index} onClick={() => handleOptionClick(option)} id={option[field_name]}>
-                {option[field_name]}
+              <DropdownItem key={index} onClick={() => handleOptionClick(option)} id={option.name}>
+                {option.name}
               </DropdownItem>
             )) : (
               <DropdownItem>

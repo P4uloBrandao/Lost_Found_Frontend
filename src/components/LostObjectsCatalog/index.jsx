@@ -29,8 +29,6 @@ const CategoryTitle = styled.h2`
 `;
 
 const SearchButton = styled.button`
-
-  
   bottom: 50px;
   margin-left: 10px;
   padding: 10px 20px;
@@ -48,7 +46,7 @@ const ResetButton = styled.a`
   font-weight: 500;
   text-decoration: none;
   color: var(--primary-green-color);
-  cursor:pointer;
+  cursor: pointer;
   margin-right: 11px;
   &:hover {
     text-decoration: underline;
@@ -76,8 +74,11 @@ export default function LostObjectCatalog() {
   
         // Buscar os dados dos objetos perdidos
         const objectsResponse = await axios.get(`http://localhost:3000/api/lost-objects/user/${token}`);
-        const objectsData = objectsResponse.data;
-  
+        let objectsData = objectsResponse.data;
+
+        // Renomear o campo title para name
+        objectsData = objectsData.map(obj => ({ ...obj, name: obj.title }));
+       
         // Atualizar o estado dos objetos com os dados buscados
         setObjects(objectsData);
         setFilteredObjects(objectsData); // Inicialmente, mostrar todos os objetos
@@ -93,7 +94,6 @@ export default function LostObjectCatalog() {
     fetchData();
   }, []);
   
-  
   useEffect(() => {
     console.log("Current objectName:", objectName); // Print objectName to the console whenever it changes
   }, [objectName]);
@@ -101,7 +101,6 @@ export default function LostObjectCatalog() {
   useEffect(() => {
     console.log("Current searchTerm:", searchTerm); // Print searchTerm to the console whenever it changes
   }, [searchTerm]);
-
 
   const handleCreateSubmit = async (event) => {
     event.preventDefault();
@@ -125,7 +124,7 @@ export default function LostObjectCatalog() {
 
   const handleSearch = (value) => {
     const filtered = objects.filter(obj =>
-      obj.title.toLowerCase() === (value.toLowerCase())
+      obj.name.toLowerCase() === value.toLowerCase()
     );
     setFilteredObjects(filtered);
   };
@@ -135,7 +134,7 @@ export default function LostObjectCatalog() {
     setFilteredObjects(objects); // Exibir todos os objetos novamente
   };
 
-  function getLostObjectID(name, objects){
+  function getLostObjectID(name, objects) {
     const foundItem = objects.find(item => item.name === name);
     return foundItem ? foundItem._id : null;
   }
@@ -151,39 +150,38 @@ export default function LostObjectCatalog() {
         Here you can view all your lost objects. Remember to never lose hope!
       </CategoryTitle>
       <div>
-      <ButtonContainer>
-        <SearchInput 
-          placeholder={'Search your Lost Objects'}  
-          id="Objects"
-          required
-          onChange={handleDropdownChange}
-          name="Lost Object"
-          options={objects}
-          field_name = 'title'
-          ref={searchInputRef}
-        />
-          <SearchButton onClick={() => {setObjectName(objectName); handleSearch(objectName); }}>Search</SearchButton>
+        <ButtonContainer>
+          <SearchInput 
+            placeholder={'Search your Lost Objects'}  
+            id="Objects"
+            required
+            onChange={handleDropdownChange}
+            name="Lost Object"
+            options={objects}
+            ref={searchInputRef}
+          />
+          <SearchButton onClick={() => { setObjectName(objectName); handleSearch(objectName); }}>Search</SearchButton>
           <ResetButton onClick={handleResetFilters}>Reset Filters</ResetButton>
         </ButtonContainer>
       </div>
-      <Grid sx={{ textAlign: '-webkit-center', pt: 7, width:'100%' }} container spacing={5}>
+      <Grid sx={{ textAlign: '-webkit-center', pt: 7, width: '100%' }} container spacing={5}>
         {filteredObjects.map((object, index) => (
-          <Grid spacing={2} sx={{justifyContent: 'center'}} item xs={10} md={10} key={index}>
+          <Grid spacing={2} sx={{ justifyContent: 'center' }} item xs={10} md={10} key={index}>
             <Card  
               spacing={2}
-              name={object.title}
+              name={object.name} 
               description={object.description}
               location={object.location}
               category={object.category}
               id={object._id}
               catId={object.category_id}
-              date ={object.date}
-              photo ={object.objectImage}
+              date={object.lostDate}
+              photo={object.objectImage}
               status={object.status}
-              matchButton = {true}
+              matchButton={true}
             />
           </Grid>
-        ))}  
+        ))}
       </Grid> 
     </Container>
   );
