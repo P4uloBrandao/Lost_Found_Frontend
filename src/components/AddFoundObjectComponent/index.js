@@ -154,29 +154,40 @@ setLoading(false)
 
  
  const onImageUpload = (event) => {
-    setObjImage("https://www.totalprotex.pt/media/catalog/product/cache/default/image/500x500/9df78eab33525d08d6e5fb8d27136e95/s/t/steelite-taskforce-boot-s3-hro-0_3.jpg")
-}
+   let filesArray= []
+
+   for (let i = 0; i < event.length; i++) {
+     filesArray.push(event[i])
+   }
+
+   setObjImage(filesArray);
+ }
 //CREATE FOUND OBJECT
   const handleSubmit = async (event) => {
     
     event.preventDefault();
     try {
-      
+
+      const formData = new FormData();
+
+      objectImage.forEach((image) => {
+        formData.append("objectImage[]", image);
+      });
+      formData.append("userWhoFound", userWhoFound);
+        formData.append("title", title);
+        formData.append("category", getCategoryNameFromId(category));
+        formData.append("endDate", nextMonthDate);
+        formData.append("foundDate", formattedDate);
+        formData.append("description", description);
+        formData.append("location", location);
+        formData.append("price", price);
+        formData.append("status", status);
+        formData.append("policeOfficerThatReceived", "6650cb6c82b8e44086723f1e");
+        formData.append("subCategory", items);
+      console.log(formData.get("subCategory"))
+
         const response = await axios.post("http://localhost:3000/api/found-objects",
-        {"userWhoFound": userWhoFound,
-          "title": title,
-          "category": getCategoryNameFromId(category),
-          "endDate": nextMonthDate,
-          "foundDate": formattedDate,
-          "description": description,
-          "location":location,
-          " price": price,
-          "status": status,
-          "objectImage": objectImage,
-          "policeOfficerThatReceived":"6650cb6c82b8e44086723f1e",
-          "subCategory": items
-          //FALTA OBJ_NAME OU TITLE & PHOTOS
-        });
+        formData);
         setObjectCreated(true)
         
       } catch (error) {
@@ -438,7 +449,7 @@ if (loading) {
         If you don’t have any, just select the “I don’t have pictures” option.</CategoryTitle>
         <InputBox>
 
-        <CustomInputFiles singleImage
+        <CustomInputFiles singleImage max={10}
         onChange={onImageUpload}></CustomInputFiles>
         </InputBox>
         <Title>How does it look?</Title>

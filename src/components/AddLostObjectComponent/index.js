@@ -128,7 +128,6 @@ export default function LostObjectForm  ()  {
     setObjImage(filesArray);
 }
   const handleSubmit = async (event) => {
-    console.log(category)
     event.preventDefault();
     try {
         const formData = new FormData();
