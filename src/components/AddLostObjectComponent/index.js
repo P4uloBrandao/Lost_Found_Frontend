@@ -110,10 +110,14 @@ export default function LostObjectForm  ()  {
 
     fetchCategories();
   }, []);
-  function getCategoryNameFromId(categoryName) {
-    const category = categories.find(category => category.name === categoryName);
+  function getCategoryNameFromId(id) {
+    const category = categories.find(category => category._id === id);
     return category ? category.name : null;
    }
+   useEffect(() => {
+    console.log(items)
+  }, [items,category]);
+
  const onImageUpload = (event) => {
     let filesArray= []
 
@@ -124,22 +128,24 @@ export default function LostObjectForm  ()  {
     setObjImage(filesArray);
 }
   const handleSubmit = async (event) => {
-    
+    console.log(category)
     event.preventDefault();
     try {
         const formData = new FormData();
         formData.append("owner", owner);
         formData.append("title", title);
-        formData.append("subCategory", items);
+        formData.append("subCategory", JSON.stringify(items));
         formData.append("category", getCategoryNameFromId(category));
         formData.append("description", description);
         formData.append("location", location);
         formData.append("price", price);
         formData.append("status", status);
         formData.append("lostDate", formattedDate);
-        objectImage.forEach((image) => {
-            formData.append("objectImage[]", image);
-        });
+        //teste
+        formData.append("objectImage[]", "image");
+        // objectImage.forEach((image) => {
+        //     formData.append("objectImage[]", image);
+        // });
 
         const response = await axios.post("http://localhost:3000/api/lost-objects",
           formData,);
@@ -207,12 +213,10 @@ export default function LostObjectForm  ()  {
       });
     };
   const handleCategoryChange = (index, category) => {
+  console.log(category)
     setSelectedCategory(category);
     };
-  useEffect(() => {
-    console.log(items)
-  }, [items]);
-
+  
   if (loadError) return <div className="contain">Error loading maps</div>;
   if (!isLoaded) return <div className="contain">Loading maps</div>;
   if (objectCreated) return <PopupAlert message={"Object registered"} />
@@ -228,7 +232,7 @@ export default function LostObjectForm  ()  {
         <InputF 
         type={'text'} 
         placeholder={'Insert title of lost object'}  
-        id="title"
+        id="title" 
         required
         onChange={(e) => setTitle(e.target.value)}
         value={title}

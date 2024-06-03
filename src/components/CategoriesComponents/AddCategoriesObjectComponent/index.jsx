@@ -192,7 +192,6 @@ return (
                 onChange={handleDropdownChangeCategory}
                 name="Categories"
                 options={categories}
-                field_name={"name"}
                 
               />
             </InputBox>   
@@ -216,7 +215,6 @@ return (
             onChange={handleDropdownChangeSubCategory}
             name="Sub categories"
             options={subCategories}
-            field_name={"name"}
             
           />
         </InputBox> </>
