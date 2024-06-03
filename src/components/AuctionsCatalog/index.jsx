@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
 
-import Card from "../CardComponent/index";
+import Card from "../CardComponentAuction/index";
 import SearchInput from "../SearchInputFieldComponent/index";
 import axios from "axios";
 
@@ -62,26 +62,59 @@ const ButtonContainer = styled.div`
 
 export default function AuctionsCatalog() {
   const [errorMessage, setErrorMessage] = useState("");
-  const [auctions, setOAuctions] = useState([]);
+  const [auctions, setAuctions] = useState([]);
   const [auctionName, setAuctionName] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [filteredAuctions, setFilteredAuctions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const searchInputRef = useRef(null); // UseRef para o campo de busca
+  const [foundObjectsList, setfoundObjectsList] = useState([]);
+  const [foundObjectsListF, setfoundObjectsListF] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-  
+
+        const userResponse = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
+        const userData = userResponse.data.currentUser._id;
+    
         // Buscar os dados dos objetos perdidos
-        const auctionsResponse = await axios.get(`http://localhost:3000/api/auction/user/${token}`);
+        const auctionsResponse = await axios.get(`http://localhost:3000/api/auction/user/${userData}`);
         const auctionsData = auctionsResponse.data;
-  
+
         // Atualizar o estado dos objetos com os dados buscados
         setAuctions(auctionsData);
         setFilteredAuctions(auctionsData); // Inicialmente, mostrar todos os objetos
-  
+
+        /// Array para armazenar as promessas de solicitação HTTP
+        const requests = [];
+        const requestsbid = [];
+
+        // Iterar sobre os dados dos leilões e adicionar as promessas de solicitação HTTP ao array
+        auctionsData.forEach(auction => {
+            const foundObject = auction.foundObject;
+            const requestPromise = axios.get(`http://localhost:3000/api/found-objects/${foundObject}`);
+            requests.push(requestPromise);
+            const requestPromisebid = axios.get(`http://localhost:3000/api/auction/${auction._id}/bid`);
+            requestsbid.push(requestPromisebid);
+        });
+
+        // Aguardar que todas as solicitações sejam concluídas
+        const responses = await Promise.all(requests);
+        const responsesbid = await Promise.all(requestsbid);
+
+        // Iterar sobre as respostas e extrair os objetos encontrados
+        const obgf = responses.map(response => response.data);
+        const bid = responsesbid.map(response => response.data);
+
+        auctionsData.forEach((auction,index) => {
+          auction.winnerBid = bid[index].value;
+      });
+
+        setfoundObjectsList(obgf);
+        setfoundObjectsListF(obgf);
+
         setIsLoading(false);
   
       } catch (error) {
@@ -96,9 +129,10 @@ export default function AuctionsCatalog() {
   
   useEffect(() => {
     console.log("Current objectName:", auctionName); // Print objectName to the console whenever it changes
-  }, [objectName]);
+  }, [auctionName]);
 
   useEffect(() => {
+
     console.log("Current searchTerm:", searchTerm); // Print searchTerm to the console whenever it changes
   }, [searchTerm]);
 
@@ -108,15 +142,22 @@ export default function AuctionsCatalog() {
   };
 
   const handleSearch = (value) => {
-    const filtered = auctions.filter(obj =>
-      obj.title.toLowerCase() === (value.toLowerCase())
-    );
-    setFilteredAuctions(filtered);
+    const filtered = auctions.filter((auction, index) => {
+      const foundObject = foundObjectsList[index];
+      return foundObject.title.toLowerCase() === value.toLowerCase();
+    });
+
+   setfoundObjectsListF(foundObjectsList.filter((fo, index) => {
+      return fo.title.toLowerCase() === value.toLowerCase();
+    }));
+
+   setFilteredAuctions(filtered); 
   };
 
   const handleResetFilters = () => {
     setSearchTerm('');
     setFilteredAuctions(auctions); // Exibir todos os objetos novamente
+    setfoundObjectsListF(foundObjectsList);
   };
 
   if (isLoading) {
@@ -137,29 +178,31 @@ export default function AuctionsCatalog() {
           required
           onChange={handleDropdownChange}
           name="Auction"
-          options={auctions}
+          options={foundObjectsList}
+          value = {(e) => setAuctionName(e.target.value)}
           field_name = 'title'
           ref={searchInputRef}
         />
-          <SearchButton onClick={() => {setObjectName(objectName); handleSearch(objectName); }}>Search</SearchButton>
+          <SearchButton onClick={() => handleSearch(auctionName) }>Search</SearchButton>
           <ResetButton onClick={handleResetFilters}>Reset Filters</ResetButton>
         </ButtonContainer>
       </div>
       <Grid sx={{ textAlign: '-webkit-center', pt: 7, width:'100%' }} container spacing={5}>
-        {filteredObjects.map((object, index) => (
+        {filteredAuctions.map((auction, index) => ( 
           <Grid spacing={2} sx={{justifyContent: 'center'}} item xs={10} md={10} key={index}>
             <Card  
               spacing={2}
-              name={object.title}
-              description={object.description}
-              location={object.location}
-              category={object.category}
-              id={object._id}
-              catId={object.category_id}
-              date ={object.date}
-              photo ={object.objectImage}
-              status={object.status}
+              name={foundObjectsListF[index].title}
+              description={auction.description}
+              location={foundObjectsListF[index].location}
+              category={auction.status}
+              id={auction._id}
+              catId={auction.status}
+              date ={auction.endDate}
+              photo ={foundObjectsListF[index].objectImage}
+              status={auction.status}
               matchButton = {true}
+              highbid={auction.winnerBid + " EUR"}
             />
           </Grid>
         ))}  

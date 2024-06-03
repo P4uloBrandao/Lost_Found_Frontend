@@ -25,11 +25,12 @@ const defaultTheme = createTheme();
 
 const Container = styled.div`
   width: 100vw;
+  height: calc(100vh - 103px);
   padding: 32px 64px;
     flex-direction: column;
   overflow: auto;
   display: flex;  
-  justify-content: center;
+  justify-content: flex-start;
     align-items: center;
   
   p {

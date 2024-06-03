@@ -132,7 +132,6 @@ const DropdownComponent = ({ name,disable, icon, options, placeholder, onChange,
   const dropdownRef = useRef(null);
   useEffect(() => {
     if (options) {
-      console.log(options)
       const filteredOptions = options.filter(option =>
         option.name.toLowerCase().includes(text.toLowerCase())
       );
@@ -158,11 +157,10 @@ const DropdownComponent = ({ name,disable, icon, options, placeholder, onChange,
   }, [deb, options]);
 
   const handleOptionClick = (option) => {
-    console.log(option);
-    setSelectedOption(option[field_name]);
+    setSelectedOption(option._id);
     setIsDropdownActive(false);
-    onChange(option[field_name]);
-    setText(option.title);
+    onChange(option._id);
+    setText(option.name);
 
   };
 
@@ -185,7 +183,7 @@ const DropdownComponent = ({ name,disable, icon, options, placeholder, onChange,
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isDropdownActive]);
+  }, [isDropdownActive,selectedOption]);
 
   return (
     <>
