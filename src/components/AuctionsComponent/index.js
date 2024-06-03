@@ -157,7 +157,7 @@ export default function AuctionsComponent() {
                 </FiltersContainer>
               <CardsContainer>
                   {
-                      auctions.map(auction => <AuctionsCardComponent itemTitle={auction.foundObjectTitle} daysLeft={getDaysLeft(auction.startDate, auction.endDate)} bidsNumber={auction.bids.length} price={auction.highestBid}></AuctionsCardComponent>)
+                      auctions.map(auction => <AuctionsCardComponent image={auction.objectImage[0]} itemTitle={auction.foundObjectTitle} daysLeft={getDaysLeft(auction.startDate, auction.endDate)} bidsNumber={auction.bids.length} price={auction.highestBid}></AuctionsCardComponent>)
                   }
               </CardsContainer>
           </Container>
