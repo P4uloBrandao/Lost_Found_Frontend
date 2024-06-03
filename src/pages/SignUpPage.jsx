@@ -1,5 +1,5 @@
 import React from 'react'
-import SignUp from "../components/SignUpTest";
+import SignUp from "../components/SignUpComponent";
 import styled, { keyframes } from 'styled-components';
 import LoginImage from '../assets/background/loginImage.svg'; 
 import Grid from '@mui/material/Unstable_Grid2/Grid2';

@@ -5,10 +5,10 @@ const PrivateRoute = ({children}) =>{
     const { 
         setAuthUser,
         authUser,
+        userRole,
         isLoggedIn,
         setIsLoggedIn,logout} = useAuth();
         
-        console.log("isLoggedIn-->",isLoggedIn)
     if (!isLoggedIn){
        
         return <Navigate to={'/login'}/>

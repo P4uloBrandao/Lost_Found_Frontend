@@ -1,0 +1,17 @@
+
+
+.searchIcon {
+    &:hover {
+        cursor: pointer;
+        opacity: 0.8;
+    }
+}
+
+.searchInput {
+    background: transparent;
+    border: none !important;
+    color: black;
+    &:focus {
+        outline: none !important;
+    }
+}

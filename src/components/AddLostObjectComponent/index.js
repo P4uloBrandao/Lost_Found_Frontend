@@ -4,8 +4,13 @@ import InputF  from '../inputFieldComponent/InputField';
 import axios from "axios";
 import '../../assets/colors/colors.css'
 import CustomInputFiles from "../ImageInputComponent/FileInput";
-import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, useLoadScript, Marker, Circle } from '@react-google-maps/api';
 import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
+import { InputSubmit, Container,InputBox ,Title,Form,CategoryTitle,CategorySection, Wrapper } from '../../assets/StylePopularComponent/style';
+import AddCategory from '../CategoriesComponents/AddCategoriesObjectComponent/index.jsx';
+import  AddIcon  from '../../assets/icons/add50.png';
+import PopupAlert from '../PopUpAlertComponent/index.jsx';
+import Grid from '@mui/material/Grid';
 const StyledTextArea = styled.textarea`
     height: ${props => props.height}px;
     font-size: 16px;
@@ -20,50 +25,6 @@ const StyledTextArea = styled.textarea`
     overflow-y: auto; /* Adiciona uma barra de rolagem vertical quando necessário */
     word-wrap: break-word; /* Quebra de palavra automática */
     overflow-wrap: break-word; /* Quebra de palavra automática para navegadores mais antigos */
-`;
-const Container = styled.div`
-  width: 180vh;
- 
-  margin: 5em 0;
-  
-  border-radius: 20px 20px 20px 20px; 
-  opacity: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; 
-  justify-content: flex-start; 
-  box-sizing: border-box;
-  border: 1px solid #D3D3D3; 
-  background-color: white; 
-  padding: 40px; 
-`;
-
-const CategoryTitle = styled.h2`
-color: #3CB684;
-font-family: 'Roboto', sans-serif;
-font-size: 24px;
-font-weight: 400;
-line-height: 27px;
-text-align: left;
-
-margin-top: 0px;
-`;
-
-const Title = styled.h2`
-  font-size: 1.5rem;
-  color: var(--black-color); 
-  opacity: 1;
-  margin-bottom: 40px; 
-`;
-
-
-
-const CategorySection = styled.div`
-  display: grid;
-  grid-template-columns: repeat(6, 1fr); 
-  grid-gap: 10px; 
-  justify-content: center; 
-  margin-bottom: 20px;
 `;
 
 const CategoryButton = styled.button`
@@ -83,38 +44,6 @@ const CategoryButton = styled.button`
   opacity: 1;
 `;
 
-const InputBox = styled.div`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  margin: 20px 0;
-  width: -webkit-fill-available;
-`;
-const InputSubmit = styled.button`
-
-width: 12.93306rem;
-    height: 3.25rem;
-    background: var(--primary-green-color);
-    box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.11);
-    transition: background-color 0.218s, border-color 0.218s, box-shadow 0.218s;
-    text-align: center;
-    font-family: Roboto;
-    font-size: 1.2rem;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 135.5%;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    color: var(--white-color);
-    transition: 0.3s;
-  &:hover {
-    background: var(--white-color);
-    border: solid 2px var(--primary-green-color);
-    color:var(--primary-green-color);
-    box-shadow: 0 1px 2px 0 rgba(60, 64, 67, 0.30), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
-  }
-`;
 const ResetButton = styled.a`
   font-weight: 500;
   text-decoration: none;
@@ -124,8 +53,19 @@ const ResetButton = styled.a`
   &:hover {
     text-decoration: underline;
 `;
+const AddBtn = styled.img`
+transform: scale(0.7);
+
+    transition: transform 0.2s;
+    &:hover {
+      transform: scale(0.9);
+    }
+`;
+const AddCategoryContainer = styled.div`
+ width: 100%;
+`;
 export default function LostObjectForm  ()  {
-  const [objectImage, setObjImage] = React.useState("");
+  const [objectImage, setObjImage] = React.useState([]);
 
   const [owner, setOwner] = React.useState(localStorage.getItem("token"));
   const [title, setTitle] = React.useState('');  //FALTA BD
@@ -142,10 +82,24 @@ export default function LostObjectForm  ()  {
   const libraries = ['places']; // Include places library for location search
   const [activeButton, setActiveButton] = useState(null);
 
+  const [items, setItems] = useState({});
+  const [objectCreated, setObjectCreated] = useState(false);
+  const [popupMessage, setPopupMessage] = useState('');
+  const [components, setComponents] = useState([]);
+  const [objectCategories, setObjectCategories] = useState({});
+  const today = new Date();
+  const formattedDate = today.toISOString().split('T')[0];
+  
+  const addComponent = () => {
+    setComponents([...components, <AddCategory key={components.length} />]);
+  };
+  const removeCategory = (indexToRemove) => {
+    setComponents(components.filter((_, index) => index !== indexToRemove));
+  };
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://35.219.162.80/api/category');
+        const response = await axios.get('http://localhost:3000/api/category');
         setCategories(response.data);
 
       } catch (error) {
@@ -156,25 +110,42 @@ export default function LostObjectForm  ()  {
 
     fetchCategories();
   }, []);
+  function getCategoryNameFromId(id) {
+    const category = categories.find(category => category._id === id);
+    return category ? category.name : null;
+   }
+   useEffect(() => {
+    console.log(items)
+  }, [items,category]);
+
  const onImageUpload = (event) => {
-    setObjImage("https://www.totalprotex.pt/media/catalog/product/cache/default/image/500x500/9df78eab33525d08d6e5fb8d27136e95/s/t/steelite-taskforce-boot-s3-hro-0_3.jpg")
+    let filesArray= []
+
+   for (let i = 0; i < event.length; i++) {
+        filesArray.push(event[i])
+   }
+
+    setObjImage(filesArray);
 }
   const handleSubmit = async (event) => {
-    
     event.preventDefault();
     try {
-      
-        const response = await axios.post("http://35.219.162.80/api/lost-objects",
-        {owner,
-          title,
-          category,
-          description,
-          location,
-          price,
-          status,
-          objectImage,
-          //FALTA OBJ_NAME OU TITLE & PHOTOS
+        const formData = new FormData();
+        formData.append("owner", owner);
+        formData.append("title", title);
+        formData.append("subCategory", JSON.stringify(items));
+        formData.append("category", getCategoryNameFromId(category));
+        formData.append("description", description);
+        formData.append("location", location);
+        formData.append("price", price);
+        formData.append("status", status);
+        formData.append("lostDate", formattedDate);
+        objectImage.forEach((image) => {
+            formData.append("objectImage[]", image);
         });
+
+        const response = await axios.post("http://localhost:3000/api/lost-objects",
+          formData,);
         
         // console.log(response.data)
       } catch (error) {
@@ -196,19 +167,24 @@ export default function LostObjectForm  ()  {
   };
 
   const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: 'AIzaSyC6QRYQechnlxkaivlAkIyKhMcB3iGaSZM',
+    googleMapsApiKey: 'AIzaSyDPUTFHLcj71rpOYKfPwigaRF8uiOKDvWo',
     libraries,
   });
+  const [circle, setCircle] = useState(null);
+  const geocodingApiKey = "AIzaSyDPUTFHLcj71rpOYKfPwigaRF8uiOKDvWo"
 
     const handleMapClick = async (event) => {
       const lat = event.latLng.lat();
       const lng = event.latLng.lng();
       setObjLoc({ lat: event.latLng.lat(), lng: event.latLng.lng() });
-
+   
+      setCircle({
+        center:  { lat, lng },
+        radius: 500 // Define o raio do círculo em metros
+      });
       try {
-        const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=AIzaSyC6QRYQechnlxkaivlAkIyKhMcB3iGaSZM`);
+        const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${geocodingApiKey}`);
         const address = response.data.results[0].formatted_address;
-        console.log('Address:', address);
         setObjLoc(address);
 
         // Faça o que você precisa com o endereço, como definir o estado
@@ -219,9 +195,35 @@ export default function LostObjectForm  ()  {
       }
     };
 
+    const addItem = (item) => {
+      console.log(item)
+  
+
+      setItems(prevItems => {
+        const existingKey = Object.keys(prevItems).find(key => prevItems[key].name === item.name);
+  
+        if (existingKey !== undefined) {
+          setPopupMessage(`Item with name "${item.name}" was already selected. This operation will replace it.`);
+          setTimeout(() => {
+            setPopupMessage('');
+        }, 5000);
+          return { ...prevItems, [existingKey]: item }; // Replace the existing item
+        }
+  
+        const newIndex = Object.keys(prevItems).length;
+        return { ...prevItems, [newIndex]: item };
+      });
+    };
+
+  const handleCategoryChange = (index, category) => {
+    console.log(category)
+    setSelectedCategory(category);
+    };
+  
   if (loadError) return <div className="contain">Error loading maps</div>;
   if (!isLoaded) return <div className="contain">Loading maps</div>;
-  
+  if (objectCreated) return <PopupAlert message={"Object registered"} />
+
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
   };
@@ -229,11 +231,12 @@ export default function LostObjectForm  ()  {
   return ( <>
     <Container>
       <Title>Found Object Identification</Title>
+      <Title>What did you lose?</Title>
       <InputBox>
         <InputF 
         type={'text'} 
         placeholder={'Insert title of lost object'}  
-        id="title"
+        id="title" 
         required
         onChange={(e) => setTitle(e.target.value)}
         value={title}
@@ -243,21 +246,40 @@ export default function LostObjectForm  ()  {
 
  
         </InputBox>
-      <Title>What did you lose?</Title>
-      <CategoryTitle>Choose the category of the found object.</CategoryTitle>
-      <CategorySection>
-      {categoriesArray.map(([key, value], index) => (
-        <CategoryButton
-          key={index}
-          isSelected={category === value._id}
-          onClick={() => handleCategoryClick(value._id)}
-          active={activeButton === value._id}
-        >
-          {value.name}
-        </CategoryButton>
-      ))}
-       
-      </CategorySection>
+      <Grid item xs={12} sm={12}> 
+      <Title>In what category does it fit in?</Title>
+      </Grid>
+    <AddCategoryContainer>
+        <AddCategory  
+          index={0} 
+          addItem={addItem}
+          removeCategory={removeCategory} 
+          onCategoryChange={handleCategoryChange}
+          existCategory={false}
+          objectCategories={objectCategories}
+          setObjectCategories={setObjectCategories}
+          
+
+          />
+          {components.map((_, index) => (
+            <AddCategory 
+            addItem={addItem} 
+            index={index +1} 
+            mainCategory={category}
+            removeCategory={removeCategory} 
+            onCategoryChange={handleCategoryChange}
+            existCategory={category ? true : false}
+            objectCategories={objectCategories}
+            setObjectCategories={setObjectCategories}
+            
+            />
+          ))}
+          
+       {Object.keys(items).length > 0 && (
+           <AddBtn src={AddIcon} className='addBtn' onClick={addComponent}alt="add category" />
+
+)}
+       </AddCategoryContainer>
       <Title>Write the price of the lost object.</Title>
       <InputBox>
         <InputF
@@ -280,12 +302,11 @@ export default function LostObjectForm  ()  {
         If you don’t have any, just select the “I don’t have pictures” option.</CategoryTitle>
         <InputBox>
 
-        <CustomInputFiles singleImage
+        <CustomInputFiles singleImage max={10}
         onChange={onImageUpload}></CustomInputFiles>
         </InputBox>
-        <Title>How does it look?</Title>
-              <CategoryTitle>Upload pictures of the lost object.
-        If you don’t have any, just select the “I don’t have pictures” option.</CategoryTitle>
+        <Title>Can you describe it?</Title>
+              <CategoryTitle>Please write a description of your lost object.</CategoryTitle>
               
         <InputBox>
         <StyledTextArea 
@@ -320,19 +341,15 @@ export default function LostObjectForm  ()  {
         </InputBox>
         <InputBox>
         <GoogleMap
-        mapContainerStyle={mapContainerStyle}
-        zoom={10}
-        center={mapCenter}
-        onClick={handleMapClick}
-      >
-        {location && <Marker position={location} />}
-      </GoogleMap>
-      {/* Display selected location coordinates (optional) */}
-      {location && (
-        <p>
-          Selected Location: {`lat: ${location.lat}, lng: ${location.lng}`}
-        </p>
-      )}
+      mapContainerStyle={mapContainerStyle}
+      zoom={10}
+      center={mapCenter}
+      onClick={handleMapClick}
+    >
+      {location && <Marker position={location} />}
+      {circle && <Circle center={circle.center} radius={circle.radius} options={{ fillColor: 'rgba(255,0,0,0.2)', strokeColor: 'rgba(255,0,0,1)' }} />}
+    </GoogleMap>
+      
     
         </InputBox>
         </Container>

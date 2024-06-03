@@ -8,3 +8,12 @@
     margin-left: 410px;
     bottom: 50px;
 }
+
+.addBtn {
+    cursor: pointer;
+    transition: transform 0.2s, filter 0.2s;
+}
+
+.addBtn:hover {
+    transform: scale(1.2);
+}
