@@ -8,13 +8,16 @@ import WelcomeHeaderComponent from '../components/headerWithNameComponent/welcom
 
 import "./LoginPage.css"
 import  '../assets/colors/colors.css' ; 
-
-const token = localStorage.getItem("token");
-
 const PrimaryContainer = styled.div`
-  margin: 0.1em 7em;
+margin: 0.1em 7em;
   text-align: -webkit-center;
   place-content: center;
+  @media (max-width: 1200px) {
+    margin: 7em 5em; // Margens para telas médias
+  }
+  @media (max-width: 768px) {
+    margin: 5em 3em; // Margens para telas pequenas
+  }
 `;
 
 const ChangeContainer = styled.div`
@@ -25,9 +28,12 @@ const ChangeContainer = styled.div`
 `;
 
 
+
 export default function RegisterLostObjectPage() {
 
   const [user, setUser] = useState('');
+  const token = localStorage.getItem("token");
+
 
   const fetchUserProfile = async () => {
     try {

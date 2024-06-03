@@ -147,18 +147,9 @@ const DropdownComponent = ({ name,disable, icon, options, placeholder, onChange,
     }
   }, [text, options]);
 
-  useEffect(() => {
-    if (options) {
-      const d = options.filter(el => el.name.toLowerCase().includes(deb));
-      setResults(d);
-    } else {
-      setResults([]);
-    }
-  }, [deb, options]);
-
   const handleOptionClick = (option) => {
+    setIsDropdownActive(false)
     setSelectedOption(option._id);
-    setIsDropdownActive(false);
     onChange(option._id);
     setText(option.name);
 

@@ -90,6 +90,7 @@ const CustomInput = ({ style ,height,icon, type, placeholder, id, required, onCh
     const removeValidation = () => {
         errorValidation = false;
     }
+    
   return (
     <InputBox>
       <InputField

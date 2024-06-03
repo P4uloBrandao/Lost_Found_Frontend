@@ -4,7 +4,7 @@ import InputF  from '../inputFieldComponent/InputField';
 import axios from "axios";
 import '../../assets/colors/colors.css'
 import CustomInputFiles from "../ImageInputComponent/FileInput";
-import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, useLoadScript, Marker, Circle } from '@react-google-maps/api';
 import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
 import { InputSubmit, Container,InputBox ,Title,Form,CategoryTitle,CategorySection, Wrapper } from '../../assets/StylePopularComponent/style';
 import AddCategory from '../CategoriesComponents/AddCategoriesObjectComponent/index.jsx';
@@ -170,13 +170,18 @@ export default function LostObjectForm  ()  {
     googleMapsApiKey: 'AIzaSyDPUTFHLcj71rpOYKfPwigaRF8uiOKDvWo',
     libraries,
   });
+  const [circle, setCircle] = useState(null);
+  const geocodingApiKey = "AIzaSyDPUTFHLcj71rpOYKfPwigaRF8uiOKDvWo"
 
     const handleMapClick = async (event) => {
       const lat = event.latLng.lat();
       const lng = event.latLng.lng();
       setObjLoc({ lat: event.latLng.lat(), lng: event.latLng.lng() });
-      const geocodingApiKey = "AIzaSyDPUTFHLcj71rpOYKfPwigaRF8uiOKDvWo"
-
+   
+      setCircle({
+        center:  { lat, lng },
+        radius: 500 // Define o raio do círculo em metros
+      });
       try {
         const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${geocodingApiKey}`);
         const address = response.data.results[0].formatted_address;
@@ -209,8 +214,9 @@ export default function LostObjectForm  ()  {
         return { ...prevItems, [newIndex]: item };
       });
     };
+
   const handleCategoryChange = (index, category) => {
-  console.log(category)
+    console.log(category)
     setSelectedCategory(category);
     };
   
@@ -335,19 +341,15 @@ export default function LostObjectForm  ()  {
         </InputBox>
         <InputBox>
         <GoogleMap
-        mapContainerStyle={mapContainerStyle}
-        zoom={10}
-        center={mapCenter}
-        onClick={handleMapClick}
-      >
-        {location && <Marker position={location} />}
-      </GoogleMap>
-      {/* Display selected location coordinates (optional) */}
-      {location && (
-        <p>
-          Selected Location: {`lat: ${location.lat}, lng: ${location.lng}`}
-        </p>
-      )}
+      mapContainerStyle={mapContainerStyle}
+      zoom={10}
+      center={mapCenter}
+      onClick={handleMapClick}
+    >
+      {location && <Marker position={location} />}
+      {circle && <Circle center={circle.center} radius={circle.radius} options={{ fillColor: 'rgba(255,0,0,0.2)', strokeColor: 'rgba(255,0,0,1)' }} />}
+    </GoogleMap>
+      
     
         </InputBox>
         </Container>

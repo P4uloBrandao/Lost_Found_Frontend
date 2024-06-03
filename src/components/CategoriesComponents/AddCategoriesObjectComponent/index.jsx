@@ -77,6 +77,7 @@ export default function AddCategory  ({ key, removeCategory,index, onCategoryCha
       
     }, [categories]);
   function getCategoryNameFromId(categoryName) {
+
     const category = categories.find(category => category._id === categoryName);
     return category ? category.name : null;
    }
@@ -117,6 +118,7 @@ export default function AddCategory  ({ key, removeCategory,index, onCategoryCha
         }));
     }
     const handleDropdownChangeCategory = (category) => {
+      console.log(category)
         handleCategorySelect(category)
         getCategoryNameFromId(category)
         setSelectedCategory(getCategoryNameFromId(category));
