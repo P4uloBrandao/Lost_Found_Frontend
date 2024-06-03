@@ -18,27 +18,58 @@ import { useState, useContext } from "react";
 import { Navigate } from "react-router-dom"; 
 import Layout from '../../components/Layout/Layout';
 
-// TODO remove, this demo shouldn't need to reset the theme.
+import WelcomeHeaderComponent from '../../components/headerWithNameComponent/welcomeHeader.jsx';
+import styled from 'styled-components';
+
+const token = localStorage.getItem("token");
+
+
+const PrimaryContainer = styled.div`
+  margin: 0.1em 7em;
+  text-align: -webkit-center;
+  place-content: center;
+`;
+
 
 const defaultTheme = createTheme();
 
 function Home() {
-     const { setAuthUser,
-      authUser,
-      isLoggedIn,
-      setIisLoggedIn,token,loading } = useAuth();;
+    const [user, setUser] = useState('');
+    const { setAuthUser, authUser, isLoggedIn, setIisLoggedIn,token,loading } = useAuth();
+
     if (loading) {
-      return null;
+     return null;
     }
   
     if (!token) {
-      return <Navigate to="/home" replace />;
+      setUser("there");
     }
+
     else{
+      const fetchUserProfile = async () => {
+      try {
+      
+        const response = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
+        const userProfileData = response.data.currentUser; // Supondo que o endpoint forneça os detalhes do perfil do usuário
+        setUser(userProfileData.first_name);
+              // ... (outros estados conforme necessário)
+      } catch (error) {
+        console.error("Failed to fetch user profile:", error);
+        // Lide com erros conforme necessário
+      }
+      };
+          // Chame a função de busca ao montar o componente
+      fetchUserProfile();
       <Navigate to="/profile" replace />;
     }
   
-    return <></>;
+    return(
+    <PrimaryContainer>
+     
+      <WelcomeHeaderComponent name={user} description={'Welcome to bidfind.er! Lets get you started!'}/>
+      
+    </PrimaryContainer>
+    );
   }
   
   export default Home;

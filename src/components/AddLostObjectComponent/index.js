@@ -224,6 +224,7 @@ export default function LostObjectForm  ()  {
   return ( <>
     <Container>
       <Title>Found Object Identification</Title>
+      <Title>What did you lose?</Title>
       <InputBox>
         <InputF 
         type={'text'} 
@@ -238,7 +239,6 @@ export default function LostObjectForm  ()  {
 
  
         </InputBox>
-      <Title>What did you lose?</Title>
       <Grid item xs={12} sm={12}> 
       <Title>In what category does it fit in?</Title>
       </Grid>
@@ -298,9 +298,8 @@ export default function LostObjectForm  ()  {
         <CustomInputFiles singleImage max={10}
         onChange={onImageUpload}></CustomInputFiles>
         </InputBox>
-        <Title>How does it look?</Title>
-              <CategoryTitle>Upload pictures of the lost object.
-        If you don’t have any, just select the “I don’t have pictures” option.</CategoryTitle>
+        <Title>Can you describe it?</Title>
+              <CategoryTitle>Please write a description of your lost object.</CategoryTitle>
               
         <InputBox>
         <StyledTextArea 
