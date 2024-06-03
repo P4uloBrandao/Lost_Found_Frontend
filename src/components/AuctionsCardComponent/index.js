@@ -96,7 +96,7 @@ export default function AuctionsCardComponent({itemTitle, daysLeft, price, bidsN
     return (
       <>
           <CardContainer>
-              <img src="https://res.cloudinary.com/dkyu0tmfx/image/upload/v1710362682/sample.jpg" alt="Item"/>
+              <img src="https://res.cloudinary.com/dkyu0tmfx/image/upload/v1710362730/cld-sample-5.jpg" alt="Item"/>
               <InfoContainer>
                   <TextContainer>
                       <MajorText>{itemTitle}</MajorText>
