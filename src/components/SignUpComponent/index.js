@@ -65,7 +65,7 @@ const LoginBox = styled.div`
   max-width: 93vh;
   left: 0;
   backdrop-filter: blur(25px);
-  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
+  box-shadow:0px 9px 10px 2px rgba(0, 0, 0, 0.2);
   padding: 6.5em 4.5em 5.5em 4.5em;
 
 `;
