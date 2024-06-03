@@ -55,7 +55,6 @@ const CardLostObjecs = ({ matchButton, catId,name, description, location, date, 
             <p>Lost on: {date}</p>
             <p>Lost at: {location}</p>
             <p className='mapsBtn' onClick={handleViewInMaps}>View in Maps</p>
-            <p className='descriptionBtn' onClick={handleViewMatches}>View Description {'>'}</p>
           </Grid>
           <Grid xs={12} style={{textAlignLast: 'left',paddingLeft: '5rem',    fontWeight: '300'}} xsOffset={4} md={6} mdOffset={0}>
           <p style={{ fontWeight: '400' }}>Status:</p>

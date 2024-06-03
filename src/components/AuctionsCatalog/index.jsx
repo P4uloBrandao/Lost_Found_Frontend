@@ -141,6 +141,8 @@ export default function AuctionsCatalog() {
   };
 
   const handleSearch = (value) => {
+    console.log(foundObjectsListF)
+    console.log()
     const filtered = auctions.filter((auction, index) => {
       const foundObject = foundObjectsList[index];
       return foundObject.name.toLowerCase() === value.toLowerCase();
@@ -178,10 +180,10 @@ export default function AuctionsCatalog() {
             onChange={handleDropdownChange}
             name="Auction"
             options={foundObjectsList}
-            value={(e) => setAuctionName(e.target.value)}
+            value={auctionName}
             ref={searchInputRef}
           />
-          <SearchButton onClick={() => handleSearch(auctionName)}>Search</SearchButton>
+          <SearchButton onClick={() => {handleSearch(auctionName)}}>Search</SearchButton>
           <ResetButton onClick={handleResetFilters}>Reset Filters</ResetButton>
         </ButtonContainer>
       </div>
@@ -197,7 +199,7 @@ export default function AuctionsCatalog() {
               id={auction._id}
               catId={auction.status}
               date={auction.endDate}
-              photo={foundObjectsListF[index].objectImage}
+              photo={foundObjectsListF[index].objectImage[0]}
               status={auction.status}
               matchButton={true}
               highbid={auction.winnerBid + " EUR"}

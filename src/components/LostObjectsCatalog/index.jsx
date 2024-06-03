@@ -160,7 +160,7 @@ export default function LostObjectCatalog() {
             options={objects}
             ref={searchInputRef}
           />
-          <SearchButton onClick={() => { setObjectName(objectName); handleSearch(objectName); }}>Search</SearchButton>
+          <SearchButton onClick={() => {handleSearch(objectName); }}>Search</SearchButton>
           <ResetButton onClick={handleResetFilters}>Reset Filters</ResetButton>
         </ButtonContainer>
       </div>
