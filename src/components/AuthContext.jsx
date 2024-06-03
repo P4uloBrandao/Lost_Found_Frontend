@@ -83,7 +83,7 @@ export function AuthProvider(props) {
           else if (userProfileData.role === "Police") {
             const getPoliceUser = async () => {
               try {
-                const response = await axios.get(`http://localhost:3000/api/police/police-officers/users/${authUser._id}`);
+                const response = await axios.get(`https://10.182.0.39/api/police/police-officers/users/${authUser._id}`);
                 setPoliceId(response.data._id);
                 console.log(response.data._id)
                

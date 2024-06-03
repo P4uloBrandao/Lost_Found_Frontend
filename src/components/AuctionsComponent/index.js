@@ -120,7 +120,7 @@ export default function AuctionsComponent() {
     const [showFilters, setShowFilters] = React.useState(false);
     const [auctions, setAuctions] = React.useState([]);
     useEffect(() => {
-        axios.get("http://localhost:3000/api/auction").then((response) => {
+        axios.get("https://10.182.0.39/api/auction").then((response) => {
             setAuctions(response.data);
             console.log(response.data)
         }).catch((error) => {

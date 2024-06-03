@@ -64,7 +64,7 @@ export default function StationComponent() {
     useEffect(() => {
         const fetchStations = async () => {
           try {
-            const response = await axios.get('http://localhost:3000/api/police/police-stations');
+            const response = await axios.get('https://10.182.0.39/api/police/police-stations');
             setStations(response.data);
             console.log(response.data)
             setIsLoading(false);
@@ -79,7 +79,7 @@ export default function StationComponent() {
     const handleCreateSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.put(`http://localhost:3000/api/police/police-officers/${getStationID(stationName,stations)}`);
+            const response = await axios.put(`https://10.182.0.39/api/police/police-officers/${getStationID(stationName,stations)}`);
             console.log(response.data);
             
         } catch (error) {

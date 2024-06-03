@@ -148,7 +148,7 @@ export default function ProfileCreationComponent({setUserWhoFound, options}) {
           data1.append('role', 'User');
           
           data1.append('status', 'active');
-          const response = await axios.post("http://localhost:3000/api/users/signup",
+          const response = await axios.post("https://10.182.0.39/api/users/signup",
           data1);
           console.log(response.data._id);
           setUserWhoFound(response.data._id)

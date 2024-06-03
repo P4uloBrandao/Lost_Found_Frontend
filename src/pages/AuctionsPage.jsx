@@ -28,7 +28,7 @@ export default function AuctionsPage() {
   const fetchUserProfile = async () => {
     try {
     
-      const response = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
+      const response = await axios.get(`https://10.182.0.39/api/users/profile/${token}`);
       const userProfileData = response.data.currentUser; // Supondo que o endpoint forneça os detalhes do perfil do usuário
       setUser(userProfileData.first_name);
             // ... (outros estados conforme necessário)

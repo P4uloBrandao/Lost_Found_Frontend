@@ -66,7 +66,7 @@ export default function AddCategoryComponent() {
       
       const fetchCategories = async () => {
         try {
-          const response = await axios.get('http://localhost:3000/api/category');
+          const response = await axios.get('https://10.182.0.39/api/category');
           setCategories(response.data);
           setLoading(false); // Definir o estado de carregamento como falso quando o fetch estiver concluído
         } catch (error) {
@@ -82,7 +82,7 @@ export default function AddCategoryComponent() {
    // Função para buscar subcategorias de uma categoria
     const fetchSubCategories = async (data) => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/category/subCat/${data}`);
+        const response = await axios.get(`https://10.182.0.39/api/category/subCat/${data}`);
         setFullDataCategories(response.data);
        
         setSubCategories(extractSubcategories (response.data));
@@ -123,7 +123,7 @@ export default function AddCategoryComponent() {
     console.log(newSubSubCategoryToCreate)
   
     try {
-        const response = await axios.post(`http://localhost:3000/api/category/subSubCat/${getCategoryNameFromId(mainCategory)}/${getSubCategoryNameFromId(subMainCategory)}`,{"name": newSubSubCategoryToCreate});
+        const response = await axios.post(`https://10.182.0.39/api/category/subSubCat/${getCategoryNameFromId(mainCategory)}/${getSubCategoryNameFromId(subMainCategory)}`,{"name": newSubSubCategoryToCreate});
       console.log(response)
     } catch (error) {
         console.error( error);
@@ -141,7 +141,7 @@ const handleDeleteSubSubCategory = async (event) => {
   console.log(subSubMainCategoryToDelete)
 
   try {
-      const response = await axios.delete(`http://localhost:3000/api/category/subSubCat/${getCategoryNameFromId(mainCategoryToDelete)}/${getSubCategoryNameFromId(subMainCategoryToDelete)}/${getSubSubCategoryNameFromId(subSubMainCategoryToDelete)}`);
+      const response = await axios.delete(`https://10.182.0.39/api/category/subSubCat/${getCategoryNameFromId(mainCategoryToDelete)}/${getSubCategoryNameFromId(subMainCategoryToDelete)}/${getSubSubCategoryNameFromId(subSubMainCategoryToDelete)}`);
     console.log(response)
   } catch (error) {
       console.error( error);
