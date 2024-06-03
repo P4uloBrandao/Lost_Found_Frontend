@@ -66,7 +66,6 @@ const CardLostObjecs = ({ matchButton, catId,name, description, location, date, 
         </Grid>            
 
       </Grid>
-        <p  className='removeBtn' >  <span onClick={handleRemoveLostObject}style={{ textDecoration: 'underline',paddingLeft: '5rem' }}>Remove</span> lost object</p>
     </Grid>
   );
 };
