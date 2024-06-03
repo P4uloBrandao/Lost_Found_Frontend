@@ -71,7 +71,7 @@ export function AuthProvider(props) {
       try {
         if (storedToken) {
           setIsLoggedIn(true);
-          const response = await axios.get(`http://35.219.162.80/api/users/profile/${storedToken}`);
+          const response = await axios.get(`https://bidfinderbackend.ddns.net/api/users/profile/${storedToken}`);
           const userProfileData = response.data.currentUser;
           setToken(storedToken);
           setAuthUser(userProfileData);
