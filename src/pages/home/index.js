@@ -1,8 +1,9 @@
-import React from 'react';
+import {React,useState,Navigate} from 'react';
 import WelcomeHeaderComponent from '../../components/headerWithNameComponent/welcomeHeader.jsx'
 import { useLocation } from 'react-router-dom';
 import { useAuth } from '../../components/AuthContext.jsx'
-import WelcomeHeaderComponent from '../../components/headerWithNameComponent/welcomeHeader.jsx';
+import axios
+ from 'axios';
 import styled from 'styled-components';
 
 const token = localStorage.getItem("token");

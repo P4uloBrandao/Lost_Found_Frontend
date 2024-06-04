@@ -71,7 +71,7 @@ export function AuthProvider(props) {
       try {
         if (storedToken) {
           setIsLoggedIn(true);
-          const response = await axios.get(`https://bidfinderbackend.ddns.net/api/users/profile/${storedToken}`);
+          const response = await axios.get(`http://localhost:3000/api/users/profile/${storedToken}`);
           const userProfileData = response.data.currentUser;
           setToken(storedToken);
           setAuthUser(userProfileData);
@@ -83,7 +83,7 @@ export function AuthProvider(props) {
           else if (userProfileData.role === "Police") {
             const getPoliceUser = async () => {
               try {
-                const response = await axios.get(`https://bidfinderbackend.ddns.net/api/police/police-officers/users/${authUser._id}`);
+                const response = await axios.get(`http://localhost:3000/api/police/police-officers/users/${authUser._id}`);
                 setPoliceId(response.data._id);
                 console.log(response.data._id)
                

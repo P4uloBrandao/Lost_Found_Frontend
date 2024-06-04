@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import Card from "../components/CardComponent/index";
 import axios from "axios";
 import WelcomeHeaderComponent from '../components/headerWithNameComponent/welcomeHeader.jsx';
-import Menu from '../components/profileMenu/index.jsx'; 
+import ProfileMenu from '../components/profileMenu/index';
 
 const Container = styled.div`
     top: 3em;
@@ -56,11 +56,13 @@ export default function LostObjectCatalogPage() {
     setSelectedFilter(filter);
     // Add code to apply the selected filter
   };
-  const option =['My Account','Payment Details','Privacy Settings','My Auctions','My Lost Objects'] 
+  const menuOptions = ['Profile Settings', 'My Auctions', 'My Lost Objects','Payments Details', 'Privacy Settings'];
+
+  const [selectedOption, setSelectedOption] = useState(menuOptions[0]);
   return (
     <div className="lost-item-container" style={{ display: 'flex', flexDirection: 'column', width: '100%',}}>
       <WelcomeHeaderComponent name={'Carlos'} description={'Did you know that over 30 milion wallets are lost every year?'}/>
-      <Menu options={option} selected={'My Lost Objects'} />
+      <ProfileMenu options={menuOptions} selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
 
       <div>
         {objects.map((object, index) => (

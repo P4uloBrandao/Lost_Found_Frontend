@@ -99,7 +99,7 @@ export default function LostObjectForm  ()  {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('https://bidfinderbackend.ddns.net/api/category');
+        const response = await axios.get('http://localhost:3000/api/category');
         setCategories(response.data);
 
       } catch (error) {
@@ -144,7 +144,7 @@ export default function LostObjectForm  ()  {
             formData.append("objectImage[]", image);
         });
 
-        const response = await axios.post("https://bidfinderbackend.ddns.net/api/lost-objects",
+        const response = await axios.post("http://localhost:3000/api/lost-objects",
           formData,);
         
         // console.log(response.data)

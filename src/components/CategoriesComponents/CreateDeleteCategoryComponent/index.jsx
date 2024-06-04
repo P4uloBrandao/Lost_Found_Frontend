@@ -43,7 +43,7 @@ export default function AddCategoryComponent() {
       
       const fetchCategories = async () => {
         try {
-          const response = await axios.get('https://bidfinderbackend.ddns.net/api/category');
+          const response = await axios.get('http://localhost:3000/api/category');
           setCategories(response.data);
           setLoading(false); // Definir o estado de carregamento como falso quando o fetch estiver concluído
         } catch (error) {
@@ -60,7 +60,7 @@ export default function AddCategoryComponent() {
     const handleCreateSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post(`https://bidfinderbackend.ddns.net/api/category/`,{"name": categoryToCreate});
+            const response = await axios.post(`http://localhost:3000/api/category/`,{"name": categoryToCreate});
            
             console.log(category)
         } catch (error) {
@@ -77,7 +77,7 @@ export default function AddCategoryComponent() {
     const handleDeleteSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.delete(`https://bidfinderbackend.ddns.net/api/category/${categoryToDelete}`,);
+            const response = await axios.delete(`http://localhost:3000/api/category/${categoryToDelete}`,);
             
             console.log(categoryToDelete)
         } catch (error) {

@@ -73,7 +73,7 @@ export default function LostObjectCatalog() {
         const token = localStorage.getItem("token");
   
         // Buscar os dados dos objetos perdidos
-        const objectsResponse = await axios.get(`https://bidfinderbackend.ddns.net/api/lost-objects/user/${token}`);
+        const objectsResponse = await axios.get(`http://localhost:3000/api/lost-objects/user/${token}`);
         let objectsData = objectsResponse.data;
 
         // Renomear o campo title para name
@@ -105,7 +105,7 @@ export default function LostObjectCatalog() {
   const handleCreateSubmit = async (event) => {
     event.preventDefault();
     try {
-        const response = await axios.put(`https://bidfinderbackend.ddns.net/api/lost-objects/${getLostObjectID(objectName,objects)}`);
+        const response = await axios.put(`http://localhost:3000/api/lost-objects/${getLostObjectID(objectName,objects)}`);
     } catch (error) {
         console.error(error);
 

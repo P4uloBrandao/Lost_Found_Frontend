@@ -120,7 +120,7 @@ export default function AuctionsComponent() {
     const [showFilters, setShowFilters] = React.useState(false);
     const [auctions, setAuctions] = React.useState([]);
     useEffect(() => {
-        axios.get("https://bidfinderbackend.ddns.net/api/auction").then((response) => {
+        axios.get("http://localhost:3000/api/auction").then((response) => {
             setAuctions(response.data);
             console.log(response.data)
         }).catch((error) => {
@@ -157,7 +157,7 @@ export default function AuctionsComponent() {
                 </FiltersContainer>
               <CardsContainer>
                   {
-                      auctions.map(auction => <AuctionsCardComponent image={auction.objectImage[0]} itemTitle={auction.foundObjectTitle} daysLeft={getDaysLeft(auction.startDate, auction.endDate)} bidsNumber={auction.bids.length} price={auction.highestBid}></AuctionsCardComponent>)
+                      auctions.map(auction => <AuctionsCardComponent image={auction.objectImage[0]} itemTitle={auction.foundObjectTitle} daysLeft={getDaysLeft(auction.startDate, auction.endDate)} bidsNumber={auction.bids.length} price={auction.highestBid} id={auction._id}></AuctionsCardComponent>)
                   }
               </CardsContainer>
           </Container>

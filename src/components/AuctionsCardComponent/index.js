@@ -1,5 +1,6 @@
 import styled, {css} from 'styled-components';
-import React, { useEffect } from 'react';
+import React, { useEffect ,useState} from 'react';
+import { useNavigate } from 'react-router-dom'; 
 
 import Grid from '@mui/material/Grid';
 import { AuthContext } from "../AuthContext";
@@ -88,7 +89,16 @@ const ActionButton = styled.button `
 `
 
 
-export default function AuctionsCardComponent({itemTitle, daysLeft, price, bidsNumber, image}) {
+export default function AuctionsCardComponent({itemTitle, daysLeft, price, bidsNumber, image,id}) {
+  const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState(null);
+
+
+  const handleViewAuction = () => {
+    // Assuming you want to pass id and name as parameters
+    navigate(`/selectedAuction?param1=${id}`);
+  };
+
    
     useEffect(() => {
     }, []);
@@ -108,7 +118,7 @@ export default function AuctionsCardComponent({itemTitle, daysLeft, price, bidsN
                         <MinorText>{bidsNumber} bids</MinorText>
                     </TextContainer>
 
-                      <ActionButton>View Auction</ActionButton>
+                    <ActionButton onClick={handleViewAuction}>View Auction</ActionButton>
                   </PriceActionContainer>
               </InfoContainer>
           </CardContainer>

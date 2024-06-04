@@ -5,6 +5,8 @@ import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/ProfilePageTest.jsx';
 import SelectedAuctionPage from "./pages/SelectedAuctionPage.jsx";
 import styled from 'styled-components';
+import Layout from '../src/components/Layout/Layout.jsx'
+import LostObjectCatalogPage from "./pages/lostObjectCatalogPage.jsx";
 import Esquadras from './components/esquadra/index'
 import DeleteProfile from './components/deleteProfile/index'
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
@@ -25,9 +27,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import { AuthProvider } from "./components/AuthContext.jsx";
 // import  { AdminRoute, PublicRoute } from './components/protectedRoutes.jsx'
 import AdminRoute from './components/routeComponent/adminRoute/index.jsx'
-
 import PoliceRoute from './components/routeComponent/PoliceRoute/index.jsx'
-
 import PublicRoute from './components/routeComponent/publicRoute/index.jsx'
 import PrivateRoute from './components/routeComponent/privateRoute/index.jsx'
 import Footer from './components/FooterComponent/index.jsx'
@@ -63,9 +63,12 @@ function App() {
             <Routes>
               <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
               <Route path="/signup" element={<PublicRoute><SignUpPage /></PublicRoute>} />
+              
+
               <Route path="*" element={
                 <Layout>
                   <Routes>
+                    <Route path="/police" element={<PoliceRoute><PolicePage/></PoliceRoute> }/>
                     <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
                     <Route path="/AdminPage" element={<AdminRoute><AdminPage /></AdminRoute>} />
                     <Route path="/addFoundObject" element={<PrivateRoute><AddLostObjectComponent /></PrivateRoute>} />
@@ -73,6 +76,7 @@ function App() {
                     <Route path="/addLostObject" element={<PrivateRoute><RegisterLostObjectPage /></PrivateRoute>} />
                     <Route path="/myLostObjects" element={<PrivateRoute><LostObjectCatalogPage /></PrivateRoute>} />
                     <Route path="/selectedAuction" element={<PrivateRoute><SelectedAuctionPage /></PrivateRoute>} />
+                    <Route path="/auctions" element={<PublicRoute><AuctionsPage /></PublicRoute>} />
                     <Route path="/" element={<PublicRoute><Home /></PublicRoute>} />
                   </Routes>
                 </Layout>

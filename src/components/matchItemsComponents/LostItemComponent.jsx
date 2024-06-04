@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import LostItemDetails from './LostItemDetails/LostItemDetails';
 import LostItemPicture from './LostPictureComponent/LostItemPictures';
 import axios from "axios";
-import imageSrc from './LostPictureComponent/Image.svg'; 
+import imageSrc from './LostPictureComponent/Image.svg';
 import LostItemHeader from './LostItemHeader/LostItemHeader';
 import MatchFoundComponent from './MatchFoundComponent';
 import LoadingSpinner from '../LoadingPage/LoadingSpinner';
@@ -20,12 +20,10 @@ const LostItemComponent = ({ itemid }) => {
 
       try {
         const objectResponse = await axios.get(`http://localhost:3000/api/lost-objects/${itemid}`);
-        setLostObject(objectResponse.data);
+        const auctionData = objectResponse.data;
+        console.log(auctionData);
+        setLostObject(auctionData);
 
-        const matchesResponse = await axios.post(`http://localhost:3000/api/match`, {
-          lostObjectId: itemid
-        });
-        setMatches(matchesResponse.data);
       } catch (error) {
         console.error('Failed to fetch data:', error);
         setError(error);
@@ -59,10 +57,10 @@ const LostItemComponent = ({ itemid }) => {
           <LostItemPicture images={lostObject.objectImage ? [lostObject.objectImage] : []} nome={lostObject.title} />
         </div>
         <div style={{ flex: '1 1 55%', marginTop: '1%' }}>
-          <LostItemDetails status={lostObject.status} description={lostObject.description} location={lostObject.location} />
+          <LostItemDetails status={lostObject.status} description={lostObject.description} location={lostObject.location} categoy={lostObject.category} lost_date ={lostObject.lostDate} enddate={lostObject.endDate}/>
         </div>
       </div>
-      <MatchFoundComponent matches={matches} />
+
     </div>
   );
 };

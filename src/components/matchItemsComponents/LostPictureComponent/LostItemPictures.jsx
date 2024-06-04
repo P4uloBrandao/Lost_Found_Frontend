@@ -40,7 +40,7 @@ const LostItemPicture = ({ images,nome }) => {
           <div
             key={image}
             className={`lostitem-picture-item ${
-              image === selectedImage ? 'selected' : ''
+              image === selectedImage ? 'select' : ''
             }`}
             onClick={() => handleImageClick(image)}
           >

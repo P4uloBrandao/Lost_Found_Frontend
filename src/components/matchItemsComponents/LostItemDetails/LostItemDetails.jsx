@@ -4,8 +4,8 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import LocationOn from '@mui/icons-material/LocationOn';
 import mapsIcon from './Map-location.svg'
 
-const LostItemDetails = ({status,description,location }) => {
-  const [dataItem, setDataItem]=useState([status,description,location])
+const LostItemDetails = ({status,description,location,categoy,lost_date,enddate }) => {
+  const [dataItem, setDataItem]=useState([status,description,location,categoy,lost_date,enddate])
 
   return (
     <div className="lost-item-details">
@@ -24,14 +24,14 @@ const LostItemDetails = ({status,description,location }) => {
       </div>
       <div className="lost-item-status">
         <div>
-          <span className='status-title'>Status:</span>
-          <span className='status-value'>{dataItem[0]}</span>
+          <span className='status-title'>Category:</span>
+          <span className='status-value'>{dataItem[3]}</span>
         </div>
         <div>
-          <span className='matches'>10 Matches Found</span>
+          <span className='matches'>Lost Date:{dataItem[4]}</span>
         </div>
         <div>
-            <span className='remove-Item'>Remove Item</span>
+            <span className='remove-Item'>End Date: {dataItem[4]}</span>
         </div>
       </div>
       </div>

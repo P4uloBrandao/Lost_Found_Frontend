@@ -127,10 +127,10 @@ function Navbar() {
     if (token) {
       const fetchUserProfile = async () => {
         try {
-          const response = await axios.get(`https://bidfinderbackend.ddns.net/api/users/profile/${token}`);
+          const response = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
           const userProfileData = response.data.currentUser;
           if (!!userProfileData.profileImage) {
-            axios.get(`https://bidfinderbackend.ddns.net/api/users/profileImage/${userProfileData.profileImage}`)
+            axios.get(`http://localhost:3000/api/users/profileImage/${userProfileData.profileImage}`)
               .then((response) => {
                 setProfilePhoto(response.data.image);
                 setUserData(userProfileData);
@@ -213,7 +213,7 @@ function Navbar() {
   const options = [
     { label: 'Home', path: '/' },
 
-    { label: userRole !== "Police" ? 'Lost' : 'New found object', path: '/police' },
+    { label: userRole !== "Police" ? 'Lost' : 'New found object', path: '/myLostObjects' },
 
     { label: userRole !== "Police" ? 'Auctions' : '', path: '/auctions' },
     { label: userRole !== "Police" ? 'I lost something!' : '', path: '/addLostObject' },
