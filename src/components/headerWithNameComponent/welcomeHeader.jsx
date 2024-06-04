@@ -7,7 +7,7 @@ const WelcomeHeaderComponent = ({name, description}) => {
     <div className="header-component">
         <div className='header-component-left'>
             <span className='hi-component'>Hi,</span>
-            <span className='name-component'>{name}</span>
+            <span className='name-component'>Carlos</span>
             <span className='text-component'>{description}</span>
         </div>
         <div className='header-component-rigth'>

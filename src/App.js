@@ -21,6 +21,7 @@ import PublicRoute from './components/routeComponent/publicRoute/index.jsx';
 import PrivateRoute from './components/routeComponent/privateRoute/index.jsx';
 
 import './index.css';
+import SelectedAuctionPage from "./pages/SelectedAuctionPage.jsx";
 
 const AppContainer = styled.div`
   width: 100vw;
@@ -48,6 +49,7 @@ function App() {
                     <Route path="/matchObjects" element={<PrivateRoute><MatchObjectCatalogPage /></PrivateRoute>} />
                     <Route path="/addLostObject" element={<PrivateRoute><RegisterLostObjectPage /></PrivateRoute>} />
                     <Route path="/myLostObjects" element={<PrivateRoute><LostObjectCatalogPage /></PrivateRoute>} />
+                    <Route path="/selectedAuction" element={<PrivateRoute><SelectedAuctionPage /></PrivateRoute>} />
                     <Route path="/" element={<PublicRoute><Home /></PublicRoute>} />
                   </Routes>
                 </Layout>

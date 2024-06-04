@@ -10,12 +10,11 @@
   }
 
   .lostitem-picture-selected  {
-    width:350;
-    height: 400.04px;
+    width:300;
+    height: 450px;
     flex-shrink: 0;
     border-radius: 20px;
     margin:20px 20px 50px 20px;
-    border-radius: 20px;
     background: #ECECEC;
     display: flex;
     justify-content: center;
@@ -23,6 +22,7 @@
     z-index: 1;
     position: relative;
     top: 3%;
+
   }
 
 
@@ -31,7 +31,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    box-shadow: 4px 4px 27.1px 0px rgba(0, 0, 0, 0.25);
+    border: 2px solid #474646; 
     border-radius: 1.25rem;
   }
   
@@ -44,6 +44,7 @@
     left:35px;
     right:35px;
     bottom:70px;
+    
     
   }
   
@@ -62,9 +63,8 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    box-shadow: 4px 4px 27.1px 0px rgba(0, 0, 0, 0.25);
     border-radius: 1.25rem;
-   
+    border: 2px solid #474646; 
   }
    
   .lostItem-name{
