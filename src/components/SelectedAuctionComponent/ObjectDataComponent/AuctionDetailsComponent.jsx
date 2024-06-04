@@ -1,14 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import io from 'socket.io-client';
+import axios from 'axios';
 import './style.css';
+import { useAuth } from '../../AuthContext';
 import LocationOn from '@mui/icons-material/LocationOn';
 import mapsIcon from './Map-location.svg';
 import { format, differenceInDays, differenceInHours, differenceInMinutes, differenceInSeconds, isBefore } from 'date-fns';
+
+// Configurar a conexão WebSocket
+const socket = io('http://localhost:5000'); 
 
 const AuctionComponent = ({ auction, object }) => {
   const [bidValue, setBidValue] = useState('');
   const [highestBid, setHighestBid] = useState('No bids');
   const [date] = useState(new Date(auction.endDate));
 
+
+  const { authUser, token } = useAuth();
   const formattedDate = format(date, 'dd MMM yyyy HH:mm:ss z');
 
   const calculateTimeLeft = () => {
@@ -33,19 +41,64 @@ const AuctionComponent = ({ auction, object }) => {
       setTimeLeft(calculateTimeLeft());
     }, 1000);
 
+    // Limpar o intervalo quando o componente for desmontado
     return () => clearInterval(timer);
   }, [date]);
+
+  useEffect(() => {
+    // Entrar na sala do leilão
+    socket.emit('joinAuction', auction._id);
+
+    // Ouvir eventos de novos lances
+    socket.on('newBid', (data) => {
+      if (data.auctionId === auction._id) {
+        // Atualizar o lance mais alto
+        setHighestBid(data.bidValue);
+      }
+    });
+
+    // Ouvir eventos de novos lances máximos
+    socket.on('newMaxBid', (data) => {
+      if (data.auctionId === auction._id) {
+        // Atualizar o lance máximo
+        setHighestBid(data.maxBid);
+      }
+    });
+
+    // Limpar a conexão do WebSocket ao desmontar o componente
+    return () => {
+      socket.emit('leaveAuction', auction._id);
+      socket.off('newBid');
+      socket.off('newMaxBid');
+    };
+  }, [auction._id]);
 
   const handleBidChange = (event) => {
     setBidValue(event.target.value);
   };
 
-  const placeBid = () => {
-    if (parseFloat(bidValue) > 6) {
-      setHighestBid(bidValue);
-      setBidValue('');
+
+
+
+  const placeBid = async () => {
+    if (parseFloat(bidValue) > object.price) {
+      try {
+        const response = await axios.post(`http://localhost:3000/api/auction/${auction._id}/makeBid`, {
+          value: bidValue,
+          auction: auction._id,
+          bidder: authUser._id, 
+         
+        });
+          console.log(response);
+        if (response.status === 200) {
+          setBidValue('');
+        }
+      } catch (error) {
+        console.error('Failed to place bid:', error);
+      }
     }
   };
+
 
   return (
     <div className="lost-item-details">
@@ -53,13 +106,13 @@ const AuctionComponent = ({ auction, object }) => {
         <div className="lost-item-status">
           <div>
             <span className='status-title'>Highest:</span>
-            <span className='status-value'>300 EUR</span>
+            <span className='status-value'>{highestBid} EUR</span>
           </div>
           <div>
             <span className='matches'>{highestBid}</span>
           </div>
           <div>
-            <span className='remove-Item'>Minimum bid allowed:{object.price} EUR</span>
+            <span className='remove-Item'>Minimum bid allowed: {object.price} EUR</span>
           </div>
         </div>
         <div className="lost-item-status">
