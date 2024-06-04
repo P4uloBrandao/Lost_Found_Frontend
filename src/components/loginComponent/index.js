@@ -45,8 +45,9 @@ const LoginBox = styled.div`
   max-width: 93vh;
   left: 0;
   backdrop-filter: blur(25px);
-  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 9px 10px 2px rgba(0, 0, 0, 0.2);
   padding: 5.5em 4.5em;
+
 
 `;
 const LoginHeader = styled.div`
@@ -240,16 +241,16 @@ export default function SignIn() {
       console.log('Google Response:', response); // Log the entire response
     
       try {
-        const tokenResponse = await axios.get(`http://localhost:3000/api/auth/token/${response.credential}`);
+        const tokenResponse = await axios.get(`https://bidfinderbackend.ddns.net/api/auth/token/${response.credential}`);
         console.log("tokenResponse",tokenResponse)
-        const userExistValidation = await axios.post("http://localhost:3000/api/users/getUser", { googleId: tokenResponse.data.sub });
+        const userExistValidation = await axios.post("https://bidfinderbackend.ddns.net/api/users/getUser", { googleId: tokenResponse.data.sub });
     
         if (userExistValidation) {
           console.log("User is valid");
           console.log(userExistValidation);
     
           try {
-            const response1 = await axios.post("http://localhost:3000/api/auth/login", { clientId: tokenResponse.data.sub });
+            const response1 = await axios.post("https://bidfinderbackend.ddns.net/api/auth/login", { clientId: tokenResponse.data.sub });
     
             localStorage.setItem("token", response1.data.token);
             console.log(response1);
@@ -303,7 +304,7 @@ export default function SignIn() {
       });
   
       try {
-        const response = await axios.post("http://localhost:3000/api/auth/login", {email,password});
+        const response = await axios.post("https://bidfinderbackend.ddns.net/api/auth/login", {email,password});
     
         // Process the response as needed
           

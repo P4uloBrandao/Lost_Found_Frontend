@@ -34,16 +34,19 @@ const SelectedBar = styled.div`
   transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
 `;
 
-const Menu = ({ options, selected}) => {
-  const [selectedOption, setSelectedOption] = useState(selected);
+
+const Menu = ({ options, selectedOption, setSelectedOption , style }) => {
+
+  setSelectedOption(selectedOption);
 
   const handleClick = (option) => {
     setSelectedOption(option);
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom:'50px'}}>
-      <MenuContainer>
+    <div>
+      <MenuContainer style={style}>
+
         {options.map((option) => (
           <MenuItem
             key={option}

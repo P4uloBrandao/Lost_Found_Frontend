@@ -1,17 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { AuthContext } from "../AuthContext";
+
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {PasswordStrength} from '../controllers/index'
@@ -23,13 +12,12 @@ import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 import PhoneIcon from '@mui/icons-material/PhoneAndroidRounded';
 import MailIcon from '@mui/icons-material/MailOutlineRounded';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+
 import '../../assets/colors/colors.css'
 import SearchInput from "../SearchInputFieldComponent";
 import AddressIcon from '@mui/icons-material/HomeRounded';
 import { InputSubmit, Container,InputBox ,Title,Form, Wrapper } from '../../assets/StylePopularComponent/style';
-
+import Loader from '../LoadingComponent/index';
 
 
 
@@ -104,7 +92,7 @@ const toggleShowPassword2 = () => {
 useEffect(() => {
     const fetchStations = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/police/police-stations');
+            const response = await axios.get('https://bidfinderbackend.ddns.net/api/police/police-stations');
             setStations(response.data);
             setIsLoading(false);
             console.log(stations)
@@ -119,7 +107,7 @@ useEffect(() => {
 }, []);
 
 if (isLoading) {
-    return <div>Carregando...</div>;
+    return <Loader/>;
 }
 
 if (error) {
@@ -135,11 +123,12 @@ function  getStationID(name,stations){
         event.preventDefault();
        
         try {
-            const response = await axios.post(`http://localhost:3000/api/police/police-officers`,{
+            const response = await axios.post(`https://bidfinderbackend.ddns.net/api/police/police-officers`,{
               "firstName" :first_name,
               "lastName":last_name,
               "phone":phone,
               "email":email,
+              
               
               "station" : station,
               "password": password,
@@ -157,12 +146,12 @@ function  getStationID(name,stations){
                 setErrorMessage("An unexpected error occurred. Please try again.");
             }
         }
-          window.location.reload();
+          // window.location.reload();
     }
     // const handleDeleteSubmit = async (event) => {
     //     event.preventDefault();
     //     try {
-    //         const response = await axios.delete(`http://localhost:3000/api/police/police-stations/${stationId}`);
+    //         const response = await axios.delete(`https://bidfinderbackend.ddns.net/api/police/police-stations/${stationId}`);
             
     //     } catch (error) {
     //         console.error( error);
@@ -182,10 +171,7 @@ function  getStationID(name,stations){
     };
     return (<Container>
       <Title>Add Police Officer</Title>
-      
-      
-      
-        
+  
   <Grid container spacing={2}>
     <Grid item xs={12} sm={6}>
       <InputBox>
@@ -267,6 +253,7 @@ function  getStationID(name,stations){
           onChange={handleDropdownChange}
           name="Station"
           options={stations}
+          field_name="id"
          
         />
       </InputBox>

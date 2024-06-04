@@ -28,6 +28,7 @@
     font-size: 92px;
     font-style: normal;
     font-weight: 700;
+    text-align: left;
     line-height: 90px; /* 97.222% */
   }
 
@@ -38,6 +39,7 @@
     font-size: 92px;
     font-style: normal;
     font-weight: 700;
+    text-align: left;
     line-height: 90px;
   }
   
@@ -48,6 +50,7 @@
     font-style: normal;
     font-weight: 400;
     line-height: normal;
+    text-align: left;
     margin-top: 15px;
   }
   

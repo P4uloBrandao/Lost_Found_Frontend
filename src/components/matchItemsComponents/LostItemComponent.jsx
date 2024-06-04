@@ -34,8 +34,10 @@ const LostItemComponent = ({ itemid }) => {
       }
     };
 
+
     fetchLostObjectAndMatches();
   }, [itemid]);
+
 
   if (isLoading) {
     return <LoadingSpinner />;

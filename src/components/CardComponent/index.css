@@ -32,13 +32,17 @@
 }
 
 .removeBtn {
-  font-size: 0.8rem;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  color: var(--secondary-grey-color);
-  cursor: pointer;
-  text-decoration: underline;
+
+   
+    font-size: 0.8rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    color: var(--secondary-grey-color);
+    
+    margin-top: 16px;
+    cursor: pointer;
+
 }
 
 .removeBtn:hover {

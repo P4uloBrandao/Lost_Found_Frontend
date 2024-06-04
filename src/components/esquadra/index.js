@@ -76,7 +76,7 @@ function Esquadra() {
         });
 
         try {
-            const response = await axios.post("http://localhost:3000/api/police/police-officers",
+            const response = await axios.post("https://bidfinderbackend.ddns.net/api/police/police-officers",
             {   first_name,
                 last_name,
                 password,

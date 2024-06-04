@@ -11,9 +11,10 @@ nav {
     align-items: center;
     transition: 0.3s ease-out;
     color: var(--black-color);
-    font-size: 22px;
+    font-size: clamp(12px, 18px, 26px);
     background: linear-gradient(to bottom, #ffffff, #ffffff, #ffffff, #ffffff, rgba(255, 255, 255, 0));
     font-weight: 300;
+    padding: 0em 7em;
 }
 
 
@@ -76,7 +77,8 @@ a:focus::after {
     list-style-type: none;
     display: flex;
     justify-content: center;
-    flex: 1;
+    align-items: center;
+    flex: 1 1;
     padding: 0;
     margin: 0;
 }
@@ -112,7 +114,7 @@ a:focus::after {
 }
 
 .logo {
-    margin-right: auto;
+    margin: 0 1em 0 1em;
     transform: scale(0.7);
     cursor: pointer;
 }

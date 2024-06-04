@@ -24,8 +24,11 @@ export const Wrapper = styled.div`
 `;
 export  const InputSubmit = styled.button`
 
+position: relative;
 width: 12.93306rem;
-    height: 3.25rem;
+align-self: end;
+margin-top: 33pt;
+margin-right: 11pt;    height: 3.25rem;
     background: var(--primary-green-color);
     box-shadow: 0px 4px 15px 0px rgba(0, 0, 0, 0.11);
     transition: background-color 0.218s, border-color 0.218s, box-shadow 0.218s;
@@ -92,6 +95,6 @@ export const InputBox = styled.div`
 position: relative;
 display: flex;
 flex-direction: column;
-margin: 20px 0;
+
 width: -webkit-fill-available;
 `;

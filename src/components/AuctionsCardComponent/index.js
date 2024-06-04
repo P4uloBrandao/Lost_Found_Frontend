@@ -47,11 +47,15 @@ const InfoContainer = styled.div`
 
 const MinorText = styled.p `
   font-size: 16px;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `
 
 const MajorText = styled.p `
   font-size: 22px;
   font-weight: 700;
+  text-overflow: ellipsis;
+  overflow: hidden;
 `
 
 const TextContainer = styled.div `
@@ -84,7 +88,7 @@ const ActionButton = styled.button `
 `
 
 
-export default function AuctionsCardComponent({btnLabel, options}) {
+export default function AuctionsCardComponent({itemTitle, daysLeft, price, bidsNumber, image}) {
    
     useEffect(() => {
     }, []);
@@ -92,16 +96,16 @@ export default function AuctionsCardComponent({btnLabel, options}) {
     return (
       <>
           <CardContainer>
-              <img src="https://res.cloudinary.com/dkyu0tmfx/image/upload/v1710362682/sample.jpg" alt="Item"/>
+              <img src={image} alt="Item"/>
               <InfoContainer>
                   <TextContainer>
-                      <MajorText>Teste Item Bom</MajorText>
-                      <MinorText> 8 days left</MinorText>
+                      <MajorText>{itemTitle}</MajorText>
+                      <MinorText> {daysLeft} days left</MinorText>
                   </TextContainer>
                   <PriceActionContainer>
                     <TextContainer>
-                        <MajorText>64 EUR</MajorText>
-                        <MinorText>4 bids</MinorText>
+                        <MajorText>{price} EUR</MajorText>
+                        <MinorText>{bidsNumber} bids</MinorText>
                     </TextContainer>
 
                       <ActionButton>View Auction</ActionButton>

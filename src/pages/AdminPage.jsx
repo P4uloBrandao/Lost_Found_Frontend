@@ -7,7 +7,7 @@ import Grid from '@mui/material/Unstable_Grid2/Grid2';
 import "./LoginPage.css"
 import  { useEffect, useState } from "react";
 import AddFoundObjectComponent  from '../components/AddFoundObjectComponent/index' ; 
-import CategoryComponent  from '../components/CategoryComponent/index' ; 
+import CategoriesComponents  from '../components/CategoriesComponents/index' ; 
 import StationCreateComponent  from '../components/StationCreateComponent/index' ; 
 import PoliceComponent  from '../components/PoliceComponent/index' ; 
 import AdminMenu from '../components/profileMenu/index'
@@ -30,7 +30,6 @@ const ChangeContainer = styled.div`
   width: auto;
   margin: 5em 0;
   opacity: 1;
-  
   padding: 40px;
 `;
 export default function AdminPage() {
@@ -43,7 +42,7 @@ export default function AdminPage() {
       case 'Found Object':
         return < AddFoundObjectComponent />;
       case 'My Categories':
-        return <  CategoryComponent/>
+        return <CategoriesComponents/>
       case 'Police station':
           return < StationCreateComponent/> ;
       case 'Police Officer':

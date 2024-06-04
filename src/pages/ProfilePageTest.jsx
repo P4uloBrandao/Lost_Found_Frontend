@@ -1,13 +1,21 @@
 // ProfilePage.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from "axios";
+
 import ProfileMenu from '../components/profileMenu/index';
 import ChangePassword from '../components/ChangePasswordComponent';
 import ProfileSettings from '../components/profileSettings/index';
 import DeleteProfile from '../components/deleteProfile/index';
+import MyAuctions from "../components/AuctionsCatalog/index.jsx";
+import MyLost from '../components/LostObjectsCatalog/index.jsx';
+import WelcomeHeaderComponent from '../components/headerWithNameComponent/welcomeHeader.jsx';
 import styled from 'styled-components';
 
+const token = localStorage.getItem("token");
+
+
 const PrimaryContainer = styled.div`
-  margin: 9em 7em;
+  margin: 0.1em 7em;
   text-align: -webkit-center;
   place-content: center;
 `;
@@ -15,7 +23,7 @@ const PrimaryContainer = styled.div`
 const ChangeContainer = styled.div`
   opacity: 1;
   background-color: var(--white-color);  
-  margin-top: 4em ;
+  margin-top: 2em ;
   padding: 2em ;
 `;
 
@@ -38,7 +46,25 @@ const CategoryTitle = styled.h2`
   margin-top: 0px;
 `;
 
+
 const ProfilePage = () => {
+
+    const [user, setUser] = useState('');
+
+    const fetchUserProfile = async () => {
+      try {
+      
+        const response = await axios.get(`https://bidfinderbackend.ddns.net/api/users/profile/${token}`);
+        const userProfileData = response.data.currentUser; // Supondo que o endpoint forneça os detalhes do perfil do usuário
+        setUser(userProfileData.first_name);
+              // ... (outros estados conforme necessário)
+      } catch (error) {
+        console.error("Failed to fetch user profile:", error);
+        // Lide com erros conforme necessário
+      }
+    };
+        // Chame a função de busca ao montar o componente
+    fetchUserProfile();
 
   // Definir as opções de menu
   const menuOptions = ['Profile Settings', 'My Auctions', 'My Lost Objects','Payments Details', 'Privacy Settings'];
@@ -54,9 +80,9 @@ const ProfilePage = () => {
           <DeleteProfile />
         ];
       case 'My Auctions':
-        return <ChangePassword />;
+        return <MyAuctions />;
       case 'My Lost Objects':
-        return <DeleteProfile />;
+        return <MyLost />;
       case 'Payments Details':
           return <DeleteProfile />;
       case 'Privacy Settings':
@@ -69,6 +95,7 @@ const ProfilePage = () => {
   return (
     <PrimaryContainer>
       {/* Renderizar o componente Menu com as opções */}
+      <WelcomeHeaderComponent name={user} description={'Did you know that over 30 milion wallets are lost every year?'}/>
       <ProfileMenu options={menuOptions} selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
       <ChangeContainer>
         {renderComponent()}

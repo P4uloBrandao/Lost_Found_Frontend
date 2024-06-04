@@ -65,7 +65,7 @@ const LoginBox = styled.div`
   max-width: 93vh;
   left: 0;
   backdrop-filter: blur(25px);
-  box-shadow: 0px 0px 10px 2px rgba(0, 0, 0, 0.2);
+  box-shadow:0px 9px 10px 2px rgba(0, 0, 0, 0.2);
   padding: 6.5em 4.5em 5.5em 4.5em;
 
 `;
@@ -450,7 +450,7 @@ const redirectUri = 'YOUR_REDIRECT_URI';
       data1.append('status', 'active');
 
       try {
-          const response = await axios.post("http://localhost:3000/api/users/signup",
+          const response = await axios.post("https://bidfinderbackend.ddns.net/api/users/signup",
           data1);
           setUserCreated(true);
           setTimeout(() => navigate('/login'), 2500); // Define setGoogleValid de volta para true após 2500ms
@@ -486,14 +486,14 @@ const redirectUri = 'YOUR_REDIRECT_URI';
         if (credential) {
           
             try {
-                const tokenResponse = await axios.get(`http://localhost:3000/api/auth/token/${credential}`);
+                const tokenResponse = await axios.get(`https://bidfinderbackend.ddns.net/api/auth/token/${credential}`);
                 
                
                 console.log(tokenResponse.data); // Assuming the token is returned in the response data
                 const tempEmail = tokenResponse.data.email
                 setGoogleId(tokenResponse.data.sub)
                 try {
-                  const userExistValidation = await axios.post("http://localhost:3000/api/users/getUser", { email: tempEmail, });
+                  const userExistValidation = await axios.post("https://bidfinderbackend.ddns.net/api/users/getUser", { email: tempEmail, });
                   if (userExistValidation)  {
                     console.log("User exists");
                     setGoogleValidation(false);

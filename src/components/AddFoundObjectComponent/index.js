@@ -7,11 +7,18 @@ import CustomInputFiles from "../ImageInputComponent/FileInput";
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
 import EuroSymbolIcon from '@mui/icons-material/EuroSymbol';
 import RadioButton from '../RadioButtonComponent';
-import ProfileSettings from '../profileSettings/index'
+import ProfileCreationComponent from '../ProfileCreationComponent/index'
 import DropdownInput from "../dropdownInputComponent/index";
 import Grid from '@mui/material/Grid';
-import { InputSubmit, Container,InputBox ,Title,Form, Wrapper,SubCategoryTitle,CategoryTitle } from '../../assets/StylePopularComponent/style';
-
+import { InputSubmit, Container,InputBox ,Title,Form, Wrapper,SubCategoryTitle,CategoryTitle , CategorySection } from '../../assets/StylePopularComponent/style';
+import Loader from '../LoadingComponent/index';
+import  SearchInput  from '../../components/SearchInputFieldComponent/index';
+import { useAuth } from '../AuthContext';
+import { create } from '@mui/material/styles/createTransitions';
+import AddCategory from '../CategoriesComponents/AddCategoriesObjectComponent/index.jsx';
+import  AddIcon  from '../../assets/icons/add50.png';
+import PopupAlert from '../PopUpAlertComponent/index.jsx';
+import './App.css';
 const StyledTextArea = styled.textarea`
     height: ${props => props.height}px;
     font-size: 16px;
@@ -34,23 +41,26 @@ const RadioBtn = styled.span`
   display:flex; 
 `;
 
-
+    
 
 const CategoryButton = styled.button`
-  width: 174px;
-  height: 66px;
-  padding: 16px 24px;
-  border-radius: 33px;
-  border: 1px solid var(--primary-green-color);
-  background-color: ${props => props.isSelected ? 'var(--primary-green-color)' : 'var(--white-color)'};
-  color: ${props => props.isSelected ? 'var(--white-color)' : 'var(--black-color)'};
-  cursor: pointer;
-  &:hover {
-    background-color: var(--primary-green-color);
-    color: var(--white-color);
-  }
-  font-size: 1rem;
-  opacity: 1;
+    width: max-content;
+    padding: 4px 9px;
+    border-radius: 33px;
+    border: 1px solid var(--primary-green-color);
+    background-color: var(--white-color);
+    color: var(--black-color);
+    cursor: pointer;
+    font-size: 1rem;
+    opacity: 1;
+    background-color: ${props => props.isSelected ? 'var(--primary-green-color)' : 'var(--white-color)'};
+    color: ${props => props.isSelected ? 'var(--white-color)' : 'var(--black-color)'};
+    &:hover {
+      background-color: var(--primary-green-color);
+      color: var(--white-color);
+    }
+    font-size: 1rem;
+    opacity: 1;
 `;
 
 const ResetButton = styled.a`
@@ -62,13 +72,23 @@ const ResetButton = styled.a`
   &:hover {
     text-decoration: underline;
 `;
+const AddBtn = styled.img`
+transform: scale(0.7);
+
+    transition: transform 0.2s;
+    &:hover {
+      transform: scale(0.9);
+    }
+`;
+const AddCategoryContainer = styled.div`
+ width: 100%;
+`;
 export default function AddFoundObject  ()  {
   const [objectImage, setObjImage] = React.useState("");
   
   //VARIVEIS DE TESTE
   const [userWhoFound, setUserWhoFound] = React.useState(null);
-  const [policeOfficerThatReceived, setPolice] = React.useState('65fb1e5829c52b172fe02f44');
-  const [endDate, setEndDate]= React.useState('01/01/2001');
+  const [policeOfficerThatReceived, setPolice] = React.useState('');
   //VARIVEIS DE TESTE
   const [title, setTitle] = React.useState('');  //FALTA BD
   const [category, setSelectedCategory] = React.useState(null);
@@ -85,65 +105,90 @@ export default function AddFoundObject  ()  {
   const [mapCenter, setMapCenter] = useState({ lat: 38.72, lng: -9.14 }); // Initial center (Lisbon)
   const libraries = ['places']; // Include places library for location search
   const [activeButton, setActiveButton] = useState(null);
-  const [selectedValue,setSelectedValue ] = useState("no");
+  const [selectedValue,setSelectedValue ] = useState("yes");
   const [subCategories, setSubCategories] = React.useState('');
   const [subCategory, setSelectedSubCategory] = React.useState('');
   const [loading, setLoading] = useState(true);
+  const [fullDataCategories, setFullDataCategories] = useState([]);
+  const [subSubCategories, setSubSubCategories] = useState([]);
 
-  function fetchSubCategories() {
-        try {
-       
-          const response =  axios.get(`http://localhost:3000/api/category/subCat/${category}`);
-          setSubCategories(response.data);
-          console.error(response.data);
-          setLoading(false)
-        } catch (error) {
-          console.error('Failed to fetch categories', error);
-          // Lide com erros conforme necessário
-        }
-        
-      };
+  const [objectCreated, setObjectCreated] = useState(false);
+  const [objectCategories, setObjectCategories] = useState({});
+  //DATAS
+  const today = new Date();
+  const formattedDate = today.toISOString().split('T')[0];
+  const nextMonthDate = (new Date(today.setMonth(today.getMonth() + 1))).toISOString().split('T')[0];
+
+  const [displayedCategories, setDisplayedCategories] = useState([]);
+  const {  authUser } = useAuth();
+  const [components, setComponents] = useState([]);
+  const [user, setUser] = useState("");
+  const [popupMessage, setPopupMessage] = useState('');
+
+  let counter = 0; // Mantido no escopo do componente pai
+
+  const addComponent = () => {
+    setComponents([...components, <AddCategory key={components.length} />]);
+  };
+  const removeCategory = (indexToRemove) => {
+    setComponents(components.filter((_, index) => index !== indexToRemove));
+  };
   useEffect(() => {
     const fetchCategories = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/api/category');
+    try {
+        const response = await axios.get('https://bidfinderbackend.ddns.net/api/category');
         setCategories(response.data);
+        setDisplayedCategories(Object.entries(response.data))
         setLoading(false)
-
         console.error(response.data);
-      } catch (error) {
+    } catch (error) {
         console.error('Failed to fetch categories', error);
         // Lide com erros conforme necessário
-      }
+    }
     };
-    
-     fetchCategories();
-    setLoading(false)
-  }, []);
+  if(displayedCategories.length === 0){
+    fetchCategories();
+      }
+setLoading(false)
+}, []);
 
  
  const onImageUpload = (event) => {
-    setObjImage("https://www.totalprotex.pt/media/catalog/product/cache/default/image/500x500/9df78eab33525d08d6e5fb8d27136e95/s/t/steelite-taskforce-boot-s3-hro-0_3.jpg")
-}
+   let filesArray= []
+
+   for (let i = 0; i < event.length; i++) {
+     filesArray.push(event[i])
+   }
+
+   setObjImage(filesArray);
+ }
+//CREATE FOUND OBJECT
   const handleSubmit = async (event) => {
     
     event.preventDefault();
     try {
-      
-        const response = await axios.post("http://localhost:3000/api/found-objects",
-        {userWhoFound,
-          title,
-          category,
-          endDate,
-          description,
-          location,
-          price,
-          status,
-          objectImage,
-          policeOfficerThatReceived,
-          //FALTA OBJ_NAME OU TITLE & PHOTOS
-        });
-        
+
+      const formData = new FormData();
+
+      objectImage.forEach((image) => {
+        formData.append("objectImage[]", image);
+      });
+      formData.append("userWhoFound", userWhoFound);
+        formData.append("title", title);
+        formData.append("category", getCategoryNameFromId(category));
+        formData.append("endDate", nextMonthDate);
+        formData.append("foundDate", formattedDate);
+        formData.append("description", description);
+        formData.append("location", location);
+        formData.append("price", price);
+        formData.append("status", status);
+        formData.append("policeOfficerThatReceived", "6650cb6c82b8e44086723f1e");
+        formData.append("subCategory", items);
+      console.log(formData.get("subCategory"))
+
+        const response = await axios.post("https://bidfinderbackend.ddns.net/api/found-objects",
+        formData);
+        setObjectCreated(true)
         
       } catch (error) {
         console.error("Object Registration failed:", error);
@@ -156,18 +201,26 @@ export default function AddFoundObject  ()  {
         }
       } 
   };
-  
+  //VALIDAÇÃO DO FOUNDER
   const handleUserValidation = async (event) => {
    event.preventDefault();
     try {
-         const response = await axios.post("http://localhost:3000/api/users/getUser/",
+         const response = await axios.post("https://bidfinderbackend.ddns.net/api/users/getUser/",
         {email,
           nic,});
-        setUserWhoFound(response._id)
+        setUserWhoFound(response.data._id)
+        setUser("true")
+        setTimeout(() => {
+          setUser("");
+      }, 3000);
+      
         
       } catch (error) {
         console.error("User Validation failed:", error);
-                
+        setUser("false")
+        setTimeout(() => {
+          setUser("");
+      }, 3000);
         if (error.response && error.response.data) {
           setMessage(error.response.data.error); // Set the error message if present in the error response
         } else {
@@ -175,7 +228,6 @@ export default function AddFoundObject  ()  {
         }
       } 
   };
-  const categoriesArray = Object.entries(categories);
   const mapContainerStyle = {
     width: '50vw',
     height: '50vh',
@@ -195,7 +247,6 @@ export default function AddFoundObject  ()  {
       try {
         const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${geocodingApiKey}`);
         const address = response.data.results[0].formatted_address;
-        console.log('Address:', address);
         setObjLoc(address);
 
         // Faça o que você precisa com o endereço, como definir o estado
@@ -206,16 +257,7 @@ export default function AddFoundObject  ()  {
       }
     };
 
-  if (loadError) return <div className="contain">Error loading maps</div>;
-  if (!isLoaded) return <div className="contain">Loading maps</div>;
-  
-  const handleCategoryClick = (category) => {
-    setSelectedCategory(category);
-    fetchSubCategories(category)
-  };
-  const handleSubCategoryClick = (subCategory) => {
-    setSelectedSubCategory(subCategory);
-  };
+ 
   const options = [
     { id: "yesOpt", value: "yes", text: "Yes", defaultSelection: true },
     { id: "noOpt", value: "no", text: "No", defaultSelection: false },
@@ -224,34 +266,72 @@ export default function AddFoundObject  ()  {
   
  function test(value){
   setSelectedValue(value)
-  console.log(selectedValue)
 
  }
- const handleDropdownChange = (selectedOptionName) => {
-  setSelectedCategory(selectedOptionName)
-  // Faça o que for necessário com o nome da opção selecionada
-};
-const handleDropdownChangeSubCategory = (selectedOptionName) => {
-  setSelectedSubCategory(selectedOptionName)
-  // Faça o que for necessário com o nome da opção selecionada
-};
+
+function getCategoryNameFromId(categoryName) {
+  const category = categories.find(category => category._id === categoryName);
+  return category ? category.name : null;
+ }
+
+const handleCategoryChange = (index, category) => {
+  setSelectedCategory(category);
+  };
+ 
+
+  const [items, setItems] = useState({});
+  
+  const addItem = (item) => {
+  
+
+    setItems(prevItems => {
+      const existingKey = Object.keys(prevItems).find(key => prevItems[key].name === item.name);
+
+      if (existingKey !== undefined) {
+        setPopupMessage(`Item with name "${item.name}" was already selected. This operation will replace it.`);
+        setTimeout(() => {
+          setPopupMessage('');
+      }, 5000);
+        return { ...prevItems, [existingKey]: item }; // Replace the existing item
+      }
+
+      const newIndex = Object.keys(prevItems).length;
+      return { ...prevItems, [newIndex]: item };
+    });
+  };
+  
+useEffect(() => {
+  console.log(items)
+}, [items,user]);
+
+
+if (loadError) return <div className="contain">Error loading maps</div>;
+if (!isLoaded) return <div className="contain"><Loader/></div>;
+  
+if (objectCreated) return <PopupAlert message={"Object registered"} />
+
+ 
 if (loading) {
-  return <div>Carregando...</div>; // Ou qualquer indicador de carregamento que você preferir
+  return <Loader/>; // Ou qualquer indicador de carregamento que você preferir
 }
+  const newLocal = <RadioBtn>
+    <RadioButton
+      options={options}
+      onChange={(selectedValue) => test(selectedValue)}
+      value="option1" />
+  </RadioBtn>;
+
   return ( <>
+  {popupMessage && <PopupAlert message={popupMessage}   />}
+  {user === "true" && (<>  <PopupAlert message={"Valid User"} /></>)}
+  {user === "false" && (<>  <PopupAlert message={"Invalid User"} /></>)}
   <Container>
   <Title>Finder’s Information</Title>
-      <CategoryTitle>Does the finder have an <span>BIDFIND.er</span> account? 
-      <RadioBtn >
-       <RadioButton
-  options={options}
-  onChange={(selectedValue) => test(selectedValue)}
-  value="option1"
-/>
-        </RadioBtn>
+      <CategoryTitle>Does the finder have an BIDFIND.er account? 
       </CategoryTitle>
+      {newLocal}
       {selectedValue !== "no" && (<>
-      <InputBox>
+      <InputBox style={{marginTop:'15px'}}>
         <InputF 
         type={'number'} 
         placeholder={'Insert your NIC'}  
@@ -284,7 +364,7 @@ if (loading) {
           </InputSubmit></>
         )}
       {selectedValue !== "yes" && (<>
-      <ProfileSettings /></>)}
+      <ProfileCreationComponent setUserWhoFound ={setUserWhoFound} /></>)}
   </Container>
   
   {userWhoFound !== null && (
@@ -324,81 +404,52 @@ if (loading) {
 
  
         </InputBox>
-         <Grid container spacing={2}>
-       <Grid item xs={12} sm={12}> 
+    </Container>
+<Container>
+{/* //COMPONENTE PARA ADICIONAR CATEGORIAS  */}
+<Grid item xs={12} sm={12}> 
       <Title>In what category does it fit in?</Title>
       </Grid>
-      <Grid item xs={12} sm={4}> 
-      <SubCategoryTitle>Choose the category of the found object.</SubCategoryTitle>
-      
-     
-       <InputBox>
-              <DropdownInput 
-                
-                placeholder={'Categories'}  
-                id="category"
-                required
-                onClick = {(e) => handleCategoryClick(e.target.value)}
-                value={category}
-                onChange={handleDropdownChange}
-                name="Categories"
-                options={categories}
-                
-              />
-            </InputBox>   
-      
-      </Grid>
-      
-      <Grid item xs={12} sm={4}>
-        
-  {category !== null && ( <>
-        <SubCategoryTitle>Choose the subcategory of the found object.</SubCategoryTitle>
-        <InputBox>
-          <DropdownInput 
-            
-            placeholder={'Subcategories'}  
-            id="subcategory"
-            required
-            onClick = {(e) => handleSubCategoryClick(e.target.value)}
-            value={subCategory}
-            onChange={handleDropdownChangeSubCategory}
-            name="Sub categories"
-            options={subCategories}
-            
+    <AddCategoryContainer>
+        <AddCategory  
+          index={0} 
+          addItem={addItem}
+          removeCategory={removeCategory} 
+          onCategoryChange={handleCategoryChange}
+          existCategory={false}
+          objectCategories={objectCategories}
+          setObjectCategories={setObjectCategories}
+          
+
           />
-        </InputBox> </>
-  )}
-      </Grid>
-      <Grid item xs={12} sm={4}> 
-      {/* {subCategory !== null && ( <>
-      <SubCategoryTitle>Write something to describe.</SubCategoryTitle>
-      
-      
-       <InputBox>
-              <InputF
-                
-                placeholder={'Categories'}  
-                id="category"
-                required
-                onClick = {(e) => handleCategoryClick(e.target.value)}
-                value={category}
-                onChange={handleDropdownChange}
-                name="Categories"
-               
-                
-              />
-            </InputBox> </>
-      )} */}
-      </Grid> 
-      </Grid>
-    </Container>
+          {components.map((_, index) => (
+            <AddCategory 
+            addItem={addItem} 
+            index={index +1} 
+            mainCategory={category}
+            removeCategory={removeCategory} 
+            onCategoryChange={handleCategoryChange}
+            existCategory={category ? true : false}
+            objectCategories={objectCategories}
+            setObjectCategories={setObjectCategories}
+            
+            />
+          ))}
+          
+       {Object.keys(items).length > 0 && (
+           <AddBtn src={AddIcon} className='addBtn' onClick={addComponent}alt="add category" />
+
+)}
+       </AddCategoryContainer>
+
+        </Container>
       <Container>
       <Title>How does it look?</Title>
       <CategoryTitle>Upload pictures of the lost object.
         If you don’t have any, just select the “I don’t have pictures” option.</CategoryTitle>
         <InputBox>
 
-        <CustomInputFiles singleImage
+        <CustomInputFiles singleImage max={10}
         onChange={onImageUpload}></CustomInputFiles>
         </InputBox>
         <Title>How does it look?</Title>

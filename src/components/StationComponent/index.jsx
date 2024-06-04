@@ -64,7 +64,7 @@ export default function StationComponent() {
     useEffect(() => {
         const fetchStations = async () => {
           try {
-            const response = await axios.get('http://localhost:3000/api/police/police-stations');
+            const response = await axios.get('https://bidfinderbackend.ddns.net/api/police/police-stations');
             setStations(response.data);
             console.log(response.data)
             setIsLoading(false);
@@ -79,8 +79,8 @@ export default function StationComponent() {
     const handleCreateSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.put(`http://localhost:3000/api/police/police-officers/${getStationID(stationName,stations)}`);
-            
+            const response = await axios.put(`https://bidfinderbackend.ddns.net/api/police/police-officers/${getStationID(stationName,stations)}`);
+            console.log(response.data);
             
         } catch (error) {
             console.error( error);
@@ -97,18 +97,17 @@ export default function StationComponent() {
       setStationName(selectedOptionName)
       // Faça o que for necessário com o nome da opção selecionada
     };
-    function  getStationID(name,stations){
-      const foundItem = stations.find(item => item.name === name);
+    function  getStationID(id,stations){
+      const foundItem = stations.find(item => item._id === id);
       return foundItem ? foundItem._id : null;
-  
-  }
+    }
     const handleStationClick = (station) => {
       setStationId(station);
       };
     const stationsArray = Object.entries(stations);
     if (isLoading) {
       return <div>Carregando...</div>;
-  }
+    }
   
     return (<>
         <Container>
