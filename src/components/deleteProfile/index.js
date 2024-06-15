@@ -12,7 +12,7 @@ import "../../assets/colors/colors.css"
 
 import styled, { keyframes, css} from 'styled-components';
 
-
+const token = localStorage.getItem("token");
 
 const Wrapper = styled.div`
   width: 100%;
@@ -70,23 +70,42 @@ const CategoryTitle = styled.h2`
 
 const DeleteProfile = () => {
     const [errorMessage, setErrorMessage] = useState(null);
+    const [password, setPass] = useState(null);
+    const [passwordGet, setPassGet] = useState(null);
     const [deleteConfirmation, setDeleteConfirmation] = useState('');
     const { logout }= useAuth();
     const handleLogout = () => {
             logout();
-            
-            
           };
+
+    const fetchUserPass = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
+        const userProfileData = response.data.currentUser; // Supondo que o endpoint forneça os detalhes do perfil do usuário
+        setPass(userProfileData.password);
+              // ... (outros estados conforme necessário)
+      } catch (error) {
+        console.error("Failed to fetch user profile:", error);
+        // Lide com erros conforme necessário
+      }
+    };
+    fetchUserPass();
+
     const handleDeleteProfile = async () => {
+      // Validate the pass confirmation
+      if (passwordGet !== password) {
+        setErrorMessage('Incorrect password.');
+        return;
+      }
+
       // Validate the delete confirmation
       if (deleteConfirmation !== 'DELETE') {
         setErrorMessage('Invalid delete confirmation. Please type DELETE to confirm.');
         return;
       }
+      
   
       try {
-        const token = localStorage.getItem("token");
-        console.log(token)
         // Make an API call to delete the user profile
         const response = await axios.delete(`http://localhost:3000/api/users/delete/${token}`);
         console.log(response.data); // Log the response from the server
@@ -122,6 +141,17 @@ const DeleteProfile = () => {
               onChange={(e) => setDeleteConfirmation(e.target.value)}
               name="DELETE"
               value={deleteConfirmation}
+            />
+          </InputBox>
+          <InputBox>
+            <InputF
+              type="text"
+              placeholder="Insert your password"
+              id="pass"
+              required
+              onChange={(e) => setPassGet(e.target.value)}
+              name="Password"
+              value={passwordGet}
             />
           </InputBox>
           <InputSubmit type="submit" onClick={handleDeleteProfile}>

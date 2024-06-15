@@ -222,11 +222,12 @@ export default function SationComponent() {
               Create
             </InputSubmit>
             </Container>
-            <Container>
+
+        <Container>
             <Title>Delete Station</Title>
-        <CategoryTitle> Choose station to delete  </CategoryTitle>
-        <InputBox>
-        <SearchInput 
+            <CategoryTitle> Choose station to delete  </CategoryTitle>
+            <InputBox>
+            <SearchInput 
                 
                 placeholder={'Choose your station'}  
                 id="station"
@@ -239,8 +240,7 @@ export default function SationComponent() {
               
               /> 
             </InputBox>
-      
-        
+       
         <InputSubmit type="submit" onClick={handleDeleteSubmit}>
             Delete
         </InputSubmit>

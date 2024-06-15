@@ -67,17 +67,15 @@ const ProfilePage = () => {
     fetchUserProfile();
 
   // Definir as opções de menu
-  const menuOptions = ['Profile Settings', 'My Auctions', 'My Lost Objects','Payments Details', 'Privacy Settings'];
+  const menuOptions = ['Profile', 'My Auctions', 'My Lost Objects','Payments Details', 'Account Settings'];
 
   const [selectedOption, setSelectedOption] = useState(menuOptions[0]);
   
   const renderComponent = () => {
     switch (selectedOption) {
-      case 'Profile Settings':
+      case 'Profile':
         return [
-          <ProfileSettings/>,
-          <ChangePassword  />,
-          <DeleteProfile />
+          <ProfileSettings/>
         ];
       case 'My Auctions':
         return <MyAuctions />;
@@ -85,8 +83,11 @@ const ProfilePage = () => {
         return <MyLost />;
       case 'Payments Details':
           return <DeleteProfile />;
-      case 'Privacy Settings':
-          return <DeleteProfile />;
+      case 'Account Settings':
+          return [
+            <ChangePassword  />,
+            <DeleteProfile />
+          ];
       default:
         return <ProfileSettings />;
     }
