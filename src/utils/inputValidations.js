@@ -1,6 +1,8 @@
+import axios from "axios";
+
 export function validateEmail(email) {
   const re = /\S+@\S+\.\S+/;
-  return re.test(email);
+  return re.test(email) && email.includes("@") && email.includes(".") && !email.includes(" ");
 }
 
 export function isValidPhoneNumber(phoneNumber) {
@@ -8,7 +10,7 @@ export function isValidPhoneNumber(phoneNumber) {
     const regex = /^9\d{8}$/;
 
     // Testa se a string do número de telefone corresponde ao padrão
-    return regex.test(phoneNumber);
+    return regex.test(phoneNumber) && validateNifNic(phoneNumber);
 }
 
 export function validatePasswordCorrespondence(password, confirmPassword) {
@@ -25,3 +27,17 @@ export function validateBirthDate(birthDate) {
     return birth <= today;
 }
 
+export function validateNifNic(nif) {
+    return nif.length===9 && !haveLetters(nif);
+}
+
+
+export function haveLetters(input) {
+    return /[a-z]/i.test(input);
+}
+
+export async function checkIfEmailExists(email) {
+    const response = await axios.post("http://localhost:3000/api/users/checkByEmail", {email: email});
+    const data = response.data;
+    return data;
+}
