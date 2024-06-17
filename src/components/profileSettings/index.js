@@ -24,6 +24,7 @@ import axios from "axios";
 import {PasswordStrength} from '../controllers/index'
 import InputF  from '../inputFieldComponent/InputField';
 import "../../assets/colors/colors.css"
+import {isValidPhoneNumber, validateBirthDate, validateEmail, validateNifNic} from "../../utils/inputValidations";
 // TODO remove, this demo shouldn't need to reset the theme.
 const colors = css`
   --primary-color: #c6c3c3;
@@ -126,6 +127,20 @@ export default function ProfileSettings({btnLabel, options}) {
     const [phone, setPhone] = React.useState('');
     const [showPassword, setShowPassword] = useState(null); // New state for handling error messages
 
+    const [firstNameError, setFirstNameError ] = useState(false);
+    const [lastNameError, setLastNameError ] = useState(false);
+    const [emailError, setEmailError ] = useState(false);
+    const [genderError, setGenderError ] = useState(false);
+    const [addressError, setAddressError ] = useState(false);
+    const [passwordError, setPasswordError ] = useState(false);
+    const [checkPasswordError, setCheckPasswordError ] = useState(false);
+    const [birthError, setBirthError ] = useState(false);
+    const [nicError, setNicError ] = useState(false);
+    const [nifError, setNifError ] = useState(false);
+    const [phoneError, setPhoneError ] = useState(false);
+
+    const validationSetter= [setFirstNameError, setLastNameError, setEmailError, setGenderError, setAddressError, setPasswordError, setCheckPasswordError, setBirthError, setNicError, setNifError, setPhoneError]
+
     const token = localStorage.getItem("token");
    
     useEffect(() => {
@@ -158,9 +173,67 @@ export default function ProfileSettings({btnLabel, options}) {
       // Chame a função de busca ao montar o componente
       fetchUserProfile();
     }, []);
+
+  const clearErrors = () => {
+    for (let i = 0; i < validationSetter.length; i++) {
+      validationSetter[i](false);
+    }
+  }
+
+    const validateFields = () => {
+      let isValid= true;
+
+      if (first_name === "") {
+        setFirstNameError(true);
+        isValid = false;
+      }
+      if (last_name === "") {
+        setLastNameError(true);
+        isValid = false;
+      }
+      if (adddress === "") {
+        setAddressError(true);
+        isValid = false;
+      }
+
+      if (!validateEmail(email)) {
+        setEmailError(true);
+        isValid = false;
+      }
+
+      if(!validateBirthDate(birth)){
+        setBirthError(true);
+        isValid = false;
+      }
+
+      if (!isValidPhoneNumber(phone)) {
+        setPhoneError(true);
+        isValid = false;
+      }
+
+      if (!validateNifNic(nif) ) {
+        setNifError(true);
+        isValid = false;
+      }
+
+      if (!validateNifNic(nic)) {
+        setNicError(true);
+        isValid = false;
+      }
+
+      return isValid;
+    }
     const handleSubmit = async (event) => {
     
         event.preventDefault();
+
+
+
+      clearErrors();
+
+        if (!validateFields()) {
+            return;
+        }
        
         try {
           const data1 = new FormData();
@@ -221,6 +294,8 @@ export default function ProfileSettings({btnLabel, options}) {
           required
           onChange={(e) => setFirstName(e.target.value)}
           name="First Name"
+          errorValidation={firstNameError}
+          errorMessage={"First Name is invalid"}
           value={first_name}
         />
       </InputBox>
@@ -236,6 +311,8 @@ export default function ProfileSettings({btnLabel, options}) {
           onChange={(e) => setLastName(e.target.value)}
           name="Last Name"
           value={last_name}
+            errorValidation={lastNameError}
+            errorMessage={"Last Name is invalid"}
         />
       </InputBox>
     </Grid>
@@ -250,6 +327,8 @@ export default function ProfileSettings({btnLabel, options}) {
           onChange={(e) => setEmail(e.target.value)}
           value={email}
           name="Email"
+            errorValidation={emailError}
+            errorMessage={"Email is invalid"}
         />
       </InputBox>
     </Grid>
@@ -264,6 +343,8 @@ export default function ProfileSettings({btnLabel, options}) {
           onChange={(e) => setAdddress(e.target.value)}
           value={adddress}
           name="Address"
+            errorValidation={addressError}
+    errorMessage={"Address is invalid"}
         />
       </InputBox>
     </Grid>
@@ -279,6 +360,8 @@ export default function ProfileSettings({btnLabel, options}) {
           onChange={(e) => setPhone(e.target.value)}
           value={phone}
           name="Phone"
+          errorValidation={phoneError}
+            errorMessage={"Phone is invalid"}
         />
       </InputBox>
     </Grid>
@@ -293,6 +376,8 @@ export default function ProfileSettings({btnLabel, options}) {
           onChange={(e) => setBirth(e.target.value)}
           value={birth}
           name="Birthday"
+            errorValidation={birthError}
+            errorMessage={"Birthday is invalid"}
         />
       </InputBox>
     </Grid>
@@ -306,6 +391,8 @@ export default function ProfileSettings({btnLabel, options}) {
           onChange={(e) => setNif(e.target.value)}
           value={nif}
           name="Nif"
+          errorValidation={nifError}
+            errorMessage={"Nif is invalid"}
         />
       </InputBox>
     </Grid>
@@ -319,6 +406,8 @@ export default function ProfileSettings({btnLabel, options}) {
           onChange={(e) => setNic(e.target.value)}
           value={nic}
           name="Nic"
+            errorValidation={nicError}
+            errorMessage={"Nic is invalid"}
         />
       </InputBox>
     </Grid>
