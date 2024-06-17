@@ -95,6 +95,7 @@ const PaymentDetails = () => {
     
         const idsResponse = await axios.get(`http://localhost:3000/api/payment/getPaymentInfoUser/${bidderId}`);
         const idsData = idsResponse.data;
+        const PaymentIds = idsData.map((payment) => payment.paymentStatus);
         const auctionIds = idsData.map((payment) => payment.paymentAuction);
 
         // Em seguida, obtenha os detalhes de cada leilão usando os IDs
@@ -114,6 +115,7 @@ const PaymentDetails = () => {
         // Array para armazenar as promessas de solicitação HTTP
         const requests = [];
         const requestsBid = [];
+        const requestP = [];
 
         // Iterar sobre os dados dos leilões e adicionar as promessas de solicitação HTTP ao array
         auctionsData.forEach(auction => {
@@ -135,7 +137,20 @@ const PaymentDetails = () => {
         // Renomear o campo title para name
         foundObjectsData = foundObjectsData.map(obj => ({ ...obj, name: obj.title }));
 
+        foundObjectsData.forEach(obj => {
+          const police = obj.policeOfficerThatReceived;
+          const requestPP = axios.get(` http://localhost:3000/api/police/police-stations/police-officers/${police}`);
+          requestP.push(requestPP);
+        });
+
+        const responsesPoli = await Promise.all(requestP);
+
+        // Iterar sobre as respostas e extrair os objetos encontrados
+        let policeData = responsesPoli.map(response => response.data);
+
         auctionsData.forEach((auction, index) => {
+          auction.location = policeData[index].policeStationName;
+          auction.status = PaymentIds[index]
           auction.winnerBid = bidsData[index].value;
         });
 
@@ -175,15 +190,12 @@ const PaymentDetails = () => {
                 <Card  
                 spacing={2}
                 name={foundObjectsListF[index].name}
-                description={auction.description}
-                location={foundObjectsListF[index].location}
+                location={auction.location}
                 category={foundObjectsListF[index].category}
                 id={auction._id}
-                catId={auction.status}
                 date={auction.endDate.split('T')[0]}
                 photo={foundObjectsListF[index].objectImage[0]}
                 status={auction.status}
-                matchButton={true}
                 highbid={auction.winnerBid + " EUR"}
                 />
             </Grid>
