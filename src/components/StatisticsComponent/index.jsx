@@ -5,11 +5,20 @@ import { InputSubmit, Container,InputBox ,Title,Form, Wrapper,SubCategoryTitle,C
 import styled from 'styled-components';
 import BarChart from '../BarChartComponent';
 const Grid = styled.div`
-display: grid;
+  display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 70pt;
-  
   align-self: center;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 50pt; /* Ajuste o gap conforme necessário */
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    grid-gap: 30pt; /* Ajuste o gap conforme necessário */
+  }
 `;
 const Estatistics = () => {
   const [stats, setStats] = useState({

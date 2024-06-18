@@ -13,6 +13,7 @@ import PoliceComponent  from '../components/PoliceComponent/index' ;
 import AdminMenu from '../components/profileMenu/index'
 import ProfileSettings from '../components/profileSettings';
 import WelcomeHeaderComponent from '../components/headerWithNameComponent/welcomeHeader.jsx';
+import PoliceDeliverObjComponent from '../components/PoliceDeliverObjComponent/index.jsx';
 
 const token = localStorage.getItem("token"); 
 
@@ -55,17 +56,19 @@ export default function AdminPage() {
         // Chame a função de busca ao montar o componente
     fetchUserProfile();
 
-  const menuOptions = ['Found Object', 'Police station','Profile'];
+  const menuOptions = ['Found Object', 'Object Delivery', 'Police station','Profile'];
 
   const [selectedOption, setSelectedOption] = useState(menuOptions[0]);
   const renderComponent = () => {
     switch (selectedOption) {
-      
-     
+      case 'Found Object':
+          return <AddFoundObjectComponent/> ;
       case 'Police station':
           return <SationComponent/> ;
       case 'Profile':
           return <ProfileSettings />;
+      case 'Object Delivery':
+        return <PoliceDeliverObjComponent />;
       default:
         return < AddFoundObjectComponent />;
       

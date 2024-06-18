@@ -115,22 +115,6 @@
         line-height: normal;
     }
     
-    .svgButtons {
-        transition: transform 0.3s ease;
-        /* Add a transition for the transform property */
-    }
-    /* Define the styles for the open and closed states */
-    
-    .open {
-        transform: rotate(180deg);
-        /* Adjust the rotation for the open state */
-    }
-    
-    .closed {
-        transform: rotate(0deg);
-        /* Keep the rotation as it is for the closed state */
-    }
-    
     .buttonsSide {
         gap: 1rem;
         /* margin-right: 4rem; */
@@ -152,63 +136,28 @@
     .menuOptions1 {
         display: none;
         border-radius: 14px;
-        position: relative;
-        /* border: solid 1px black; */
+        position: absolute;
+        border: solid 1px black;
         top: -9pt;
         padding: 4px;
         align-content: flex-end;
-        right: -21pt;
+        right: 189pt;
         height: 67pt;
-        z-index: -1;
+        z-index: 4;
         width: 141pt;
         background-color: var(--white-color);
     }
     
-    .subMenu1 {
-        width: 80pt;
-        left: -58pt;
-        /* border: 1px solid blue; */
-        height: 31pt;
-        /* background-color: aquamarine; */
-        position: relative;
-    }
-    
-    .subMenu2 {
-        width: 80pt;
-        left: -79pt;
-        top: 7pt;
-        /* border: 1px solid blue; */
-        height: 31pt;
-        /* background-color: aquamarine; */
-        position: relative;
-    }
-    
-    .op1:hover .menuOptions1 {
-        display: block;
-        right: 136pt;
-        z-index: 0;
-        border: 1px solid black;
-    }
-    
-    .op2:hover .menuOptions2 {
-        display: block;
-        border: 1px solid black;
-    }
-    
-    .op3:hover .menuOptions3 {
-        border: 1px solid black;
-        display: block;
-    }
-    
     .menuOptions2 {
+        z-index: 4;
         display: none;
         border-radius: 14px;
-        position: relative;
-        /* border: solid 1px black; */
+        position: absolute;
+        border: solid 1px black;
         top: -31pt;
         padding: 4px;
         align-content: flex-end;
-        right: 182pt;
+        right: 189pt;
         padding-left: 9pt;
         height: 67pt;
         width: 171pt;
@@ -216,14 +165,15 @@
     }
     
     .menuOptions3 {
+        z-index: 4;
         display: none;
         border-radius: 14px;
-        position: relative;
-        /* border: solid 1px black; */
+        position: absolute;
+        border: solid 1px black;
         top: -3pt;
         padding: 4px;
         align-content: flex-end;
-        right: 171pt;
+        right: 189pt;
         z-index: 1;
         padding-left: 9pt;
         height: 67pt;
@@ -243,18 +193,14 @@
         height: 45pt;
         margin: 0pt 4pt 0pt;
         width: 170pt;
-        background-color: var(--white-color);
     }
     
     .option {
         display: flex;
         align-items: center;
         height: 32pt;
-        left: -22pt;
         position: relative;
-        margin-left: 19pt;
-        width: 174pt;
-        background-color: var(--white-color);
+        width: auto;
     }
     
     .optionMenu {
@@ -344,8 +290,16 @@
     }
     
     .svgButtons {
-        left: 1em;
-        position: relative;
+        border: solid 2px var(--primary-green-color);
+        transition: transform 0.3s ease;
+        top: 22pt;
+        right: 22pt;
+        border-radius: 24pt;
+        position: fixed;
+    }
+    
+    .svgButtons:hover {
+        transform: scale(1.1);
     }
     
     .svgArrow11 {
@@ -366,10 +320,6 @@
         top: 10pt;
     }
     
-    .op21 {
-        left: -27pt;
-    }
-    
     .ml-13 {
         margin-left: 13pt;
     }
@@ -383,19 +333,19 @@
     }
     
     .svgArrow1 {
-        right: -177px;
+        right: -170px;
     }
     
     .svgArrow2 {
-        right: -136px;
+        right: -130px;
     }
     
     .svgArrow3 {
-        right: -151px;
+        right: -146px;
     }
     
     .svgArrow4 {
-        right: -152px;
+        right: -147px;
     }
     
     .signbtn {

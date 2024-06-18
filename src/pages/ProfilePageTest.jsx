@@ -1,6 +1,8 @@
 // ProfilePage.jsx
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
+import { useLocation } from 'react-router-dom';
+import styled from 'styled-components';
 
 import ProfileMenu from '../components/profileMenu/index';
 import ChangePassword from '../components/ChangePasswordComponent';
@@ -8,11 +10,10 @@ import ProfileSettings from '../components/profileSettings/index';
 import DeleteProfile from '../components/deleteProfile/index';
 import MyAuctions from "../components/AuctionsCatalog/index.jsx";
 import MyLost from '../components/LostObjectsCatalog/index.jsx';
+import PaymentsDetails from '../components/PaymentDetailsComponent/index.jsx';
 import WelcomeHeaderComponent from '../components/headerWithNameComponent/welcomeHeader.jsx';
-import styled from 'styled-components';
 
 const token = localStorage.getItem("token");
-
 
 const PrimaryContainer = styled.div`
   margin: 0.1em 7em;
@@ -46,47 +47,69 @@ const CategoryTitle = styled.h2`
   margin-top: 0px;
 `;
 
-
 const ProfilePage = () => {
+  const [user, setUser] = useState('');
+  const [selectedOption, setSelectedOption] = useState('Profile');
+  const location = useLocation();
 
-    const [user, setUser] = useState('');
+  const menuOptions = ['Profile', 'My Auctions', 'My Lost Objects', 'Payments Details', 'Account Settings'];
 
+  useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-      
         const response = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
         const userProfileData = response.data.currentUser; // Supondo que o endpoint forneça os detalhes do perfil do usuário
         setUser(userProfileData.first_name);
-              // ... (outros estados conforme necessário)
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
-        // Lide com erros conforme necessário
       }
     };
-        // Chame a função de busca ao montar o componente
+
     fetchUserProfile();
+  }, []);
 
-  // Definir as opções de menu
-  const menuOptions = ['Profile Settings', 'My Auctions', 'My Lost Objects','Payments Details', 'Privacy Settings'];
+  useEffect(() => {
+    const path = location.pathname.split('/profile/')[1];
+    console.log(path);
+    switch (path) {
+      case 'profile':
+        setSelectedOption('Profile');
+        break;
+      case 'myAuctions':
+        setSelectedOption('My Auctions');
+        break;
+      case 'myLostObjects':
+        setSelectedOption('My Lost Objects');
+        break;
+      case 'paymentsDetails':
+        setSelectedOption('Payments Details');
+        break;
+      case 'accountSettings':
+        setSelectedOption('Account Settings');
+        break;
+      default:
+        setSelectedOption('Profile');
+        break;
+    }
+  }, [location]);
 
-  const [selectedOption, setSelectedOption] = useState(menuOptions[0]);
-  
   const renderComponent = () => {
     switch (selectedOption) {
-      case 'Profile Settings':
-        return [
-          <ProfileSettings/>,
-          <ChangePassword  />,
-          <DeleteProfile />
-        ];
+      case 'Profile':
+        return <ProfileSettings />;
       case 'My Auctions':
         return <MyAuctions />;
       case 'My Lost Objects':
         return <MyLost />;
       case 'Payments Details':
-          return <DeleteProfile />;
-      case 'Privacy Settings':
-          return <DeleteProfile />;
+        return <PaymentsDetails />;
+      case 'Account Settings':
+        return (
+          <>
+            <ChangePassword />
+            <DeleteProfile />
+          </>
+        );
       default:
         return <ProfileSettings />;
     }
@@ -94,8 +117,7 @@ const ProfilePage = () => {
 
   return (
     <PrimaryContainer>
-      {/* Renderizar o componente Menu com as opções */}
-      <WelcomeHeaderComponent name={user} description={'Did you know that over 30 milion wallets are lost every year?'}/>
+      <WelcomeHeaderComponent name={user} description={'Did you know that over 30 million wallets are lost every year?'} />
       <ProfileMenu options={menuOptions} selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
       <ChangeContainer>
         {renderComponent()}

@@ -24,7 +24,7 @@ const Container1 = styled.div`
     align-items: flex-start; 
   
   img {
-    width: 100px;
+    width: 200px;
     height: auto;
   }
   

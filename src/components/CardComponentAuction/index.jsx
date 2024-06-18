@@ -17,34 +17,13 @@ const CardLostObjecs = ({ matchButton, catId,name, description, location, date, 
     navigate(`/matchObjects?param1=${catId}&param2=${name}`);
   };
 
-  const handleViewInMaps = () => {
-    // Add logic to view the location in maps
-  };
-
-  const handleRemoveLostObject = async () => {
-    try {
-      // Make an API call to delete the user profile
-      const response = await axios.delete(`http://localhost:3000/api/lost-objects/${id}`);
-      console.log(response.data); // Log the response from the server
-      // Handle success, e.g., redirect to login or show a success message
-    } catch (error) {
-      console.error('Remove lost object failed:', error);
-  
-      if (error.response && error.response.data) {
-        setErrorMessage(error.response.data.error); // Set the error message if present in the error response
-      } else {
-        setErrorMessage('An unexpected error occurred. Please try again.');
-      }
-    }
-    window.location.reload();
-  };
-  
+ 
 
   return (
     <Grid id="1" style={{ borderRadius:'1.25rem',boxShadow: '4px 4px 27.1px 0px rgba(0, 0, 0, 0.25)'}} container spacing={2}>
       <Grid id="2" style={{ margin: '2rem ',height: '15vh'}}  spacing={2}>
          <p className='p-absolute'> {category}</p>
-             <img  style={{ width: '215px', height: '215px' ,    objectFit: 'cover',borderRadius:' 1.25rem'}}  src={photo} alt="" />  
+             <img  style={{ width: '215px', height: '200px' , objectFit: 'cover',borderRadius:' 1.25rem'}}  src={photo} alt="" />  
       </Grid>
       <Grid style={{padding: '0rem 1rem ', width: 'auto'}} container spacing={2}>
         <Grid container spacing={3} sx={{justifyContent: 'center' ,padding: '2rem '}}>

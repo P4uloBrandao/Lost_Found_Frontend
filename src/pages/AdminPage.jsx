@@ -1,6 +1,6 @@
 import React from 'react';
-import Login from '../components/loginComponent/index';
-import photo from '../assets/background/bg-photo.jpg';
+import axios from "axios";
+
 import styled, { keyframes } from 'styled-components';
 
 import Grid from '@mui/material/Unstable_Grid2/Grid2';
@@ -12,9 +12,14 @@ import StationCreateComponent  from '../components/StationCreateComponent/index'
 import PoliceComponent  from '../components/PoliceComponent/index' ; 
 import AdminMenu from '../components/profileMenu/index'
 import Statistics from '../components/StatisticsComponent/index'
+import AdminAuctionComponent from '../components/AdminAuctionComponent/index';
+import AdminUserAccountComponent from '../components/AdminUserAccountComponent/index.jsx';
+import WelcomeHeaderComponent from '../components/headerWithNameComponent/welcomeHeader.jsx';
+
+const token = localStorage.getItem("token");
 
 const PrimaryContainer = styled.div`
-  margin: 9em 7em;
+  margin: 0.1em 7em;
   text-align: -webkit-center;
   place-content: center;
   @media (max-width: 1200px) {
@@ -33,7 +38,25 @@ const ChangeContainer = styled.div`
   padding: 40px;
 `;
 export default function AdminPage() {
-  const menuOptions = ['Estatistics','Found Object', 'My Categories', 'Police station','Police Officer'];
+
+  const [user, setUser] = useState('');
+
+    const fetchUserProfile = async () => {
+      try {
+      
+        const response = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
+        const userProfileData = response.data.currentUser; // Supondo que o endpoint forneça os detalhes do perfil do usuário
+        setUser(userProfileData.first_name);
+              // ... (outros estados conforme necessário)
+      } catch (error) {
+        console.error("Failed to fetch user profile:", error);
+        // Lide com erros conforme necessário
+      }
+    };
+        // Chame a função de busca ao montar o componente
+    fetchUserProfile();
+
+  const menuOptions = ['Estatistics','Users','Found Object', 'Categories','Auctions','Police station','Police Officer'];
 
   const [selectedOption, setSelectedOption] = useState(menuOptions[0]);
   const renderComponent = () => {
@@ -41,12 +64,16 @@ export default function AdminPage() {
       
       case 'Found Object':
         return < AddFoundObjectComponent />;
-      case 'My Categories':
+      case 'Categories':
         return <CategoriesComponents/>
+      case 'Users':
+        return <AdminUserAccountComponent/>
       case 'Police station':
           return < StationCreateComponent/> ;
       case 'Police Officer':
           return <PoliceComponent />;
+      case 'Auctions':
+          return <AdminAuctionComponent />;
       default:
         return <Statistics />
       
@@ -59,6 +86,7 @@ export default function AdminPage() {
     
     
     <PrimaryContainer>
+      <WelcomeHeaderComponent name={user} description={'Welcome to your dedicated Admin Page!'}/>
       <AdminMenu  options={menuOptions} selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
     <ChangeContainer>
     {renderComponent()}

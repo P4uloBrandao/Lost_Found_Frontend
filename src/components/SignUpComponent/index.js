@@ -24,7 +24,13 @@ import DropdownInput from "../dropdownInputComponent";
 import PopAlert from "../PopAlertComponent"
 import {ArrowDropDownIcon} from "@mui/x-date-pickers";
 import '../../assets/colors/colors.css'
-import {isValidPhoneNumber, validateBirthDate, validateEmail} from "../../utils/inputValidations";
+import {
+    checkIfEmailExists,
+    isValidPhoneNumber,
+    validateBirthDate,
+    validateEmail,
+    validateNifNic
+} from "../../utils/inputValidations";
 
 const Card = styled.div `
 
@@ -315,9 +321,12 @@ const redirectUri = 'YOUR_REDIRECT_URI';
       { title: "4" }
   ];
 
-  function validateStepOne() {
+  async function validateStepOne() {
       let isValid= true;
-      if (email==='' || !validateEmail(email) ) {
+
+      const emailExists = await checkIfEmailExists(email);
+
+      if (email==='' || !validateEmail(email) || emailExists['exist'] ) {
           setEmailError(true);
             isValid = false;
       }
@@ -375,17 +384,17 @@ const redirectUri = 'YOUR_REDIRECT_URI';
   function validateStepFourth() {
       let isValid= true;
 
-      if (phone==='' || !isValidPhoneNumber(phone) ) {
+      if (!isValidPhoneNumber(phone) ) {
           setPhoneError(true);
           isValid = false;
       }
 
-      if (nif==='' || nif.length!==9 ) {
+      if (!validateNifNic(nif) ) {
           setNifError(true);
           isValid = false;
       }
 
-      if (nic==='' || nic.length!==9 ) {
+      if (!validateNifNic(nic)) {
           setNicError(true);
           isValid = false;
       }
@@ -395,27 +404,29 @@ const redirectUri = 'YOUR_REDIRECT_URI';
         return isValid;
   }
 
-  const nextStep = () => {
-      if (formStepsNum === 0) {
-            if (!validateStepOne()) {
-                return;
-            }
-      }
+   const nextStep = async () => {
+      clearErrors();
+       if (formStepsNum === 0) {
+           const stepOne = await validateStepOne();
+           if (!stepOne) {
+               return;
+           }
+       }
 
-      if (formStepsNum === 1) {
-            if (!validateStepTwo()) {
-                return;
-            }
-      }
+       if (formStepsNum === 1) {
+           if (!validateStepTwo()) {
+               return;
+           }
+       }
 
-      if (formStepsNum === 2) {
-          if (!validateStepThird()) {
-              return;
-          }
-      }
+       if (formStepsNum === 2) {
+           if (!validateStepThird()) {
+               return;
+           }
+       }
 
-      setFormStepsNum(prevStep => prevStep + 1);
-  };
+       setFormStepsNum(prevStep => prevStep + 1);
+   };
 
   const prevStep = () => {
       setFormStepsNum(prevStep => prevStep - 1);
