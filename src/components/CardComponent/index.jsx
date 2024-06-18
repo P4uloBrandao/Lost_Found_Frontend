@@ -36,7 +36,7 @@ const CardLostObjecs = ({ matchButton, catId,name, description, location, date, 
         setErrorMessage('An unexpected error occurred. Please try again.');
       }
     }
-    window.location.reload();
+    //window.location.reload();
   };
   
 
