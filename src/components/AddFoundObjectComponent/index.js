@@ -257,7 +257,7 @@ setLoading(false)
         formData.append("price", price);
         formData.append("status", status);
         formData.append("policeOfficerThatReceived", "6650cb6c82b8e44086723f1e");
-        formData.append("subCategory", items);
+        formData.append("subCategory", JSON.stringify(items));
 
         const response = await axios.post("http://localhost:3000/api/found-objects",
         formData);
@@ -343,7 +343,7 @@ setLoading(false)
  }
 
 function getCategoryNameFromId(categoryName) {
-  const category = categories.find(category => category._id === categoryName);
+  const category = categories.find(category => category.name === categoryName);
   return category ? category.name : null;
  }
 
