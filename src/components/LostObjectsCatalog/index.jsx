@@ -173,7 +173,7 @@ export default function LostObjectCatalog() {
               description={object.description}
               location={object.location}
               category={object.category}
-              id={object._id}
+              id={object.object_id}
               catId={object.category_id}
               date={object.lostDate}
               photo={object.objectImage}

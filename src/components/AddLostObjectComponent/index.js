@@ -111,7 +111,7 @@ export default function LostObjectForm  ()  {
     fetchCategories();
   }, []);
   function getCategoryNameFromId(id) {
-    const category = categories.find(category => category._id === id);
+    const category = categories.find(category => category.name === id);
     return category ? category.name : null;
    }
    useEffect(() => {
@@ -130,6 +130,7 @@ export default function LostObjectForm  ()  {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      console.log(owner,title,JSON.stringify(items),getCategoryNameFromId(category),description,location,price,status,formattedDate)
         const formData = new FormData();
         formData.append("owner", owner);
         formData.append("title", title);
@@ -147,7 +148,7 @@ export default function LostObjectForm  ()  {
         const response = await axios.post("http://localhost:3000/api/lost-objects",
           formData,);
         
-        // console.log(response.data)
+        console.log(response.data)
       } catch (error) {
         console.error("Object Registration failed:", error);
          
