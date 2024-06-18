@@ -283,8 +283,10 @@ function Navbar() {
 
   const options = [
     { label: 'Home', path: '/' },
+
     { label: userRole !== "Police" ? 'Lost' : '', path: '/profile/myLostObjects' },
     { label: userRole === "Police" ? 'New found object' : '', path: '/police' },
+
     { label: userRole !== "Police" ? 'Auctions' : '', path: '/auctions' },
     { label: userRole !== "Police" ? 'I lost something!' : '', path: '/addLostObject' },
     { label: userRole === "Admin" ? 'Admin settings' : '', path: '/adminPage' }

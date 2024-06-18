@@ -1,24 +1,9 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useAuth, AuthProvider } from '../../components/AuthContext';
-import axios from "axios";
-import { useState, useContext } from "react";
-import { Navigate } from "react-router-dom"; 
-import Layout from '../../components/Layout/Layout';
-
-import WelcomeHeaderComponent from '../../components/headerWithNameComponent/welcomeHeader.jsx';
+import {React,useState,Navigate} from 'react';
+import WelcomeHeaderComponent from '../../components/headerWithNameComponent/welcomeHeader.jsx'
+import { useLocation } from 'react-router-dom';
+import { useAuth } from '../../components/AuthContext.jsx'
+import axios
+ from 'axios';
 import styled from 'styled-components';
 
 const token = localStorage.getItem("token");
@@ -31,7 +16,7 @@ const PrimaryContainer = styled.div`
 `;
 
 
-const defaultTheme = createTheme();
+
 
 function Home() {
     const [user, setUser] = useState('');
@@ -49,7 +34,7 @@ function Home() {
       const fetchUserProfile = async () => {
       try {
       
-        const response = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
+        const response = await axios.get(`https://bidfinderbackend.ddns.net/api/users/profile/${token}`);
         const userProfileData = response.data.currentUser; // Supondo que o endpoint forneça os detalhes do perfil do usuário
         setUser(userProfileData.first_name);
               // ... (outros estados conforme necessário)
@@ -73,3 +58,4 @@ function Home() {
   }
   
   export default Home;
+

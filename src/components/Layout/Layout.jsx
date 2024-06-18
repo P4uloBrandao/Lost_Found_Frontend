@@ -1,15 +1,17 @@
 import React from "react";
 import "./Layout.css";
-import Navbar from "../Layout/Layout.jsx";
+import Navbar from "../NavBarTest/index.jsx"; // Corrigir o caminho conforme necessário
+import WelcomeHeaderComponent from "../headerWithNameComponent/welcomeHeader.jsx";
+import Footer from "../FooterComponent/index.jsx";
 
-// Pass the child props
-export default function Layout({ children }) {
+export default function Layout({ children }) { // Corrigido para 'children'
   return (
-    <div>
-      {/* Attaching all file components */}
+    <div className="layoutContainer">
       <Navbar />
-      {children}
-      {/* <Footer />  */}
+      <div className="contentContainer">
+        {children} {/* Corrigido para usar a propriedade 'children' corretamente */}
+      </div>
+      <Footer/>
     </div>
   );
 }
