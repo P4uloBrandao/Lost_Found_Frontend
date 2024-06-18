@@ -68,7 +68,7 @@ function App() {
 
                 <Route path="/profile/:option" element={<PrivateRoute><ProfilePage /></PrivateRoute> }/>
                 <Route path="/AdminPage" element={<AdminRoute><AdminPage /></AdminRoute>} />
-                <Route path="/addFoundObject" element={<PrivateRoute><AddLostObjectComponent /></PrivateRoute>} />
+                <Route path="/addFoundObject" element={<PrivateRoute><AddLostObjectComponent isFoundObjectPage={true} /></PrivateRoute>} />
                 <Route path="/matchObjects" element={<PrivateRoute><MatchObjectCatalogPage /></PrivateRoute>} />
                 <Route path="/addLostObject" element={<PrivateRoute><RegisterLostObjectPage /></PrivateRoute>} />
                 <Route path="/myLostObjects" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
