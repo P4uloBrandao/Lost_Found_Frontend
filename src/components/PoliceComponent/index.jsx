@@ -114,7 +114,6 @@ if (error) {
     return <div>Erro ao carregar as estações de polícia.</div>;
 }
 function  getStationID(name,stations){
-  console.log("aqui:", name)
     const foundItem = stations.find(item => item.name === name);
     return foundItem ? foundItem._id : null;
 

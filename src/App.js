@@ -26,7 +26,9 @@ import { AuthProvider } from "./components/AuthContext.jsx";
 import AdminRoute from './components/routeComponent/adminRoute/index.jsx'
 
 import PoliceRoute from './components/routeComponent/PoliceRoute/index.jsx'
+import ForgetPasswordPage from './pages/ForgetPasswordPage.jsx'
 
+import ForgetPasswordPageEmail from './pages/ForgetPasswordPageEmail.jsx'
 import PublicRoute from './components/routeComponent/publicRoute/index.jsx'
 import PrivateRoute from './components/routeComponent/privateRoute/index.jsx'
 import Footer from './components/FooterComponent/index.jsx'
@@ -64,7 +66,7 @@ function App() {
               <Routes>
                 <Route path="/police" element={<PoliceRoute><PolicePage/></PoliceRoute> }/>
 
-                <Route path="/profile" element={<PrivateRoute><ProfilePage /></PrivateRoute> }/>
+                <Route path="/profile/:option" element={<PrivateRoute><ProfilePage /></PrivateRoute> }/>
                 <Route path="/AdminPage" element={<AdminRoute><AdminPage /></AdminRoute>} />
                 <Route path="/addFoundObject" element={<PrivateRoute><AddLostObjectComponent /></PrivateRoute>} />
                 <Route path="/matchObjects" element={<PrivateRoute><MatchObjectCatalogPage /></PrivateRoute>} />
@@ -75,6 +77,10 @@ function App() {
                 <Route path="/" element={<PublicRoute><Home /></PublicRoute>} />
                 <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
                 <Route path="/signup" element={<PublicRoute><SignUpPage /></PublicRoute>} />
+              
+                <Route path="/resetPassword/:token" element={<PublicRoute><ForgetPasswordPage /></PublicRoute>} />
+                <Route path="/forgetPasswordRedirect" element={<PublicRoute><ForgetPasswordPageEmail /></PublicRoute>} />
+
               </Routes>
               <Footer></Footer>
             </ContentContainer>
