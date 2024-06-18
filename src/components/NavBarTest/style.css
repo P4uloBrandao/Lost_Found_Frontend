@@ -115,8 +115,21 @@ a:focus::after {
 
 .logo {
     margin: 0 1em 0 1em;
-    transform: scale(0.7);
+    width: 200pt;
     cursor: pointer;
+    transition: width 0.3s ease;
+    /* Adiciona uma transição suave na mudança de largura */
+}
+
+@media (max-width: 1024px) {
+    .logo {
+        /* margin: 0 1em 0 1em; */
+        transform: scale(0.6);
+        top: 16pt;
+        left: -21pt;
+        position: fixed;
+        cursor: pointer;
+    }
 }
 
 @media (min-width: 640px) {
@@ -273,16 +286,41 @@ a:focus::after {
     display: none;
     border-radius: 14px;
     position: relative;
-    /* border: solid 1px black; */
-    top: -9pt;
+    border: solid 1px black;
+    top: -19pt;
     padding: 4px;
     align-content: flex-end;
-    right: -21pt;
+    right: 175pt;
     height: 67pt;
     z-index: -1;
-    width: 141pt;
+    width: 151pt;
     background-color: var(--white-color);
 }
+
+@media (max-width: 720px) {
+    .menuOptions1 {
+        display: none;
+        border-radius: 14px;
+        position: absolute;
+        border: solid 1px black;
+        top: -9pt;
+        padding: 4px;
+        align-content: flex-end;
+        right: 174pt;
+        height: 67pt;
+        z-index: 4;
+        width: 141pt;
+        background-color: var(--white-color);
+    }
+}
+
+@media (max-width: 450px) {
+    .menuOptions1 {
+        right: 174pt;
+    }
+}
+
+@media (max-width: 380px) {}
 
 .subMenu1 {
     width: 80pt;
@@ -301,13 +339,6 @@ a:focus::after {
     height: 31pt;
     /* background-color: aquamarine; */
     position: relative;
-}
-
-.op1:hover .menuOptions1 {
-    display: block;
-    right: 136pt;
-    z-index: 0;
-    border: 1px solid black;
 }
 
 .op2:hover .menuOptions2 {
@@ -393,10 +424,6 @@ a:focus::after {
     display: block;
 }
 
-.menuOptions1:hover {
-    display: block;
-}
-
 .menuOptions2:hover {
     display: block;
 }
@@ -409,6 +436,7 @@ a:focus::after {
 .op2:hover,
 .op3:hover,
 .op4:hover,
+.op5:hover,
 .op11:hover,
 .op12:hover,
 .op21:hover,
@@ -434,6 +462,7 @@ a:focus::after {
 .op2:hover .svgArrow2,
 .op3:hover .svgArrow3,
 .op4:hover .svgArrow4,
+.op5:hover .svgArrow5,
 .op11:hover .svgArrow11,
 .op21:hover .svgArrow21,
 .op22:hover .svgArrow22,
@@ -450,6 +479,7 @@ a:focus::after {
 .svgArrow2,
 .svgArrow3,
 .svgArrow4,
+.svgArrow5,
 .svgArrow11,
 .svgArrow12,
 .svgArrow21,
@@ -511,6 +541,10 @@ a:focus::after {
 
 .svgArrow4 {
     right: -128px;
+}
+
+.svgArrow5 {
+    right: -60px;
 }
 
 .signbtn {
