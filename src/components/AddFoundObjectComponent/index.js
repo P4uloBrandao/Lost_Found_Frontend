@@ -238,8 +238,6 @@ setLoading(false)
 
       clearErrors();
 
-      console.log("OOOOOOOok")
-
       if (!validateForm()) {
         return;
       }
