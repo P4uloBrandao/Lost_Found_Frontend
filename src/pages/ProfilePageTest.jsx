@@ -12,6 +12,7 @@ import MyAuctions from "../components/AuctionsCatalog/index.jsx";
 import MyLost from '../components/LostObjectsCatalog/index.jsx';
 import PaymentsDetails from '../components/PaymentDetailsComponent/index.jsx';
 import WelcomeHeaderComponent from '../components/headerWithNameComponent/welcomeHeader.jsx';
+import MyFoundObjComponent from '../components/MyFoundObjComponent/index.jsx';
 
 const token = localStorage.getItem("token");
 
@@ -52,7 +53,7 @@ const ProfilePage = () => {
   const [selectedOption, setSelectedOption] = useState('Profile');
   const location = useLocation();
 
-  const menuOptions = ['Profile', 'My Auctions', 'My Lost Objects', 'Payments Details', 'Account Settings'];
+  const menuOptions = ['Profile', 'My Auctions', 'My Lost Objects','My Found Objects','Payments Details', 'Account Settings'];
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -87,6 +88,9 @@ const ProfilePage = () => {
       case 'accountSettings':
         setSelectedOption('Account Settings');
         break;
+      case "myFoundObjects":
+        setSelectedOption('My Found Objects');
+        break;
       default:
         setSelectedOption('Profile');
         break;
@@ -103,6 +107,8 @@ const ProfilePage = () => {
         return <MyLost />;
       case 'Payments Details':
         return <PaymentsDetails />;
+      case 'My Found Objects':
+        return <MyFoundObjComponent />;
       case 'Account Settings':
         return (
           <>

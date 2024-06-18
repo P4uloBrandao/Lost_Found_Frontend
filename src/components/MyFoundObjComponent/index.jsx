@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
-import styled from 'styled-components'; // Importe styled-components
+import React, { useState, useEffect, useRef } from 'react';
+import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
+
 import Card from "../CardComponent/index";
 import SearchInput from "../SearchInputFieldComponent/index";
-import Categories from "../CategoriesComponents/AddCategoriesObjectComponent/index";
 import axios from "axios";
 
 const Container = styled.div`
@@ -58,83 +58,13 @@ const ButtonContainer = styled.div`
   align-items: center;
 `;
 
-const PopupOverlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const PopupContent = styled.div`
-  background: white;
-  border-radius: 15px;
-  padding: 20px;
-  width: 400px;
-  height: 300px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-`;
-
-const LargePopupContent = styled.div`
-  background: white;
-  border-radius: 15px;
-  padding: 40px; /* Ajuste o padding conforme necessário */
-  width: 600px; /* Ajuste a largura conforme necessário */
-  height: 400px; /* Ajuste a altura conforme necessário */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-`;
-
-const CloseButton = styled.button`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  font-size: 18px;
-  cursor: pointer;
-`;
-
-const Textbox = styled.textarea`
-  width: 100%;
-  height: 70%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  resize: none;
-`;
-
-const SubmitButton = styled.button`
-  padding: 10px 20px;
-  background-color: #3cb684;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  &:hover {
-    background-color: #34a26a;
-  }
-`;
-
-export default function LostObjectCatalog() {
+export default function MyFoundObjComponent() {
   const [errorMessage, setErrorMessage] = useState("");
   const [objects, setObjects] = useState([]);
   const [objectName, setObjectName] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [filteredObjects, setFilteredObjects] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [isCategoriesPopupOpen, setIsCategoriesPopupOpen] = useState(false);
   const searchInputRef = useRef(null); // UseRef para o campo de busca
 
   useEffect(() => {
@@ -142,22 +72,25 @@ export default function LostObjectCatalog() {
       try {
         const token = localStorage.getItem("token");
   
-        // Buscar os dados dos objetos perdidos
+        // Fetch the lost objects data
         const objectsResponse = await axios.get(`http://localhost:3000/api/lost-objects/user/${token}`);
         let objectsData = objectsResponse.data;
 
-        // Renomear o campo title para name
+        // Filter objects to only include those with status "Claimed"
+        objectsData = objectsData.filter(obj => obj.status === 'Claimed');
+        
+        // Rename the title field to name
         objectsData = objectsData.map(obj => ({ ...obj, name: obj.title }));
-       
-        // Atualizar o estado dos objetos com os dados buscados
+
+        // Update the state with the filtered objects data
         setObjects(objectsData);
-        setFilteredObjects(objectsData); // Inicialmente, mostrar todos os objetos
+        setFilteredObjects(objectsData); // Initially, show all claimed objects
   
         setIsLoading(false);
   
       } catch (error) {
         console.error('Failed to fetch data:', error);
-        // Lidar com erros conforme necessário
+        // Handle errors as necessary
       }
     };
   
@@ -175,7 +108,7 @@ export default function LostObjectCatalog() {
   const handleCreateSubmit = async (event) => {
     event.preventDefault();
     try {
-        const response = await axios.put(`http://localhost:3000/api/lost-objects/${getLostObjectID(objectName,objects)}`);
+        const response = await axios.put(`http://localhost:3000/api/lost-objects/${getLostObjectID(objectName, objects)}`);
     } catch (error) {
         console.error(error);
 
@@ -201,7 +134,7 @@ export default function LostObjectCatalog() {
 
   const handleResetFilters = () => {
     setSearchTerm('');
-    setFilteredObjects(objects); // Exibir todos os objetos novamente
+    setFilteredObjects(objects); // Display all claimed objects again
   };
 
   function getLostObjectID(name, objects) {
@@ -209,38 +142,28 @@ export default function LostObjectCatalog() {
     return foundItem ? foundItem._id : null;
   }
 
-  const togglePopup = () => {
-    setIsPopupOpen(!isPopupOpen);
-  };
-
-  const toggleCategoriesPopup = () => {
-    setIsCategoriesPopupOpen(!isCategoriesPopupOpen);
-  };
-
   if (isLoading) {
     return <div>Carregando...</div>;
   }
 
   return (
     <Container>
-      <Title>My Lost Objects</Title>
+      <Title>My Found Objects</Title>
       <CategoryTitle>
-        Here you can view all your lost objects. Remember to never lose hope!
+        Here you can view all your lost objects that where found. We're very happy you found them!
       </CategoryTitle>
       <div>
         <ButtonContainer>
           <SearchInput 
-            placeholder={'Search your Lost Objects'}  
+            placeholder={'Search your Found Objects'}  
             id="Objects"
             required
             onChange={handleDropdownChange}
-            name="Lost Object"
+            name="Found Object"
             options={objects}
             ref={searchInputRef}
           />
           <SearchButton onClick={() => {handleSearch(objectName); }}>Search</SearchButton>
-          <SearchButton onClick={togglePopup}>Description Filter</SearchButton>
-          <SearchButton onClick={toggleCategoriesPopup}>Category Filter</SearchButton>
           <ResetButton onClick={handleResetFilters}>Reset Filters</ResetButton>
         </ButtonContainer>
       </div>
@@ -263,23 +186,6 @@ export default function LostObjectCatalog() {
           </Grid>
         ))}
       </Grid> 
-      {isPopupOpen && (
-        <PopupOverlay>
-          <PopupContent>
-            <CloseButton onClick={togglePopup}>X</CloseButton>
-            <Textbox placeholder="Enter your description" />
-            <SubmitButton onClick={togglePopup}>Submit</SubmitButton>
-          </PopupContent>
-        </PopupOverlay>
-      )}
-      {isCategoriesPopupOpen && (
-        <PopupOverlay>
-          <LargePopupContent>
-            <CloseButton onClick={toggleCategoriesPopup}>X</CloseButton>
-            <Categories />
-          </LargePopupContent>
-        </PopupOverlay>
-      )}
     </Container>
   );
 }
