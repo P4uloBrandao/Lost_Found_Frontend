@@ -405,7 +405,7 @@ export default function SignIn() {
             <label for="one">Remember me</label>
           </RememberBox>
           <div className="forgot">
-            <RegisterLink href="#"  style={{ left: '10px' }}>Forgot password?</RegisterLink>
+            <RegisterLink href="/forgetPasswordRedirect"  style={{ left: '10px' }}>Forgot password?</RegisterLink>
           </div>
         </RememberForgot>
         <>
