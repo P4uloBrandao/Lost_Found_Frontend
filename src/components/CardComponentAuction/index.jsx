@@ -14,7 +14,7 @@ const CardLostObjecs = ({ matchButton, catId,name, description, location, date, 
   const [errorMessage, setErrorMessage] = useState(null);
   const handleViewMatches = () => {
     // Assuming you want to pass id and name as parameters
-    navigate(`/matchObjects?param1=${catId}&param2=${name}`);
+   // navigate(`/matchObjects?param1=${catId}&param2=${name}`);
   };
 
  

@@ -15,7 +15,7 @@ import {Cloudinary} from "@cloudinary/url-gen";
 import AddLostObjectComponent from './components/AddLostObjectComponent/index'
 import Navbar from './components/NavBarTest/index.jsx'
 import PolicePage from './pages/PolicePage.jsx';
-
+import SelectedAuctionPage from "./pages/SelectedAuctionPage.jsx";
 import RegisterLostObjectPage from'./pages/RegisterLostObjectPage.jsx'; 
 import MatchObjectCatalogPage from'./pages/matchObjectCatalogPage.jsx'; 
 import AdminPage from'./pages/AdminPage.jsx'; 
@@ -27,7 +27,7 @@ import AdminRoute from './components/routeComponent/adminRoute/index.jsx'
 
 import PoliceRoute from './components/routeComponent/PoliceRoute/index.jsx'
 import ForgetPasswordPage from './pages/ForgetPasswordPage.jsx'
-
+import LostObjectCatalogPage from "./pages/lostObjectCatalogPage.jsx";
 import ForgetPasswordPageEmail from './pages/ForgetPasswordPageEmail.jsx'
 import PublicRoute from './components/routeComponent/publicRoute/index.jsx'
 import PrivateRoute from './components/routeComponent/privateRoute/index.jsx'
@@ -69,9 +69,10 @@ function App() {
                 <Route path="/profile/:option" element={<PrivateRoute><ProfilePage /></PrivateRoute> }/>
                 <Route path="/AdminPage" element={<AdminRoute><AdminPage /></AdminRoute>} />
                 <Route path="/addFoundObject" element={<PrivateRoute><AddLostObjectComponent isFoundObjectPage={true} /></PrivateRoute>} />
-                <Route path="/matchObjects" element={<PrivateRoute><MatchObjectCatalogPage /></PrivateRoute>} />
+              
                 <Route path="/addLostObject" element={<PrivateRoute><RegisterLostObjectPage /></PrivateRoute>} />
-                <Route path="/myLostObjects" element={<PrivateRoute><ProfilePage /></PrivateRoute>} />
+                <Route path="/myLostObjects" element={<PrivateRoute><LostObjectCatalogPage /></PrivateRoute>} />
+                <Route path="/selectedAuction" element={<PrivateRoute><SelectedAuctionPage /></PrivateRoute>} />
                 <Route path="/auctions" element={<PublicRoute><AuctionsPage /></PublicRoute>} />
 
                 <Route path="/" element={<PublicRoute><Home /></PublicRoute>} />

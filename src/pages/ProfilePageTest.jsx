@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-
+import LostObjectCatalogPage from "./lostObjectCatalogPage.jsx";
 import ProfileMenu from '../components/profileMenu/index';
 import ChangePassword from '../components/ChangePasswordComponent';
 import ProfileSettings from '../components/profileSettings/index';
@@ -48,12 +48,12 @@ const CategoryTitle = styled.h2`
   margin-top: 0px;
 `;
 
-const ProfilePage = () => {
+const ProfilePage = ({ componentToRender }) => {
   const [user, setUser] = useState('');
   const [selectedOption, setSelectedOption] = useState('Profile');
   const location = useLocation();
 
-  const menuOptions = ['Profile', 'My Auctions', 'My Lost Objects','My Found Objects','Payments Details', 'Account Settings'];
+  const menuOptions = ['Profile', 'My Auctions', 'My Lost Objects', 'My Found Objects', 'Payments Details', 'Account Settings'];
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -71,7 +71,6 @@ const ProfilePage = () => {
 
   useEffect(() => {
     const path = location.pathname.split('/profile/')[1];
-    console.log(path);
     switch (path) {
       case 'profile':
         setSelectedOption('Profile');
@@ -81,6 +80,9 @@ const ProfilePage = () => {
         break;
       case 'myLostObjects':
         setSelectedOption('My Lost Objects');
+        break;
+      case 'mySelectedLostObject':
+        setSelectedOption('mySelectedLostObject');
         break;
       case 'paymentsDetails':
         setSelectedOption('Payments Details');
@@ -98,13 +100,17 @@ const ProfilePage = () => {
   }, [location]);
 
   const renderComponent = () => {
+    if (componentToRender) {
+      return React.createElement(componentToRender);
+    }
+
     switch (selectedOption) {
       case 'Profile':
         return <ProfileSettings />;
       case 'My Auctions':
         return <MyAuctions />;
       case 'My Lost Objects':
-        return <MyLost />;
+        return <LostObjectCatalogPage />;
       case 'Payments Details':
         return <PaymentsDetails />;
       case 'My Found Objects':
