@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useRef } from 'react';
-import styled from 'styled-components'; // Importe styled-components
+import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
 import Card from "../CardComponent/index";
 import SearchInput from "../SearchInputFieldComponent/index";
-import Categories from "../CategoriesComponents/AddCategoriesObjectComponent/index";
+import LostItemComponent from '../matchItemsComponents/LostItemComponent.jsx';
+import Category from '../CategoriesSearchComponent/index.jsx'
 import axios from "axios";
 
 const Container = styled.div`
@@ -85,9 +86,9 @@ const PopupContent = styled.div`
 const LargePopupContent = styled.div`
   background: white;
   border-radius: 15px;
-  padding: 40px; /* Ajuste o padding conforme necessário */
-  width: 600px; /* Ajuste a largura conforme necessário */
-  height: 400px; /* Ajuste a altura conforme necessário */
+  padding: 40px;
+  width: 800px;
+  height: 400px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -128,6 +129,7 @@ const SubmitButton = styled.button`
 
 export default function LostObjectCatalog() {
   const [errorMessage, setErrorMessage] = useState("");
+  const [openCard, setOpenCard] = useState(null);
   const [objects, setObjects] = useState([]);
   const [objectName, setObjectName] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -142,38 +144,33 @@ export default function LostObjectCatalog() {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-  
-        // Buscar os dados dos objetos perdidos
+
         const objectsResponse = await axios.get(`http://localhost:3000/api/lost-objects/user/${token}`);
         let objectsData = objectsResponse.data;
 
-        // Renomear o campo title para name
         objectsData = objectsData.map(obj => ({ ...obj, name: obj.title }));
-       
-        // Atualizar o estado dos objetos com os dados buscados
+
         setObjects(objectsData);
         setFilteredObjects(objectsData); // Inicialmente, mostrar todos os objetos
-  
+
         setIsLoading(false);
-  
+
       } catch (error) {
         console.error('Failed to fetch data:', error);
-        // Lidar com erros conforme necessário
       }
     };
-  
+
     fetchData();
   }, []);
-  
+
   useEffect(() => {
-    console.log("Current objectName:", objectName); // Print objectName to the console whenever it changes
+    console.log("Current objectName:", objectName);
   }, [objectName]);
 
   useEffect(() => {
-    console.log("Current searchTerm:", searchTerm); // Print searchTerm to the console whenever it changes
+    console.log("Current searchTerm:", searchTerm);
   }, [searchTerm]);
 
-  
   const handleDropdownChange = (selectedOptionName) => {
     setObjectName(selectedOptionName)
   };
@@ -201,10 +198,9 @@ export default function LostObjectCatalog() {
 
   const handleResetFilters = () => {
     setSearchTerm('');
+    setObjectName('');
     setFilteredObjects(objects); // Exibir todos os objetos novamente
   };
-
- 
 
   const togglePopup = () => {
     setIsPopupOpen(!isPopupOpen);
@@ -212,6 +208,18 @@ export default function LostObjectCatalog() {
 
   const toggleCategoriesPopup = () => {
     setIsCategoriesPopupOpen(!isCategoriesPopupOpen);
+  };
+
+  const handleCardClick = (id) => {
+    setOpenCard(id);
+  };
+
+  const handleCardClose = () => {
+    setOpenCard(null);
+  };
+
+  const handleFilteredObjects = (objects) => {
+    setFilteredObjects(objects);
   };
 
   if (isLoading) {
@@ -224,47 +232,57 @@ export default function LostObjectCatalog() {
       <CategoryTitle>
         Here you can view all your lost objects. Remember to never lose hope!
       </CategoryTitle>
-      <div>
-        <ButtonContainer>
-          <SearchInput 
-            placeholder={'Search your Lost Objects'}  
-            id="Objects"
-            required
-            onChange={handleDropdownChange}
-            name="Lost Object"
-            options={objects}
-            ref={searchInputRef}
-          />
-          <SearchButton onClick={() => {handleSearch(objectName); }}>Search</SearchButton>
-          <SearchButton onClick={togglePopup}>Description Filter</SearchButton>
-          <SearchButton onClick={toggleCategoriesPopup}>Category Filter</SearchButton>
-          <ResetButton onClick={handleResetFilters}>Reset Filters</ResetButton>
-        </ButtonContainer>
-      </div>
-      <Grid sx={{ textAlign: '-webkit-center', pt: 7, width: '100%' }} container spacing={5}>
-        {filteredObjects.map((object, index) => (
-          <Grid spacing={2} sx={{ justifyContent: 'center' }} item xs={10} md={10} key={index}>
-            <Card  
-              spacing={2}
-              name={object.title} 
-              description={object.description}
-              location={object.location}
-              category={object.category}
-              id={object.object_id}
-              catId={object.category_id}
-              date={object.lostDate}
-              photo={object.objectImage}
-              status={object.status}
-              matchButton={true}
+      {openCard === null && (
+        <div>
+          <ButtonContainer>
+            <SearchInput
+              placeholder={'Search your Lost Objects'}
+              id="Objects"
+              required
+              onChange={handleDropdownChange}
+              name="Lost Object"
+              options={objects}
+              ref={searchInputRef}
             />
-          </Grid>
-        ))}
-      </Grid> 
+            <SearchButton onClick={() => { handleSearch(objectName); }}>Search</SearchButton>
+            <SearchButton onClick={togglePopup}>Description Filter</SearchButton>
+            <SearchButton onClick={toggleCategoriesPopup}>Category Filter</SearchButton>
+            <ResetButton onClick={handleResetFilters}>Reset Filters</ResetButton>
+          </ButtonContainer>
+        </div>
+      )}
+      <div className="lost-item-container" style={{ display: 'flex', flexDirection: 'column', width: '100%', }}>
+        {openCard ? <LostItemComponent itemid={openCard} onClose={handleCardClose} /> : null}
+        <div>
+          {filteredObjects.map((object, index) => (
+            object.object_id !== openCard && (
+              <Grid spacing={2} sx={{
+                justifyContent: 'center'
+              }} item xs={10} md={10} key={index}>
+                <Card spacing={2}
+                  name={object.title}
+                  description={object.description}
+                  location={object.location}
+                  category={object.category}
+                  id={object.object_id}
+                  catId={object.catId}
+                  date={object.date}
+                  photo={object.objectImage[0]}
+                  status={object.status}
+                  policeOfficer={object.policeOfficerThatReceived}
+                  matchButton={true}
+                  onCardClick={handleCardClick}
+                />
+              </Grid>
+            )
+          ))}
+        </div>
+      </div>
       {isPopupOpen && (
         <PopupOverlay>
           <PopupContent>
             <CloseButton onClick={togglePopup}>X</CloseButton>
-            <Textbox 
+            <Textbox
               placeholder="Enter your description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
@@ -277,7 +295,7 @@ export default function LostObjectCatalog() {
         <PopupOverlay>
           <LargePopupContent>
             <CloseButton onClick={toggleCategoriesPopup}>X</CloseButton>
-            <Categories />
+            <Category onFilteredObjects={handleFilteredObjects} onClose={toggleCategoriesPopup} />
           </LargePopupContent>
         </PopupOverlay>
       )}

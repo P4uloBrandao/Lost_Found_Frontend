@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import LostObjectCatalogPage from "./lostObjectCatalogPage.jsx";
 import ProfileMenu from '../components/profileMenu/index';
 import ChangePassword from '../components/ChangePasswordComponent';
 import ProfileSettings from '../components/profileSettings/index';
@@ -110,7 +109,8 @@ const ProfilePage = ({ componentToRender }) => {
       case 'My Auctions':
         return <MyAuctions />;
       case 'My Lost Objects':
-        return <LostObjectCatalogPage />;
+          return <MyLost />;
+        //return < LostObjectCatalogPage/>;
       case 'Payments Details':
         return <PaymentsDetails />;
       case 'My Found Objects':
