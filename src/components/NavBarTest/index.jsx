@@ -313,13 +313,21 @@ function Navbar() {
               </ul>
             </MenuPages>)}
             {authUser ? (
-              <div style={{ margin: 'auto' }}>
-                {profilePhoto ? (
-                  <img onClick={handleMenuItemClick} className={`svgButtons ${isOpen ? 'open' : 'closed'}`} width='45px' height='45px' src={profilePhoto} alt="Profile" />
-                ) : (
-                  <img onClick={handleMenuItemClick} className={`svgButtons ${isOpen ? 'open' : 'closed'}`} width='45px' height='45px' src="https://res.cloudinary.com/dkyu0tmfx/image/upload/v1715205192/profileImages/profile_1_i39bhb.png" alt="Default Profile" />
-                )}
-              </div>
+               <div style={{ margin: 'auto' }}>
+               <div className="profile-container" onClick={handleMenuItemClick}>
+               {profilePhoto && ( <img
+                   className={` ${isOpen ? 'open' : 'closed'}`}
+                   width='45px'
+                   height='45px'
+                   style={{ borderRadius: '24pt'} }
+                   src={profilePhoto || "https://res.cloudinary.com/dkyu0tmfx/image/upload/v1715205192/profileImages/profile_1_i39bhb.png"}
+                   alt="Profile"
+                 /> )}
+                 <div className="initials-overlay">
+                   {authUser.first_name[0]}{authUser.last_name[0]}
+                 </div>
+               </div>
+             </div>
             ) : (
               <p>
                 <a style={{ marginRight: "5pt" }} onClick={handleSignUpClick}>SIGN UP</a>|
@@ -375,8 +383,8 @@ function Navbar() {
          
         )}
          {isSmallScreen &&authUser && userRole==="Admin" && (
-            <div className='option op3'>
-              <div onClick={redirectToProfile} className='optionMenu'>ADMIN SETTINGS<FontAwesomeIcon className='svgArrow3' icon={faArrowLeft} /></div>
+            <div className='option op7'>
+              <div onClick={handlerAdminPage} className='optionMenu'>ADMIN SETTINGS<FontAwesomeIcon className='svgArrow7' icon={faArrowLeft} /></div>
             </div>
           )}
           {isSmallScreen && authUser && userRole==="Police" && (

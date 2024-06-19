@@ -137,6 +137,7 @@ export default function AddFoundObject  ()  {
   const [components, setComponents] = useState([]);
   const [user, setUser] = useState("");
   const [popupMessage, setPopupMessage] = useState('');
+  const [objCord, setObjCord] = useState({ lat: null, lng: null });
 
   let counter = 0; // Mantido no escopo do componente pai
 
@@ -258,7 +259,7 @@ setLoading(false)
         formData.append("status", status);
         formData.append("policeOfficerThatReceived", "6650cb6c82b8e44086723f1e");
         formData.append("subCategory", JSON.stringify(items));
-
+        formData.append("coordinates", `lat: ${objCord.lat}, lng: ${objCord.lng}`);
         const response = await axios.post("http://localhost:3000/api/found-objects",
         formData);
         setObjectCreated(true)
@@ -315,7 +316,9 @@ setLoading(false)
     const handleMapClick = async (event) => {
       const lat = event.latLng.lat();
       const lng = event.latLng.lng();
+      
       setObjLoc({ lat: event.latLng.lat(), lng: event.latLng.lng() });
+      setObjCord({ lat, lng });
       const geocodingApiKey = "AIzaSyDPUTFHLcj71rpOYKfPwigaRF8uiOKDvWo"
       try {
         const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${lat},${lng}&key=${geocodingApiKey}`);

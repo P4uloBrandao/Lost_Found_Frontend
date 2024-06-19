@@ -85,6 +85,8 @@ export default function LostObjectForm  ( isFoundObjectPage=false)  {
   const [title, setTitle] = React.useState('');  //FALTA BD
   const [category, setSelectedCategory] = React.useState('');
   const [location, setObjLoc] = React.useState('');
+  const [objCord, setObjCord] = useState({ lat: null, lng: null });
+
   const [description, setObjDesc] = React.useState('');
   const [price, setObjPrice] = React.useState(0);
   // const [objectImage, setObjPhotos] = React.useState([]); //FALTA BD
@@ -210,7 +212,8 @@ export default function LostObjectForm  ( isFoundObjectPage=false)  {
         formData.append("price", price);
         formData.append("status", status);
         formData.append("lostDate", formattedDate);
-        objectImage.forEach((image) => {
+        formData.append("coordinates", `lat: ${objCord.lat}, lng: ${objCord.lng}`);       
+         objectImage.forEach((image) => {
             formData.append("objectImage[]", image);
         });
 
@@ -247,7 +250,8 @@ export default function LostObjectForm  ( isFoundObjectPage=false)  {
       const lat = event.latLng.lat();
       const lng = event.latLng.lng();
       setObjLoc({ lat: event.latLng.lat(), lng: event.latLng.lng() });
-   
+      setObjCord({ lat, lng });
+
       setCircle({
         center:  { lat, lng },
         radius: 500 // Define o raio do círculo em metros
