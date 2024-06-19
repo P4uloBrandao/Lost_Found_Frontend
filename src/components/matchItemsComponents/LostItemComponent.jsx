@@ -57,7 +57,7 @@ const LostItemComponent = ({ itemid }) => {
           <LostItemPicture images={lostObject.objectImage ? [lostObject.objectImage] : []} nome={lostObject.title} />
         </div>
         <div style={{ flex: '1 1 55%', marginTop: '1%' }}>
-          <LostItemDetails status={lostObject.status} description={lostObject.description} location={lostObject.location} categoy={lostObject.category} lost_date ={lostObject.lostDate} enddate={lostObject.endDate}/>
+          <LostItemDetails status={lostObject.status} description={lostObject.description} location={lostObject.location} categoy={lostObject.category} lost_date ={lostObject.lostDate} enddate={lostObject.endDate} coordinates={lostObject.coordinates}/>
         </div>
       </div>
 
