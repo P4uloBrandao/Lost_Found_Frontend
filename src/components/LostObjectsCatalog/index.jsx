@@ -135,6 +135,7 @@ export default function LostObjectCatalog() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [isCategoriesPopupOpen, setIsCategoriesPopupOpen] = useState(false);
+  const [description, setDescription] = useState(''); // Novo estado para descrição
   const searchInputRef = useRef(null); // UseRef para o campo de busca
 
   useEffect(() => {
@@ -172,22 +173,7 @@ export default function LostObjectCatalog() {
     console.log("Current searchTerm:", searchTerm); // Print searchTerm to the console whenever it changes
   }, [searchTerm]);
 
-  const handleCreateSubmit = async (event) => {
-    event.preventDefault();
-    try {
-        const response = await axios.put(`http://localhost:3000/api/lost-objects/${getLostObjectID(objectName,objects)}`);
-    } catch (error) {
-        console.error(error);
-
-        if (error.response && error.response.data) {
-            setErrorMessage(error.response.data); // Set the error message if present in the error response
-        } else {
-            setErrorMessage("An unexpected error occurred. Please try again.");
-        }
-    }
-    //  window.location.reload();
-  }
-
+  
   const handleDropdownChange = (selectedOptionName) => {
     setObjectName(selectedOptionName)
   };
@@ -199,15 +185,26 @@ export default function LostObjectCatalog() {
     setFilteredObjects(filtered);
   };
 
+  const handleDescriptionSearch = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/api/lost-objects/description', {
+        description: description
+      });
+      setFilteredObjects(response.data); // Atualizar os objetos filtrados com a resposta da API
+      console.log(response.data[0])
+      setIsPopupOpen(false); // Fechar o popup após a pesquisa
+    } catch (error) {
+      console.error("Failed to fetch objects by description:", error);
+      setErrorMessage("An unexpected error occurred. Please try again.");
+    }
+  };
+
   const handleResetFilters = () => {
     setSearchTerm('');
     setFilteredObjects(objects); // Exibir todos os objetos novamente
   };
 
-  function getLostObjectID(name, objects) {
-    const foundItem = objects.find(item => item.name === name);
-    return foundItem ? foundItem._id : null;
-  }
+ 
 
   const togglePopup = () => {
     setIsPopupOpen(!isPopupOpen);
@@ -249,7 +246,7 @@ export default function LostObjectCatalog() {
           <Grid spacing={2} sx={{ justifyContent: 'center' }} item xs={10} md={10} key={index}>
             <Card  
               spacing={2}
-              name={object.name} 
+              name={object.title} 
               description={object.description}
               location={object.location}
               category={object.category}
@@ -267,8 +264,12 @@ export default function LostObjectCatalog() {
         <PopupOverlay>
           <PopupContent>
             <CloseButton onClick={togglePopup}>X</CloseButton>
-            <Textbox placeholder="Enter your description" />
-            <SubmitButton onClick={togglePopup}>Submit</SubmitButton>
+            <Textbox 
+              placeholder="Enter your description"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <SubmitButton onClick={handleDescriptionSearch}>Submit</SubmitButton>
           </PopupContent>
         </PopupOverlay>
       )}
