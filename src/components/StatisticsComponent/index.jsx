@@ -67,8 +67,7 @@ const Estatistics = () => {
       </div>
       <div>
         <SubCategoryTitle>Found Objects by Category</SubCategoryTitle>
-        <BarChart data={stats.lofoundObjectsByCategorystObjectsByCategory} />
-          
+        <BarChart data={stats.foundObjectsByCategory} />          
         
       </div>
       <div>
