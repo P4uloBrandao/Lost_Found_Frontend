@@ -28,8 +28,8 @@ import {
   checkIfEmailExists,
   isValidPhoneNumber,
   validateBirthDate,
-  validateEmail,
-  validateNifNic
+  validateEmail, validateNic,
+  validateNif
 } from "../../utils/inputValidations";
 // TODO remove, this demo shouldn't need to reset the theme.
 const colors = css`
@@ -224,12 +224,12 @@ export default function ProfileSettings({btnLabel, options}) {
         isValid = false;
       }
 
-      if (!validateNifNic(nif) ) {
+      if (!validateNif(nif) ) {
         setNifError(true);
         isValid = false;
       }
 
-      if (!validateNifNic(nic)) {
+      if (!validateNic(nic)) {
         setNicError(true);
         isValid = false;
       }

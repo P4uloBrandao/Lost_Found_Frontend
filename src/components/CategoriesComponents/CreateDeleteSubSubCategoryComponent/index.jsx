@@ -82,6 +82,7 @@ export default function AddCategoryComponent() {
    // Função para buscar subcategorias de uma categoria
     const fetchSubCategories = async (data) => {
       try {
+        console.log('data:', data);
         const response = await axios.get(`http://localhost:3000/api/category/subCat/${data}`);
         setFullDataCategories(response.data);
        
@@ -91,8 +92,9 @@ export default function AddCategoryComponent() {
         console.error('Failed to fetch categories', error);
         // Lide com erros conforme necessário
       }
+      
     }
-  
+   
    // Função para buscar subcategorias do json que vem da api
     function extractSubcategories(categories) {
       return categories.map(category => ({
@@ -102,11 +104,13 @@ export default function AddCategoryComponent() {
     }
     
     function getSubSubCategories(categoryName, subcategoryId) {
-      console.log('subCategories:', fullDataCategories);
+      
+
       for (const item of fullDataCategories) {
         console.log('item:', item);
        
-        if (item.category.name === categoryName && item.subcategory._id === subcategoryId) {
+        if (item.category.name === categoryName && item.subcategory._id === getSubCategoryIdFromName(subcategoryId)) {
+          console.log('item.subSubCategories:', item.subSubCategories);
           setSubSubCategories(item.subSubCategories);
           setLoading(false);
               return item.subSubCategories;
@@ -114,7 +118,7 @@ export default function AddCategoryComponent() {
       }
       setLoading(false);
 
-      return [];
+      return [subSubCategories];
   }
    
 
@@ -198,11 +202,12 @@ const handleDeleteSubSubCategory = async (event) => {
     };
 
     function getCategoryNameFromId(categoryName) {
-      const category = categories.find(category => category._id === categoryName);
+  
+      const category = categories.find(category => category.name === categoryName);
       return category ? category.name : null;
      }
      function getSubCategoryNameFromId(subCategoryName) {
-      const subCategory = subCategories.find(subCategories => subCategories._id === subCategoryName);
+      const subCategory = subCategories.find(subCategories => subCategories.name === subCategoryName);
       return subCategory ? subCategory.name : null;
  
     }
@@ -211,7 +216,7 @@ const handleDeleteSubSubCategory = async (event) => {
       return subCategory ? subCategory._id : null;
     }
     function getSubSubCategoryNameFromId(subCategoryName) {
-      const subCategory = subSubCategories.find(subCategories => subCategories._id === subCategoryName);
+      const subCategory = subSubCategories.find(subCategories => subCategories.name === subCategoryName);
       return subCategory ? subCategory.name : null;
  
     }

@@ -77,7 +77,6 @@ export default function AddCategory  ({ key, removeCategory,index, onCategoryCha
       
     }, [categories]);
   function getCategoryNameFromId(categoryName) {
-
     const category = categories.find(category => category.name === categoryName);
     return category ? category.name : null;
    }
@@ -165,7 +164,7 @@ export default function AddCategory  ({ key, removeCategory,index, onCategoryCha
         return category ? category.name : null;
       }
       function getSubCategoryNameFromId(categoryName) {
-        const category = subCategories.find(category => category._id === categoryName);
+        const category = subCategories.find(category => category.name === categoryName);
         return category ? category.name : null;
        }
        function  handleCategorySelect(event) {

@@ -104,10 +104,9 @@ export default function AddCategoryComponent() {
     
 
     function getCategoryNameFromId(categoryName) {
-      const category = categories.find(category => category._id === categoryName);
+      const category = categories.find(category => category.name === categoryName);
       return category ? category.name : null;
-     
-    
+   
     
     };
 
