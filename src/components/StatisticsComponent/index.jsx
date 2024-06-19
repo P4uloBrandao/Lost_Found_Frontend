@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import BarChart from '../BarChartComponent';
 import Loader from '../LoadingComponent/index';
 import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
+import '../../assets/colors/colors.css'
 
 const Grid = styled.div`
   display: grid;
@@ -23,6 +24,26 @@ const Grid = styled.div`
     grid-gap: 30pt; /* Ajuste o gap conforme necessário */
   }
 `;
+  // Estilo CSS inline para a tabela e suas células
+  const tableStyle = {
+    border: '1px solid var(--primary-green-color)',
+    borderRadius: '20px',
+    width: '100%',
+    textAlign: 'left',
+    borderCollapse: 'collapse',
+    marginTop: '20px'
+};
+
+const thStyle = {
+    backgroundColor: '#3cb6848f',
+    padding: '12px',
+    borderBottom: '1px solid var(--primary-green-color)'
+};
+
+const tdStyle = {
+    padding: '12px',
+    borderBottom: '1px solid #ddd'
+};
 const Estatistics = () => {
   const [mapCenter, setMapCenter] = useState({ lat: 38.72, lng: -9.14 }); // Initial center (Lisbon)
   const libraries = ['places']; // Include places library for location search
@@ -220,6 +241,70 @@ if (loading) {
     </GoogleMap>
     
         </InputBox>
+
+    </Container>
+    <Container>
+    <Title style={{ alignSelf: 'center' }}>List of Lost Objects</Title>
+    <table style={tableStyle}>
+                <thead>
+                    <tr>
+                        <th style={thStyle}>ID</th>
+                        <th style={thStyle}>Title</th>
+                        <th style={thStyle}>Description</th>
+                        <th style={thStyle}>Location</th>
+                        <th style={thStyle}>Price</th>
+                        <th style={thStyle}>Lost Date</th>
+                        <th style={thStyle}>Status</th>
+                        <th style={thStyle}>Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {lostObjects.map(item => (
+                        <tr key={item.object_id}>
+                            <td style={tdStyle}>{item.object_id}</td>
+                            <td style={tdStyle}>{item.title}</td>
+                            <td style={tdStyle}>{item.description}</td>
+                            <td style={tdStyle}>{item.location}</td>
+                            <td style={tdStyle}>{item.price}</td>
+                            <td style={tdStyle}>{item.lostDate}</td>
+                            <td style={tdStyle}>{item.status}</td>
+                            <td style={tdStyle}>{item.category}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+
+    </Container>
+    <Container>
+    <Title style={{ alignSelf: 'center' }}>List of Found Objects</Title>
+    <table style={tableStyle}>
+                <thead>
+                    <tr>
+                        <th style={thStyle}>ID</th>
+                        <th style={thStyle}>Title</th>
+                        <th style={thStyle}>Description</th>
+                        <th style={thStyle}>Location</th>
+                        <th style={thStyle}>Price</th>
+                        <th style={thStyle}>Lost Date</th>
+                        <th style={thStyle}>Status</th>
+                        <th style={thStyle}>Category</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {foundObjects.map(item => (
+                        <tr key={item.object_id}>
+                            <td style={tdStyle}>{item.object_id}</td>
+                            <td style={tdStyle}>{item.title}</td>
+                            <td style={tdStyle}>{item.description}</td>
+                            <td style={tdStyle}>{item.location}</td>
+                            <td style={tdStyle}>{item.price}</td>
+                            <td style={tdStyle}>{item.lostDate}</td>
+                            <td style={tdStyle}>{item.status}</td>
+                            <td style={tdStyle}>{item.category}</td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
 
     </Container>
     </>

@@ -105,6 +105,7 @@ export default function LostObjectForm  ( isFoundObjectPage=false)  {
   const [objectCategories, setObjectCategories] = useState({});
   const today = new Date();
   const formattedDate = today.toISOString().split('T')[0];
+  const [lostDate, setLostDate] = useState([]);
 
 
   // Validations
@@ -212,6 +213,7 @@ export default function LostObjectForm  ( isFoundObjectPage=false)  {
         formData.append("price", price);
         formData.append("status", status);
         formData.append("lostDate", formattedDate);
+        formData.append("registeredDate", formattedDate);
         formData.append("coordinates", `lat: ${objCord.lat}, lng: ${objCord.lng}`);       
          objectImage.forEach((image) => {
             formData.append("objectImage[]", image);
@@ -356,6 +358,8 @@ export default function LostObjectForm  ( isFoundObjectPage=false)  {
 
       {categoryError && <ErrorMessage>Category is required</ErrorMessage>}
        </AddCategoryContainer>
+       <Grid container  >
+        <Grid item xs={12} sm={6}> 
       <Title>Write the price of the lost object.</Title>
       <InputBox>
         <InputF
@@ -372,6 +376,26 @@ export default function LostObjectForm  ( isFoundObjectPage=false)  {
 
  
         </InputBox>
+        </Grid>
+        <Grid item xs={12} sm={6}> 
+        <Title>Write the lost date.</Title>
+
+        <InputBox>
+        <InputF 
+      
+        type={'date'} 
+        placeholder={'Enter lost date'}  
+        id="lostDate"
+        required
+        onChange={(e) => setLostDate(e.target.value)}
+        value={lostDate}
+        errorMessage={'Data inválida'}
+        name="Lost Date"/>
+
+ 
+        </InputBox>
+        </Grid>
+        </Grid>
     </Container>
       <Container>
       <Title>How does it look?</Title>
