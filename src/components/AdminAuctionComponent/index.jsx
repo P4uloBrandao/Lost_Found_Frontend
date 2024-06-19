@@ -61,11 +61,24 @@ export default function AdminAuctionComponent() {
       setCreateErrorMessage("");
     } catch (error) {
       console.error(error);
-      if (error.response && error.response.data) {
-        setCreateErrorMessage(error.response.data.message || "An unexpected error occurred. Please try again.");
+      if (foundObjId==='') {
+        setCreateErrorMessage("Please insert a Found Object Id");
+      } else if (dateStart==='') {
+            setCreateErrorMessage("Please insert a Start Date");
+      } else if (dateEnd==='') {
+            setCreateErrorMessage("Please insert a End Date");
+      } else if (dateStart > dateEnd) {
+            setCreateErrorMessage("The start date must be before the end date");
+      } else if (dateStart < new Date().toISOString().split('T')[0]) {
+            setCreateErrorMessage("The start date must be after the current date");
       } else {
-        setCreateErrorMessage("An unexpected error occurred. Please try again.");
+        setCreateErrorMessage("Please insert a valid Found Object Id.");
       }
+      // if (error.response && error.response.data) {
+      //   setCreateErrorMessage(error.response.data.message || "An unexpected error occurred. Please try again.");
+      // } else {
+      //   setCreateErrorMessage("An unexpected error occurred. Please try again.");
+      // }
       setCreateStatusMessage("");
     }
   };

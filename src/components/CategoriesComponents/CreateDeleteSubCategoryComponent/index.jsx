@@ -25,6 +25,18 @@ const CategoryButton = styled.button`
   opacity: 1;
 `;
 
+const ErrorMessage= styled.p `
+  color: #ad0000;
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  padding-right: 15px;
+  margin-top: 5px;
+  text-align: end;
+  width: 100%;
+  `
+
 export default function AddCategoryComponent() {
   const [categoryToDelete, setCategoryToDelete] = useState('');
   const [mainCategory, setMainCategory] = useState('');
@@ -39,6 +51,19 @@ export default function AddCategoryComponent() {
 
   const [subCategoryToCreate, setSubCategorytoCreate] = useState('');
   const [category, setCategory] = useState('');
+
+    // Validations
+    const [selectCreateCategoryMainError, setSelectCreateCategoryMainError ] = useState(false);
+    const [selectSubCreateCategoryMainError, setSelectSubCreateCategoryMainError ] = useState(false);
+    const [deleteSelectCategoryMainError, setDeleteSelectCategoryMainError ] = useState(false);
+    const [deleteSubCategoryMainError, setDeleteSubCategoryMainError ] = useState(false);
+    const validationSetter= [setSelectCreateCategoryMainError, setSelectSubCreateCategoryMainError, setDeleteSelectCategoryMainError, setDeleteSubCategoryMainError];
+
+    const clearErrors = () => {
+        for (let i = 0; i < validationSetter.length; i++) {
+            validationSetter[i](false);
+        }
+    }
 
   useEffect(() => {
     
@@ -80,12 +105,24 @@ export default function AddCategoryComponent() {
     }));
   }
     const handleDeleteSubCategory = async (event) => {
+       clearErrors();
         event.preventDefault();
+
+
+        if(mainCategoryToDelete === '' || subCategoryToDelete === ''){
+            if (mainCategoryToDelete === '') {
+                setDeleteSelectCategoryMainError(true);
+            } else {
+                setDeleteSubCategoryMainError(true);
+            }
+        }
         try {
             const response = await axios.delete(`http://localhost:3000/api/category/subCat/${getCategoryNameFromId(mainCategoryToDelete)}/${getSubCategoryNameFromId(subCategoryToDelete)}`,);
             
            console.log(subCategoryToDelete)
         } catch (error) {
+            setSelectSubCreateCategoryMainError(true);
+
             console.error( error);
     
             if (error.response && error.response.data) {
@@ -98,6 +135,15 @@ export default function AddCategoryComponent() {
     };
 
     const handleCreateSubCategory = async (event) => {
+        clearErrors();
+
+        if(mainCategory === '' || subCategoryToCreate === ''){
+            if (mainCategory === '') {
+                setSelectCreateCategoryMainError(true);
+            } else {
+                setSelectSubCreateCategoryMainError(true);
+            }
+        }
       event.preventDefault();
       console.log(mainCategory)
       console.log(subCategoryToCreate)
@@ -106,6 +152,12 @@ export default function AddCategoryComponent() {
       
 
       } catch (error) {
+
+          if (mainCategory === '') {
+              setSelectCreateCategoryMainError(true);
+          } else {
+              setSelectSubCreateCategoryMainError(true);
+          }
           console.error( error);
   
           if (error.response && error.response.data) {
@@ -168,6 +220,8 @@ export default function AddCategoryComponent() {
               
             />
           </InputBox>
+            {selectCreateCategoryMainError && <ErrorMessage>Category not found</ErrorMessage>}
+
                 
         </Grid>
             <Grid item xs={12} sm={6}>
@@ -186,6 +240,7 @@ export default function AddCategoryComponent() {
 
               name="Sub-category"/>
                   </InputBox>
+                {selectSubCreateCategoryMainError && <ErrorMessage>SubCategory invalid</ErrorMessage>}
       
         
         </Grid>
@@ -218,6 +273,8 @@ export default function AddCategoryComponent() {
               
             />
           </InputBox>
+
+            {deleteSelectCategoryMainError && <ErrorMessage>Category not found</ErrorMessage>}
                 
         </Grid>
             <Grid item xs={12} sm={6}>
@@ -225,7 +282,7 @@ export default function AddCategoryComponent() {
             <CategoryTitle> Write subcategory label  </CategoryTitle>
               <InputBox>
               <SearchInput 
-              placeholder={mainCategory ? getCategoryNameFromId(mainCategory) : 'Insert category'} 
+              placeholder={mainCategoryToDelete ? getCategoryNameFromId(mainCategoryToDelete) : 'Insert category'}
               id="mainCategory"
               required
               onClick = {(e) => setSubCategoryToDelete(e.target.value)}
@@ -235,6 +292,8 @@ export default function AddCategoryComponent() {
               
             />
                   </InputBox>
+                {deleteSubCategoryMainError && <ErrorMessage>Subcategory invalid</ErrorMessage>}
+
       
         
         </Grid>
