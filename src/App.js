@@ -66,9 +66,8 @@ function App() {
             <Routes>
               <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
               <Route path="/signup" element={<PublicRoute><SignUpPage /></PublicRoute>} />
-               <Route path="/resetPassword/:token" element={<PublicRoute><ForgetPasswordPage /></PublicRoute>} />
-                <Route path="/forgetPasswordRedirect" element={<PublicRoute><ForgetPasswordPageEmail /></PublicRoute>} />
-
+              <Route path="/resetPassword/:token" element={<PublicRoute><ForgetPasswordPage /></PublicRoute>} />
+              <Route path="/forgetPasswordRedirect" element={<PublicRoute><ForgetPasswordPageEmail /></PublicRoute>} />
               <Route path="*" element={
                 <Layout>
                   <Routes>
@@ -86,7 +85,6 @@ function App() {
                 </Layout>
               } />
             </Routes>
-
 
           </Router>
         </GoogleOAuthProvider>

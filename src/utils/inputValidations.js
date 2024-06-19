@@ -10,7 +10,7 @@ export function isValidPhoneNumber(phoneNumber) {
     const regex = /^9\d{8}$/;
 
     // Testa se a string do número de telefone corresponde ao padrão
-    return regex.test(phoneNumber) && validateNifNic(phoneNumber);
+    return regex.test(phoneNumber) && validateNif(phoneNumber);
 }
 
 export function validatePasswordCorrespondence(password, confirmPassword) {
@@ -27,8 +27,13 @@ export function validateBirthDate(birthDate) {
     return birth <= today;
 }
 
-export function validateNifNic(nif) {
+export function validateNif(nif) {
     return nif.length===9 && !haveLetters(nif);
+}
+
+
+export function validateNic(nif) {
+    return nif.length===8 && !haveLetters(nif);
 }
 
 
