@@ -25,6 +25,20 @@ const CategoryButton = styled.button`
   opacity: 1;
 `;
 
+
+const ErrorMessage= styled.p `
+  color: #ad0000;
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  padding-right: 15px;
+  margin-top: 5px;
+  text-align: end;
+  width: 100%;
+  `
+
+
 export default function AddCategoryComponent() {
   const [count, setCount] = useState(0);
 
@@ -38,9 +52,20 @@ export default function AddCategoryComponent() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const [category, setCategory] = useState('');
+
+
+    // Validations
+    const [createCategoryError, setCreateCategoryError ] = useState(false);
+    const [deleteCategoryError, setDeleteCategoryError ] = useState(false);
+    const validationSetter= [setCreateCategoryError, setDeleteCategoryError];
+
+    const clearErrors = () => {
+        for (let i = 0; i < validationSetter.length; i++) {
+            validationSetter[i](false);
+        }
+    }
   
     useEffect(() => {
-      
       const fetchCategories = async () => {
         try {
           const response = await axios.get('http://localhost:3000/api/category');
@@ -58,14 +83,16 @@ export default function AddCategoryComponent() {
         }, [categories]);
    
     const handleCreateSubmit = async (event) => {
+        clearErrors();
+
+
         event.preventDefault();
         try {
-            const response = await axios.post(`http://localhost:3000/api/category/`,{"name": categoryToCreate});
+            const response = await axios.post(process.env.REACT_APP_API_URL+`/api/category/`,{"name": categoryToCreate});
            
             console.log(category)
         } catch (error) {
-            console.error( error);
-    
+            setCreateCategoryError(true);
             if (error.response && error.response.data) {
                 setErrorMessage(error.response.data); // Set the error message if present in the error response
             } else {
@@ -75,13 +102,17 @@ export default function AddCategoryComponent() {
         // window.location.reload();
     }
     const handleDeleteSubmit = async (event) => {
+
+        clearErrors();
         event.preventDefault();
+
         try {
             const response = await axios.delete(`http://localhost:3000/api/category/${categoryToDelete}`,);
             
             console.log(categoryToDelete)
         } catch (error) {
-            console.error( error);
+            setDeleteCategoryError(true);
+            console.log(deleteCategoryError)
     
             if (error.response && error.response.data) {
                 setErrorMessage(error.response.data); // Set the error message if present in the error response
@@ -89,19 +120,11 @@ export default function AddCategoryComponent() {
                 setErrorMessage("An unexpected error occurred. Please try again.");
             }
         }
-         window.location.reload();
     };
-
-
   
     const handleDropdownChange = (selectedOptionName) => {
       setCategoryToDelete(getCategoryNameFromId(selectedOptionName))
     };
-
-   
-    
-   
-    
 
     function getCategoryNameFromId(categoryName) {
       const category = categories.find(category => category.name === categoryName);
@@ -114,7 +137,6 @@ export default function AddCategoryComponent() {
       return <div>Carregando...</div>;
     }
 
-    
   
     return (<>
         <Container>
@@ -131,7 +153,7 @@ export default function AddCategoryComponent() {
               required
               onChange={(e) => setCategoryToCreate(e.target.value)}
               value={categoryToCreate}
-              
+              errorValidation={createCategoryError}
               errorMessage={'Category already exist'}
               name="category"/>
       
@@ -156,10 +178,12 @@ export default function AddCategoryComponent() {
                 value={categoryToDelete}
                 onChange={handleDropdownChange}
                 name="Categories"
-                options={categories}
+                errorMessage={'Category not found'}
                 
               />
-            </InputBox> 
+            </InputBox>
+
+                {deleteCategoryError && <ErrorMessage>Category not found</ErrorMessage>}
       
         <InputSubmit type="submit" onClick={handleDeleteSubmit}>
             Delete

@@ -50,7 +50,24 @@ export default function AddCategoryComponent() {
 
   const [subCategory, setSubCategory] = useState('');
   const [category, setCategory] = useState('');
-  useEffect(() => {
+
+
+
+    // Validations
+    const [selectCreateCategoryMainError, setSelectCreateCategoryMainError ] = useState(false);
+    const [selectSubCreateCategoryMainError, setSelectSubCreateCategoryMainError ] = useState(false);
+    const [deleteSelectCategoryMainError, setDeleteSelectCategoryMainError ] = useState(false);
+    const [deleteSubCategoryMainError, setDeleteSubCategoryMainError ] = useState(false);
+    const validationSetter= [setSelectCreateCategoryMainError, setSelectSubCreateCategoryMainError, setDeleteSelectCategoryMainError, setDeleteSubCategoryMainError];
+
+
+    const clearErrors = () => {
+        for (let i = 0; i < validationSetter.length; i++) {
+            validationSetter[i](false);
+        }
+    }
+
+    useEffect(() => {
     if (subMainCategory !== null) {
       if (subSubCategories.length === 0) {
   
@@ -290,14 +307,6 @@ const handleDeleteSubSubCategory = async (event) => {
         </InputSubmit></Grid>
             </Grid>
         </Container>
-
-
-
-
-
-
-
-
 
         <Container>
         <Grid container spacing={2}>

@@ -75,12 +75,12 @@ export default function AdminUserAccountComponent() {
         event.preventDefault();
         try {
             const response = await axios.put(`http://localhost:3000/api/users/deactivate/${userId}`);
-            console.log(response.data); // Log the response from the server
+            console.log(response); // Log the response from the server
             setStatusMessage("User account deactivated successfully.");
             setErrorMessage("");
         } catch (error) {
             if (error.response && error.response.data) {
-                setErrorMessage(error.response.data.error);
+                setErrorMessage("User invalid");
                 setStatusMessage("");
             } else {
                 setErrorMessage('An unexpected error occurred. Please try again.');
