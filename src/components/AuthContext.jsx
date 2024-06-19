@@ -63,6 +63,7 @@ export function AuthProvider(props) {
     userRole,
     setUserRole,
     login,
+    policeId,
   };
   useEffect(() => {
     const storedToken = localStorage.getItem("token");

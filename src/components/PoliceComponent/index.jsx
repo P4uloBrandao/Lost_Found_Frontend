@@ -18,6 +18,7 @@ import SearchInput from "../SearchInputFieldComponent";
 import AddressIcon from '@mui/icons-material/HomeRounded';
 import { InputSubmit, Container,InputBox ,Title,Form, Wrapper } from '../../assets/StylePopularComponent/style';
 import Loader from '../LoadingComponent/index';
+import { useAuth } from '../AuthContext';
 
 
 
@@ -70,6 +71,7 @@ export default function PoliceComponent() {
 
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(false);
+    const { setAuthUser, authUser, isLoggedIn, setIsLoggedIn, logout, userRole } = useAuth();
 
     const [passwordError, setPasswordError ] = useState(null);
     const [checkPasswordError, setCheckPasswordError ] = useState(null);
@@ -129,7 +131,7 @@ function  getStationID(name,stations){
               "email":email,
               
               
-              "station" : station,
+              "station" : getStationID(station,stations),
               "password": password,
               "police_id" : policeId,
               "role": "Police",

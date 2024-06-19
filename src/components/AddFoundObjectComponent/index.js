@@ -123,7 +123,7 @@ export default function AddFoundObject  ()  {
   const [subSubCategories, setSubSubCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [fullDataCategories, setFullDataCategories] = useState([]);
-
+const [policeId, setPoliceId] = useState('');
 
   const [objectCreated, setObjectCreated] = useState(false);
   const [objectCategories, setObjectCategories] = useState({});
@@ -233,7 +233,19 @@ setLoading(false)
  }
 //CREATE FOUND OBJECT
   const handleSubmit = async (event) => {
-    
+    const getPoliceUser = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/police/police-officers/users/${authUser._id}`);
+        setPoliceId(response.data._id);
+        console.log(response.data._id)
+       
+        setLoading(false); // Definir o estado de carregamento como falso quando o fetch estiver concluído
+      } catch (error) {
+        console.error('Failed to fetch categories', error);
+        // Lide com erros conforme necessário
+      }
+    }
+    getPoliceUser()
     event.preventDefault();
     try {
 
@@ -257,7 +269,7 @@ setLoading(false)
         formData.append("location", location);
         formData.append("price", price);
         formData.append("status", status);
-        formData.append("policeOfficerThatReceived", "6650cb6c82b8e44086723f1e");
+        formData.append("policeOfficerThatReceived", policeId);
         formData.append("subCategory", JSON.stringify(items));
         formData.append("coordinates", `lat: ${objCord.lat}, lng: ${objCord.lng}`);
         const response = await axios.post("http://localhost:3000/api/found-objects",
