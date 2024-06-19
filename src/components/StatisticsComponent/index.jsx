@@ -30,8 +30,9 @@ const Estatistics = () => {
   const [location, setObjLoc] = React.useState('');
   const [foundObjects, setFoundObjects] = useState([]);
   const [lostObjects, setLostObjects] = useState([]);
-  const lostSelectedLocations = [];
-  const foundSelectedLocations = [];
+  const [filteredFoundObjects, setFilteredFoundObjects] = useState([]);
+  const [filteredLostObjects, setFilteredLostObjects] = useState([]);
+
   const [stats, setStats] = useState({
     usersByRole: [],
     policeOfficersByStation: [],
@@ -48,63 +49,55 @@ const Estatistics = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchFoundObjects = async () => {
       try {
-       
-  
-        // Buscar os dados dos objetos perdidos
-        const objectsResponse = await axios.get(`http://localhost:3000/api/found-objects`);
-        let objectsData1 = objectsResponse.data;
-
-        
-       
-        // Atualizar o estado dos objetos com os dados buscados
-        setFoundObjects(objectsData1);
-  
-        setLoading(false);
-        const foundSelectedLocations = objectsData1
-        .filter(objeto => objeto.status === "Lost")
-        .map(objeto => ({
-          lat: objeto.coordinates.lat,
-          lng: objeto.coordinates.lng,
-          location: objeto.location,
-          title: objeto.title
-        }));
-      } catch (error) {
-        console.error('Failed to fetch data:', error);
-        // Lidar com erros conforme necessário
-      }
-      try {
-       
-  
-        // Buscar os dados dos objetos perdidos
-        const objectsResponse = await axios.get(`http://localhost:3000/api/lost-objects`);
+        // Buscar os dados dos objetos encontrados
+        const objectsResponse = await axios.get('http://localhost:3000/api/found-objects');
         let objectsData = objectsResponse.data;
-
-       
-       
+  
         // Atualizar o estado dos objetos com os dados buscados
-        setLostObjects(objectsData);
+        setFoundObjects(objectsData);
+  
+        // Atualizar os pontos filtrados no mapa para objetos encontrados
+        let temp = getPreSelectedLocations(objectsData);
+        console.log(temp);
+        setFilteredFoundObjects(temp);
   
         setLoading(false);
-         lostSelectedLocations = objectsData
-        .filter(objeto => objeto.status === "Lost")
-        .map(objeto => ({
-          lat: objeto.coordinates.lat,
-          lng: objeto.coordinates.lng,
-          location: objeto.location,
-          title: objeto.title
-        }));
       } catch (error) {
-        console.error('Failed to fetch data:', error);
+        console.error('Failed to fetch found objects data:', error);
         // Lidar com erros conforme necessário
       }
     };
   
-    fetchData();
-  }, []);
+    fetchFoundObjects();
+  }, []); // Dependências vazias para executar apenas uma vez ao montar o componente
   
-
+  useEffect(() => {
+    const fetchLostObjects = async () => {
+      try {
+        // Buscar os dados dos objetos perdidos
+        const objectsResponse = await axios.get('http://localhost:3000/api/lost-objects');
+        let objectsData = objectsResponse.data;
+  
+        // Atualizar o estado dos objetos com os dados buscados
+        setLostObjects(objectsData);
+  
+        // Atualizar os pontos filtrados no mapa para objetos perdidos
+        let temp = getPreSelectedLocations(objectsData);
+        console.log(temp);
+        setFilteredLostObjects(temp);
+  
+        setLoading(false);
+      } catch (error) {
+        console.error('Failed to fetch lost objects data:', error);
+        // Lidar com erros conforme necessário
+      }
+    };
+  
+    fetchLostObjects();
+  }, []); // Dependências vazias para executar apenas uma vez ao montar o componente
+  
 const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: 'AIzaSyDPUTFHLcj71rpOYKfPwigaRF8uiOKDvWo',
     libraries,
@@ -127,6 +120,24 @@ const options = [
     setLoading(false);
     fetchData();
   }, []);
+  function getPreSelectedLocations(data) {
+    return data
+        .filter(item => item.coordinates) // Filtra itens sem coordenadas
+        .map(item => {
+            const coordinates = item.coordinates.split(', ').reduce((acc, coord) => {
+                const [key, value] = coord.split(': ');
+                acc[key] = parseFloat(value);
+                return acc;
+            }, {});
+
+            return {
+                lat: coordinates.lat,
+                lng: coordinates.lng,
+                address: item.location,
+                name: item.title
+            };
+        });
+}
 
   if (loadError) return <div className="contain">Error loading maps</div>;
   if (!isLoaded) return <div className="contain"><Loader/></div>;
@@ -179,7 +190,7 @@ if (loading) {
       zoom={10}
       center={mapCenter}
     >
-      {foundSelectedLocations.map((location, index) => (
+      {filteredFoundObjects.map((location, index) => (
         <Marker
           key={index}
           position={{ lat: location.lat, lng: location.lng }}
@@ -199,7 +210,7 @@ if (loading) {
       zoom={10}
       center={mapCenter}
     >
-      {lostSelectedLocations.map((location, index) => (
+      {filteredLostObjects.map((location, index) => (
         <Marker
           key={index}
           position={{ lat: location.lat, lng: location.lng }}
