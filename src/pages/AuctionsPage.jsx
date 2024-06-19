@@ -16,6 +16,15 @@ const PrimaryContainer = styled.div`
   margin: 0.1em 7em;
 `;
 
+
+const ChangeContainer = styled.div`
+  opacity: 1;
+  background-color: var(--white-color);  
+  margin-top: 2em ;
+  padding: 2em ;
+`;
+
+
 export default function AuctionsPage() {
   useEffect(() => {
     // Retornar a função de limpeza no desmonte do componente
@@ -45,9 +54,10 @@ export default function AuctionsPage() {
     <PrimaryContainer container  spacing={0}>
       <WelcomeHeaderComponent name={user} description={'Creating auctions is our way to save the planet, bid and buy lost items! '}/>
     </PrimaryContainer>
-    <Grid className="logincontainer">
-      <AuctionsComponent/>
-    </Grid>
+    <ChangeContainer>
+        <AuctionsComponent/>
+    </ChangeContainer>
+
     </>
   );
 }

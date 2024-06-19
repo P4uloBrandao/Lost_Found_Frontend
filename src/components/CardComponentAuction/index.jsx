@@ -9,15 +9,13 @@ import './index.css';
 
 
 
-const CardLostObjecs = ({ matchButton, catId,name, description, location, date, category, id,photo, status,highbid }) => {
+const CardLostObjecs = ({ matchButton, catId,name, description, location, date, category, id,photo, status,highbid,onCardClick }) => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState(null);
   const handleViewMatches = () => {
-    // Assuming you want to pass id and name as parameters
-   // navigate(`/matchObjects?param1=${catId}&param2=${name}`);
+    onCardClick(id);
   };
 
- 
 
   return (
     <Grid id="1" style={{ borderRadius:'1.25rem',boxShadow: '4px 4px 27.1px 0px rgba(0, 0, 0, 0.25)'}} container spacing={2}>

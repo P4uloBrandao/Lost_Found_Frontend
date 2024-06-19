@@ -72,7 +72,7 @@ function App() {
               
                 <Route path="/addLostObject" element={<PrivateRoute><RegisterLostObjectPage /></PrivateRoute>} />
                 <Route path="/myLostObjects" element={<PrivateRoute><LostObjectCatalogPage /></PrivateRoute>} />
-                <Route path="/selectedAuction" element={<PrivateRoute><SelectedAuctionPage /></PrivateRoute>} />
+                
                 <Route path="/auctions" element={<PublicRoute><AuctionsPage /></PublicRoute>} />
 
                 <Route path="/" element={<PublicRoute><Home /></PublicRoute>} />

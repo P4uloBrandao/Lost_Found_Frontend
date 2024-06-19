@@ -88,10 +88,15 @@ const ActionButton = styled.button `
 `
 
 
-export default function AuctionsCardComponent({itemTitle, daysLeft, price, bidsNumber, image}) {
+export default function AuctionsCardComponent({itemTitle, daysLeft, id, price, bidsNumber, image, onCardClick}) {
    
     useEffect(() => {
     }, []);
+
+    const handleViewMatches = () => {
+      onCardClick(id);
+    };
+  
 
     return (
       <>
@@ -108,7 +113,7 @@ export default function AuctionsCardComponent({itemTitle, daysLeft, price, bidsN
                         <MinorText>{bidsNumber} bids</MinorText>
                     </TextContainer>
 
-                      <ActionButton>View Auction</ActionButton>
+                    <p className='descriptionBtn' onClick={handleViewMatches}>View more{'>'}</p>
                   </PriceActionContainer>
               </InfoContainer>
           </CardContainer>
