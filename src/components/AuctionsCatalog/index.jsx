@@ -80,6 +80,13 @@ export default function AuctionsCatalog() {
         // Buscar os dados dos leilões
         const auctionsResponse = await axios.get(`http://localhost:3000/api/auction/user/${userData}`);
         let auctionsData = auctionsResponse.data;
+        
+        // Verificar se a mensagem de "Not participated in any auctions" foi recebida
+        if (auctionsData.message === 'Not participated in any auctions') {
+          setErrorMessage(auctionsData.message);
+          setIsLoading(false);
+          return;
+        }
 
         // Atualizar o estado dos leilões com os dados buscados
         setAuctions(auctionsData);
@@ -120,7 +127,8 @@ export default function AuctionsCatalog() {
   
       } catch (error) {
         console.error('Failed to fetch data:', error);
-        // Lidar com erros conforme necessário
+        setErrorMessage('We had an issue on our side. Please try again later');
+        setIsLoading(false);
       }
     };
   
@@ -163,6 +171,10 @@ export default function AuctionsCatalog() {
 
   if (isLoading) {
     return <div>Carregando...</div>;
+  }
+
+  if (errorMessage) {
+    return <div>{errorMessage}</div>;
   }
 
   return (
