@@ -280,6 +280,12 @@ function Navbar() {
   if (loading) {
     return <div>Carregando...</div>;
   }
+  const truncateEmail = (email) => {
+    if (email.length > 16) {
+      return email.slice(0, 16) + '...'; // Trunca o email após 13 caracteres e adiciona '...'
+    }
+    return email;
+  };
 
   const options = [
     { label: 'Home', path: '/' },
@@ -350,8 +356,10 @@ function Navbar() {
       {userData && (
         <>
           <p className='userNameText'>{userData.first_name} {userData.last_name}</p>
-          <p className='userEmailText'>{userData.email}</p>
-        </>
+          <p className='userEmailText'>
+        {truncateEmail(userData.email)}
+        {userData.email.length > 16 && <span className="fadeOut"></span>}
+      </p>        </>
       )}
     </div>
         </div>

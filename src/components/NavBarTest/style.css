@@ -209,6 +209,18 @@ nav.mask-pattern {
         line-height: normal;
         margin-top: 0pt;
         margin-bottom: 0pt;
+        display: inline-block;
+        max-width: 100%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        position: relative;
+    }
+    
+    .fadeOut {
+        position: absolute;
+        right: 0;
+        background: linear-gradient(90deg, transparent, white);
     }
     
     .userEmailText {
