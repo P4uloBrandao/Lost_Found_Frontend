@@ -47,19 +47,18 @@ const CardLostObjecs = ({ matchButton,catId,name, description, location, date, c
        </div>
         
       </Grid>
-      <Grid style={{padding: '0rem 2rem ', width: 'auto',alignSelf: 'center'}} container spacing={2}>
-        <Grid container spacing={3} sx={{justifyContent: 'center', flexGrow: 1 }}>
+      <Grid style={{padding: '0rem 2rem ', width: 'auto'}} container spacing={2}>
+        <Grid container spacing={3} sx={{justifyContent: 'center' ,padding: '2rem '}}>
           <Grid style={{paddingLeft: '1rem',textAlign: '-webkit-left', paddingTop: '1em',    height:' 5em'}} xs={12} xsOffset={3}  mdOffset={0}>
           <h2>{name}</h2>
           </Grid>
-          <Grid  style={{ textAlignLast: 'left',paddingLeft: '1rem',    fontWeight: '300'}}xs={12} md={6} mdOffset="auto">
-            
+          <Grid  style={{ textAlign: 'left',paddingLeft: '1rem',    fontWeight: '300'}}xs={12} md={6} mdOffset="auto">
             <p>Lost on: {date}</p>
             <p>Lost at: {location}</p>
-            <p className='mapsBtn' onClick={handleViewInMaps}>View in Maps</p>
-          
+            
+            <p  className='removeBtn' >  <span onClick={handleRemoveLostObject}style={{ textDecoration: 'underline' }}>Remove</span> lost object</p>
           </Grid>
-          <Grid xs={12} style={{textAlignLast: 'left',paddingLeft: '2rem',    fontWeight: '300'}} xsOffset={4} md={6} mdOffset={0}>
+          <Grid xs={12} style={{textAlign: 'left',paddingLeft: '5rem',    fontWeight: '300'}} xsOffset={4} md={6} mdOffset={0}>
           <p style={{ fontWeight: '400' }}>Status:</p>
            <div>
             <p>{status}</p>
@@ -71,7 +70,6 @@ const CardLostObjecs = ({ matchButton,catId,name, description, location, date, c
         </Grid>            
 
       </Grid>
-        <p  className='removeBtn' >  <span onClick={handleRemoveLostObject}style={{ textDecoration: 'underline' }}>Remove</span> lost object</p>
     </Grid>
    
   );
