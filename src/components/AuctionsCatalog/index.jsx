@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import Grid from '@mui/material/Grid';
-
+import AuctionInfoComponent from '../SelectedAuctionComponent/ObjectDataComponent/AuctionDataContainer.jsx'
 import Card from "../CardComponentAuction/index";
 import SearchInput from "../SearchInputFieldComponent/index";
 import axios from "axios";
@@ -68,6 +68,7 @@ export default function AuctionsCatalog() {
   const searchInputRef = useRef(null); // UseRef para o campo de busca
   const [foundObjectsList, setFoundObjectsList] = useState([]);
   const [foundObjectsListF, setFoundObjectsListF] = useState([]);
+  const [openCard, setOpenCard]= useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -135,7 +136,10 @@ export default function AuctionsCatalog() {
     fetchData();
   }, []);
   
-  
+  const handleCardClick = (id) => {
+    setOpenCard(id);
+  };
+
   useEffect(() => {
     console.log("Current auctionName:", auctionName); // Print auctionName to the console whenever it changes
   }, [auctionName]);
@@ -200,6 +204,7 @@ export default function AuctionsCatalog() {
         </ButtonContainer>
       </div>
       <Grid sx={{ textAlign: '-webkit-center', pt: 7, width: '100%' }} container spacing={5}>
+       {openCard ? <AuctionInfoComponent itemid={openCard}/> : null}
         {filteredAuctions.map((auction, index) => (
           <Grid spacing={2} sx={{ justifyContent: 'center' }} item xs={10} md={10} key={index}>
             <Card  
@@ -215,6 +220,7 @@ export default function AuctionsCatalog() {
               status={auction.status}
               matchButton={true}
               highbid={auction.winnerBid + " EUR"}
+              onCardClick={handleCardClick}
             />
           </Grid>
         ))}  

@@ -1,12 +1,13 @@
-import styled, {css} from 'styled-components';
-import React, { useEffect } from 'react';
+import styled, { css } from 'styled-components';
+import React, { useEffect, useState } from 'react';
 import TuneIcon from '@mui/icons-material/Tune';
 import { AuthContext } from "../AuthContext";
 import './style.css';
+import Grid from '@mui/material/Grid';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-
+import AuctionInfoComponent from '../SelectedAuctionComponent/ObjectDataComponent/AuctionDataContainer.jsx'
 import { createTheme } from '@mui/material/styles';
 import "../../assets/colors/colors.css"
 import AuctionsCardComponent from "../AuctionsCardComponent";
@@ -108,59 +109,82 @@ const FilterCheckBoxes = styled.div`
 `
 
 function getDaysLeft(startDate, endDate) {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const diff = end.getTime() - start.getTime();
-    return Math.floor(diff / (1000 * 60 * 60 * 24));
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  const diff = end.getTime() - start.getTime();
+  return Math.floor(diff / (1000 * 60 * 60 * 24));
 }
 
 
 export default function AuctionsComponent() {
 
-    const [showFilters, setShowFilters] = React.useState(false);
-    const [auctions, setAuctions] = React.useState([]);
-    useEffect(() => {
-        axios.get("http://localhost:3000/api/auction").then((response) => {
-            setAuctions(response.data);
-            console.log(response.data)
-        }).catch((error) => {
-            console.log(error);
-        });
-    }, []);
+  const [showFilters, setShowFilters] = React.useState(false);
+  const [auctions, setAuctions] = React.useState([]);
+  const [openCard, setOpenCard] = useState(null);
+  useEffect(() => {
+    axios.get("http://localhost:3000/api/auction").then((response) => {
+      setAuctions(response.data);
+      console.log(response.data)
+    }).catch((error) => {
+      console.log(error);
+    });
+  }, []);
 
-    const handleShowFilters = () => {
-        setShowFilters(!showFilters);
-    }
+  const handleShowFilters = () => {
+    setShowFilters(!showFilters);
+  }
 
-    return (
+
+  const handleCardClick = (id) => {
+    setOpenCard(id);
+  };
+
+  return (
       <>
-          <Container>
-                <FiltersContainer>
-                    <FilterText>Current</FilterText>
-                    <FilterText>Future</FilterText>
-                    <FilterText>Past</FilterText>
-                    <FilterInputContainer>
-                        <FilterText onClick={handleShowFilters}>Filter <TuneIcon></TuneIcon></FilterText>
-                        {showFilters && <FilterOptions>
-                                            <FormGroup>
-                                                <FormControlLabel control={<Checkbox/>} label="Label" />
-                                                <FormControlLabel control={<Checkbox/>} label="Label" />
-                                                <FormControlLabel control={<Checkbox/>} label="Label" />
-                                            </FormGroup>
-                                        </FilterOptions>}
 
-                    </FilterInputContainer>
-                    <SearchInput>
-                        <input type={"text"} placeholder={"Search"} className={"searchInput"}/>
-                        <SearchIcon className={"searchIcon"}/>
-                    </SearchInput>
-                </FiltersContainer>
-              <CardsContainer>
-                  {
-                      auctions.map(auction => <AuctionsCardComponent image={auction.objectImage[0]} itemTitle={auction.foundObjectTitle} daysLeft={getDaysLeft(auction.startDate, auction.endDate)} bidsNumber={auction.bids.length} price={auction.highestBid}></AuctionsCardComponent>)
-                  }
-              </CardsContainer>
-          </Container>
-      </>
-    );
+        <FiltersContainer>
+          <FilterText>Current</FilterText>
+          <FilterText>Future</FilterText>
+          <FilterText>Past</FilterText>
+          <FilterInputContainer>
+            <FilterText onClick={handleShowFilters}>Filter <TuneIcon></TuneIcon></FilterText>
+            {showFilters && <FilterOptions>
+              <FormGroup>
+                <FormControlLabel control={<Checkbox />} label="Label" />
+                <FormControlLabel control={<Checkbox />} label="Label" />
+                <FormControlLabel control={<Checkbox />} label="Label" />
+              </FormGroup>
+            </FilterOptions>}
+
+          </FilterInputContainer>
+          <SearchInput>
+            <input type={"text"} placeholder={"Search"} className={"searchInput"} />
+            <SearchIcon className={"searchIcon"} />
+          </SearchInput>
+        </FiltersContainer>
+
+
+        <div className="lost-item-container" style={{ display: 'flex', flexDirection: 'column', width: '100%', }}>
+          {openCard ? <AuctionInfoComponent itemid={openCard} /> : null}
+          <div>
+            {auctions.map((auction, index) => (
+              auction._id !== openCard && (
+                <Grid spacing={2} sx={{
+                  justifyContent: 'center'
+                }} item xs={10} md={10} key={index}>
+                  <AuctionsCardComponent image={auction.objectImage[0]} itemTitle={auction.foundObjectTitle}
+                    id={auction._id}
+                    daysLeft={getDaysLeft(auction.startDate, auction.endDate)}
+                    bidsNumber={auction.bids.length}
+                    price={auction.highestBid}
+                    onCardClick={handleCardClick}>
+                  </AuctionsCardComponent>
+                </Grid>
+              )
+            ))}
+          </div>
+
+        </div>
+</>
+      );
 }
