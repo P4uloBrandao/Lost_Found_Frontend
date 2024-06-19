@@ -28,8 +28,8 @@ import {
     checkIfEmailExists,
     isValidPhoneNumber,
     validateBirthDate,
-    validateEmail,
-    validateNifNic
+    validateEmail, validateNic,
+    validateNif
 } from "../../utils/inputValidations";
 
 const Card = styled.div `
@@ -389,12 +389,12 @@ const redirectUri = 'YOUR_REDIRECT_URI';
           isValid = false;
       }
 
-      if (!validateNifNic(nif) ) {
+      if (!validateNif(nif) ) {
           setNifError(true);
           isValid = false;
       }
 
-      if (!validateNifNic(nic)) {
+      if (!validateNic(nic)) {
           setNicError(true);
           isValid = false;
       }
