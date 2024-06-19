@@ -24,7 +24,13 @@ import axios from "axios";
 import {PasswordStrength} from '../controllers/index'
 import InputF  from '../inputFieldComponent/InputField';
 import "../../assets/colors/colors.css"
-import {isValidPhoneNumber, validateBirthDate, validateEmail, validateNifNic} from "../../utils/inputValidations";
+import {
+  checkIfEmailExists,
+  isValidPhoneNumber,
+  validateBirthDate,
+  validateEmail,
+  validateNifNic
+} from "../../utils/inputValidations";
 // TODO remove, this demo shouldn't need to reset the theme.
 const colors = css`
   --primary-color: #c6c3c3;
@@ -111,6 +117,10 @@ const defaultTheme = createTheme();
 
 
 export default function ProfileSettings({btnLabel, options}) {
+  // Definir email inicial
+  const [initialEmail, setInitialEmail] = React.useState('');
+
+
   const [profileImage, setProfileImage] = React.useState(null);
 
     const [first_name, setFirstName] = React.useState('');
@@ -156,6 +166,7 @@ export default function ProfileSettings({btnLabel, options}) {
           setFirstName(userProfileData.first_name);
           setLastName(userProfileData.last_name);
           setEmail(userProfileData.email);
+          setInitialEmail(userProfileData.email);
           setAdddress(userProfileData.adddress);
           setBirth(userProfileData.birth);
           setGender(userProfileData.gender);
@@ -180,8 +191,10 @@ export default function ProfileSettings({btnLabel, options}) {
     }
   }
 
-    const validateFields = () => {
+    const validateFields = async () => {
       let isValid= true;
+
+      const emailExists = await checkIfEmailExists(email);
 
       if (first_name === "") {
         setFirstNameError(true);
@@ -196,7 +209,7 @@ export default function ProfileSettings({btnLabel, options}) {
         isValid = false;
       }
 
-      if (!validateEmail(email)) {
+      if (email==='' || !validateEmail(email) || (emailExists['exist'] && email !== initialEmail)) {
         setEmailError(true);
         isValid = false;
       }
@@ -227,11 +240,9 @@ export default function ProfileSettings({btnLabel, options}) {
     
         event.preventDefault();
 
-
-
       clearErrors();
-
-        if (!validateFields()) {
+        const verifyFields = await validateFields();
+        if (!verifyFields) {
             return;
         }
        
@@ -249,6 +260,7 @@ export default function ProfileSettings({btnLabel, options}) {
           data1.append('token',token);
           data1.append('profileImage',profileImage);
           const response = await axios.put("http://localhost:3000/api/users/update", data1);
+          setInitialEmail(email);
 
         } catch (error) {
             console.error("Update failed:", error);

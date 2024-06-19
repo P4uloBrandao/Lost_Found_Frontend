@@ -15,6 +15,7 @@ import Statistics from '../components/StatisticsComponent/index'
 import AdminAuctionComponent from '../components/AdminAuctionComponent/index';
 import AdminUserAccountComponent from '../components/AdminUserAccountComponent/index.jsx';
 import WelcomeHeaderComponent from '../components/headerWithNameComponent/welcomeHeader.jsx';
+import DeleteFoundObjComponent from '../components/DeleteFoundObjComponent/index'
 
 const token = localStorage.getItem("token");
 
@@ -63,7 +64,12 @@ export default function AdminPage() {
     switch (selectedOption) {
       
       case 'Found Object':
-        return < AddFoundObjectComponent />;
+        return (
+          <>
+            < AddFoundObjectComponent />
+            < DeleteFoundObjComponent />
+          </>
+        );
       case 'Categories':
         return <CategoriesComponents/>
       case 'Users':

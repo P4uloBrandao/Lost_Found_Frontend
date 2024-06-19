@@ -41,6 +41,18 @@ const RadioBtn = styled.span`
   display:flex; 
 `;
 
+const ErrorMessage= styled.p `
+  color: #ad0000;
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  padding-right: 15px;
+  margin-top: 5px;
+  text-align: end;
+  width: 100%;
+  `
+
     
 
 const CategoryButton = styled.button`
@@ -84,12 +96,12 @@ const AddCategoryContainer = styled.div`
  width: 100%;
 `;
 export default function AddFoundObject  ()  {
-  const [objectImage, setObjImage] = React.useState("");
+  const [objectImage, setObjImage] = React.useState([]);
   
   //VARIVEIS DE TESTE
   const [userWhoFound, setUserWhoFound] = React.useState(null);
   const [policeOfficerThatReceived, setPolice] = React.useState('');
-  //VARIVEIS DE TESTE
+
   const [title, setTitle] = React.useState('');  //FALTA BD
   const [category, setSelectedCategory] = React.useState(null);
   const [location, setObjLoc] = React.useState('');
@@ -108,9 +120,10 @@ export default function AddFoundObject  ()  {
   const [selectedValue,setSelectedValue ] = useState("yes");
   const [subCategories, setSubCategories] = React.useState('');
   const [subCategory, setSelectedSubCategory] = React.useState('');
+  const [subSubCategories, setSubSubCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [fullDataCategories, setFullDataCategories] = useState([]);
-  const [subSubCategories, setSubSubCategories] = useState([]);
+
 
   const [objectCreated, setObjectCreated] = useState(false);
   const [objectCategories, setObjectCategories] = useState({});
@@ -126,6 +139,61 @@ export default function AddFoundObject  ()  {
   const [popupMessage, setPopupMessage] = useState('');
 
   let counter = 0; // Mantido no escopo do componente pai
+
+
+
+  // Validations
+  const [titleError, setTitleError ] = useState(false);
+  const [categoryError, setCategoryError ] = useState(false);
+  const [priceError, setPriceError ] = useState(false);
+  const [locationError, setLocationError ] = useState(false);
+  const [descriptionError, setDescriptionError ] = useState(false);
+  const [imageError, setImageError ] = useState(false);
+  const validationSetter= [setTitleError, setCategoryError, setPriceError, setLocationError, setDescriptionError, setImageError];
+
+
+  const validateForm = () => {
+    let isValid = true;
+    if (title === '') {
+      setTitleError(true);
+        isValid = false;
+    }
+
+    if (category === null) {
+        setCategoryError(true);
+        isValid = false;
+    }
+
+    if (price === 0) {
+        setPriceError(true);
+        isValid = false;
+    }
+
+    if (location === '') {
+        setLocationError(true);
+        isValid = false;
+    }
+
+    if (description === '') {
+        setDescriptionError(true);
+        isValid = false;
+    }
+
+    if (objectImage.length === 0) {
+        setImageError(true);
+        isValid = false;
+    }
+
+    return isValid;
+  }
+
+
+
+  const clearErrors = () => {
+    for (let i = 0; i < validationSetter.length; i++) {
+      validationSetter[i](false);
+    }
+  }
 
   const addComponent = () => {
     setComponents([...components, <AddCategory key={components.length} />]);
@@ -168,6 +236,12 @@ setLoading(false)
     event.preventDefault();
     try {
 
+      clearErrors();
+
+      if (!validateForm()) {
+        return;
+      }
+
       const formData = new FormData();
 
       objectImage.forEach((image) => {
@@ -183,8 +257,7 @@ setLoading(false)
         formData.append("price", price);
         formData.append("status", status);
         formData.append("policeOfficerThatReceived", "6650cb6c82b8e44086723f1e");
-        formData.append("subCategory", items);
-      console.log(formData.get("subCategory"))
+        formData.append("subCategory", JSON.stringify(items));
 
         const response = await axios.post("http://localhost:3000/api/found-objects",
         formData);
@@ -270,7 +343,7 @@ setLoading(false)
  }
 
 function getCategoryNameFromId(categoryName) {
-  const category = categories.find(category => category._id === categoryName);
+  const category = categories.find(category => category.name === categoryName);
   return category ? category.name : null;
  }
 
@@ -381,8 +454,8 @@ if (loading) {
         required
         onChange={(e) => setTitle(e.target.value)}
         value={title}
-        
-        errorMessage={'invalid'}
+        errorValidation={titleError}
+        errorMessage={'Title is required'}
         name="Title"/>
 
  
@@ -399,7 +472,8 @@ if (loading) {
         required
         onChange={(e) => setObjPrice(parseInt(e.target.value))}
         value={price}        
-        errorMessage={'invalid'}
+        errorMessage={'Price is required'}
+         errorValidation={priceError}
         name="Price"/>
 
  
@@ -440,6 +514,8 @@ if (loading) {
            <AddBtn src={AddIcon} className='addBtn' onClick={addComponent}alt="add category" />
 
 )}
+
+      {categoryError && <ErrorMessage>Category is required</ErrorMessage>}
        </AddCategoryContainer>
 
         </Container>
@@ -452,6 +528,8 @@ if (loading) {
         <CustomInputFiles singleImage max={10}
         onChange={onImageUpload}></CustomInputFiles>
         </InputBox>
+
+        {imageError && <ErrorMessage>Image is required</ErrorMessage>}
         <Title>How does it look?</Title>
               <CategoryTitle>Upload pictures of the lost object.
         If you don’t have any, just select the “I don’t have pictures” option.</CategoryTitle>
@@ -465,10 +543,10 @@ if (loading) {
         required
         onChange={(e) => setObjDesc(e.target.value)}
         value={description}
-        errorMessage={'invalid'}
         name="Description"
         height={80} />
-       </InputBox> 
+       </InputBox>
+        {descriptionError===true && <ErrorMessage>Description is required</ErrorMessage>}
       </Container>
         <Container>
         <Title>Where did you lose it?</Title>
@@ -482,7 +560,8 @@ if (loading) {
         onChange={(e) => setObjLoc(e.target.value)}
         value={location}
         
-        errorMessage={'invalid'}
+        errorMessage={'Location is required'}
+        errorValidation={locationError}
         name="Location"/>
 
  

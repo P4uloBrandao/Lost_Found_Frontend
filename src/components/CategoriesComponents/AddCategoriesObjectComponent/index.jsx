@@ -78,7 +78,7 @@ export default function AddCategory  ({ key, removeCategory,index, onCategoryCha
     }, [categories]);
   function getCategoryNameFromId(categoryName) {
 
-    const category = categories.find(category => category._id === categoryName);
+    const category = categories.find(category => category.name === categoryName);
     return category ? category.name : null;
    }
     //GET SUBCATEGORIES AND SUBSUBCATEGORIES
@@ -99,7 +99,7 @@ export default function AddCategory  ({ key, removeCategory,index, onCategoryCha
     function getSubSubCategories(categoryName, subcategoryId) {
         for (const item of fullDataCategories) {
         
-          if (item.category.name === categoryName && item.subcategory._id === subcategoryId) {
+          if (item.category.name === categoryName && item.subcategory.name === subcategoryId) {
   
             setSubSubCategories(Object.entries(item.subSubCategories));
             setLoading(false);
@@ -137,9 +137,9 @@ export default function AddCategory  ({ key, removeCategory,index, onCategoryCha
         // Faça o que for necessário com o nome da opção selecionada
       }; 
       function createObjectSubCategories(subCategory){
-        const subCategories = fullDataCategories.find(category => category.subcategory._id === subCategory);
+        console.log(subCategory)
+        const subCategories = fullDataCategories.find(category => category.subcategory.name === subCategory);
         getSubSubCategories(getCategoryNameFromId(category),subCategory)
-    
       }
 
       const handleSubSubCategoryClick = (subSubCategory) => {

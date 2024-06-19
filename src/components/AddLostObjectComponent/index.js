@@ -61,10 +61,24 @@ transform: scale(0.7);
       transform: scale(0.9);
     }
 `;
+
+
+const ErrorMessage= styled.p `
+  color: #ad0000;
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  padding-right: 15px;
+  margin-top: 5px;
+  text-align: end;
+  width: 100%;
+  `
+
 const AddCategoryContainer = styled.div`
  width: 100%;
 `;
-export default function LostObjectForm  ()  {
+export default function LostObjectForm  ( isFoundObjectPage=false)  {
   const [objectImage, setObjImage] = React.useState([]);
 
   const [owner, setOwner] = React.useState(localStorage.getItem("token"));
@@ -89,6 +103,57 @@ export default function LostObjectForm  ()  {
   const [objectCategories, setObjectCategories] = useState({});
   const today = new Date();
   const formattedDate = today.toISOString().split('T')[0];
+
+
+  // Validations
+  const [titleError, setTitleError ] = useState(false);
+  const [categoryError, setCategoryError ] = useState(false);
+  const [priceError, setPriceError ] = useState(false);
+  const [locationError, setLocationError ] = useState(false);
+  const [descriptionError, setDescriptionError ] = useState(false);
+  const [imageError, setImageError ] = useState(false);
+  const validationSetter= [setTitleError, setCategoryError, setPriceError, setLocationError, setDescriptionError, setImageError];
+
+  const clearErrors = () => {
+    for (let i = 0; i < validationSetter.length; i++) {
+      validationSetter[i](false);
+    }
+  }
+
+  const validateForm = () => {
+    let isValid = true;
+    if (title === '') {
+      setTitleError(true);
+      isValid = false;
+    }
+
+    if (category === '') {
+      setCategoryError(true);
+      isValid = false;
+    }
+
+    if (price === 0) {
+      setPriceError(true);
+      isValid = false;
+    }
+
+    if (location === '') {
+      setLocationError(true);
+      isValid = false;
+    }
+
+    if (description === '') {
+      setDescriptionError(true);
+      isValid = false;
+    }
+
+    if (isFoundObjectPage && objectImage.length === 0) {
+      setImageError(true);
+      isValid = false;
+    }
+
+    return isValid;
+  }
   
   const addComponent = () => {
     setComponents([...components, <AddCategory key={components.length} />]);
@@ -111,7 +176,7 @@ export default function LostObjectForm  ()  {
     fetchCategories();
   }, []);
   function getCategoryNameFromId(id) {
-    const category = categories.find(category => category._id === id);
+    const category = categories.find(category => category.name === id);
     return category ? category.name : null;
    }
    useEffect(() => {
@@ -130,6 +195,11 @@ export default function LostObjectForm  ()  {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
+      clearErrors();
+
+      if (!validateForm()) {
+        return;
+      }
         const formData = new FormData();
         formData.append("owner", owner);
         formData.append("title", title);
@@ -147,7 +217,7 @@ export default function LostObjectForm  ()  {
         const response = await axios.post("http://localhost:3000/api/lost-objects",
           formData,);
         
-        // console.log(response.data)
+        console.log(response.data)
       } catch (error) {
         console.error("Object Registration failed:", error);
          
@@ -240,8 +310,8 @@ export default function LostObjectForm  ()  {
         required
         onChange={(e) => setTitle(e.target.value)}
         value={title}
-        
-        errorMessage={'invalid'}
+        errorValidation={titleError}
+        errorMessage={'Title is required'}
         name="Title"/>
 
  
@@ -279,6 +349,8 @@ export default function LostObjectForm  ()  {
            <AddBtn src={AddIcon} className='addBtn' onClick={addComponent}alt="add category" />
 
 )}
+
+      {categoryError && <ErrorMessage>Category is required</ErrorMessage>}
        </AddCategoryContainer>
       <Title>Write the price of the lost object.</Title>
       <InputBox>
@@ -289,8 +361,9 @@ export default function LostObjectForm  ()  {
         id="price"
         required
         onChange={(e) => setObjPrice(parseInt(e.target.value))}
-        value={price}        
-        errorMessage={'invalid'}
+        value={price}
+         errorMessage={'Price is required'}
+         errorValidation={priceError}
         name="Price"/>
 
  
@@ -305,6 +378,8 @@ export default function LostObjectForm  ()  {
         <CustomInputFiles singleImage max={10}
         onChange={onImageUpload}></CustomInputFiles>
         </InputBox>
+
+        {imageError && <ErrorMessage>Image is required</ErrorMessage>}
         <Title>Can you describe it?</Title>
               <CategoryTitle>Please write a description of your lost object.</CategoryTitle>
               
@@ -320,7 +395,9 @@ export default function LostObjectForm  ()  {
         errorMessage={'invalid'}
         name="Description"
         height={80} />
-       </InputBox> 
+       </InputBox>
+
+        {descriptionError===true && <ErrorMessage>Description is required</ErrorMessage>}
       </Container>
         <Container>
         <Title>Where did you lose it?</Title>
@@ -333,8 +410,9 @@ export default function LostObjectForm  ()  {
         required
         onChange={(e) => setObjLoc(e.target.value)}
         value={location}
-        
-        errorMessage={'invalid'}
+
+        errorMessage={'Location is required'}
+        errorValidation={locationError}
         name="Location"/>
 
  
