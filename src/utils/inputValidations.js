@@ -41,6 +41,10 @@ export function haveLetters(input) {
     return /[a-z]/i.test(input);
 }
 
+export function validateZipCode(zipCode) {
+    return !!zipCode && zipCode.length === 8 && !haveLetters(zipCode) && zipCode[4] === "-";
+}
+
 export async function checkIfEmailExists(email) {
     const response = await axios.post("http://localhost:3000/api/users/checkByEmail", {email: email});
     const data = response.data;

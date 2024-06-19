@@ -19,6 +19,11 @@ import AddressIcon from '@mui/icons-material/HomeRounded';
 import { InputSubmit, Container,InputBox ,Title,Form, Wrapper } from '../../assets/StylePopularComponent/style';
 import Loader from '../LoadingComponent/index';
 import { useAuth } from '../AuthContext';
+import {
+    checkIfEmailExists,
+    isValidPhoneNumber,
+    validateEmail, validateNif, validateZipCode
+} from "../../utils/inputValidations";
 
 
 
@@ -38,6 +43,20 @@ const CategoryButton = styled.button`
   font-size: 1rem;
   opacity: 1;
 `;
+
+
+const ErrorMessage= styled.p `
+  color: #ad0000;
+  font-size: 15px;
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+  padding-right: 15px;
+  margin-top: 5px;
+  text-align: end;
+  width: 100%;
+  `
+
 
 
 
@@ -73,9 +92,29 @@ export default function PoliceComponent() {
     const [error, setError] = useState(false);
     const { setAuthUser, authUser, isLoggedIn, setIsLoggedIn, logout, userRole } = useAuth();
 
-    const [passwordError, setPasswordError ] = useState(null);
-    const [checkPasswordError, setCheckPasswordError ] = useState(null);
-function setNameOfStation(station){
+
+    // Validations
+    const [firstNameError, setFirstNameError ] = useState(false);
+    const [lastNameError, setLastNameError ] = useState(false);
+    const [emailError, setEmailError ] = useState(false);
+    const [addressError, setAddressError ] = useState(false);
+    const [passwordError, setPasswordError ] = useState(false);
+    const [checkPasswordError, setCheckPasswordError ] = useState(false);
+    const [nifError, setNifError ] = useState(false);
+    const [phoneError, setPhoneError ] = useState(false);
+    const [zipCodeError, setZipCodeError ] = useState(null);
+    const [policeIdError, setPoliceIdError] = useState('');
+    const [stationError, setStationError] = React.useState('');
+
+    const validationSetter= [ setFirstNameError, setLastNameError, setEmailError, setAddressError, setPasswordError, setCheckPasswordError, setNifError, setPhoneError, setZipCodeError, setPoliceIdError, setStationError]
+
+    const clearErrors = () => {
+        for (let i = 0; i < validationSetter.length; i++) {
+            validationSetter[i](false);
+        }
+    }
+
+    function setNameOfStation(station){
   console.log(station)
   setStation(station)
 }
@@ -97,7 +136,6 @@ useEffect(() => {
             const response = await axios.get('http://localhost:3000/api/police/police-stations');
             setStations(response.data);
             setIsLoading(false);
-            console.log(stations)
         } catch (error) {
             console.error('Failed to fetch stations', error);
             setError(true);
@@ -120,17 +158,83 @@ function  getStationID(name,stations){
     return foundItem ? foundItem._id : null;
 
 }
+
+async function validateForm() {
+
+    let isValid= true;
+    const emailExists = await checkIfEmailExists(email);
+
+    if (email==='' || !validateEmail(email) || emailExists['exist'] ) {
+        setEmailError(true);
+        isValid = false;
+    }
+
+    if (first_name === '') {
+        setFirstNameError(true);
+        isValid = false;
+    }
+
+    if (last_name === '') {
+        setLastNameError(true);
+        isValid = false;
+    }
+
+    if (password==='') {
+        setPasswordError(true);
+        isValid = false;
+    }
+
+    if (checkPassword === '' || checkPassword !== password) {
+        setCheckPasswordError(true);
+        isValid = false;
+    }
+
+    if (adddress==='') {
+        setAddressError(true);
+        isValid = false;
+    }
+
+    if (!isValidPhoneNumber(phone) ) {
+        setPhoneError(true);
+        isValid = false;
+    }
+
+    if (!validateNif(nif) ) {
+        setNifError(true);
+        isValid = false;
+    }
+
+    if (!validateZipCode(zipCode) ) {
+        setZipCodeError(true);
+        isValid = false;
+    }
+    if (!station) {
+        setStationError(true);
+        isValid = false;
+    }
+
+    if (policeId==='') {
+        setPoliceIdError(true);
+        isValid = false;
+    }
+
+    return isValid;
+}
     const handleCreateSubmit = async (event) => {
+        clearErrors();
         event.preventDefault();
        
         try {
+
+            const isValid = await validateForm();
+            if (!isValid) {
+                return;
+            }
             const response = await axios.post(`http://localhost:3000/api/police/police-officers`,{
               "firstName" :first_name,
               "lastName":last_name,
               "phone":phone,
               "email":email,
-              
-              
               "station" : getStationID(station,stations),
               "password": password,
               "police_id" : policeId,
@@ -185,6 +289,8 @@ function  getStationID(name,stations){
           onChange={(e) => setFirstName(e.target.value)}
           name="First Name"
           value={first_name}
+          errorValidation={firstNameError}
+          errorMessage={'First Name is required'}
         />
       </InputBox>
     </Grid>
@@ -199,6 +305,8 @@ function  getStationID(name,stations){
           onChange={(e) => setLastName(e.target.value)}
           name="Last Name"
           value={last_name}
+            errorValidation={lastNameError}
+            errorMessage={'Last Name is required'}
         />
       </InputBox>
     </Grid>
@@ -213,6 +321,8 @@ function  getStationID(name,stations){
           onChange={(e) => setEmail(e.target.value)}
           value={email}
           name="Email"
+            errorValidation={emailError}
+            errorMessage={'Email is invalid or already exists'}
         />
       </InputBox>
       </Grid>
@@ -227,6 +337,8 @@ function  getStationID(name,stations){
           onChange={(e) => setPhone(e.target.value)}
           value={phone}
           name="Phone"
+            errorValidation={phoneError}
+            errorMessage={'Phone number is invalid'}
         />
       </InputBox>
       </Grid>
@@ -240,6 +352,8 @@ function  getStationID(name,stations){
           onChange={(e) => setNif(e.target.value)}
           value={nif}
           name="NIF"
+            errorValidation={nifError}
+            errorMessage={'NIF is invalid'}
         />
       </InputBox>
       </Grid>
@@ -255,9 +369,10 @@ function  getStationID(name,stations){
           name="Station"
           options={stations}
           field_name="id"
-         
         />
       </InputBox>
+
+        {stationError && <ErrorMessage>Station is required</ErrorMessage>}
       </Grid><Grid item xs={12} sm={3}>
       <InputBox>
         <InputF 
@@ -268,6 +383,8 @@ function  getStationID(name,stations){
           onChange={(e) => setZipCode(e.target.value)}
           
           name="Zip Code"
+            errorValidation={zipCodeError}
+            errorMessage={'Zip Code is invalid'}
          
         />
       </InputBox>
@@ -282,6 +399,8 @@ function  getStationID(name,stations){
           onChange={(e) => setPoliceId(e.target.value)}
           
           name="Police ID"
+            errorValidation={policeIdError}
+            errorMessage={'Police ID is invalid'}
          
         />
       </InputBox>
@@ -299,7 +418,8 @@ function  getStationID(name,stations){
               value={adddress}
               errorValidation={adddressError}
               errorMessage={'Endereço inválido'}
-              name="Address"/>
+              name="Address"
+              />
                 
                 
               
