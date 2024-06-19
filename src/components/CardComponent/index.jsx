@@ -51,11 +51,12 @@ const CardLostObjecs = ({ matchButton,catId,name, description, location, date, c
         <Grid container spacing={3} sx={{justifyContent: 'center' ,padding: '2rem '}}>
           <Grid style={{paddingLeft: '1rem',textAlign: '-webkit-left', paddingTop: '1em',    height:' 5em'}} xs={12} xsOffset={3}  mdOffset={0}>
           <h2>{name}</h2>
+          <p  className='removeBtn' >  <span onClick={handleRemoveLostObject}style={{ textDecoration: 'underline' }}>Remove</span> lost object</p>
           </Grid>
           <Grid  style={{ textAlign: 'left',paddingLeft: '1rem',    fontWeight: '300'}}xs={12} md={6} mdOffset="auto">
             <p>Lost on: {date}</p>
             <p>Lost at: {location}</p>
-            <p  className='removeBtn' >  <span onClick={handleRemoveLostObject}style={{ textDecoration: 'underline', paddingLeft: '4em' }}>Remove</span> lost object</p>
+            
           </Grid>
           <Grid xs={12} style={{textAlign: 'left',paddingLeft: '5rem',    fontWeight: '300'}} xsOffset={4} md={6} mdOffset={0}>
           <p style={{ fontWeight: '400' }}>Status:</p>
