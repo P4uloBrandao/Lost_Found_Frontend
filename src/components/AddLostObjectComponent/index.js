@@ -270,7 +270,7 @@ const prevStep = () => {
       setObjCord({ lat, lng });
 
       setCircle({
-        center:  { lat, lng },
+        center:  { lat:lat, lng :lng},
         radius: 500 // Define o raio do círculo em metros
       });
       try {

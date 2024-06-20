@@ -3,18 +3,23 @@ import './LostItemDetails.css'
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import LocationOn from '@mui/icons-material/LocationOn';
 import mapsIcon from './Map-location.svg'
-import { GoogleMap, useLoadScript, Marker } from '@react-google-maps/api';
+import { GoogleMap, useLoadScript, Marker,Circle } from '@react-google-maps/api';
+
 
 const LostItemDetails = ({ status, description, location, category, lost_date, enddate, coordinates }) => {
   const [dataItem, setDataItem] = useState([status, description, location, category, lost_date, enddate, coordinates]);
   const [mapCenter, setMapCenter] = useState({ lat: 38.72, lng: -9.14 }); // Initial center (Lisbon)
-  const libraries = ['places']; // Include places library for location search
   const [lat, setLat] = useState(null);
   const [lng, setLng] = useState(null);
+  const [circle, setCircle] = useState(null);
+  
+  const libraries = ['places']; // Include places library for location search
+
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: 'AIzaSyDPUTFHLcj71rpOYKfPwigaRF8uiOKDvWo',
     libraries,
   });
+
   const mapContainerStyle = {
     width: '300px',
     height: '200px',
@@ -27,19 +32,29 @@ const LostItemDetails = ({ status, description, location, category, lost_date, e
       const latPart = parts[0].trim().split(':')[1].trim();
       const lngPart = parts[1].trim().split(':')[1].trim();
 
-      const lat = parseFloat(latPart);
-      const lng = parseFloat(lngPart);
+      const templat = parseFloat(latPart);
+      const templng = parseFloat(lngPart);
 
-      setLat(lat);
-      setLng(lng);
-      setMapCenter({ lat: lat, lng: lng });
+      if (!isNaN(templat) && !isNaN(templng)) {
+        setLat(templat);
+        setLng(templng);
+        setMapCenter({ lat: templat, lng: templng });
+        setCircle({
+          center: { lat: templat, lng: templng },
+          radius: 500 // Define o raio do círculo em metros
+        });
+      }
     };
 
     if (coordinates) {
       extractLatLng(coordinates);
     }
-    console.log(coordinates);
+    
   }, [coordinates]);
+  function openGoogleMaps() {
+    const url = `https://www.google.com/maps?q=${lat},${lng}`;
+    window.open(url, '_blank');
+}
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading maps</div>;
 
@@ -79,21 +94,29 @@ const LostItemDetails = ({ status, description, location, category, lost_date, e
             <span className='location-icon'><LocationOn /></span>
             <span className='location-value-data'>{dataItem[2]}</span>
           </div>
-          <span className='get-coordinates'>Get GPS coordinates</span>
+          <span className='get-coordinates'onClick={openGoogleMaps}>Get GPS coordinates</span>
         </div>
         <div className='location-image'>
-          <GoogleMap
-            mapContainerStyle={mapContainerStyle}
-            zoom={10}
-            center={mapCenter}
-          >
-            {lat && lng && (
-              <Marker
-                position={{ coordinates}}
-                title={dataItem[2]}
-              />
-            )}
-          </GoogleMap>
+        <GoogleMap
+      mapContainerStyle={mapContainerStyle}
+      zoom={18}
+      center={mapCenter}
+    >
+      <Marker
+        position={{ lat: lat, lng: lng }}
+        title={dataItem[2]}
+      />
+      {circle && (
+        <Circle 
+          center={circle.center} 
+          radius={circle.radius} 
+          options={{ 
+            fillColor: 'rgba(255,0,0,0.2)', 
+            strokeColor: 'rgba(255,0,0,1)' 
+          }} 
+        />
+      )}
+    </GoogleMap>
         </div>
       </div>
 
