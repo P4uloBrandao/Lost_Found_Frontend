@@ -6,6 +6,7 @@
 .btnSubmitSection {
     position: relative;
     margin-left: 410px;
+    padding-top: 50px;
     bottom: 50px;
 }
 
@@ -17,3 +18,75 @@
 .addBtn:hover {
     transform: scale(1.2);
 }
+
+
+/* Progress bar */
+
+.progress-bar {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    counter-reset: step;
+    margin-bottom: 30px;
+}
+
+.progress-bar::before,
+.progress {
+    content: "";
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 4px;
+    width: 100%;
+    background-color: #dcdcdc;
+    z-index: 0;
+}
+
+.progress {
+    background-color: #3eb886;
+    width: 0;
+    transition: .5s;
+}
+
+.progress-step {
+    width: 35px;
+    height: 35px;
+    background-color: #dcdcdc;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+.progress-step::before {
+    counter-increment: step;
+    content: counter(step);
+}
+
+.progress-step::after {
+    content: attr(data-title);
+    position: absolute;
+    top: calc(100% + 0.20rem);
+    font-size: 0.85rem;
+    color: black !important;
+}
+
+.progress-step.active {
+    background-color: #3eb886;
+    color: white;
+}
+
+@keyframes animate {
+    from {
+        transform: scale(1, 0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1, 1);
+        opacity: 1;
+    }
+}
+
+
+/* End Progress bar */
