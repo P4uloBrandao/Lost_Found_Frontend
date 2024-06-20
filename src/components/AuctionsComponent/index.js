@@ -120,11 +120,14 @@ export default function AuctionsComponent() {
 
   const [showFilters, setShowFilters] = React.useState(false);
   const [auctions, setAuctions] = React.useState([]);
+  const [auctionsFiltered, setAuctionsFiltered] = React.useState([]);
+
   const [openCard, setOpenCard] = useState(null);
+  const [filters, setFilters] = React.useState([]);
   useEffect(() => {
     axios.get("http://localhost:3000/api/auction").then((response) => {
       setAuctions(response.data);
-      console.log(response.data)
+      setAuctionsFiltered(response.data);
     }).catch((error) => {
       console.log(error);
     });
@@ -139,52 +142,99 @@ export default function AuctionsComponent() {
     setOpenCard(id);
   };
 
+  const setCurrentFilter = () => {
+    if (filters.includes('current')) {
+      filters.splice(filters.indexOf('current'), 1);
+      setAuctionsFiltered(auctions);
+    } else {
+
+      filters.splice(filters.indexOf('past'), 1);
+      filters.splice(filters.indexOf('future'), 1);
+        filters.push('current');
+
+      //filtrar auctions
+      const currentAuctions = auctions.filter(auction => {
+        const today = new Date();
+        const endDate = new Date(auction.endDate);
+        const startDate = new Date(auction.startDate);
+        return today >= startDate && today <= endDate;
+      })
+      setAuctionsFiltered(currentAuctions);
+    }
+  }
+
+  const setPastFilter = () => {
+    if (filters.includes('past')) {
+      filters.splice(filters.indexOf('past'), 1);
+      setAuctionsFiltered(auctions);
+    } else {
+
+      filters.splice(filters.indexOf('current'), 1);
+      filters.splice(filters.indexOf('future'), 1);
+        filters.push('past');
+
+      //filtrar auctions
+      const pastAuctions = auctions.filter(auction => {
+        const today = new Date();
+        const endDate = new Date(auction.endDate);
+        return today > endDate;
+      });
+      setAuctionsFiltered(pastAuctions);
+    }
+  }
+
+    const setFutureFilter = () => {
+    if (filters.includes('future')) {
+      setAuctionsFiltered(auctions);
+
+        filters.splice(filters.indexOf('future'), 1);
+    } else {
+
+      filters.splice(filters.indexOf('past'), 1);
+      filters.splice(filters.indexOf('current'), 1);
+        filters.push('future');
+
+
+
+      //filtrar auctions
+      const futureAuctions = auctions.filter(auction => {
+        const today = new Date();
+        const startDate = new Date(auction.startDate);
+        return today < startDate;
+      });
+      setAuctionsFiltered(futureAuctions);
+    }
+  }
+
   return (
       <>
+        <Container>
+          <FiltersContainer>
+            <FilterText className={filters.includes('current') ? 'background-filtered': ''} onClick={setCurrentFilter}>Current</FilterText>
+            <FilterText className={filters.includes('future') ? 'background-filtered': ''} onClick={setFutureFilter}>Future</FilterText>
+            <FilterText className={filters.includes('past') ? 'background-filtered': ''} onClick={setPastFilter}>Past</FilterText>
+            <FilterInputContainer>
+              <FilterText onClick={handleShowFilters}>Filter <TuneIcon></TuneIcon></FilterText>
+              {showFilters && <FilterOptions>
+                <FormGroup>
+                  <FormControlLabel control={<Checkbox/>} label="Label" />
+                  <FormControlLabel control={<Checkbox/>} label="Label" />
+                  <FormControlLabel control={<Checkbox/>} label="Label" />
+                </FormGroup>
+              </FilterOptions>}
 
-        <FiltersContainer>
-          <FilterText>Current</FilterText>
-          <FilterText>Future</FilterText>
-          <FilterText>Past</FilterText>
-          <FilterInputContainer>
-            <FilterText onClick={handleShowFilters}>Filter <TuneIcon></TuneIcon></FilterText>
-            {showFilters && <FilterOptions>
-              <FormGroup>
-                <FormControlLabel control={<Checkbox />} label="Label" />
-                <FormControlLabel control={<Checkbox />} label="Label" />
-                <FormControlLabel control={<Checkbox />} label="Label" />
-              </FormGroup>
-            </FilterOptions>}
-
-          </FilterInputContainer>
-          <SearchInput>
-            <input type={"text"} placeholder={"Search"} className={"searchInput"} />
-            <SearchIcon className={"searchIcon"} />
-          </SearchInput>
-        </FiltersContainer>
-
-
-        <div className="lost-item-container" style={{ display: 'flex', flexDirection: 'column', width: '100%', }}>
-          {openCard ? <AuctionInfoComponent itemid={openCard} /> : null}
-          <div>
-            {auctions.map((auction, index) => (
-              auction._id !== openCard && (
-                <Grid spacing={2} sx={{
-                  justifyContent: 'center'
-                }} item xs={10} md={10} key={index}>
-                  <AuctionsCardComponent image={"https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/" +auction.objectImage[0]} itemTitle={auction.foundObjectTitle}
-                    id={auction._id}
-                    daysLeft={getDaysLeft(auction.startDate, auction.endDate)}
-                    bidsNumber={auction.bids.length}
-                    price={auction.highestBid}
-                    onCardClick={handleCardClick}>
-                  </AuctionsCardComponent>
-                </Grid>
-              )
-            ))}
-          </div>
-
-        </div>
-</>
-      );
+            </FilterInputContainer>
+            <SearchInput>
+              <input type={"text"} placeholder={"Search"} className={"searchInput"}/>
+              <SearchIcon className={"searchIcon"}/>
+            </SearchInput>
+          </FiltersContainer>
+          <CardsContainer>
+            {
+              auctionsFiltered.map(auction => <AuctionsCardComponent image={"https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/" +auction.objectImage[0]} itemTitle={auction.foundObjectTitle} daysLeft={getDaysLeft(auction.startDate, auction.endDate)} bidsNumber={auction.bids.length} price={auction.highestBid}></AuctionsCardComponent>)
+            }
+          </CardsContainer>
+        </Container>
+      </>
+  );
 }
