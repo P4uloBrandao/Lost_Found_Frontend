@@ -116,13 +116,28 @@ export default function LostObjectForm  ( isFoundObjectPage=false)  {
   const [descriptionError, setDescriptionError ] = useState(false);
   const [imageError, setImageError ] = useState(false);
   const validationSetter= [setTitleError, setCategoryError, setPriceError, setLocationError, setDescriptionError, setImageError];
-
+  const [formStepsNum, setFormStepsNum] = useState(0);
+  const formSteps = [
+      { title: "1" },
+      { title: "2" },
+      { title: "3" }
+  ];
   const clearErrors = () => {
     for (let i = 0; i < validationSetter.length; i++) {
       validationSetter[i](false);
     }
   }
+  const nextStep =  () => {
+    
+    setFormStepsNum(prevStep => prevStep + 1);
+    console.log(formStepsNum)
+ };
 
+const prevStep = () => {
+    setFormStepsNum(prevStep => prevStep - 1);
+    console.log(formStepsNum)
+
+};
   const validateForm = () => {
     let isValid = true;
     if (title === '') {
@@ -304,167 +319,169 @@ export default function LostObjectForm  ( isFoundObjectPage=false)  {
     setSelectedCategory(category);
   };
 
-  return ( <>
-    <Container>
-      <Title>Found Object Identification</Title>
-      <Title>What did you lose?</Title>
-      <InputBox>
-        <InputF 
-        type={'text'} 
-        placeholder={'Insert title of lost object'}  
-        id="title" 
-        required
-        onChange={(e) => setTitle(e.target.value)}
-        value={title}
-        errorValidation={titleError}
-        errorMessage={'Title is required'}
-        name="Title"/>
-
- 
-        </InputBox>
-      <Grid item xs={12} sm={12}> 
-      <Title>In what category does it fit in?</Title>
-      </Grid>
-    <AddCategoryContainer>
-        <AddCategory  
-          index={0} 
-          addItem={addItem}
-          removeCategory={removeCategory} 
-          onCategoryChange={handleCategoryChange}
-          existCategory={false}
-          objectCategories={objectCategories}
-          setObjectCategories={setObjectCategories}
-          
-
-          />
-          {components.map((_, index) => (
-            <AddCategory 
-            addItem={addItem} 
-            index={index +1} 
-            mainCategory={category}
-            removeCategory={removeCategory} 
-            onCategoryChange={handleCategoryChange}
-            existCategory={category ? true : false}
-            objectCategories={objectCategories}
-            setObjectCategories={setObjectCategories}
-            
-            />
-          ))}
-          
-       {Object.keys(items).length > 0 && (
-           <AddBtn src={AddIcon} className='addBtn' onClick={addComponent}alt="add category" />
-
-)}
-
-      {categoryError && <ErrorMessage>Category is required</ErrorMessage>}
-       </AddCategoryContainer>
-       <Grid container  >
-        <Grid item xs={12} sm={6}> 
-      <Title>Write the price of the lost object.</Title>
-      <InputBox>
-        <InputF
-         icon = {<EuroSymbolIcon/>}
-        type={'number'} 
-        placeholder={'Insert the price of lost object'}  
-        id="price"
-        required
-        onChange={(e) => setObjPrice(parseInt(e.target.value))}
-        value={price}
-         errorMessage={'Price is required'}
-         errorValidation={priceError}
-        name="Price"/>
-
- 
-        </InputBox>
-        </Grid>
-        <Grid item xs={12} sm={6}> 
-        <Title>Write the lost date.</Title>
-
-        <InputBox>
-        <InputF 
-      
-        type={'date'} 
-        placeholder={'Enter lost date'}  
-        id="lostDate"
-        required
-        onChange={(e) => setLostDate(e.target.value)}
-        value={lostDate}
-        errorMessage={'Data inválida'}
-        name="Lost Date"/>
-
- 
-        </InputBox>
-        </Grid>
-        </Grid>
-    </Container>
-      <Container>
-      <Title>How does it look?</Title>
-      <CategoryTitle>Upload pictures of the lost object.
-        If you don’t have any, just select the “I don’t have pictures” option.</CategoryTitle>
-        <InputBox>
-
-        <CustomInputFiles singleImage max={10}
-        onChange={onImageUpload}></CustomInputFiles>
-        </InputBox>
-
-        {imageError && <ErrorMessage>Image is required</ErrorMessage>}
-        <Title>Can you describe it?</Title>
+  return (
+    <>
+      <div className="progress-bar">
+        <div className="progress" style={{ width: `${(formStepsNum + 1) * 33}%` }}></div>
+        {formSteps.map((step, index) => (
+          <div key={index} className={`progress-step ${index === formStepsNum ? 'active' : ''}`}></div>
+        ))}
+      </div>
+      {formSteps.map((step, index) => (
+        <div key={index} className={`form-step ${index === formStepsNum ? 'active' : ''}`}>
+          {step.title === "1" && (
+            <Container>
+              <Title>Found Object Identification</Title>
+              <Title>What did you lose?</Title>
+              <InputBox>
+                <InputF
+                  type={'text'}
+                  placeholder={'Insert title of lost object'}
+                  id="title"
+                  required
+                  onChange={(e) => setTitle(e.target.value)}
+                  value={title}
+                  errorValidation={titleError}
+                  errorMessage={'Title is required'}
+                  name="Title"
+                />
+              </InputBox>
+              <Grid item xs={12} sm={12}>
+                <Title>In what category does it fit in?</Title>
+              </Grid>
+              <AddCategoryContainer>
+                <AddCategory
+                  index={0}
+                  addItem={addItem}
+                  removeCategory={removeCategory}
+                  onCategoryChange={handleCategoryChange}
+                  existCategory={false}
+                  objectCategories={objectCategories}
+                  setObjectCategories={setObjectCategories}
+                />
+                {components.map((_, index) => (
+                  <AddCategory
+                    key={index + 1}
+                    addItem={addItem}
+                    index={index + 1}
+                    mainCategory={category}
+                    removeCategory={removeCategory}
+                    onCategoryChange={handleCategoryChange}
+                    existCategory={!!category}
+                    objectCategories={objectCategories}
+                    setObjectCategories={setObjectCategories}
+                  />
+                ))}
+                {Object.keys(items).length > 0 && (
+                  <AddBtn src={AddIcon} className='addBtn' onClick={addComponent} alt="add category" />
+                )}
+                {categoryError && <ErrorMessage>Category is required</ErrorMessage>}
+              </AddCategoryContainer>
+              <Grid container>
+                <Grid item xs={12} sm={6}>
+                  <Title>Write the price of the lost object.</Title>
+                  <InputBox>
+                    <InputF
+                      icon={<EuroSymbolIcon />}
+                      type={'number'}
+                      placeholder={'Insert the price of lost object'}
+                      id="price"
+                      required
+                      onChange={(e) => setObjPrice(parseInt(e.target.value))}
+                      value={price}
+                      errorMessage={'Price is required'}
+                      errorValidation={priceError}
+                      name="Price"
+                    />
+                  </InputBox>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Title>Write the lost date.</Title>
+                  <InputBox>
+                    <InputF
+                      type={'date'}
+                      placeholder={'Enter lost date'}
+                      id="lostDate"
+                      required
+                      onChange={(e) => setLostDate(e.target.value)}
+                      value={lostDate}
+                      errorMessage={'Data inválida'}
+                      name="Lost Date"
+                    />
+                  </InputBox>
+                </Grid>
+              </Grid>
+            </Container>
+          )}
+          {step.title === "2" && (
+            <Container>
+              <Title>How does it look?</Title>
+              <CategoryTitle>Upload pictures of the lost object. If you don’t have any, just select the “I don’t have pictures” option.</CategoryTitle>
+              <InputBox>
+                <CustomInputFiles singleImage max={10} onChange={onImageUpload} />
+              </InputBox>
+              {imageError && <ErrorMessage>Image is required</ErrorMessage>}
+              <Title>Can you describe it?</Title>
               <CategoryTitle>Please write a description of your lost object.</CategoryTitle>
-              
-        <InputBox>
-        <StyledTextArea 
-        
-         type={'text'} 
-        placeholder={'Describe your object..'}  
-        id="objDesc"
-        required
-        onChange={(e) => setObjDesc(e.target.value)}
-        value={description}
-        errorMessage={'invalid'}
-        name="Description"
-        height={80} />
-       </InputBox>
-
-        {descriptionError===true && <ErrorMessage>Description is required</ErrorMessage>}
-      </Container>
-        <Container>
-        <Title>Where did you lose it?</Title>
-        <CategoryTitle>Insert the location. If you don’t know, please choose the “I have no clue” option.</CategoryTitle>
-      <InputBox>
-        <InputF 
-        type={'text'} 
-        placeholder={'Insert location'}  
-        id="location"
-        required
-        onChange={(e) => setObjLoc(e.target.value)}
-        value={location}
-
-        errorMessage={'Location is required'}
-        errorValidation={locationError}
-        name="Location"/>
-
- 
-        </InputBox>
-        <InputBox>
-        <GoogleMap
-      mapContainerStyle={mapContainerStyle}
-      zoom={10}
-      center={mapCenter}
-      onClick={handleMapClick}
-    >
-      {location && <Marker position={location} />}
-      {circle && <Circle center={circle.center} radius={circle.radius} options={{ fillColor: 'rgba(255,0,0,0.2)', strokeColor: 'rgba(255,0,0,1)' }} />}
-    </GoogleMap>
-      
-    
-        </InputBox>
-        </Container>
-        <div className=' btnSubmitSection'>
-       
-            <ResetButton> Reset form</ResetButton>
-          <InputSubmit onClick={handleSubmit} className="input-submit" value="Login" label="Login">Register Object </InputSubmit>
+              <InputBox>
+                <StyledTextArea
+                  type={'text'}
+                  placeholder={'Describe your object..'}
+                  id="objDesc"
+                  required
+                  onChange={(e) => setObjDesc(e.target.value)}
+                  value={description}
+                  errorMessage={'invalid'}
+                  name="Description"
+                  height={80}
+                />
+              </InputBox>
+              {descriptionError && <ErrorMessage>Description is required</ErrorMessage>}
+            </Container>
+          )}
+          {step.title === "3" && (
+            <Container>
+              <Title>Where did you lose it?</Title>
+              <CategoryTitle>Insert the location. If you don’t know, please choose the “I have no clue” option.</CategoryTitle>
+              <InputBox>
+                <InputF
+                  type={'text'}
+                  placeholder={'Insert location'}
+                  id="location"
+                  required
+                  onChange={(e) => setObjLoc(e.target.value)}
+                  value={location}
+                  errorMessage={'Location is required'}
+                  errorValidation={locationError}
+                  name="Location"
+                />
+              </InputBox>
+              <InputBox>
+                <GoogleMap
+                  mapContainerStyle={mapContainerStyle}
+                  zoom={10}
+                  center={mapCenter}
+                  onClick={handleMapClick}
+                >
+                  {location && <Marker position={location} />}
+                  {circle && <Circle center={circle.center} radius={circle.radius} options={{ fillColor: 'rgba(255,0,0,0.2)', strokeColor: 'rgba(255,0,0,1)' }} />}
+                </GoogleMap>
+              </InputBox>
+              <div className='btnSubmitSection'>
+              <InputSubmit onClick={handleSubmit} className="input-submit" value="Register Object">Register Object</InputSubmit>
+              <ResetButton onClick={() => window.location.reload()}>Reset form</ResetButton>
+              </div>
+            </Container>
+          )}
+          {/* Navigation buttons */}
+          {index !== 0 && (
+            <button type="button" className="btn btn-prev" onClick={prevStep}>Previous</button>
+          )}
+          {index !== formSteps.length - 1  && (
+            <button type="button" className="btn btn-next" onClick={nextStep}>Next</button>
+          )}
         </div>
-       </>
+      ))}
+    </>
   );
 };
-

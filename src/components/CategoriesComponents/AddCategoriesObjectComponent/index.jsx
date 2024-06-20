@@ -181,7 +181,7 @@ return (
       <Grid item xs={12} sm={3}> 
       
       {existCategory === false && ( <>
-      <SubCategoryTitle>Choose the category of the found object.</SubCategoryTitle>
+      <SubCategoryTitle>Choose category</SubCategoryTitle>
       <InputBox>
               <SearchInput 
                 
@@ -204,7 +204,7 @@ return (
       <Grid item xs={12} sm={3}>
         
   {category !== null && ( <>
-        <SubCategoryTitle>Choose the subcategory .</SubCategoryTitle>
+        <SubCategoryTitle>Choose  subcategory</SubCategoryTitle>
         <InputBox>
           <SearchInput 
             
@@ -223,7 +223,9 @@ return (
       </Grid>
       <Grid item xs={12} sm={5}> 
        {subCategory !== null && ( <>
+     <SubCategoryTitle>Choose  option </SubCategoryTitle>
      <CategorySection>
+
       {subSubCategories.map(([key, value], index) => (
         <CategoryButton
           key={index}
