@@ -67,10 +67,11 @@ const RemoveButton = styled.button`
 const MatchFoundComponent = ({ matches }) => {
   return (
     <div>
-      <h2 style={{marginTop:'40px'}}>Matches Found</h2>
+      <h2 style={{marginTop:'89px'}}>Matches Found</h2>
       {matches.map((match, index) => (
+        
         <MatchFoundContainer key={index}>
-          <MatchImage src={match.image} alt={match.title} />
+          <MatchImage src={'https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/'+ match.image} alt={match.title} />
           <MatchDetails>
             <MatchTitle>{match.title}</MatchTitle>
             <MatchInfo>Lost on: {match.date}</MatchInfo>

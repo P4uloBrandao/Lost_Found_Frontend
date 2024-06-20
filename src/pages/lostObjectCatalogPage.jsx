@@ -69,7 +69,8 @@ export default function LostObjectCatalogPage() {
   return (
    
     <div className="lost-item-container" style={{ display: 'flex', flexDirection: 'column', width: '100%',}}>
-      {openCard ? <LostItemComponent itemid={openCard}/> : null}
+      {openCard ? <div> <h2 style={{marginTop:'89px'}}> More Lost Obbjects</h2> <LostItemComponent itemid={openCard}/> </div> : null}
+      
       <div>
         {objects.map((object, index) => (
             object.object_id !== openCard && (

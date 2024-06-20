@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './LostItemPicture.css';
-import imageSrc from './Image.svg';
+import ImageSrc from './Image.svg';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 
@@ -39,7 +39,7 @@ const LostItemPicture = ({ images,nome }) => {
           </button>
       </div>
       <div className="lostitem-picture-selected" >
-        <img src={selectedImage} alt={selectedImage} />
+        <img src={selectedImage} alt={'Image not Found'} />
       </div>
 
       <div className="lostitem-picture-carousel">
@@ -51,7 +51,7 @@ const LostItemPicture = ({ images,nome }) => {
             }`}
             onClick={() => handleImageClick(image)}
           >
-            <img src={carouselImages[0]} alt={image} />
+            <img src={carouselImages[0]} alt={'Image not found'} />
           </div>
         ))}
       </div>

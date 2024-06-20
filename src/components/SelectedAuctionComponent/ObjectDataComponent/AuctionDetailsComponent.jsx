@@ -83,7 +83,7 @@ const AuctionComponent = ({ auction, object }) => {
   const placeBid = async () => {
     if (parseFloat(bidValue) > object.price) {
       try {
-        const response = await axios.post(`http://localhost:3000/api/auction/${auction._id}/makeBid`, {
+        const response = await axios.post(`http://localhost:3000/api/auction/makeBid`, {
           value: bidValue,
           auction: auction._id,
           bidder: authUser._id, 
