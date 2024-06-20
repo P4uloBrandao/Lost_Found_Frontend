@@ -10,66 +10,252 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useAuth, AuthProvider } from '../../components/AuthContext';
 import axios from "axios";
-import { useState, useContext } from "react";
+import { useState, useContext,useEffect } from "react";
 import { Navigate } from "react-router-dom"; 
 import Layout from '../../components/Layout/Layout';
-
 import WelcomeHeaderComponent from '../../components/headerWithNameComponent/welcomeHeader.jsx';
 import styled from 'styled-components';
+import { InputSubmit, Container,InputBox ,Title,Form, Wrapper } from '../../assets/StylePopularComponent/style';
+import { useNavigate } from 'react-router-dom';
+import SearchIcon from '@mui/icons-material/Search';
+import AuctionInfoComponent from '../../components/SelectedAuctionComponent/ObjectDataComponent/AuctionDataContainer.jsx'
+
+import AuctionsCardComponent from "../../components/AuctionsCardComponent";
+import TuneIcon from '@mui/icons-material/Tune';
+import FormGroup from '@mui/material/FormGroup';
 
 const token = localStorage.getItem("token");
 
+const CardsContainer = styled.div`
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  justify-content: center;
+`
+const FiltersContainer = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+    justify-content: center;
+  margin-bottom: 3rem;
+`
+
+const FilterText = styled.p`
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+    padding: 0 0.5rem;
+  display: flex;
+    align-items: center;
+    gap: 0.2rem;
+  cursor: pointer;
+  &:hover {
+    background: #ECECEC;
+    border-radius: 15px;
+  }
+`
+
+const SearchInput = styled.div`
+  display: flex;
+  border-radius: 30px;
+  background: #ECECEC;
+  align-items: center;
+  gap: 40px;
+  padding: 5px 10px;
+  color: #000000;
+`
+
+const FilterInputContainer = styled.div`
+  margin: 0;
+  padding: 0;
+    display: flex;
+    align-items: center;
+  position: relative;
+  &:hover {
+    background: #ECECEC;
+    border-radius: 15px;
+  }
+  
+`
+
+const FilterOptions = styled.div`
+    position: absolute;
+    top: 105%;
+    left: 0;
+    background: #ECECEC;
+    border-radius: 15px;
+    padding: 1rem;
+    z-index: 100;
+`
+
+const FilterCheckBoxes = styled.div`
+    display: flex;
+  align-items: center;
+`
 
 const PrimaryContainer = styled.div`
   margin: 0.1em 7em;
   text-align: -webkit-center;
   place-content: center;
 `;
+const BannerContainer = styled.div`
+  background-color: #f5f5f5;
+  padding: 2em;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+`;
 
+const BannerButton = styled.button`
+  margin: 1em;
+`;
 
 const defaultTheme = createTheme();
-
 function Home() {
-    const [user, setUser] = useState('');
-    const { setAuthUser, authUser, isLoggedIn, setIisLoggedIn,token,loading } = useAuth();
-
-    if (loading) {
-     return null;
-    }
+  const navigate = useNavigate();
+const [showFilters, setShowFilters] = React.useState(false);
+  const [auctions, setAuctions] = React.useState([]);
+  const [openCard, setOpenCard] = useState(null);
+  const [user, setUser] = useState('');
+  const { token, loading } = useAuth();
+  const redirectLogin = () => {
+    navigate("/login");
   
-    if (!token) {
-      setUser("there");
-    }
-
-    else{
-      const fetchUserProfile = async () => {
-      try {
-      
-        const response = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
-        const userProfileData = response.data.currentUser; // Supondo que o endpoint forneça os detalhes do perfil do usuário
-        setUser(userProfileData.first_name);
-              // ... (outros estados conforme necessário)
-      } catch (error) {
-        console.error("Failed to fetch user profile:", error);
-        // Lide com erros conforme necessário
-      }
-      };
-          // Chame a função de busca ao montar o componente
-      fetchUserProfile();
-      <Navigate to="/profile" replace />;
-    }
-  
-    return(
-    <PrimaryContainer>
-     
-      <WelcomeHeaderComponent name={user} description={'Welcome to bidfind.er! Lets get you started!'}/>
-      
-    </PrimaryContainer>
-    );
+  }
+  const redirectRegister = () => {              navigate("/register");
   }
   
-  export default Home;
+  function getDaysLeft(startDate, endDate) {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diff = end.getTime() - start.getTime();
+    return Math.floor(diff / (1000 * 60 * 60 * 24));
+  }
+  
+  useEffect(() => {
+      const fetchUserProfile = async () => {
+          if (!token) {
+              setUser("there");
+              return;
+          }
+
+          try {
+              const response = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
+              const userProfileData = response.data.currentUser;
+              setUser(userProfileData.first_name);
+          } catch (error) {
+              console.error("Failed to fetch user profile:", error);
+          }
+      };
+
+      fetchUserProfile();
+  }, [token]);
+  
+  useEffect(() => {
+    axios.get("http://localhost:3000/api/auction").then((response) => {
+      setAuctions(response.data);
+      console.log(response.data)
+    }).catch((error) => {
+      console.log(error);
+    });
+  }, []);
+
+  const handleShowFilters = () => {
+    setShowFilters(!showFilters);
+  }
+
+
+  const handleCardClick = (id) => {
+    setOpenCard(id);
+  };
+  if (loading) {
+      return null; // Or a loading spinner
+  }
+
+  return (<>
+      <PrimaryContainer>
+          <WelcomeHeaderComponent name={user} description={'Welcome to BidFind.er! Let\'s get you started!'}/>
+      </PrimaryContainer>
+
+      {user==="there" && (
+  <>
+    <BannerContainer>
+      <Typography variant="h4" gutterBottom>
+        Create an account or log in to access all features.
+      </Typography>
+      <Typography variant="h6" gutterBottom>
+        Already have an account?
+      </Typography>
+      <InputSubmit onClick={redirectLogin} variant="contained" color="primary">
+        Login
+      </InputSubmit>
+      <InputSubmit onClick={redirectRegister} variant="outlined" color="primary">
+        Create account
+      </InputSubmit>
+    </BannerContainer>
+  </>
+)}
+    <BannerContainer>
+     <Title>Active auctions</Title>
+ 
+
+
+      
+
+        <FiltersContainer>
+          <FilterText>Current</FilterText>
+          <FilterText>Future</FilterText>
+          <FilterText>Past</FilterText>
+          <FilterInputContainer>
+            <FilterText onClick={handleShowFilters}>Filter <TuneIcon></TuneIcon></FilterText>
+            {showFilters && <FilterOptions>
+              <FormGroup>
+                <FormControlLabel control={<Checkbox />} label="Label" />
+                <FormControlLabel control={<Checkbox />} label="Label" />
+                <FormControlLabel control={<Checkbox />} label="Label" />
+              </FormGroup>
+            </FilterOptions>}
+
+          </FilterInputContainer>
+          <SearchInput>
+            <input type={"text"} placeholder={"Search"} className={"searchInput"} />
+            <SearchIcon className={"searchIcon"} />
+          </SearchInput>
+        </FiltersContainer>
+
+
+        <div className="lost-item-container" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
+            {openCard ? <AuctionInfoComponent itemid={openCard} /> : null}
+            <div>
+              {auctions.slice(0, 6).map((auction, index) => (
+                auction._id !== openCard && (
+                  <Grid spacing={2} sx={{ justifyContent: 'center' }} item xs={10} md={10} key={index}>
+                    <AuctionsCardComponent 
+                      image={auction.objectImage[0]} 
+                      itemTitle={auction.foundObjectTitle}
+                      id={auction._id}
+                      daysLeft={getDaysLeft(auction.startDate, auction.endDate)}
+                      bidsNumber={auction.bids.length}
+                      price={auction.highestBid}
+                      onCardClick={handleCardClick}
+                    />
+                  </Grid>
+                )
+              ))}
+            </div>
+          </div>
+
+    
+
+     </BannerContainer>
+     
+     </>
+   
+  );
+}
+
+export default Home;

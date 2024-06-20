@@ -258,7 +258,7 @@ export default function SignIn() {
           console.log(userExistValidation);
     
           try {
-            const response1 = await axios.post("http://localhost:3000/api/auth/login", { clientId: tokenResponse.data.sub });
+            const response1 = await axios.post("http://localhost:3000/api/auth/login", { clientId: tokenResponse.data.sub});
     
             localStorage.setItem("token", response1.data.token);
             console.log(response1); 
@@ -266,10 +266,10 @@ export default function SignIn() {
             if (response1.data.user.role === 'Admin') {
               setIsAdmin(true);
               setUserRole("Admin");
-              navigate("/adminPage");
+              navigate("/");
             } else if (response1.data.user.role === 'Police') {
               setIsAdmin(false);
-              navigate("/police");
+              navigate("/");
             }else{
                 navigate("/");
             }
@@ -320,10 +320,10 @@ export default function SignIn() {
           if (response.data.user.role === 'Admin') {
               setIsAdmin(true);
               setUserRole("Admin");
-              navigate("/adminPage");
+              navigate("/");
             } else if (response.data.user.role === 'Police') {
               setIsAdmin(false);
-              navigate("/police");
+              navigate("/");
             }else{
                navigate("/");
             }

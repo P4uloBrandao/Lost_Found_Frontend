@@ -79,7 +79,7 @@ export function AuthProvider(props) {
       }
  
       try {
-        console.log(time)
+        
         if (storedToken && time > Date.now()) {
           setIsLoggedIn(true);
           const response = await axios.get(`http://localhost:3000/api/users/profile/${storedToken}`);
