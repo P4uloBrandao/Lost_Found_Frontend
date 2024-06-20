@@ -15,7 +15,9 @@ import GoogleButton from '../GoogleButtonComponent/index'
 import '../../assets/colors/colors.css'
 import { hasGrantedAllScopesGoogle } from '@react-oauth/google';
 import { GoogleLogin } from '@react-oauth/google';
-
+import FormGroup from '@mui/material/FormGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -213,7 +215,7 @@ export default function SignIn() {
     const [password, setPassword] = React.useState('');
     const [errorMessage, setErrorMessage] = useState(null); // New state for handling error messages
     const [googleId, setGoogleId] = useState(''); // New state for handling error messages
-
+    const [time,setTime] = useState(2);//hora
     const {
       setAuthUser,authUser,
       setIsLoggedIn,
@@ -226,6 +228,12 @@ export default function SignIn() {
 
     const handleCheckboxClick = () => {
       setChecked(!checked);
+      if( time === 2){
+      setTime(24)}
+      else{
+        setTime(2)
+      }
+      console.log("Time",time)
     };
    
     
@@ -238,7 +246,7 @@ export default function SignIn() {
       });
     };
     const showUserInformation = async (response) => {
-      console.log('Google Response:', response); // Log the entire response
+      console.log('Google Response:', response); //Log the entire response
     
       try {
         const tokenResponse = await axios.get(`http://localhost:3000/api/auth/token/${response.credential}`);
@@ -253,15 +261,15 @@ export default function SignIn() {
             const response1 = await axios.post("http://localhost:3000/api/auth/login", { clientId: tokenResponse.data.sub });
     
             localStorage.setItem("token", response1.data.token);
-            console.log(response1);
+            console.log(response1); 
     
             if (response1.data.user.role === 'Admin') {
               setIsAdmin(true);
               setUserRole("Admin");
-               navigate("/adminPage");
+              navigate("/adminPage");
             } else if (response1.data.user.role === 'Police') {
               setIsAdmin(false);
-               navigate("/police");
+              navigate("/police");
             }else{
                 navigate("/");
             }
@@ -304,7 +312,7 @@ export default function SignIn() {
       });
   
       try {
-        const response = await axios.post("http://localhost:3000/api/auth/login", {email,password});
+        const response = await axios.post("http://localhost:3000/api/auth/login", {email,password, time});
     
         // Process the response as needed
           
@@ -399,11 +407,26 @@ export default function SignIn() {
         />
         </InputBox>
         <RememberForgot>
-           <RememberBox>
-            <input id="one" type="checkbox"/>
-            <span className="check" onClick={handleCheckboxClick}></span>
-            <label for="one">Remember me</label>
-          </RememberBox>
+          
+          <FormGroup>
+          <FormControlLabel
+          
+      control={
+        <Checkbox
+        onClick={handleCheckboxClick}
+          
+          sx={{
+            borderRadius: 3,
+            color: "#71af95",
+            '&.Mui-checked': {
+              color: "#3CB684",
+            },
+          }}
+        />
+      }
+      label="Remember me"
+    />
+    </FormGroup>
           <div className="forgot">
             <RegisterLink href="/forgetPasswordRedirect"  style={{ left: '10px' }}>Forgot password?</RegisterLink>
           </div>

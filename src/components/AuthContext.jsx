@@ -21,7 +21,7 @@ export function AuthProvider(props) {
   const [isContextReady, setIsContextReady] = useState(false); // Indica se o contexto está pronto
   const [userRole, setUserRole] = useState('');
   const [policeId, setPoliceId] = useState('');
-
+  var time = ""
 
   const logout = () => {
     setIsLoggedIn(false);
@@ -65,12 +65,22 @@ export function AuthProvider(props) {
     login,
     policeId,
   };
+  
   useEffect(() => {
     const storedToken = localStorage.getItem("token");
-  
+    
+    
     const fetchData = async () => {
+      if (storedToken){
+        const response = await  axios.get(`http://localhost:3000/api/auth/token/${storedToken}`);
+        if (response.data.expiresIn){
+        time = new Date(response.data.expiresIn)
+            }
+      }
+ 
       try {
-        if (storedToken) {
+        console.log(time)
+        if (storedToken && time > Date.now()) {
           setIsLoggedIn(true);
           const response = await axios.get(`http://localhost:3000/api/users/profile/${storedToken}`);
           const userProfileData = response.data.currentUser;
@@ -114,7 +124,7 @@ export function AuthProvider(props) {
 
     fetchData();
     }
-  }, [userRole, isAdmin, isLoggedIn,authUser, policeId]);
+  }, [userRole, isAdmin, isLoggedIn,authUser, policeId,time]);
 
 
 // Log isAdmin após setIsAdmin(true)
