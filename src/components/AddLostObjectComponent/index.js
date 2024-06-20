@@ -130,16 +130,16 @@ export default function LostObjectForm  ( isFoundObjectPage= false)  {
   }
   const nextStep =  () => {
     clearErrors();
-    // if (formStepsNum === 0) {
-    //     if (!validateStepOne()) {
-    //         return;
-    //     }
-    // }
-    // if (formStepsNum === 1) {
-    //     if (!validateStepTwo()) {
-    //         return;
-    //     }
-    // }
+    if (formStepsNum === 0) {
+        if (!validateStepOne()) {
+            return;
+        }
+    }
+    if (formStepsNum === 1) {
+        if (!validateStepTwo()) {
+            return;
+        }
+    }
     setFormStepsNum(prevStep => prevStep + 1);
  };
 
@@ -185,18 +185,6 @@ const validateStepTwo = () => {
   }
   return isValid;
 }
-  const validateForm = () => {
-    let isValid = true;
-
-
-
-    if (location === '') {
-      setLocationError(true);
-      isValid = false;
-    }
-
-    return isValid;
-  }
   
   const addComponent = () => {
     setComponents([...components, <AddCategory key={components.length} />]);
