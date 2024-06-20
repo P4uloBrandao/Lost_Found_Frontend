@@ -24,6 +24,12 @@ const LostItemComponent = ({ itemid }) => {
         console.log(auctionData);
         setLostObject(auctionData);
 
+
+        const matchesResponse = await axios.post('http://localhost:3000/api/match/', { lostObjectId: itemid });
+        const matchesData = matchesResponse.data;
+        console.log(matchesData);
+        setMatches(matchesData);
+
       } catch (error) {
         console.error('Failed to fetch data:', error);
         setError(error);
@@ -57,9 +63,10 @@ const LostItemComponent = ({ itemid }) => {
           <LostItemPicture images={lostObject.objectImage ? [lostObject.objectImage] : []} nome={lostObject.title} />
         </div>
         <div style={{ flex: '1 1 55%', marginTop: '1%' }}>
-          <LostItemDetails status={lostObject.status} description={lostObject.description} location={lostObject.location} categoy={lostObject.category} lost_date ={lostObject.lostDate} enddate={lostObject.endDate} coordinates={lostObject.coordinates}/>
+          <LostItemDetails status={lostObject.status} description={lostObject.description} location={lostObject.location} categoy={lostObject.category} lost_date ={lostObject.lostDate} enddate={lostObject.endDate} coordinates={lostObject.coordinates} matchesNumber={matches.length}/>
         </div>
       </div>
+      {matches.length !==0 ? <MatchFoundComponent matches={matches}/> : null}
 
     </div>
   );

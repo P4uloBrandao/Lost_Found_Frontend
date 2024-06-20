@@ -9,7 +9,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 
 const LostItemPicture = ({ images,nome }) => {
   const [isFavorite, setIsFavorite] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(images[0]); 
+  const [selectedImage, setSelectedImage] = useState('https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/'+images[0]); 
   const [selectedname, setSelectedname] = useState(nome); 
 
   const handleImageClick = (image) => {
@@ -20,9 +20,16 @@ const LostItemPicture = ({ images,nome }) => {
     setIsFavorite(!isFavorite); // Toggle favorite state
    
   };
+  // Prefix for Cloudinary images
+  const imagePrefix = 'https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/';
+  
+  // Add prefix to each image ID
+  const prefixedImages = images.map(image => imagePrefix + image);
 
-  const placeholderImages = Array(3).fill(imageSrc);
-  const carouselImages = images.length >= 3 ? images : [...images, ...placeholderImages.slice(0, 3 - images.length)];
+  const placeholderImages = Array(3).fill(imagePrefix + images[0]);
+  const carouselImages = prefixedImages.length == 3 
+    ? prefixedImages 
+    : [...prefixedImages, ...placeholderImages.slice(0, 3 - prefixedImages.length)];
   return (
     <div className="lostitem-picture-container">
       <span className="lostItem-name">{selectedname}</span>

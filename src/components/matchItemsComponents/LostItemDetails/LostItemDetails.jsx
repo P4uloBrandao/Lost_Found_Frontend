@@ -6,8 +6,8 @@ import mapsIcon from './Map-location.svg'
 import { GoogleMap, useLoadScript, Marker,Circle } from '@react-google-maps/api';
 
 
-const LostItemDetails = ({ status, description, location, category, lost_date, enddate, coordinates }) => {
-  const [dataItem, setDataItem] = useState([status, description, location, category, lost_date, enddate, coordinates]);
+const LostItemDetails = ({ status, description, location, category, lost_date, enddate, coordinates, matchesNumber }) => {
+  const [dataItem, setDataItem] = useState([status, description, location, category, lost_date, enddate, coordinates,matchesNumber]);
   const [mapCenter, setMapCenter] = useState({ lat: 38.72, lng: -9.14 }); // Initial center (Lisbon)
   const [lat, setLat] = useState(null);
   const [lng, setLng] = useState(null);
@@ -67,7 +67,7 @@ const LostItemDetails = ({ status, description, location, category, lost_date, e
             <span className='status-value'>{dataItem[0]}</span>
           </div>
           <div>
-            <span className='matches'>10 Matches Found</span>
+            <span className='matches'>{matchesNumber} Matches Found</span>
           </div>
           <div>
             <span className='remove-Item'>Remove Item</span>

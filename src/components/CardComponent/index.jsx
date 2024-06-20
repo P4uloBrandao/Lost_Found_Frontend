@@ -43,7 +43,7 @@ const CardLostObjecs = ({ matchButton,catId,name, description, location, date, c
   return (
     <Grid style={{ borderRadius:'1.25rem',boxShadow: '4px 4px 27.1px 0px rgba(0, 0, 0, 0.25)',marginTop:'60px'}} container spacing={2}>
       <Grid style={{ margin: '1rem 2rem ',height: '215px', width: '215px'}}  spacing={2}>
-       <div> <p className='p-absolute'> {category}</p><img  style={{ width: '215px', height: '215px' ,    objectFit: 'cover',borderRadius:' 1.25rem'}}  src={photo} alt="" />
+       <div> <p className='p-absolute'> {category}</p><img  style={{ width: '215px', height: '215px' ,    objectFit: 'cover',borderRadius:' 1.25rem'}}  src={'https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/'+photo} alt="" />
        </div>
         
       </Grid>
