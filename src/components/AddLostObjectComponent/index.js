@@ -78,7 +78,7 @@ const ErrorMessage= styled.p `
 const AddCategoryContainer = styled.div`
  width: 100%;
 `;
-export default function LostObjectForm  ( isFoundObjectPage=false)  {
+export default function LostObjectForm  ( isFoundObjectPage= false)  {
   const [objectImage, setObjImage] = React.useState([]);
 
   const [owner, setOwner] = React.useState(localStorage.getItem("token"));
@@ -105,7 +105,7 @@ export default function LostObjectForm  ( isFoundObjectPage=false)  {
   const [objectCategories, setObjectCategories] = useState({});
   const today = new Date();
   const formattedDate = today.toISOString().split('T')[0];
-  const [lostDate, setLostDate] = useState([]);
+  const [lostDate, setLostDate] = useState('');
 
 
   // Validations
@@ -115,6 +115,7 @@ export default function LostObjectForm  ( isFoundObjectPage=false)  {
   const [locationError, setLocationError ] = useState(false);
   const [descriptionError, setDescriptionError ] = useState(false);
   const [imageError, setImageError ] = useState(false);
+  const [lostdateError, setLostDateError ] = useState(false);
   const validationSetter= [setTitleError, setCategoryError, setPriceError, setLocationError, setDescriptionError, setImageError];
   const [formStepsNum, setFormStepsNum] = useState(0);
   const formSteps = [
@@ -128,45 +129,69 @@ export default function LostObjectForm  ( isFoundObjectPage=false)  {
     }
   }
   const nextStep =  () => {
-    
+    clearErrors();
+    // if (formStepsNum === 0) {
+    //     if (!validateStepOne()) {
+    //         return;
+    //     }
+    // }
+    // if (formStepsNum === 1) {
+    //     if (!validateStepTwo()) {
+    //         return;
+    //     }
+    // }
     setFormStepsNum(prevStep => prevStep + 1);
-    console.log(formStepsNum)
  };
 
 const prevStep = () => {
     setFormStepsNum(prevStep => prevStep - 1);
-    console.log(formStepsNum)
 
 };
+
+const validateStepOne= () => {
+  let isValid = true;
+  if (title === '') {
+    setTitleError(true);
+    isValid = false;
+  }
+
+  if (category === '') {
+    setCategoryError(true);
+    isValid = false;
+  }
+  if (price === 0) {
+    setPriceError(true);
+    isValid = false;
+  }
+  if (lostDate === '' || lostDate > new Date().toISOString().split('T')[0]) {
+    setLostDateError(true);
+    isValid = false;
+  }
+
+    return isValid;
+}
+
+const validateStepTwo = () => {
+  let isValid = true;
+
+  if (isFoundObjectPage.isFoundObjectPage && isFoundObjectPage!=={} && objectImage.length === 0) {
+    setImageError(true);
+    isValid = false;
+  }
+
+  if (description === '') {
+    setDescriptionError(true);
+    isValid = false;
+  }
+  return isValid;
+}
   const validateForm = () => {
     let isValid = true;
-    if (title === '') {
-      setTitleError(true);
-      isValid = false;
-    }
 
-    if (category === '') {
-      setCategoryError(true);
-      isValid = false;
-    }
 
-    if (price === 0) {
-      setPriceError(true);
-      isValid = false;
-    }
 
     if (location === '') {
       setLocationError(true);
-      isValid = false;
-    }
-
-    if (description === '') {
-      setDescriptionError(true);
-      isValid = false;
-    }
-
-    if (isFoundObjectPage && objectImage.length === 0) {
-      setImageError(true);
       isValid = false;
     }
 
@@ -215,7 +240,8 @@ const prevStep = () => {
     try {
       clearErrors();
 
-      if (!validateForm()) {
+      if (location === '') {
+        setLocationError(true);
         return;
       }
         const formData = new FormData();
@@ -237,7 +263,6 @@ const prevStep = () => {
         const response = await axios.post("http://localhost:3000/api/lost-objects",
           formData,);
         
-        console.log(response.data)
       } catch (error) {
         console.error("Object Registration failed:", error);
          
@@ -307,7 +332,6 @@ const prevStep = () => {
     };
 
   const handleCategoryChange = (index, category) => {
-    console.log(category)
     setSelectedCategory(category);
     };
   
@@ -405,6 +429,7 @@ const prevStep = () => {
                       required
                       onChange={(e) => setLostDate(e.target.value)}
                       value={lostDate}
+                        errorValidation={lostdateError}
                       errorMessage={'Data inválida'}
                       name="Lost Date"
                     />

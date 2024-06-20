@@ -55,7 +55,7 @@ export default function RegisterLostObjectPage() {
       {/* Renderizar o componente Menu com as opções */}
       <WelcomeHeaderComponent name={user} description={'At bidfind.er we believe that nothing is trully lost, never lose your hope!'}/>
       <ChangeContainer>
-         <AddLostObjectComponent />
+         <AddLostObjectComponent  isFoundObjectPage={false}/>
       </ChangeContainer>
     </PrimaryContainer>
   );
