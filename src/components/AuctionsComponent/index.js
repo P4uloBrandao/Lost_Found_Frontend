@@ -126,11 +126,6 @@ export default function AuctionsComponent() {
     axios.get("http://localhost:3000/api/auction").then((response) => {
       setAuctions(response.data);
       setAuctionsFiltered(response.data);
-      let teste= []
-      for (let i = 0; i < 15; i++) {
-        teste.push(response.data[0]);
-      }
-      setAuctionsFiltered(teste);
     }).catch((error) => {
       console.log(error);
     });
@@ -232,11 +227,24 @@ export default function AuctionsComponent() {
               <SearchIcon className={"searchIcon"}/>
             </SearchInput>
           </FiltersContainer>
+
+          <div className="lost-item-container" style={{ display: 'flex', flexDirection: 'column', width: '100%', }}>
+            {openCard ? <AuctionInfoComponent itemid={openCard} /> : null}
           <CardsContainer>
-            {
-              auctionsFiltered.map(auction => <AuctionsCardComponent image={"https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/" +auction.objectImage[0]} itemTitle={auction.foundObjectTitle} daysLeft={getDaysLeft(auction.startDate, auction.endDate)} bidsNumber={auction.bids.length} price={auction.highestBid}></AuctionsCardComponent>)
-            }
+            {auctions.map((auction, index) => (
+                auction._id !== openCard && (
+                    <AuctionsCardComponent
+                        image={"https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/" +auction.objectImage[0]} itemTitle={auction.foundObjectTitle}
+                        id={auction._id}
+                        daysLeft={getDaysLeft(auction.startDate, auction.endDate)}
+                        bidsNumber={auction.bids.length}
+                        price={auction.highestBid}
+                        onCardClick={handleCardClick}
+                    ></AuctionsCardComponent>
+                )
+            ))}
           </CardsContainer>
+          </div>
         </Container>
       </>
   );
