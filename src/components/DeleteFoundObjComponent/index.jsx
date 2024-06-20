@@ -45,7 +45,7 @@ export default function DeleteFoundObjComponent() {
         } catch (error) {
             console.error(error);
             if (error.response && error.response.data) {
-                setDeleteErrorMessage(error.response.data);
+                setDeleteErrorMessage("Id invalid or not found.");
             } else {
                 setDeleteErrorMessage("An unexpected error occurred. Please try again.");
             }
@@ -70,7 +70,7 @@ export default function DeleteFoundObjComponent() {
                         required
                         onChange={(e) => setObjId(e.target.value)}
                         value={objId}
-                        errorMessage={'invalid'}
+                        errorMessage={'Id invalid or not found.'}
                         name="Found Object Id"
                     />
                 </InputBox>

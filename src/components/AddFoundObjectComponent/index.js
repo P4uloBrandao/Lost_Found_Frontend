@@ -256,11 +256,12 @@ setLoading(false)
     event.preventDefault();
     try {
 
-      clearErrors();
+        clearErrors();
 
-      if (!validateForm()) {
-        return;
-      }
+        if (location === '') {
+            setLocationError(true);
+            return;
+        }
 
       const formData = new FormData();
 
@@ -395,15 +396,71 @@ const handleCategoryChange = (index, category) => {
       return { ...prevItems, [newIndex]: item };
     });
   };
+
+  const validateStepTwo = () => {
+    let isValid = true;
+    if (!title) {
+        setTitleError("Title is required");
+        isValid = false;
+    }
+
+    if (!price) {
+        setPriceError("Price is required");
+        isValid = false;
+    }
+    return isValid;
+  }
+
+  const validateStepThree = () => {
+        let isValid = true;
+
+      if (category === null) {
+          setCategoryError(true);
+          isValid = false;
+      }
+
+      return isValid;
+  }
+
+  const validateStepFour = () => {
+        let isValid = true;
+
+      if (objectImage.length === 0) {
+          setImageError(true);
+          isValid = false;
+      }
+
+      if (description === '') {
+          setDescriptionError(true);
+          isValid = false;
+      }
+
+        return isValid;
+  }
   const nextStep =  () => {
-    
+
+      if (formStepsNum === 1) {
+        if (!validateStepTwo()) {
+          return;
+        }
+      }
+
+      if (formStepsNum === 2) {
+            if (!validateStepThree()) {
+                return;
+            }
+        }
+
+        if (formStepsNum === 3) {
+            if (!validateStepFour()) {
+                return;
+            }
+        }
     setFormStepsNum(prevStep => prevStep + 1);
-    console.log(formStepsNum)
  };
 
 const prevStep = () => {
     setFormStepsNum(prevStep => prevStep - 1);
-    console.log(formStepsNum)
 
 };
 useEffect(() => {
@@ -491,6 +548,7 @@ return (
                 onChange={(e) => setTitle(e.target.value)}
                 value={title}
                 errorValidation={titleError}
+                errorMessage={'Title is required'}
                 name="Title"
               />
             </InputBox>
@@ -504,6 +562,7 @@ return (
                 onChange={(e) => setObjPrice(parseInt(e.target.value))}
                 value={price}
                 errorValidation={priceError}
+                errorMessage={'Price is required'}
                 name="Price"
               />
             </InputBox>
@@ -580,6 +639,7 @@ return (
                 onChange={(e) => setObjLoc(e.target.value)}
                 value={location}
                 errorValidation={locationError}
+                errorMessage={'Location is required'}
                 name="Location"
               />
             </InputBox>
