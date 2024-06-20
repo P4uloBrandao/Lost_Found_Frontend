@@ -22,7 +22,7 @@ import { useAuth } from '../AuthContext';
 import {
     checkIfEmailExists,
     isValidPhoneNumber,
-    validateEmail, validateNif, validateZipCode
+    validateEmail, validateNif, validateNic
 } from "../../utils/inputValidations";
 
 
@@ -102,11 +102,11 @@ export default function PoliceComponent() {
     const [checkPasswordError, setCheckPasswordError ] = useState(false);
     const [nifError, setNifError ] = useState(false);
     const [phoneError, setPhoneError ] = useState(false);
-    const [zipCodeError, setZipCodeError ] = useState(null);
+    const [nicError, setNicError ] = useState(null);
     const [policeIdError, setPoliceIdError] = useState('');
     const [stationError, setStationError] = React.useState('');
 
-    const validationSetter= [ setFirstNameError, setLastNameError, setEmailError, setAddressError, setPasswordError, setCheckPasswordError, setNifError, setPhoneError, setZipCodeError, setPoliceIdError, setStationError]
+    const validationSetter= [ setFirstNameError, setLastNameError, setEmailError, setAddressError, setPasswordError, setCheckPasswordError, setNifError, setPhoneError, setNicError, setPoliceIdError, setStationError]
 
     const clearErrors = () => {
         for (let i = 0; i < validationSetter.length; i++) {
@@ -204,8 +204,8 @@ async function validateForm() {
         isValid = false;
     }
 
-    if (!validateZipCode(zipCode) ) {
-        setZipCodeError(true);
+    if (!validateNic(nic) ) {
+        setNicError(true);
         isValid = false;
     }
     if (!station) {
@@ -235,6 +235,8 @@ async function validateForm() {
               "lastName":last_name,
               "phone":phone,
               "email":email,
+              "nif":nif,
+              "nic":nic,
               "station" : getStationID(station,stations),
               "password": password,
               "police_id" : policeId,
@@ -376,15 +378,14 @@ async function validateForm() {
       </Grid><Grid item xs={12} sm={3}>
       <InputBox>
         <InputF 
-          
-          placeholder={'****-***'}  
-          id="zipcode"
+          placeholder={'Enter your Nic'} 
+          id="nic"
           required
-          onChange={(e) => setZipCode(e.target.value)}
-          
-          name="Zip Code"
-            errorValidation={zipCodeError}
-            errorMessage={'Zip Code is invalid'}
+          onChange={(e) => setNic(e.target.value)}
+          value={nic}
+          name="NIC"
+          errorValidation={nicError}
+          errorMessage={'Nic is invalid'}
          
         />
       </InputBox>
