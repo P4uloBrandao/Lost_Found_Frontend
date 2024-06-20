@@ -25,8 +25,6 @@ const defaultTheme = createTheme();
 
 
 const Container = styled.div`
-  width: 100vw;
-  height: calc(100vh - 103px);
   padding: 32px 64px;
     flex-direction: column;
   overflow: auto;
@@ -128,6 +126,11 @@ export default function AuctionsComponent() {
     axios.get("http://localhost:3000/api/auction").then((response) => {
       setAuctions(response.data);
       setAuctionsFiltered(response.data);
+      let teste= []
+      for (let i = 0; i < 15; i++) {
+        teste.push(response.data[0]);
+      }
+      setAuctionsFiltered(teste);
     }).catch((error) => {
       console.log(error);
     });
