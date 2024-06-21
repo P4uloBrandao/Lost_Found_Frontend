@@ -29,7 +29,7 @@ import FormGroup from '@mui/material/FormGroup';
 
 const token = localStorage.getItem("token");
 
-const CardsContainer = styled.div`
+const AuctionContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
@@ -122,11 +122,35 @@ const [showFilters, setShowFilters] = React.useState(false);
   const [openCard, setOpenCard] = useState(null);
   const [user, setUser] = useState('');
   const { token, loading } = useAuth();
+
+  const responsiveOptions = [
+    {
+        breakpoint: '1400px',
+        numVisible: 2,
+        numScroll: 1
+    },
+    {
+        breakpoint: '1199px',
+        numVisible: 3,
+        numScroll: 1
+    },
+    {
+        breakpoint: '767px',
+        numVisible: 2,
+        numScroll: 1
+    },
+    {
+        breakpoint: '575px',
+        numVisible: 1,
+        numScroll: 1
+    }
+];
   const redirectLogin = () => {
     navigate("/login");
   
   }
-  const redirectRegister = () => {              navigate("/register");
+  const redirectRegister = () => {    
+    navigate("/register");
   }
   
   function getDaysLeft(startDate, endDate) {
@@ -206,31 +230,11 @@ const [showFilters, setShowFilters] = React.useState(false);
 
       
 
-        <FiltersContainer>
-          <FilterText>Current</FilterText>
-          <FilterText>Future</FilterText>
-          <FilterText>Past</FilterText>
-          <FilterInputContainer>
-            <FilterText onClick={handleShowFilters}>Filter <TuneIcon></TuneIcon></FilterText>
-            {showFilters && <FilterOptions>
-              <FormGroup>
-                <FormControlLabel control={<Checkbox />} label="Label" />
-                <FormControlLabel control={<Checkbox />} label="Label" />
-                <FormControlLabel control={<Checkbox />} label="Label" />
-              </FormGroup>
-            </FilterOptions>}
-
-          </FilterInputContainer>
-          <SearchInput>
-            <input type={"text"} placeholder={"Search"} className={"searchInput"} />
-            <SearchIcon className={"searchIcon"} />
-          </SearchInput>
-        </FiltersContainer>
-
+        
 
         <div className="lost-item-container" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             {openCard ? <AuctionInfoComponent itemid={openCard} /> : null}
-            <div>
+            <AuctionContainer>
               {auctions.slice(0, 6).map((auction, index) => (
                 auction._id !== openCard && (
                   <Grid spacing={2} sx={{ justifyContent: 'center' }} item xs={10} md={10} key={index}>
@@ -246,7 +250,7 @@ const [showFilters, setShowFilters] = React.useState(false);
                   </Grid>
                 )
               ))}
-            </div>
+            </AuctionContainer>
           </div>
 
     
