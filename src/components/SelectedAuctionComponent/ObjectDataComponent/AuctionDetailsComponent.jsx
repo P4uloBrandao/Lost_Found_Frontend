@@ -11,13 +11,12 @@ import { GoogleMap, useLoadScript, Marker,Circle } from '@react-google-maps/api'
 // Configurar a conexão WebSocket
 const socket = io('http://localhost:5000'); 
 
-const AuctionComponent = ({ auction,coordinates }) => {
-  const [dataItem, setDataItem] = useState([coordinates]);
+const AuctionComponent = ({ auction }) => {
 
   const [bidValue, setBidValue] = useState('');
   const [highestBid, setHighestBid] = useState(auction.highestBid);
   const [date] = useState(new Date(auction.endDate));
-
+  const [coordinates, setCoordinates] = useState(auction.coordinates);
 
   const { authUser, token } = useAuth();
   const formattedDate = format(date, 'dd MMM yyyy HH:mm:ss z');
@@ -28,6 +27,7 @@ const AuctionComponent = ({ auction,coordinates }) => {
   const [lng, setLng] = useState(null);
   const [circle, setCircle] = useState(null);
  
+
 
   const mapContainerStyle = {
     width: '300px',
@@ -201,7 +201,7 @@ const AuctionComponent = ({ auction,coordinates }) => {
     >
       <Marker
         position={{ lat: lat, lng: lng }}
-        title={dataItem[2]}
+        title={auction.title}
       />
       {circle && (
         <Circle 

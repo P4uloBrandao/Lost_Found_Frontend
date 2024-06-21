@@ -245,6 +245,7 @@ const [showFilters, setShowFilters] = React.useState(false);
                       daysLeft={getDaysLeft(auction.startDate, auction.endDate)}
                       bidsNumber={auction.bids.length}
                       price={auction.highestBid}
+                      
                       onCardClick={handleCardClick}
                     />
                   </Grid>
