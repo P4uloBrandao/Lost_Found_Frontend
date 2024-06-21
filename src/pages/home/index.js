@@ -239,7 +239,7 @@ const [showFilters, setShowFilters] = React.useState(false);
                 auction._id !== openCard && (
                   <Grid spacing={2} sx={{ justifyContent: 'center' }} item xs={10} md={10} key={index}>
                     <AuctionsCardComponent 
-                      image={auction.objectImage[0]} 
+                      image={"https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/"+ auction.objectImage[0]} 
                       itemTitle={auction.foundObjectTitle}
                       id={auction._id}
                       daysLeft={getDaysLeft(auction.startDate, auction.endDate)}

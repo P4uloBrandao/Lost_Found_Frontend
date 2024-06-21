@@ -6,7 +6,7 @@ import { useLocation } from 'react-router-dom';
 import './style.css';
 import AuctionComponent from './AuctionDetailsComponent';
 import LoadingSpinner from '../../LoadingPage/LoadingSpinner';
-
+ 
 const AuctionInfoComponent = ({itemid}) => {
   const [selectedAuction, setselectedAuction] = useState(itemid);
   const [foundObject, setfoundObject] = useState(null);
