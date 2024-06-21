@@ -13,7 +13,8 @@ import "../../assets/colors/colors.css"
 import AuctionsCardComponent from "../AuctionsCardComponent";
 import SearchIcon from '@mui/icons-material/Search';
 import axios from "axios";
-// TODO remove, this demo shouldn't need to reset the theme.
+import io from 'socket.io-client'; // Import socket.io-client
+
 const colors = css`
   --primary-color: #c6c3c3;
   --second-color: #ffffff;
@@ -22,51 +23,51 @@ const colors = css`
 
 const defaultTheme = createTheme();
 
-
-
 const Container = styled.div`
   padding: 32px 64px;
-    flex-direction: column;
+  flex-direction: column;
   overflow: auto;
   display: flex;  
   justify-content: flex-start;
-    align-items: center;
+  align-items: center;
   
   p {
     color: #000;
     margin: 0;
   }
-`
+`;
 
 const CardsContainer = styled.div`
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
   justify-content: center;
-`
+`;
+
 const FiltersContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
   width: 100%;
-    justify-content: center;
+  justify-content: center;
   margin-bottom: 3rem;
-`
+`;
 
 const FilterText = styled.p`
-    font-size: 20px;
-    font-weight: 700;
-    margin: 0;
-    padding: 0 0.5rem;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  padding: 0 0.5rem;
   display: flex;
-    align-items: center;
-    gap: 0.2rem;
+  align-items: center;
+  gap: 0.2rem;
   cursor: pointer;
+  
   &:hover {
     background: #ECECEC;
     border-radius: 15px;
   }
-`
+`;
 
 const SearchInput = styled.div`
   display: flex;
@@ -76,35 +77,35 @@ const SearchInput = styled.div`
   gap: 40px;
   padding: 5px 10px;
   color: #000000;
-`
+`;
 
 const FilterInputContainer = styled.div`
   margin: 0;
   padding: 0;
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
   position: relative;
+  
   &:hover {
     background: #ECECEC;
     border-radius: 15px;
   }
-  
-`
+`;
 
 const FilterOptions = styled.div`
-    position: absolute;
-    top: 105%;
-    left: 0;
-    background: #ECECEC;
-    border-radius: 15px;
-    padding: 1rem;
-    z-index: 100;
-`
+  position: absolute;
+  top: 105%;
+  left: 0;
+  background: #ECECEC;
+  border-radius: 15px;
+  padding: 1rem;
+  z-index: 100;
+`;
 
 const FilterCheckBoxes = styled.div`
-    display: flex;
+  display: flex;
   align-items: center;
-`
+`;
 
 function getDaysLeft(startDate, endDate) {
   const start = new Date(startDate);
@@ -113,29 +114,46 @@ function getDaysLeft(startDate, endDate) {
   return Math.floor(diff / (1000 * 60 * 60 * 24));
 }
 
+const socket = io('http://localhost:5000'); // Connect to your WebSocket server
 
 export default function AuctionsComponent() {
-
   const [showFilters, setShowFilters] = React.useState(false);
   const [auctions, setAuctions] = React.useState([]);
   const [auctionsFiltered, setAuctionsFiltered] = React.useState([]);
-
   const [openCard, setOpenCard] = useState(null);
   const [filters, setFilters] = React.useState([]);
+
   useEffect(() => {
     axios.get(process.env.REACT_APP_API_URL+"/api/auction").then((response) => {
       setAuctions(response.data);
-      console.log(auctions);
       setAuctionsFiltered(response.data);
     }).catch((error) => {
       console.log(error);
     });
-  }, []);
+
+    // WebSocket event listeners
+    socket.on('newBid', (updatedAuction) => {
+      // Update the auction list or filtered auctions when a new bid occurs
+      const updatedAuctions = auctions.map(auction => {
+        if (auction._id === updatedAuction._id) {
+          return updatedAuction;
+        } else {
+          return auction;
+        }
+      });
+      setAuctions(updatedAuctions);
+      setAuctionsFiltered(updatedAuctions);
+    });
+
+    return () => {
+      // Clean up WebSocket listeners
+      socket.off('newBid');
+    };
+  }, [auctions]); // Dependency array to run effect on changes to 'auctions'
 
   const handleShowFilters = () => {
     setShowFilters(!showFilters);
-  }
-
+  };
 
   const handleCardClick = (id) => {
     const auction = auctions.find(auction => auction._id === id);
@@ -143,50 +161,46 @@ export default function AuctionsComponent() {
   };
 
   const setSearchingFilter = (search) => {
-    const value = search.target.value
+    const value = search.target.value;
 
     if (value === '') {
-        setAuctionsFiltered(auctions);
+      setAuctionsFiltered(auctions);
     } else {
-        const filteredAuctions = auctions.filter(auction => {
-            return auction.foundObjectTitle.toLowerCase().includes(value.toLowerCase());
-        });
-        setAuctionsFiltered(filteredAuctions);
+      const filteredAuctions = auctions.filter(auction => {
+        return auction.foundObjectTitle.toLowerCase().includes(value.toLowerCase());
+      });
+      setAuctionsFiltered(filteredAuctions);
     }
-  }
+  };
 
   const setCurrentFilter = () => {
     if (filters.includes('current')) {
       filters.splice(filters.indexOf('current'), 1);
       setAuctionsFiltered(auctions);
     } else {
-
       filters.splice(filters.indexOf('past'), 1);
       filters.splice(filters.indexOf('future'), 1);
-        filters.push('current');
+      filters.push('current');
 
-      //filtrar auctions
       const currentAuctions = auctions.filter(auction => {
         const today = new Date();
         const endDate = new Date(auction.endDate);
         const startDate = new Date(auction.startDate);
         return today >= startDate && today <= endDate;
-      })
+      });
       setAuctionsFiltered(currentAuctions);
     }
-  }
+  };
 
   const setPastFilter = () => {
     if (filters.includes('past')) {
       filters.splice(filters.indexOf('past'), 1);
       setAuctionsFiltered(auctions);
     } else {
-
       filters.splice(filters.indexOf('current'), 1);
       filters.splice(filters.indexOf('future'), 1);
-        filters.push('past');
+      filters.push('past');
 
-      //filtrar auctions
       const pastAuctions = auctions.filter(auction => {
         const today = new Date();
         const endDate = new Date(auction.endDate);
@@ -194,22 +208,17 @@ export default function AuctionsComponent() {
       });
       setAuctionsFiltered(pastAuctions);
     }
-  }
+  };
 
-    const setFutureFilter = () => {
+  const setFutureFilter = () => {
     if (filters.includes('future')) {
       setAuctionsFiltered(auctions);
-
-        filters.splice(filters.indexOf('future'), 1);
+      filters.splice(filters.indexOf('future'), 1);
     } else {
-
       filters.splice(filters.indexOf('past'), 1);
       filters.splice(filters.indexOf('current'), 1);
-        filters.push('future');
+      filters.push('future');
 
-
-
-      //filtrar auctions
       const futureAuctions = auctions.filter(auction => {
         const today = new Date();
         const startDate = new Date(auction.startDate);
@@ -217,50 +226,41 @@ export default function AuctionsComponent() {
       });
       setAuctionsFiltered(futureAuctions);
     }
-  }
+  };
 
   return (
-      <>
-        <Container>
-          <FiltersContainer>
-            <FilterText className={filters.includes('current') ? 'background-filtered': ''} onClick={setCurrentFilter}>Current</FilterText>
-            <FilterText className={filters.includes('future') ? 'background-filtered': ''} onClick={setFutureFilter}>Future</FilterText>
-            <FilterText className={filters.includes('past') ? 'background-filtered': ''} onClick={setPastFilter}>Past</FilterText>
-            {/*<FilterInputContainer>*/}
-            {/*  <FilterText onClick={handleShowFilters}>Filter <TuneIcon></TuneIcon></FilterText>*/}
-            {/*  {showFilters && <FilterOptions>*/}
-            {/*    <FormGroup>*/}
-            {/*      <FormControlLabel control={<Checkbox/>} label="Label" />*/}
-            {/*      <FormControlLabel control={<Checkbox/>} label="Label" />*/}
-            {/*      <FormControlLabel control={<Checkbox/>} label="Label" />*/}
-            {/*    </FormGroup>*/}
-            {/*  </FilterOptions>}*/}
+    <>
+      <Container>
+        <FiltersContainer>
+          <FilterText className={filters.includes('current') ? 'background-filtered': ''} onClick={setCurrentFilter}>Current</FilterText>
+          <FilterText className={filters.includes('future') ? 'background-filtered': ''} onClick={setFutureFilter}>Future</FilterText>
+          <FilterText className={filters.includes('past') ? 'background-filtered': ''} onClick={setPastFilter}>Past</FilterText>
+          <SearchInput>
+            <input onChange={setSearchingFilter}  type={"text"} placeholder={"Search"} className={"searchInput"}/>
+            <SearchIcon className={"searchIcon"}/>
+          </SearchInput>
+        </FiltersContainer>
 
-            {/*</FilterInputContainer>*/}
-            <SearchInput>
-              <input onChange={setSearchingFilter}  type={"text"} placeholder={"Search"} className={"searchInput"}/>
-              <SearchIcon className={"searchIcon"}/>
-            </SearchInput>
-          </FiltersContainer>
-
-          <div className="lost-item-container" style={{ display: 'flex', flexDirection: 'column', width: '100%', }}>
-            {openCard ? <AuctionInfoComponent itemid={ openCard} /> : null}
+        <div className="lost-item-container" style={{ display: 'flex', flexDirection: 'column', width: '100%', }}>
+          {openCard ? <AuctionInfoComponent itemid={ openCard} /> : null}
           <CardsContainer>
             {auctionsFiltered.map((auction, index) => (
-                auction != openCard && (
-                    <AuctionsCardComponent
-                        image={"https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/" +auction.objectImage[0]} itemTitle={auction.foundObjectTitle}
-                        id={auction._id}
-                        daysLeft={getDaysLeft(auction.startDate, auction.endDate)}
-                        bidsNumber={auction.bids.length}
-                        price={auction.highestBid}
-                        onCardClick={handleCardClick}
-                    ></AuctionsCardComponent>
-                )
+              auction !== openCard && (
+                <AuctionsCardComponent
+                  key={auction._id}
+                  image={"https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/" +auction.objectImage[0]}
+                  itemTitle={auction.foundObjectTitle}
+                  id={auction._id}
+                  daysLeft={getDaysLeft(auction.startDate, auction.endDate)}
+                  bidsNumber={auction.bids.length}
+                  price={auction.highestBid}
+                  onCardClick={handleCardClick}
+                />
+              )
             ))}
           </CardsContainer>
-          </div>
-        </Container>
-      </>
+        </div>
+      </Container>
+    </>
   );
 }

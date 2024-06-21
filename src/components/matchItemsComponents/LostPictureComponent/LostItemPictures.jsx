@@ -1,16 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './LostItemPicture.css';
-import ImageSrc from './Image.svg';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
-
-
-
-const LostItemPicture = ({ images,nome }) => {
+const LostItemPicture = ({ images, nome }) => {
   const [isFavorite, setIsFavorite] = useState(false);
-  const [selectedImage, setSelectedImage] = useState('https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/'+images[0]); 
-  const [selectedname, setSelectedname] = useState(nome); 
+  const [selectedImage, setSelectedImage] = useState('');
+  const [selectedName, setSelectedName] = useState(nome);
+  const [carouselImages, setCarouselImages] = useState([]);
+
+  useEffect(() => {
+    const imagePrefix = 'https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/';
+    const prefixedImages = images.map(image => imagePrefix + image);
+    const placeholderImage = Array(3 - prefixedImages.length).fill(prefixedImages[0]);
+    const completeCarouselImages = prefixedImages.length >= 3 ? prefixedImages : [...prefixedImages, ...placeholderImage];
+    
+    setSelectedImage(completeCarouselImages[0]);
+    setCarouselImages(completeCarouselImages);
+  }, [images]);
 
   const handleImageClick = (image) => {
     setSelectedImage(image);
@@ -18,50 +25,32 @@ const LostItemPicture = ({ images,nome }) => {
   
   const handleFavoriteClick = () => {
     setIsFavorite(!isFavorite); // Toggle favorite state
-   
   };
-  // Prefix for Cloudinary images
-  const imagePrefix = 'https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/';
-  
-  // Add prefix to each image ID
-  const prefixedImages = images.map(image => imagePrefix + image);
 
-  const placeholderImages = Array(3).fill(imagePrefix + images[0]);
-  const carouselImages = prefixedImages.length == 3 
-    ? prefixedImages 
-    : [...prefixedImages, ...placeholderImages.slice(0, 3 - prefixedImages.length)];
   return (
     <div className="lostitem-picture-container">
-      <span className="lostItem-name">{selectedname}</span>
+      <span className="lostItem-name">{selectedName}</span>
       <div className='lostItem-icon'>
         <button type="button" onClick={handleFavoriteClick}>
-            {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-          </button>
+          {isFavorite ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+        </button>
       </div>
-      <div className="lostitem-picture-selected" >
-        <img src={selectedImage} alt={'Image not Found'} />
+      <div className="lostitem-picture-selected">
+        <img src={selectedImage} alt="Image not found" />
       </div>
-
       <div className="lostitem-picture-carousel">
-        {carouselImages.map((image) => (
+        {carouselImages.map((image, index) => (
           <div
-            key={image}
-            className={`lostitem-picture-item ${
-              image === selectedImage ? 'select' : ''
-            }`}
+            key={index}
+            className={`lostitem-picture-item ${image === selectedImage ? 'select' : ''}`}
             onClick={() => handleImageClick(image)}
           >
-            <img src={carouselImages[0]} alt={'Image not found'} />
+            <img src={image} alt="Image not found" />
           </div>
         ))}
       </div>
-
-      
     </div>
   );
 };
 
 export default LostItemPicture;
-
-
-
