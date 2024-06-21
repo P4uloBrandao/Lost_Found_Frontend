@@ -125,6 +125,7 @@ export default function AuctionsComponent() {
   useEffect(() => {
     axios.get("http://localhost:3000/api/auction").then((response) => {
       setAuctions(response.data);
+      console.log(auctions);
       setAuctionsFiltered(response.data);
     }).catch((error) => {
       console.log(error);
@@ -137,7 +138,8 @@ export default function AuctionsComponent() {
 
 
   const handleCardClick = (id) => {
-    setOpenCard(id);
+    const auction = auctions.find(auction => auction._id === id);
+    setOpenCard(auction);
   };
 
   const setCurrentFilter = () => {
@@ -232,7 +234,7 @@ export default function AuctionsComponent() {
             {openCard ? <AuctionInfoComponent itemid={openCard} /> : null}
           <CardsContainer>
             {auctions.map((auction, index) => (
-                auction._id !== openCard && (
+                auction._id !== openCard._id && (
                     <AuctionsCardComponent
                         image={"https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/" +auction.objectImage[0]} itemTitle={auction.foundObjectTitle}
                         id={auction._id}

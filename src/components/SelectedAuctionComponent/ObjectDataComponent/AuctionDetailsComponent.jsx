@@ -10,9 +10,9 @@ import { format, differenceInDays, differenceInHours, differenceInMinutes, diffe
 // Configurar a conexão WebSocket
 const socket = io('http://localhost:5000'); 
 
-const AuctionComponent = ({ auction, object }) => {
+const AuctionComponent = ({ auction }) => {
   const [bidValue, setBidValue] = useState('');
-  const [highestBid, setHighestBid] = useState('No bids');
+  const [highestBid, setHighestBid] = useState(auction.highestBid);
   const [date] = useState(new Date(auction.endDate));
 
 
@@ -81,7 +81,7 @@ const AuctionComponent = ({ auction, object }) => {
 
 
   const placeBid = async () => {
-    if (parseFloat(bidValue) > object.price) {
+    if (parseFloat(bidValue) > auction.price) {
       try {
         const response = await axios.post(`http://localhost:3000/api/auction/makeBid`, {
           value: bidValue,
@@ -112,7 +112,7 @@ const AuctionComponent = ({ auction, object }) => {
             <span className='matches'>{highestBid}</span>
           </div>
           <div>
-            <span className='remove-Item'>Minimum bid allowed: {object.price} EUR</span>
+            <span className='remove-Item'>Minimum bid allowed: {auction.price} EUR</span>
           </div>
         </div>
         <div className="lost-item-status">
@@ -139,7 +139,7 @@ const AuctionComponent = ({ auction, object }) => {
           <span className='location-title'>Location</span>
           <div className='location-value'>
             <span className='location-icon'><LocationOn /></span>
-            <span className='location-value-data'>{object.location}</span>
+            <span className='location-value-data'>{auction.location}</span>
           </div>
           <span className='get-coordinates'>Get GPS coordinates</span>
         </div>
