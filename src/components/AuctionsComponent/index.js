@@ -142,6 +142,19 @@ export default function AuctionsComponent() {
     setOpenCard(auction);
   };
 
+  const setSearchingFilter = (search) => {
+    const value = search.target.value
+
+    if (value === '') {
+        setAuctionsFiltered(auctions);
+    } else {
+        const filteredAuctions = auctions.filter(auction => {
+            return auction.foundObjectTitle.toLowerCase().includes(value.toLowerCase());
+        });
+        setAuctionsFiltered(filteredAuctions);
+    }
+  }
+
   const setCurrentFilter = () => {
     if (filters.includes('current')) {
       filters.splice(filters.indexOf('current'), 1);
@@ -213,19 +226,19 @@ export default function AuctionsComponent() {
             <FilterText className={filters.includes('current') ? 'background-filtered': ''} onClick={setCurrentFilter}>Current</FilterText>
             <FilterText className={filters.includes('future') ? 'background-filtered': ''} onClick={setFutureFilter}>Future</FilterText>
             <FilterText className={filters.includes('past') ? 'background-filtered': ''} onClick={setPastFilter}>Past</FilterText>
-            <FilterInputContainer>
-              <FilterText onClick={handleShowFilters}>Filter <TuneIcon></TuneIcon></FilterText>
-              {showFilters && <FilterOptions>
-                <FormGroup>
-                  <FormControlLabel control={<Checkbox/>} label="Label" />
-                  <FormControlLabel control={<Checkbox/>} label="Label" />
-                  <FormControlLabel control={<Checkbox/>} label="Label" />
-                </FormGroup>
-              </FilterOptions>}
+            {/*<FilterInputContainer>*/}
+            {/*  <FilterText onClick={handleShowFilters}>Filter <TuneIcon></TuneIcon></FilterText>*/}
+            {/*  {showFilters && <FilterOptions>*/}
+            {/*    <FormGroup>*/}
+            {/*      <FormControlLabel control={<Checkbox/>} label="Label" />*/}
+            {/*      <FormControlLabel control={<Checkbox/>} label="Label" />*/}
+            {/*      <FormControlLabel control={<Checkbox/>} label="Label" />*/}
+            {/*    </FormGroup>*/}
+            {/*  </FilterOptions>}*/}
 
-            </FilterInputContainer>
+            {/*</FilterInputContainer>*/}
             <SearchInput>
-              <input type={"text"} placeholder={"Search"} className={"searchInput"}/>
+              <input onChange={setSearchingFilter}  type={"text"} placeholder={"Search"} className={"searchInput"}/>
               <SearchIcon className={"searchIcon"}/>
             </SearchInput>
           </FiltersContainer>
