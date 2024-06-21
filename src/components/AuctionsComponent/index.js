@@ -231,10 +231,10 @@ export default function AuctionsComponent() {
           </FiltersContainer>
 
           <div className="lost-item-container" style={{ display: 'flex', flexDirection: 'column', width: '100%', }}>
-            {openCard ? <AuctionInfoComponent itemid={openCard} /> : null}
+            {openCard ? <AuctionInfoComponent itemid={ openCard} /> : null}
           <CardsContainer>
             {auctions.map((auction, index) => (
-                auction._id !== openCard._id && (
+                auction != openCard && (
                     <AuctionsCardComponent
                         image={"https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/" +auction.objectImage[0]} itemTitle={auction.foundObjectTitle}
                         id={auction._id}
