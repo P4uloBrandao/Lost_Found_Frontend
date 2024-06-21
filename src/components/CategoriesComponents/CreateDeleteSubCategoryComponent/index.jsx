@@ -87,7 +87,7 @@ export default function AddCategoryComponent() {
    const fetchSubCategories = async (data) => {
     
       try {
-        const response = await axios.get(`http://localhost:3000/api/category/subCat/${getCategoryNameFromId(data)}`);
+        const response = await axios.get(process.env.REACT_APP_API_URL+`/api/category/subCat/${getCategoryNameFromId(data)}`);
         setFullDataCategories(response.data);
        
         setSubCategories(extractSubcategories (response.data));
@@ -117,7 +117,7 @@ export default function AddCategoryComponent() {
             }
         }
         try {
-            const response = await axios.delete(`http://localhost:3000/api/category/subCat/${getCategoryNameFromId(mainCategoryToDelete)}/${getSubCategoryNameFromId(subCategoryToDelete)}`,);
+            const response = await axios.delete(process.env.REACT_APP_API_URL+`/api/category/subCat/${getCategoryNameFromId(mainCategoryToDelete)}/${getSubCategoryNameFromId(subCategoryToDelete)}`,);
             
            console.log(subCategoryToDelete)
         } catch (error) {
@@ -148,7 +148,7 @@ export default function AddCategoryComponent() {
       console.log(mainCategory)
       console.log(subCategoryToCreate)
       try {
-          const response = await axios.post(`http://localhost:3000/api/category/subCat/${getCategoryNameFromId(mainCategory)}`,{"name": subCategoryToCreate});
+          const response = await axios.post(process.env.REACT_APP_API_URL+`/api/category/subCat/${getCategoryNameFromId(mainCategory)}`,{"name": subCategoryToCreate});
       
 
       } catch (error) {

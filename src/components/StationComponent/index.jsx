@@ -79,7 +79,7 @@ export default function StationComponent() {
     const handleCreateSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.put(`http://localhost:3000/api/police/police-officers/${getStationID(stationName,stations)}`);
+            const response = await axios.put(process.env.REACT_APP_API_URL+`/api/police/police-officers/${getStationID(stationName,stations)}`);
             console.log(response.data);
             
         } catch (error) {

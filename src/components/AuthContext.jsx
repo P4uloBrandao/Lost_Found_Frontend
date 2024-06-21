@@ -72,7 +72,7 @@ export function AuthProvider(props) {
     
     const fetchData = async () => {
       if (storedToken){
-        const response = await  axios.get(`http://localhost:3000/api/auth/token/${storedToken}`);
+        const response = await  axios.get(process.env.REACT_APP_API_URL+`/api/auth/token/${storedToken}`);
         if (response.data.expiresIn){
         time = new Date(response.data.expiresIn)
             }
@@ -82,7 +82,7 @@ export function AuthProvider(props) {
         
         if (storedToken && time > Date.now()) {
           setIsLoggedIn(true);
-          const response = await axios.get(`http://localhost:3000/api/users/profile/${storedToken}`);
+          const response = await axios.get(process.env.REACT_APP_API_URL+`/api/users/profile/${storedToken}`);
           const userProfileData = response.data.currentUser;
           setToken(storedToken);
           setAuthUser(userProfileData);
@@ -94,7 +94,7 @@ export function AuthProvider(props) {
           else if (userProfileData.role === "Police") {
             const getPoliceUser = async () => {
               try {
-                const response = await axios.get(`http://localhost:3000/api/police/police-officers/users/${authUser._id}`);
+                const response = await axios.get(process.env.REACT_APP_API_URL+`/api/police/police-officers/users/${authUser._id}`);
                 setPoliceId(response.data._id);
                 console.log(response.data._id)
                

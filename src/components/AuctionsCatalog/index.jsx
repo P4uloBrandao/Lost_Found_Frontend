@@ -75,11 +75,11 @@ export default function AuctionsCatalog() {
       try {
         const token = localStorage.getItem("token");
 
-        const userResponse = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
+        const userResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/users/profile/${token}`);
         const userData = userResponse.data.currentUser._id;
     
         // Buscar os dados dos leilões
-        const auctionsResponse = await axios.get(`http://localhost:3000/api/auction/user/${userData}`);
+        const auctionsResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/auction/user/${userData}`);
         let auctionsData = auctionsResponse.data;
         
         // Verificar se a mensagem de "Not participated in any auctions" foi recebida
@@ -100,9 +100,9 @@ export default function AuctionsCatalog() {
         // Iterar sobre os dados dos leilões e adicionar as promessas de solicitação HTTP ao array
         auctionsData.forEach(auction => {
           const foundObject = auction.foundObject;
-          const requestPromise = axios.get(`http://localhost:3000/api/found-objects/${foundObject}`);
+          const requestPromise = axios.get(process.env.REACT_APP_API_URL+`/api/found-objects/${foundObject}`);
           requests.push(requestPromise);
-          const requestPromiseBid = axios.get(`http://localhost:3000/api/auction/${auction._id}/bid`);
+          const requestPromiseBid = axios.get(process.env.REACT_APP_API_URL+`/api/auction/${auction._id}/bid`);
           requestsBid.push(requestPromiseBid);
         });
 

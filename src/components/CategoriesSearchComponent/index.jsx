@@ -64,7 +64,7 @@ export default function CategorySelectionComponent({ onFilteredObjects,onClose }
 
   const fetchSubCategories = async (data) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/category/subCat/${data}`);
+      const response = await axios.get(process.env.REACT_APP_API_URL+`/api/category/subCat/${data}`);
       setFullDataCategories(response.data);
       setSubCategories(extractSubcategories(response.data));
       setLoading(false);
@@ -98,7 +98,7 @@ export default function CategorySelectionComponent({ onFilteredObjects,onClose }
     const subSubCatId = getSubSubCategoryIdFromName(subSubMainCategory);
 
     try {
-      const response = await axios.get(`http://localhost:3000/api/lost-objects/categories/${mainCatId}/${subCatId}/${subSubCatId}`);
+      const response = await axios.get(process.env.REACT_APP_API_URL+`/api/lost-objects/categories/${mainCatId}/${subCatId}/${subSubCatId}`);
       setFilteredObjects(response.data);
       onFilteredObjects(response.data); // Chamar a função de callback com os dados filtrados
       onClose(); // Fechar o popup após a busca

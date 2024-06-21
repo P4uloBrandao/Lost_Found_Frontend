@@ -51,7 +51,7 @@ export default function AdminAuctionComponent() {
   const handleCreateSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:3000/api/auction/`, {
+      const response = await axios.post(process.env.REACT_APP_API_URL+`/api/auction/`, {
         "foundObject": foundObjId,
         "endDate": dateEnd,
         "startDate": dateStart,
@@ -86,7 +86,7 @@ export default function AdminAuctionComponent() {
   const handleBeginSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.put(`http://localhost:3000/api/auction/${auctionIdB}/begin`);
+      const response = await axios.put(process.env.REACT_APP_API_URL+`/api/auction/${auctionIdB}/begin`);
       setBeginStatusMessage("Auction started successfully.");
       setBeginErrorMessage("");
     } catch (error) {
@@ -102,7 +102,7 @@ export default function AdminAuctionComponent() {
   const handleEndSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.put(`http://localhost:3000/api/auction/${auctionIdE}/end`);
+      const response = await axios.put(process.env.REACT_APP_API_URL+`/api/auction/${auctionIdE}/end`);
       setEndStatusMessage("Auction ended successfully.");
       setEndErrorMessage("");
     } catch (error) {
@@ -119,7 +119,7 @@ export default function AdminAuctionComponent() {
   const handleDeleteSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.delete(`http://localhost:3000/api/auction/${auctionId}`);
+      const response = await axios.delete(process.env.REACT_APP_API_URL+`/api/auction/${auctionId}`);
       setDeleteStatusMessage("Auction deleted successfully.");
       setDeleteErrorMessage("");
     } catch (error) {

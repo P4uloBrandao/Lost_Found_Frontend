@@ -83,7 +83,7 @@ export default function AddCategory  ({ key, removeCategory,index, onCategoryCha
     //GET SUBCATEGORIES AND SUBSUBCATEGORIES
     const fetchSubCategories = async (data) => {
         try {
-        const response = await axios.get(`http://localhost:3000/api/category/subCat/${getCategoryNameFromId(data)}`);
+        const response = await axios.get(process.env.REACT_APP_API_URL+`/api/category/subCat/${getCategoryNameFromId(data)}`);
         setFullDataCategories(response.data);
         setSubCategories(extractSubcategories (response.data));
         setLoading(false); // Definir o estado de carregamento como falso quando o fetch estiver concluído

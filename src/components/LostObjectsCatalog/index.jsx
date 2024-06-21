@@ -145,7 +145,7 @@ export default function LostObjectCatalog() {
       try {
         const token = localStorage.getItem("token");
 
-        const objectsResponse = await axios.get(`http://localhost:3000/api/lost-objects/user/${token}`);
+        const objectsResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/lost-objects/user/${token}`);
         let objectsData = objectsResponse.data;
 
         objectsData = objectsData.map(obj => ({ ...obj, name: obj.title }));

@@ -168,7 +168,7 @@ const [showFilters, setShowFilters] = React.useState(false);
           }
 
           try {
-              const response = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
+              const response = await axios.get(process.env.REACT_APP_API_URL+`/api/users/profile/${token}`);
               const userProfileData = response.data.currentUser;
               setUser(userProfileData.first_name);
           } catch (error) {
@@ -180,7 +180,7 @@ const [showFilters, setShowFilters] = React.useState(false);
   }, [token]);
   
   useEffect(() => {
-    axios.get("http://localhost:3000/api/auction").then((response) => {
+    axios.get(process.env.REACT_APP_API_URL+"/api/auction").then((response) => {
       setAuctions(response.data);
       console.log(response.data)
     }).catch((error) => {

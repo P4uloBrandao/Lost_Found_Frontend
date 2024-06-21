@@ -123,7 +123,7 @@ export default function AuctionsComponent() {
   const [openCard, setOpenCard] = useState(null);
   const [filters, setFilters] = React.useState([]);
   useEffect(() => {
-    axios.get("http://localhost:3000/api/auction").then((response) => {
+    axios.get(process.env.REACT_APP_API_URL+"/api/auction").then((response) => {
       setAuctions(response.data);
       console.log(auctions);
       setAuctionsFiltered(response.data);

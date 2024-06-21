@@ -212,7 +212,7 @@ const [policeId, setPoliceId] = useState('');
   useEffect(() => {
     const fetchCategories = async () => {
     try {
-        const response = await axios.get('http://localhost:3000/api/category');
+        const response = await axios.get(process.env.REACT_APP_API_URL + '/api/category');
         setCategories(response.data);
         setDisplayedCategories(Object.entries(response.data))
         setLoading(false)
@@ -242,7 +242,7 @@ setLoading(false)
   const handleSubmit = async (event) => {
     const getPoliceUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/police/police-officers/users/${authUser._id}`);
+        const response = await axios.get(process.env.REACT_APP_API_URL+`/api/police/police-officers/users/${authUser._id}`);
         setPoliceId(response.data._id);
         console.log(response.data._id)
        
@@ -280,7 +280,7 @@ setLoading(false)
         formData.append("policeOfficerThatReceived", policeId);
         formData.append("subCategory", JSON.stringify(items));
         formData.append("coordinates", `lat: ${objCord.lat}, lng: ${objCord.lng}`);
-        const response = await axios.post("http://localhost:3000/api/found-objects",
+        const response = await axios.post(process.env.REACT_APP_API_URL+"/api/found-objects",
         formData);
         setObjectCreated(true)
         
@@ -299,7 +299,7 @@ setLoading(false)
   const handleUserValidation = async (event) => {
    event.preventDefault();
     try {
-         const response = await axios.post("http://localhost:3000/api/users/getUser/",
+         const response = await axios.post(process.env.REACT_APP_API_URL+"/api/users/getUser/",
         {email,
           nic,});
         setUserWhoFound(response.data._id)

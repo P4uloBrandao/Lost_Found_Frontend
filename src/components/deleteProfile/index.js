@@ -80,7 +80,7 @@ const DeleteProfile = () => {
 
     const fetchUserPass = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
+        const response = await axios.get(process.env.REACT_APP_API_URL+`/api/users/profile/${token}`);
         const userProfileData = response.data.currentUser; // Supondo que o endpoint forneça os detalhes do perfil do usuário
         setPass(userProfileData.password);
               // ... (outros estados conforme necessário)
@@ -107,7 +107,7 @@ const DeleteProfile = () => {
   
       try {
         // Make an API call to delete the user profile
-        const response = await axios.delete(`http://localhost:3000/api/users/delete/${token}`);
+        const response = await axios.delete(process.env.REACT_APP_API_URL+`/api/users/delete/${token}`);
         console.log(response.data); // Log the response from the server
         handleLogout()
         // Handle success, e.g., redirect to login or show a success message

@@ -461,7 +461,7 @@ const redirectUri = 'YOUR_REDIRECT_URI';
       data1.append('status', 'active');
 
       try {
-          const response = await axios.post("http://localhost:3000/api/users/signup",
+          const response = await axios.post(process.env.REACT_APP_API_URL+"/api/users/signup",
           data1);
           setUserCreated(true);
           setTimeout(() => navigate('/login'), 2500); // Define setGoogleValid de volta para true após 2500ms
@@ -497,14 +497,14 @@ const redirectUri = 'YOUR_REDIRECT_URI';
         if (credential) {
           
             try {
-                const tokenResponse = await axios.get(`http://localhost:3000/api/auth/token/${credential}`);
+                const tokenResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/auth/token/${credential}`);
                 
                
                 console.log(tokenResponse.data); // Assuming the token is returned in the response data
                 const tempEmail = tokenResponse.data.email
                 setGoogleId(tokenResponse.data.sub)
                 try {
-                  const userExistValidation = await axios.post("http://localhost:3000/api/users/getUser", { email: tempEmail, });
+                  const userExistValidation = await axios.post(process.env.REACT_APP_API_URL+"/api/users/getUser", { email: tempEmail, });
                   if (userExistValidation)  {
                     console.log("User exists");
                     setGoogleValidation(false);

@@ -19,7 +19,7 @@ const LostItemComponent = ({ itemid }) => {
       setError(null);
 
       try {
-        const objectResponse = await axios.get(`http://localhost:3000/api/lost-objects/${itemid}`);
+        const objectResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/lost-objects/${itemid}`);
         const auctionData = objectResponse.data;
         console.log(auctionData);
         setLostObject(auctionData);

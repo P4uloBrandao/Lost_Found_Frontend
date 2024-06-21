@@ -77,7 +77,7 @@ export default function SationComponent() {
     const handleCreateSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post(`http://localhost:3000/api/police/police-stations`,{
+            const response = await axios.post(process.env.REACT_APP_API_URL+`/api/police/police-stations`,{
               "name": stationName,
               "address": location,
               "zip_code" : "0000-00",
@@ -102,7 +102,7 @@ export default function SationComponent() {
 
       event.preventDefault();
         try {
-            const response = await axios.delete(`http://localhost:3000/api/police/police-stations/${stationId}`);
+            const response = await axios.delete(process.env.REACT_APP_API_URL+`/api/police/police-stations/${stationId}`);
             
             
         } catch (error) {

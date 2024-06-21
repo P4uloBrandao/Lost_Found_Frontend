@@ -248,7 +248,7 @@ const validateStepTwo = () => {
             formData.append("objectImage[]", image);
         });
 
-        const response = await axios.post("http://localhost:3000/api/lost-objects",
+        const response = await axios.post(process.env.REACT_APP_API_URL+"/api/lost-objects",
           formData,);
         
       } catch (error) {
