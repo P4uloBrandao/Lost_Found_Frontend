@@ -194,7 +194,8 @@ const [showFilters, setShowFilters] = React.useState(false);
 
 
   const handleCardClick = (id) => {
-    setOpenCard(id);
+      const auction = auctions.find(auction => auction._id === id);
+      setOpenCard(auction);
   };
   if (loading) {
       return null; // Or a loading spinner
