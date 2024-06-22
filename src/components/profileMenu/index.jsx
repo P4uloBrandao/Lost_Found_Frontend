@@ -10,8 +10,13 @@ const MenuContainer = styled.div`
   overflow: hidden;
   position: relative;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Adding shadow */
-  height: 6vh;
+  flex-wrap: wrap;
 `;
+
+const ItemWrapper = styled.div `
+
+  min-width: 84px;
+`
 
 const MenuItem = styled.div`
   flex: 1;
@@ -26,12 +31,12 @@ const MenuItem = styled.div`
 `;
 
 const SelectedBar = styled.div`
-  position: absolute;
-  bottom: 0;
+  width: 100%;
   border-radius: 20px;
   height: 5px;
   background: linear-gradient(90deg, #039baf, #f7db61); /* Gradient color */
-  transition: width 0.3s ease-in-out, left 0.3s ease-in-out;
+  transition: opacity 0.3s ease-in;
+  
 `;
 
 const Menu = ({ options, selectedOption, setSelectedOption , style }) => {
@@ -47,21 +52,21 @@ const Menu = ({ options, selectedOption, setSelectedOption , style }) => {
   return (
       <MenuContainer style={style}>
         {options.map((option) => (
-          <MenuItem
-            key={option}
-            onClick={() => handleClick(option)}
-          >
-            {option}
-          </MenuItem>
-        ))}
-        {selectedOption && (
-          <SelectedBar
-            style={{
+            <ItemWrapper style={{
               width: `${100 / options.length}%`,
-              left: `${options.indexOf(selectedOption) * (100 / options.length)}%`,
-            }}
-          />
-        )}
+            }}>
+                <MenuItem
+                  key={option}
+                  onClick={() => handleClick(option)}
+                >
+                  {option}
+                </MenuItem>
+                  <SelectedBar style={{
+                    opacity: option === selectedOption ? 1: 0
+                  }}/>
+
+            </ItemWrapper>
+        ))}
       </MenuContainer>
   );
 };

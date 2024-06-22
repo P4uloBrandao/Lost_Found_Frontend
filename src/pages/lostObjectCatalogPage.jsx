@@ -16,7 +16,6 @@ export default function LostObjectCatalogPage() {
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [objects, setObjects] = useState([]);
   const [openCard, setOpenCard]= useState(null);
-  console.log(objects)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -28,7 +27,7 @@ export default function LostObjectCatalogPage() {
   
         // Atualizar o estado dos objetos com os dados buscados
         setObjects(objectsData);
-  
+
         // Para cada objeto, buscar o nome da categoria associada
         const updatedObjects = await Promise.all(objectsData.map(async (object) => {
           const catId = object.category;

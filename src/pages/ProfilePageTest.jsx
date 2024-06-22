@@ -19,6 +19,10 @@ const PrimaryContainer = styled.div`
   margin: 0.1em 7em;
   text-align: -webkit-center;
   place-content: center;
+
+  @media (max-width: 1200px) {
+    margin: 0.1em 3em; // Margens para telas médias
+  }
 `;
 
 const ChangeContainer = styled.div`

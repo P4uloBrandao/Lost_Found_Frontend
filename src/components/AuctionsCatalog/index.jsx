@@ -216,7 +216,7 @@ export default function AuctionsCatalog() {
               id={auction._id}
               catId={auction.status}
               date={auction.endDate}
-              photo={foundObjectsListF[index].objectImage[0]}
+              photo={process.env.REACT_APP_CLOUDINARY_IMAGE_URL + foundObjectsListF[index].objectImage[0]}
               status={auction.status}
               matchButton={true}
               highbid={auction.winnerBid + " EUR"}

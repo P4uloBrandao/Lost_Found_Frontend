@@ -9,15 +9,17 @@
   .header-component-left {
     display: flex;
     flex-direction: column;
-    width: 40%;
+    width: 50%;
     justify-content: flex-start;
     padding-right: 160px;
  
   }
   
   .header-component-right {
-    width: 60%;
-    height: 100%;
+    display: flex;
+    align-items: center;
+    width: 50%;
+    height: auto;
     padding-right: 0px;
    
   }
@@ -58,5 +60,17 @@
     width: 100%; /* Garante que a imagem ocupe toda a largura do container */
     height: 100%;
     object-fit: cover; /* Mantém a proporção da imagem */
+  }
+
+  @media screen and (max-width: 1000px){
+    .header-component-right {
+      display: none !important;
+      width: 0;
+    }
+
+    .header-component-left {
+      width: 100% !important;
+      padding-right: 0 !important;
+    }
   }
   

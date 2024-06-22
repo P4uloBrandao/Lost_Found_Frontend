@@ -198,8 +198,7 @@ const [showFilters, setShowFilters] = React.useState(false);
   };
   if (loading) {
       return null; // Or a loading spinner
-  }
-
+  };
   return (<>
       <PrimaryContainer>
           <WelcomeHeaderComponent name={user} description={'Welcome to BidFind.er! Let\'s get you started!'}/>
@@ -225,13 +224,6 @@ const [showFilters, setShowFilters] = React.useState(false);
 )}
     <BannerContainer>
      <Title>Active auctions</Title>
- 
-
-
-      
-
-        
-
         <div className="lost-item-container" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             {openCard ? <AuctionInfoComponent itemid={openCard} /> : null}
             <AuctionContainer>
@@ -239,7 +231,7 @@ const [showFilters, setShowFilters] = React.useState(false);
                 auction._id !== openCard && (
                   <Grid spacing={2} sx={{ justifyContent: 'center' }} item xs={10} md={10} key={index}>
                     <AuctionsCardComponent 
-                      image={"https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/"+ auction.objectImage[0]} 
+                      image={auction.objectImage.length ===0 ? "https://res.cloudinary.com/dkyu0tmfx/image/upload/v1719065883/objectImages/default_obj_ht0fde.png": "https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/"+ auction.objectImage[0]}
                       itemTitle={auction.foundObjectTitle}
                       id={auction._id}
                       daysLeft={getDaysLeft(auction.startDate, auction.endDate)}

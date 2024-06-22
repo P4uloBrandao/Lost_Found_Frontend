@@ -26,7 +26,6 @@ const LostItemPicture = ({ images, nome }) => {
   const handleFavoriteClick = () => {
     setIsFavorite(!isFavorite); // Toggle favorite state
   };
-
   return (
     <div className="lostitem-picture-container">
       <span className="lostItem-name">{selectedName}</span>
@@ -45,7 +44,7 @@ const LostItemPicture = ({ images, nome }) => {
             className={`lostitem-picture-item ${image === selectedImage ? 'select' : ''}`}
             onClick={() => handleImageClick(image)}
           >
-            <img src={image} alt="Image not found" />
+            <img src={!!image? image : 'https://res.cloudinary.com/dkyu0tmfx/image/upload/v1719065883/objectImages/default_obj_ht0fde.png'} alt="Image not found" />
           </div>
         ))}
       </div>
