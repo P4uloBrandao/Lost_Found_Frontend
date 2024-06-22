@@ -265,3 +265,22 @@
 }
 
 
+
+
+/* Adicione isso ao seu arquivo CSS */
+.Toastify__toast--info {
+  background: blue;
+  color: white;
+}
+
+.Toastify__toast--success {
+  background: green;
+  color: white;
+}
+
+.Toastify__toast--error {
+  background: red;
+  color: white;
+}
+
+
