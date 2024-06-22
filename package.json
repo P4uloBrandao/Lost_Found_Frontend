@@ -23,6 +23,7 @@
         "boxicons": "^2.1.4",
         "chart.js": "^4.4.3",
         "cloudinary": "^2.0.3",
+        "crypto-random-string": "^5.0.0",
         "date-fns": "^3.6.0",
         "dayjs": "^1.11.10",
         "gsap": "^3.12.5",
