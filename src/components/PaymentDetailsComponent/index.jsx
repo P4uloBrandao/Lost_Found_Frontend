@@ -194,7 +194,7 @@ const PaymentDetails = () => {
                 category={foundObjectsListF[index].category}
                 id={auction._id}
                 date={auction.endDate.split('T')[0]}
-                photo={foundObjectsListF[index].objectImage[0]}
+                photo={process.env.REACT_APP_CLOUDINARY_IMAGE_URL + foundObjectsListF[index].objectImage[0]}
                 status={auction.status}
                 highbid={auction.winnerBid + " EUR"}
                 />
