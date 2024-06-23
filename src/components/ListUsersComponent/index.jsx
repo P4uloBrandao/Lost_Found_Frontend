@@ -27,9 +27,9 @@ const Grid = styled.div`
     border: '1px solid var(--primary-green-color)',
     borderRadius: '20px',
     width: '100%',
-    textAlign: 'left',
+    textAlign: 'center',
     borderCollapse: 'collapse',
-    marginTop: '20px'
+    
 };
 
 const thStyle = {
@@ -50,7 +50,7 @@ export default function ListUsersComponent() {
         const fetchUsers = async () => {
           try {
             // Buscar os dados dos objetos encontrados
-            const objectsResponse = await axios.get('http://localhost:3000/api/found-objects');
+            const objectsResponse = await axios.get('http://localhost:3000/api/users/list/');
             let objectsData = objectsResponse.data;
       
             // Atualizar o estado dos objetos com os dados buscados
@@ -77,26 +77,27 @@ export default function ListUsersComponent() {
                 <thead>
                     <tr>
                         <th style={thStyle}>ID</th>
-                        <th style={thStyle}>Title</th>
-                        <th style={thStyle}>Description</th>
-                        <th style={thStyle}>Location</th>
-                        <th style={thStyle}>Price</th>
-                        <th style={thStyle}>Lost Date</th>
+                        <th style={thStyle}>Name</th>
+                        <th style={thStyle}>Email</th>
+                        <th style={thStyle}>Phone</th>
+                        <th style={thStyle}>NIC</th>
+                        <th style={thStyle}>NIF</th>
+                        <th style={thStyle}>Role</th>
                         <th style={thStyle}>Status</th>
-                        <th style={thStyle}>Category</th>
                     </tr>
                 </thead>
+              
                 <tbody>
                     {users.map(item => (
                         <tr key={item.object_id}>
-                            <td style={tdStyle}>{item.object_id}</td>
-                            <td style={tdStyle}>{item.title}</td>
-                            <td style={tdStyle}>{item.description}</td>
-                            <td style={tdStyle}>{item.location}</td>
-                            <td style={tdStyle}>{item.price}</td>
-                            <td style={tdStyle}>{item.lostDate}</td>
+                            <td style={tdStyle}>{item._id}</td>
+                            <td style={tdStyle}>{item.first_name + " "+ item.last_name}</td>
+                            <td style={tdStyle}>{item.email}</td>
+                            <td style={tdStyle}>{item.phone}</td>
+                            <td style={tdStyle}>{item.nic}</td>
+                            <td style={tdStyle}>{item.nif}</td>
+                            <td style={tdStyle}>{item.role}</td>
                             <td style={tdStyle}>{item.status}</td>
-                            <td style={tdStyle}>{item.category}</td>
                         </tr>
                     ))}
                 </tbody>

@@ -114,9 +114,9 @@ const Footer = () => {
             </Container2>
             <Container2 className={"Container"}>
                 <p href={"#"} className={"title"}>Support</p>
-                <a href={"#"} className={"link"}>Terms of service</a>
+                <a href={"/terms-conditions"} className={"link"}>Terms of service</a>
                 <a href={"#"} className={"link"}>Legal</a>
-                <a href={"#"} className={"link"}>Privacy policy</a>
+                <a href={"/policies"} className={"link"}>Privacy policy</a>
                 <a href={"#"} className={"link"}>Team</a>
             </Container2>
             <Container3 className={"Container"}>

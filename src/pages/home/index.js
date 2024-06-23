@@ -214,10 +214,10 @@ const [showFilters, setShowFilters] = React.useState(false);
       <Typography variant="h6" gutterBottom>
         Already have an account?
       </Typography>
-      <InputSubmit onClick={redirectLogin} variant="contained" color="primary">
+      <InputSubmit alt={"Login"}onClick={redirectLogin} variant="contained" color="primary">
         Login
       </InputSubmit>
-      <InputSubmit onClick={redirectRegister} variant="outlined" color="primary">
+      <InputSubmit alt={"Create account"} onClick={redirectRegister} variant="outlined" color="primary">
         Create account
       </InputSubmit>
     </BannerContainer>

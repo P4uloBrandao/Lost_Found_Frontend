@@ -34,6 +34,9 @@ import PrivateRoute from './components/routeComponent/privateRoute/index.jsx'
 import Footer from './components/FooterComponent/index.jsx'
 import'./assets/colors/colors.css'
 import AuctionsPage from "./pages/AuctionsPage";
+
+import Policies from './pages/PoliciesPage.jsx'
+import TermsConditions from './pages/TermsConditionsPage.jsx'
 const AppContainer = styled.div`
     
     background-color: var(--white-color);
@@ -46,7 +49,7 @@ const ContentContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     padding: 0 0 0 0;
-  padding-top: 103px;
+    padding-top: 103px;
     margin: 0 0 0 0;
     width: 100%;
     height: 100%;
@@ -81,6 +84,9 @@ function App() {
               
                 <Route path="/resetPassword/:token" element={<PublicRoute><ForgetPasswordPage /></PublicRoute>} />
                 <Route path="/forgetPasswordRedirect" element={<PublicRoute><ForgetPasswordPageEmail /></PublicRoute>} />
+
+                <Route path="/policies" element={<PublicRoute><Policies /></PublicRoute>} />
+                <Route path="/terms-conditions" element={<PublicRoute><TermsConditions /></PublicRoute>} />
 
               </Routes>
               <Footer></Footer>
