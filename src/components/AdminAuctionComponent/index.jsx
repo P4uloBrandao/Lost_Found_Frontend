@@ -51,6 +51,16 @@ export default function AdminAuctionComponent() {
   const handleCreateSubmit = async (event) => {
     event.preventDefault();
     try {
+
+      if (dateStart > dateEnd) {
+        setCreateErrorMessage("The start date must be before the end date");
+        return;
+      }
+
+        if (dateStart < new Date().toISOString().split('T')[0]) {
+            setCreateErrorMessage("The start date must be after the current date");
+            return;
+        }
       const response = await axios.post(process.env.REACT_APP_API_URL+`/api/auction/`, {
         "foundObject": foundObjId,
         "endDate": dateEnd,
@@ -60,18 +70,13 @@ export default function AdminAuctionComponent() {
       setCreateStatusMessage("Auction created successfully.");
       setCreateErrorMessage("");
     } catch (error) {
-      console.error(error);
       if (foundObjId==='') {
         setCreateErrorMessage("Please insert a Found Object Id");
       } else if (dateStart==='') {
             setCreateErrorMessage("Please insert a Start Date");
       } else if (dateEnd==='') {
             setCreateErrorMessage("Please insert a End Date");
-      } else if (dateStart > dateEnd) {
-            setCreateErrorMessage("The start date must be before the end date");
-      } else if (dateStart < new Date().toISOString().split('T')[0]) {
-            setCreateErrorMessage("The start date must be after the current date");
-      } else {
+      }else {
         setCreateErrorMessage("Please insert a valid Found Object Id.");
       }
       // if (error.response && error.response.data) {

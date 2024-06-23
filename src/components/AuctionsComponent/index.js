@@ -124,32 +124,51 @@ export default function AuctionsComponent() {
   const [filters, setFilters] = React.useState([]);
 
   useEffect(() => {
-    axios.get(process.env.REACT_APP_API_URL+"/api/auction").then((response) => {
-      setAuctions(response.data);
-      setAuctionsFiltered(response.data);
-    }).catch((error) => {
-      console.log(error);
-    });
 
-    // WebSocket event listeners
+    const fetchAuctions = () => {
+      axios.get(process.env.REACT_APP_API_URL + "/api/auction")
+          .then((response) => {
+            setAuctions(response.data);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    };
+
+    // Initial fetch when component mounts
+    fetchAuctions();
+
+    // Set up interval to fetch data every 2 seconds
+    const intervalId = setInterval(fetchAuctions, 3000);
+
+    // Set up WebSocket event listeners
     socket.on('newBid', (updatedAuction) => {
-      // Update the auction list or filtered auctions when a new bid occurs
-      const updatedAuctions = auctions.map(auction => {
-        if (auction._id === updatedAuction._id) {
-          return updatedAuction;
-        } else {
-          return auction;
-        }
-      });
-      setAuctions(updatedAuctions);
-      setAuctionsFiltered(updatedAuctions);
+      // Update the auction list when a new bid occurs
+      setAuctions((prevAuctions) =>
+          prevAuctions.map(auction =>
+              auction._id === updatedAuction._id ? updatedAuction : auction
+          )
+      );
     });
 
     return () => {
       // Clean up WebSocket listeners
+      clearInterval(intervalId);
       socket.off('newBid');
     };
-  }, [auctions]); // Dependency array to run effect on changes to 'auctions'
+  }, []); // Dependency array to run effect on changes to 'auctions'
+
+  useEffect(() => {
+    if (filters.includes('current')) {
+      currentFilter();
+    } else if (filters.includes('past')) {
+      pastFilter();
+    } else if (filters.includes('future')) {
+      futureFilter();
+    } else {
+      setAuctionsFiltered(auctions);
+    }
+  }, [auctions, filters]);
 
   const handleShowFilters = () => {
     setShowFilters(!showFilters);
@@ -173,6 +192,16 @@ export default function AuctionsComponent() {
     }
   };
 
+  const currentFilter = () => {
+    const currentAuctions = auctions.filter(auction => {
+      const today = new Date();
+      const endDate = new Date(auction.endDate);
+      const startDate = new Date(auction.startDate);
+      return today >= startDate && today <= endDate;
+    });
+    setAuctionsFiltered(currentAuctions);
+  };
+
   const setCurrentFilter = () => {
     if (filters.includes('current')) {
       filters.splice(filters.indexOf('current'), 1);
@@ -182,15 +211,18 @@ export default function AuctionsComponent() {
       filters.splice(filters.indexOf('future'), 1);
       filters.push('current');
 
-      const currentAuctions = auctions.filter(auction => {
-        const today = new Date();
-        const endDate = new Date(auction.endDate);
-        const startDate = new Date(auction.startDate);
-        return today >= startDate && today <= endDate;
-      });
-      setAuctionsFiltered(currentAuctions);
+        currentFilter();
     }
   };
+
+  const pastFilter = () => {
+    const pastAuctions = auctions.filter(auction => {
+      const today = new Date();
+      const endDate = new Date(auction.endDate);
+      return today > endDate;
+    });
+    setAuctionsFiltered(pastAuctions);
+  }
 
   const setPastFilter = () => {
     if (filters.includes('past')) {
@@ -201,15 +233,19 @@ export default function AuctionsComponent() {
       filters.splice(filters.indexOf('future'), 1);
       filters.push('past');
 
-      const pastAuctions = auctions.filter(auction => {
-        const today = new Date();
-        const endDate = new Date(auction.endDate);
-        return today > endDate;
-      });
-      setAuctionsFiltered(pastAuctions);
+        pastFilter();
     }
   };
 
+    const futureFilter = () => {
+      const futureAuctions = auctions.filter(auction => {
+        const today = new Date();
+        const startDate = new Date(auction.startDate);
+        return today < startDate;
+      });
+      console.log(futureAuctions)
+        setAuctionsFiltered(futureAuctions);
+    }
   const setFutureFilter = () => {
     if (filters.includes('future')) {
       setAuctionsFiltered(auctions);
@@ -219,12 +255,7 @@ export default function AuctionsComponent() {
       filters.splice(filters.indexOf('current'), 1);
       filters.push('future');
 
-      const futureAuctions = auctions.filter(auction => {
-        const today = new Date();
-        const startDate = new Date(auction.startDate);
-        return today < startDate;
-      });
-      setAuctionsFiltered(futureAuctions);
+        futureFilter();
     }
   };
 
