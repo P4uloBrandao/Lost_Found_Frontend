@@ -6,7 +6,9 @@ import { useAuth } from '../../AuthContext';
 import LocationOn from '@mui/icons-material/LocationOn';
 import mapsIcon from './Map-location.svg';
 import { format, differenceInDays, differenceInHours, differenceInMinutes, differenceInSeconds, isBefore } from 'date-fns';
-import { GoogleMap, useLoadScript, Marker,Circle } from '@react-google-maps/api';
+import { GoogleMap, useLoadScript, Marker, Circle } from '@react-google-maps/api';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Configurar a conexão WebSocket
 const socket = io('http://localhost:5000'); 
@@ -26,15 +28,13 @@ const AuctionComponent = ({ auction }) => {
   const [lat, setLat] = useState(null);
   const [lng, setLng] = useState(null);
   const [circle, setCircle] = useState(null);
- 
-
 
   const mapContainerStyle = {
     width: '300px',
     height: '200px',
     alignSelf: 'center',
   };
-   const { isLoaded, loadError } = useLoadScript({
+  const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: 'AIzaSyDPUTFHLcj71rpOYKfPwigaRF8uiOKDvWo',
     libraries,
   });
@@ -73,6 +73,11 @@ const AuctionComponent = ({ auction }) => {
       if (data.auctionId === auction._id) {
         // Atualizar o lance mais alto
         setHighestBid(data.bidValue);
+        // Mostrar a notificação
+        toast.info('A new bid has been placed!', {
+          position: 'top-center',
+          autoClose: 3000 // Fecha após 3 segundos
+        });
       }
     });
 
@@ -81,6 +86,11 @@ const AuctionComponent = ({ auction }) => {
       if (data.auctionId === auction._id) {
         // Atualizar o lance máximo
         setHighestBid(data.maxBid);
+        // Mostrar a notificação
+        toast.info('A new highest bid has been placed!', {
+          position: 'top-center',
+          autoClose: 3000 // Fecha após 3 segundos
+        });
       }
     });
 
@@ -96,27 +106,33 @@ const AuctionComponent = ({ auction }) => {
     setBidValue(event.target.value);
   };
 
-
-
-
   const placeBid = async () => {
     if (parseFloat(bidValue) > auction.price) {
       try {
-        const response = await axios.post(`http://localhost:3000/api/auction/makeBid`, {
+        const response = await axios.post(process.env.REACT_APP_API_URL + `/api/auction/makeBid`, {
           value: bidValue,
           auction: auction._id,
-          bidder: authUser._id, 
-         
+          bidder: authUser._id,
         });
-          console.log(response);
+        console.log(response);
         if (response.status === 200) {
           setBidValue('');
+          // Mostrar a notificação
+          toast.success('Bid placed successfully!', {
+            position: 'top-center',
+            autoClose: 3000 // Fecha após 3 segundos
+          });
         }
       } catch (error) {
         console.error('Failed to place bid:', error);
+        toast.error('Failed to place bid!', {
+          position: 'top-center',
+          autoClose: 3000 // Fecha após 3 segundos
+        });
       }
     }
   };
+
   useEffect(() => {
     const extractLatLng = (data) => {
       const parts = data.split(',');
@@ -142,16 +158,18 @@ const AuctionComponent = ({ auction }) => {
     }
     
   }, [coordinates]);
+
   function openGoogleMaps() {
     const url = `https://www.google.com/maps?q=${lat},${lng}`;
     window.open(url, '_blank');
-}
+  }
+
   if (loadError) return <div>Error loading maps</div>;
   if (!isLoaded) return <div>Loading maps</div>;
 
-
   return (
     <div className="lost-item-details">
+      <ToastContainer />
       <div className="first_row">
         <div className="lost-item-status">
           <div>
@@ -191,29 +209,29 @@ const AuctionComponent = ({ auction }) => {
             <span className='location-icon'><LocationOn /></span>
             <span className='location-value-data'>{auction.location}</span>
           </div>
-          <span className='get-coordinates'onClick={openGoogleMaps}>Get GPS coordinates</span>
+          <span className='get-coordinates' onClick={openGoogleMaps}>Get GPS coordinates</span>
         </div>
         <div className='location-image'>
-        <GoogleMap
-      mapContainerStyle={mapContainerStyle}
-      zoom={18}
-      center={mapCenter}
-    >
-      <Marker
-        position={{ lat: lat, lng: lng }}
-        title={auction.title}
-      />
-      {circle && (
-        <Circle 
-          center={circle.center} 
-          radius={circle.radius} 
-          options={{ 
-            fillColor: 'rgba(255,0,0,0.2)', 
-            strokeColor: 'rgba(255,0,0,1)' 
-          }} 
-        />
-      )}
-    </GoogleMap>
+          <GoogleMap
+            mapContainerStyle={mapContainerStyle}
+            zoom={18}
+            center={mapCenter}
+          >
+            <Marker
+              position={{ lat: lat, lng: lng }}
+              title={auction.title}
+            />
+            {circle && (
+              <Circle 
+                center={circle.center} 
+                radius={circle.radius} 
+                options={{ 
+                  fillColor: 'rgba(255,0,0,0.2)', 
+                  strokeColor: 'rgba(255,0,0,1)' 
+                }} 
+              />
+            )}
+          </GoogleMap>
         </div>
       </div>
     </div>

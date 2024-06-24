@@ -69,7 +69,7 @@ export default function ChangePassword() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.put("http://localhost:3000/api/auth/forgetPassword/",
+            const response = await axios.put(process.env.REACT_APP_API_URL+"/api/auth/forgetPassword/",
                 {
                     "token": token,
                     "password": password

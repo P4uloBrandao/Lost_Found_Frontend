@@ -39,7 +39,7 @@ export default function DeleteFoundObjComponent() {
     const handleDeleteSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.delete(`http://localhost:3000/api/found-objects/${objId}`);
+            const response = await axios.delete(process.env.REACT_APP_API_URL+`/api/found-objects/${objId}`);
             setDeleteStatusMessage("Found Object deleted successfully.");
             setDeleteErrorMessage("");
         } catch (error) {

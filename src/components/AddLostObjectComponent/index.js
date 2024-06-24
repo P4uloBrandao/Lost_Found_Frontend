@@ -11,6 +11,9 @@ import AddCategory from '../CategoriesComponents/AddCategoriesObjectComponent/in
 import  AddIcon  from '../../assets/icons/add50.png';
 import PopupAlert from '../PopUpAlertComponent/index.jsx';
 import Grid from '@mui/material/Grid';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const StyledTextArea = styled.textarea`
     height: ${props => props.height}px;
     font-size: 16px;
@@ -195,7 +198,7 @@ const validateStepTwo = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/category');
+        const response = await axios.get(process.env.REACT_APP_API_URL+'/api/category');
         setCategories(response.data);
 
       } catch (error) {
@@ -248,13 +251,22 @@ const validateStepTwo = () => {
             formData.append("objectImage[]", image);
         });
 
-        const response = await axios.post("http://localhost:3000/api/lost-objects",
+        const response = await axios.post(process.env.REACT_APP_API_URL+"/api/lost-objects",
           formData,);
-        
+        if (response.status===201) {
+          toast.success("Object registered successfully", {
+            position: "top-center",
+            autoClose: 3000,
+          });
+        }
       } catch (error) {
         console.error("Object Registration failed:", error);
          
-         
+         toast.error("Object registration failed", {
+            position: "top-center",
+            autoClose: 3000,
+            });
+
         if (error.response && error.response.data) {
           setMessage(error.response.data.error); // Set the error message if present in the error response
         } else {
@@ -333,6 +345,8 @@ const validateStepTwo = () => {
 
   return (
     <>
+
+      <ToastContainer />
       <div className="progress-bar">
         <div className="progress" style={{ width: `${(formStepsNum + 1) * 33}%` }}></div>
         {formSteps.map((step, index) => (
@@ -483,6 +497,7 @@ const validateStepTwo = () => {
               <div className='btnSubmitSection'>
               <InputSubmit onClick={handleSubmit} className="input-submit" value="Register Object">Register Object</InputSubmit>
               <ResetButton onClick={() => window.location.reload()}>Reset form</ResetButton>
+
               </div>
             </Container>
           )}

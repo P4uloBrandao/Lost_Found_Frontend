@@ -10,7 +10,7 @@ const WelcomeHeaderComponent = ({name, description}) => {
             <span className='name-component'>{name}</span>
             <span className='text-component'>{description}</span>
         </div>
-        <div className='header-component-rigth'>
+        <div className='header-component-right'>
             <img src={banner} alt="banner geral" />
         </div>
     </div>

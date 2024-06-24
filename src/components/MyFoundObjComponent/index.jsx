@@ -73,7 +73,7 @@ export default function MyFoundObjComponent() {
         const token = localStorage.getItem("token");
   
         // Fetch the lost objects data
-        const objectsResponse = await axios.get(`http://localhost:3000/api/lost-objects/user/${token}`);
+        const objectsResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/lost-objects/user/${token}`);
         let objectsData = objectsResponse.data;
 
         // Filter objects to only include those with status "Claimed"
@@ -108,7 +108,7 @@ export default function MyFoundObjComponent() {
   const handleCreateSubmit = async (event) => {
     event.preventDefault();
     try {
-        const response = await axios.put(`http://localhost:3000/api/lost-objects/${getLostObjectID(objectName, objects)}`);
+        const response = await axios.put(process.env.REACT_APP_API_URL+`/api/lost-objects/${getLostObjectID(objectName, objects)}`);
     } catch (error) {
         console.error(error);
 

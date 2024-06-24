@@ -19,13 +19,13 @@ const LostItemComponent = ({ itemid }) => {
       setError(null);
 
       try {
-        const objectResponse = await axios.get(`http://localhost:3000/api/lost-objects/${itemid}`);
+        const objectResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/lost-objects/${itemid}`);
         const auctionData = objectResponse.data;
         console.log(auctionData);
         setLostObject(auctionData);
 
 
-        const matchesResponse = await axios.post('http://localhost:3000/api/match/', { lostObjectId: itemid });
+        const matchesResponse = await axios.post(process.env.REACT_APP_API_URL+'/api/match/', { lostObjectId: itemid });
         const matchesData = matchesResponse.data;
         console.log(matchesData);
         setMatches(matchesData);

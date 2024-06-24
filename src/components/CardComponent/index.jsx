@@ -9,7 +9,7 @@ import './index.css';
 import LostItemComponent from '../matchItemsComponents/LostItemComponent';
 
 
-const CardLostObjecs = ({ matchButton,catId,name, description, location, date, category, id,photo, status, onCardClick}) => {
+const CardLostObjecs = ({alt, matchButton,catId,name, description, location, date, category, id,photo, status, onCardClick}) => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -24,7 +24,7 @@ const CardLostObjecs = ({ matchButton,catId,name, description, location, date, c
   const handleRemoveLostObject = async () => {
     try {
       // Make an API call to delete the user profile
-      const response = await axios.delete(`http://localhost:3000/api/lost-objects/${id}`);
+      const response = await axios.delete(process.env.REACT_APP_API_URL+`/api/lost-objects/${id}`);
       console.log(response.data); // Log the response from the server
       // Handle success, e.g., redirect to login or show a success messages
     } catch (error) {
@@ -38,12 +38,12 @@ const CardLostObjecs = ({ matchButton,catId,name, description, location, date, c
     }
     window.location.reload();
   };
-  
 
   return (
     <Grid style={{ borderRadius:'1.25rem',boxShadow: '4px 4px 27.1px 0px rgba(0, 0, 0, 0.25)',marginTop:'60px'}} container spacing={2}>
       <Grid style={{ margin: '1rem 2rem ',height: '215px', width: '215px'}}  spacing={2}>
-       <div> <p className='p-absolute'> {category}</p><img  style={{ width: '215px', height: '215px' ,    objectFit: 'cover',borderRadius:' 1.25rem'}}  src={'https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/'+photo} alt="" />
+       <div> <p className='p-absolute'> {category}</p><img  style={{ width: '215px', height: '215px' ,    objectFit: 'cover',borderRadius:' 1.25rem'}}
+                                                            src={!!photo ? 'https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/'+photo : 'https://res.cloudinary.com/dkyu0tmfx/image/upload/v1719065883/objectImages/default_obj_ht0fde.png'} alt={alt} />
        </div>
         
       </Grid>
@@ -58,7 +58,7 @@ const CardLostObjecs = ({ matchButton,catId,name, description, location, date, c
             <p>Lost at: {location}</p>
             
           </Grid>
-          <Grid xs={12} style={{textAlign: 'left',paddingLeft: '5rem',    fontWeight: '300'}} xsOffset={4} md={6} mdOffset={0}>
+          <Grid xs={12}  xsOffset={4} md={6} mdOffset={0}>
           <p style={{ fontWeight: '400' }}>Status:</p>
            <div>
             <p>{status}</p>

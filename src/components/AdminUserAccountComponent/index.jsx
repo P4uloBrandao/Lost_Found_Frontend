@@ -47,7 +47,7 @@ export default function AdminUserAccountComponent() {
 
     useEffect(() => {
         if (userId) {
-            axios.get(`http://localhost:3000/api/users/userData/${userId}`)
+            axios.get(process.env.REACT_APP_API_URL+`/api/users/userData/${userId}`)
                 .then(response => {
                     setUserName(response.data.currentUser.first_name + " "+response.data.currentUser.last_name );
                 })
@@ -60,7 +60,7 @@ export default function AdminUserAccountComponent() {
 
     useEffect(() => {
         if (userId2) {
-            axios.get(`http://localhost:3000/api/users/userData/${userId2}`)
+            axios.get(process.env.REACT_APP_API_URL+`/api/users/userData/${userId2}`)
                 .then(response => {
                     setUserName2(response.data.currentUser.first_name + " "+response.data.currentUser.last_name );
                 })
@@ -74,7 +74,7 @@ export default function AdminUserAccountComponent() {
     const handleDeactivateSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.put(`http://localhost:3000/api/users/deactivate/${userId}`);
+            const response = await axios.put(process.env.REACT_APP_API_URL+`/api/users/deactivate/${userId}`);
             console.log(response); // Log the response from the server
             setStatusMessage("User account deactivated successfully.");
             setErrorMessage("");
@@ -92,7 +92,7 @@ export default function AdminUserAccountComponent() {
     const handleActivateSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.put(`http://localhost:3000/api/users/activate/${userId2}`);
+            const response = await axios.put(process.env.REACT_APP_API_URL+`/api/users/activate/${userId2}`);
             console.log(response.data); // Log the response from the server
             setStatusMessage2("User account activated successfully.");
             setErrorMessage2("");

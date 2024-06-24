@@ -73,7 +73,7 @@ const Estatistics = () => {
     const fetchFoundObjects = async () => {
       try {
         // Buscar os dados dos objetos encontrados
-        const objectsResponse = await axios.get('http://localhost:3000/api/found-objects');
+        const objectsResponse = await axios.get(process.env.REACT_APP_API_URL+'/api/found-objects');
         let objectsData = objectsResponse.data;
   
         // Atualizar o estado dos objetos com os dados buscados
@@ -98,7 +98,7 @@ const Estatistics = () => {
     const fetchLostObjects = async () => {
       try {
         // Buscar os dados dos objetos perdidos
-        const objectsResponse = await axios.get('http://localhost:3000/api/lost-objects');
+        const objectsResponse = await axios.get(process.env.REACT_APP_API_URL+'/api/lost-objects');
         let objectsData = objectsResponse.data;
   
         // Atualizar o estado dos objetos com os dados buscados
@@ -131,7 +131,7 @@ const options = [
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/stats');
+        const response = await axios.get(process.env.REACT_APP_API_URL+'/api/stats');
         setStats(response.data);
         console.log(response)
       } catch (error) {

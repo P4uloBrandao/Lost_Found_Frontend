@@ -27,9 +27,9 @@ const Grid = styled.div`
     border: '1px solid var(--primary-green-color)',
     borderRadius: '20px',
     width: '100%',
-    textAlign: 'center',
+    textAlign: 'left',
     borderCollapse: 'collapse',
-    
+    marginTop: '20px'
 };
 
 const thStyle = {
@@ -43,61 +43,58 @@ const tdStyle = {
     borderBottom: '1px solid #ddd'
 };
 
-export default function ListUsersComponent() {
-   const[users, setUsers] = useState([]);
+export default function AuctionsListComponent() {
+   const[auctions, setAuctions] = useState([]);
     const[loading, setLoading] = useState(true);
     useEffect(() => {
-        const fetchUsers = async () => {
+        const fetchAuctions = async () => {
           try {
             // Buscar os dados dos objetos encontrados
-            const objectsResponse = await axios.get(process.env.REACT_APP_API_URL+'/api/users/list/');
+            const objectsResponse = await axios.get(process.env.REACT_APP_API_URL+'/api/auction');
             let objectsData = objectsResponse.data;
       
             // Atualizar o estado dos objetos com os dados buscados
-            setUsers(objectsData);
+            setAuctions(objectsData);
       
             
       
             setLoading(false);
           } catch (error) {
-            console.error('Failed to fetch found objects data:', error);
+            console.error('Failed to fetch auctions data:', error);
             // Lidar com erros conforme necessário
           }
         };
       
-        fetchUsers();
+        fetchAuctions();
       }, []); // Dependências vazias para executar apenas uma vez ao montar o componente
       
 
     return (
      <>
              <Container>
-    <Title style={{ alignSelf: 'center' }}>List of users</Title>
+    <Title style={{ alignSelf: 'center' }}>List of Auctions</Title>
     <table style={tableStyle}>
                 <thead>
                     <tr>
                         <th style={thStyle}>ID</th>
-                        <th style={thStyle}>Name</th>
-                        <th style={thStyle}>Email</th>
-                        <th style={thStyle}>Phone</th>
-                        <th style={thStyle}>NIC</th>
-                        <th style={thStyle}>NIF</th>
-                        <th style={thStyle}>Role</th>
+                        <th style={thStyle}>Found Object Title</th>
+                        <th style={thStyle}>Found Object ID</th>
+                        <th style={thStyle}>Start Date</th>
+                        <th style={thStyle}>End Date</th>
                         <th style={thStyle}>Status</th>
+                        <th style={thStyle}>Highest Bid</th>
                     </tr>
                 </thead>
-              
                 <tbody>
-                    {users.map(item => (
+                    {auctions.map(item => (
                         <tr key={item.object_id}>
                             <td style={tdStyle}>{item._id}</td>
-                            <td style={tdStyle}>{item.first_name + " "+ item.last_name}</td>
-                            <td style={tdStyle}>{item.email}</td>
-                            <td style={tdStyle}>{item.phone}</td>
-                            <td style={tdStyle}>{item.nic}</td>
-                            <td style={tdStyle}>{item.nif}</td>
-                            <td style={tdStyle}>{item.role}</td>
+                            <td style={tdStyle}>{item.foundObjectTitle}</td>
+                            <td style={tdStyle}>{item.foundObject}</td>
+                            <td style={tdStyle}>{item.startDate}</td>
+                            <td style={tdStyle}>{item.endDate}</td>
                             <td style={tdStyle}>{item.status}</td>
+                            <td style={tdStyle}>{item.highestBid}</td>
                         </tr>
                     ))}
                 </tbody>

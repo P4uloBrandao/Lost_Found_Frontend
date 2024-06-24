@@ -53,14 +53,14 @@ export default function PoliceDeliverObjComponent() {
         event.preventDefault();
         try {
           
-          const userResponse = await axios.get(`http://localhost:3000/api/users/userNif/${userNif2}`);
+          const userResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/users/userNif/${userNif2}`);
           const userId2 = userResponse.data.currentUser._id;
 
           // Step 2: Get the owner ID using the user ID
-          const bidderResponse = await axios.get(`http://localhost:3000/api/users/bidder/${userId2}`);
+          const bidderResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/users/bidder/${userId2}`);
           const bidderId = bidderResponse.data[0]._id;
 
-          const deliveryResponse2 = await axios.put(`http://localhost:3000/api/police/police-officers/auction/${bidderId}/${auctionId}`);
+          const deliveryResponse2 = await axios.put(process.env.REACT_APP_API_URL+`/api/police/police-officers/auction/${bidderId}/${auctionId}`);
   
           setStatusMessage2("Object delivered successfully.");
           setErrorMessage2("");
@@ -79,16 +79,16 @@ export default function PoliceDeliverObjComponent() {
         event.preventDefault();
         try {
           
-          const userResponse = await axios.get(`http://localhost:3000/api/users/userNif/${userNif}`);
+          const userResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/users/userNif/${userNif}`);
           const userId = userResponse.data.currentUser._id;
           
           // Step 2: Get the owner ID using the user ID
-          const ownerResponse = await axios.get(`http://localhost:3000/api/users/owner/${userId}`);
+          const ownerResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/users/owner/${userId}`);
           const ownerId = ownerResponse.data._id;
       
           // Step 3: Use the owner ID and the other two IDs from inputs to call the delivery endpoint
          
-          const deliveryResponse = await axios.put(`http://localhost:3000/api/police/police-officers/delivery/${lostId}/${foundId}/${ownerId}`);
+          const deliveryResponse = await axios.put(process.env.REACT_APP_API_URL+`/api/police/police-officers/delivery/${lostId}/${foundId}/${ownerId}`);
           
           // Log the response from the server
           console.log(deliveryResponse.data); 

@@ -50,7 +50,7 @@ export default function FoundObjComponent() {
         const fetchFoundObjects = async () => {
           try {
             // Buscar os dados dos objetos encontrados
-            const objectsResponse = await axios.get('http://localhost:3000/api/found-objects');
+            const objectsResponse = await axios.get(process.env.REACT_APP_API_URL+'/api/found-objects');
             let objectsData = objectsResponse.data;
       
             // Atualizar o estado dos objetos com os dados buscados

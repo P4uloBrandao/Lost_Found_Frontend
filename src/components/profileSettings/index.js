@@ -157,7 +157,7 @@ export default function ProfileSettings({btnLabel, options}) {
       const fetchUserProfile = async () => {
         try {
          
-          const response = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
+          const response = await axios.get(process.env.REACT_APP_API_URL+`/api/users/profile/${token}`);
 
 
           const userProfileData = response.data.currentUser; // Supondo que o endpoint forneça os detalhes do perfil do usuário
@@ -259,7 +259,7 @@ export default function ProfileSettings({btnLabel, options}) {
           data1.append('nif',nif);
           data1.append('token',token);
           data1.append('profileImage',profileImage);
-          const response = await axios.put("http://localhost:3000/api/users/update", data1);
+          const response = await axios.put(process.env.REACT_APP_API_URL+"/api/users/update", data1);
           setInitialEmail(email);
 
         } catch (error) {

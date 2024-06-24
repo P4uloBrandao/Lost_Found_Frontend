@@ -16,23 +16,22 @@ export default function LostObjectCatalogPage() {
   const [selectedFilter, setSelectedFilter] = useState(null);
   const [objects, setObjects] = useState([]);
   const [openCard, setOpenCard]= useState(null);
-  console.log(objects)
   useEffect(() => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
        
         // Buscar os dados dos objetos perdidos
-        const objectsResponse = await axios.get(`http://localhost:3000/api/lost-objects/user/${token}`);
+        const objectsResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/lost-objects/user/${token}`);
         const objectsData = objectsResponse.data;
   
         // Atualizar o estado dos objetos com os dados buscados
         setObjects(objectsData);
-  
+
         // Para cada objeto, buscar o nome da categoria associada
         const updatedObjects = await Promise.all(objectsData.map(async (object) => {
           const catId = object.category;
-          const categoryResponse = await axios.get(`http://localhost:3000/api/category/${catId}`);
+          const categoryResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/category/${catId}`);
           const categoryName = categoryResponse.data.name;
   
           // Retornar um novo objeto com o nome da categoria atualizado

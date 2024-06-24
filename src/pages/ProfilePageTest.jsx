@@ -1,7 +1,7 @@
 // ProfilePage.jsx
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
-import { useLocation } from 'react-router-dom';
+import {useLocation, useNavigate, useParams, useSearchParams} from 'react-router-dom';
 import styled from 'styled-components';
 import ProfileMenu from '../components/profileMenu/index';
 import ChangePassword from '../components/ChangePasswordComponent';
@@ -12,6 +12,8 @@ import MyLost from '../components/LostObjectsCatalog/index.jsx';
 import PaymentsDetails from '../components/PaymentDetailsComponent/index.jsx';
 import WelcomeHeaderComponent from '../components/headerWithNameComponent/welcomeHeader.jsx';
 import MyFoundObjComponent from '../components/MyFoundObjComponent/index.jsx';
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 const token = localStorage.getItem("token");
 
@@ -19,6 +21,10 @@ const PrimaryContainer = styled.div`
   margin: 0.1em 7em;
   text-align: -webkit-center;
   place-content: center;
+
+  @media (max-width: 1200px) {
+    margin: 0.1em 3em; // Margens para telas médias
+  }
 `;
 
 const ChangeContainer = styled.div`
@@ -53,11 +59,19 @@ const ProfilePage = ({ componentToRender }) => {
   const location = useLocation();
 
   const menuOptions = ['Profile', 'My Auctions', 'My Lost Objects', 'My Found Objects', 'Payments Details', 'Account Settings'];
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  // Example function to remove query parameters
+
+
 
   useEffect(() => {
+
+
     const fetchUserProfile = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
+        const response = await axios.get(process.env.REACT_APP_API_URL+`/api/users/profile/${token}`);
         const userProfileData = response.data.currentUser; // Supondo que o endpoint forneça os detalhes do perfil do usuário
         setUser(userProfileData.first_name);
       } catch (error) {
@@ -98,6 +112,50 @@ const ProfilePage = ({ componentToRender }) => {
     }
   }, [location]);
 
+  useEffect(() => {
+    const setPayment = async () => {
+      const successParameter = searchParams.get('success');
+      const auctionId =  searchParams.get('auctionId');
+      if (!!successParameter && successParameter === 'false') {
+        toast.error('Payment failed. Please try again.', {
+            position: 'top-center',
+            autoClose: 3000 // Fecha após 3 segundos
+        });
+
+      }
+
+      if (!!successParameter && successParameter === 'true' && !!auctionId) {
+        const response = await axios.post(process.env.REACT_APP_API_URL+`/api/payment/createPaymentInfo`,
+            {
+              auctionId: auctionId,
+            });
+
+        if (!!response.data) {
+          if (searchParams.has("success")) {
+            const token = searchParams.get("success");
+            if (token) {
+              searchParams.delete("success");
+              setSearchParams(searchParams);
+            }
+          }
+          if (searchParams.has("auctionId")) {
+            const token = searchParams.get("auctionId");
+            if (token) {
+              searchParams.delete("auctionId");
+              setSearchParams(searchParams);
+            }
+          }
+          toast.success('Payment success!', {
+            position: 'top-center',
+            autoClose: 3000 // Fecha após 3 segundos
+          });
+        }
+      }
+    };
+      setPayment();
+
+  }, []);
+
   const renderComponent = () => {
     if (componentToRender) {
       return React.createElement(componentToRender);
@@ -129,6 +187,8 @@ const ProfilePage = ({ componentToRender }) => {
 
   return (
     <PrimaryContainer>
+
+      <ToastContainer />
       <WelcomeHeaderComponent name={user} description={'Did you know that over 30 million wallets are lost every year?'} />
       <ProfileMenu options={menuOptions} selectedOption={selectedOption} setSelectedOption={setSelectedOption} />
       <ChangeContainer>

@@ -87,20 +87,20 @@ const PaymentDetails = () => {
       try {
         const token = localStorage.getItem("token");
 
-        const userResponse = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
+        const userResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/users/profile/${token}`);
         const userData = userResponse.data.currentUser._id;
 
-        const bidderResponse = await axios.get(`http://localhost:3000/api/users/bidder/${userData}`);
+        const bidderResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/users/bidder/${userData}`);
         const bidderId = bidderResponse.data[0]._id;
     
-        const idsResponse = await axios.get(`http://localhost:3000/api/payment/getPaymentInfoUser/${bidderId}`);
+        const idsResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/payment/getPaymentInfoUser/${bidderId}`);
         const idsData = idsResponse.data;
         const PaymentIds = idsData.map((payment) => payment.paymentStatus);
         const auctionIds = idsData.map((payment) => payment.paymentAuction);
 
         // Em seguida, obtenha os detalhes de cada leilão usando os IDs
         const auctionPromises = auctionIds.map((auctionId) =>
-          axios.get(`http://localhost:3000/api/auction/${auctionId}`)
+          axios.get(process.env.REACT_APP_API_URL+`/api/auction/${auctionId}`)
         );
 
         const auctionsResponses = await Promise.all(auctionPromises);
@@ -120,9 +120,9 @@ const PaymentDetails = () => {
         // Iterar sobre os dados dos leilões e adicionar as promessas de solicitação HTTP ao array
         auctionsData.forEach(auction => {
           const foundObject = auction.foundObject;
-          const requestPromise = axios.get(`http://localhost:3000/api/found-objects/${foundObject}`);
+          const requestPromise = axios.get(process.env.REACT_APP_API_URL+`/api/found-objects/${foundObject}`);
           requests.push(requestPromise);
-          const requestPromiseBid = axios.get(`http://localhost:3000/api/auction/${auction._id}/bid`);
+          const requestPromiseBid = axios.get(process.env.REACT_APP_API_URL+`/api/auction/${auction._id}/bid`);
           requestsBid.push(requestPromiseBid);
         });
 
@@ -194,7 +194,7 @@ const PaymentDetails = () => {
                 category={foundObjectsListF[index].category}
                 id={auction._id}
                 date={auction.endDate.split('T')[0]}
-                photo={foundObjectsListF[index].objectImage[0]}
+                photo={process.env.REACT_APP_CLOUDINARY_IMAGE_URL + foundObjectsListF[index].objectImage[0]}
                 status={auction.status}
                 highbid={auction.winnerBid + " EUR"}
                 />

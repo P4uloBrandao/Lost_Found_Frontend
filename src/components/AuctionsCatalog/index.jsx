@@ -5,6 +5,8 @@ import AuctionInfoComponent from '../SelectedAuctionComponent/ObjectDataComponen
 import Card from "../CardComponentAuction/index";
 import SearchInput from "../SearchInputFieldComponent/index";
 import axios from "axios";
+import {loadStripe} from "@stripe/stripe-js";
+import {useParams} from "react-router-dom";
 
 const Container = styled.div`
     position: relative;
@@ -58,16 +60,25 @@ const ButtonContainer = styled.div`
   align-items: center;
 `;
 
+const ToPayContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border: 1px solid #000000;
+  background: linear-gradient(90deg, rgba(3, 155, 175, 0.5), rgba(247, 219, 97, 0.5));
+    border-radius: 15px;
+  gap: 30px;
+`
+
 export default function AuctionsCatalog() {
   const [errorMessage, setErrorMessage] = useState("");
   const [auctions, setAuctions] = useState([]);
   const [auctionName, setAuctionName] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [filteredAuctions, setFilteredAuctions] = useState([]);
+  const [auctionsToPay, setAuctionsToPay] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const searchInputRef = useRef(null); // UseRef para o campo de busca
-  const [foundObjectsList, setFoundObjectsList] = useState([]);
-  const [foundObjectsListF, setFoundObjectsListF] = useState([]);
   const [openCard, setOpenCard]= useState(null);
 
   useEffect(() => {
@@ -75,13 +86,13 @@ export default function AuctionsCatalog() {
       try {
         const token = localStorage.getItem("token");
 
-        const userResponse = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
+        const userResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/users/profile/${token}`);
         const userData = userResponse.data.currentUser._id;
-    
+
         // Buscar os dados dos leilões
-        const auctionsResponse = await axios.get(`http://localhost:3000/api/auction/user/${userData}`);
+        const auctionsResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/auction/user/${userData}`);
         let auctionsData = auctionsResponse.data;
-        
+
         // Verificar se a mensagem de "Not participated in any auctions" foi recebida
         if (auctionsData.message === 'Not participated in any auctions') {
           setErrorMessage(auctionsData.message);
@@ -89,9 +100,7 @@ export default function AuctionsCatalog() {
           return;
         }
 
-        // Atualizar o estado dos leilões com os dados buscados
-        setAuctions(auctionsData);
-        setFilteredAuctions(auctionsData); // Inicialmente, mostrar todos os leilões
+
 
         // Array para armazenar as promessas de solicitação HTTP
         const requests = [];
@@ -100,9 +109,9 @@ export default function AuctionsCatalog() {
         // Iterar sobre os dados dos leilões e adicionar as promessas de solicitação HTTP ao array
         auctionsData.forEach(auction => {
           const foundObject = auction.foundObject;
-          const requestPromise = axios.get(`http://localhost:3000/api/found-objects/${foundObject}`);
+          const requestPromise = axios.get(process.env.REACT_APP_API_URL+`/api/found-objects/${foundObject}`);
           requests.push(requestPromise);
-          const requestPromiseBid = axios.get(`http://localhost:3000/api/auction/${auction._id}/bid`);
+          const requestPromiseBid = axios.get(process.env.REACT_APP_API_URL+`/api/auction/${auction._id}/bid`);
           requestsBid.push(requestPromiseBid);
         });
 
@@ -117,22 +126,24 @@ export default function AuctionsCatalog() {
         // Renomear o campo title para name
         foundObjectsData = foundObjectsData.map(obj => ({ ...obj, name: obj.title }));
 
+        // Atualizar o estado dos leilões com os dados buscados
         auctionsData.forEach((auction, index) => {
-          auction.winnerBid = bidsData[index].value;
+          auction['winnerBidValue'] = bidsData[index].value;
+          auction['name'] = foundObjectsData[index].name;
+          auction['objectImage'] = foundObjectsData[index].objectImage;
+          auction['location'] = foundObjectsData[index].location;
+          auction['description'] = foundObjectsData[index].description;
+          auction['category'] = foundObjectsData[index].category;
         });
-
-        setFoundObjectsList(foundObjectsData);
-        setFoundObjectsListF(foundObjectsData);
+        setAuctions(auctionsData);
 
         setIsLoading(false);
-  
       } catch (error) {
-        console.error('Failed to fetch data:', error);
+        console.log('Failed to fetch data:', error);
         setErrorMessage('We had an issue on our side. Please try again later');
         setIsLoading(false);
       }
     };
-  
     fetchData();
   }, []);
   
@@ -140,37 +151,74 @@ export default function AuctionsCatalog() {
     setOpenCard(id);
   };
 
-  useEffect(() => {
-    console.log("Current auctionName:", auctionName); // Print auctionName to the console whenever it changes
-  }, [auctionName]);
+  const handlePayButtonClick = async (auctionId) => {
+    const stripe = await loadStripe(process.env.REACT_APP_STRIPE_KEY);
+    const auction = auctionsToPay.find(auction => auction._id === auctionId);
+    const response = await axios.post(process.env.REACT_APP_API_URL+`/api/payment`, {
+      name: auction.name,
+      image: process.env.REACT_APP_CLOUDINARY_IMAGE_URL + auction.objectImage,
+      price: auction.winnerBidValue,
+      auctionId: auctionId
+    });
+    const result = stripe.redirectToCheckout({
+      sessionId: response.data.id
+    })
+  };
 
-  useEffect(() => {
-    console.log("Current searchTerm:", searchTerm); // Print searchTerm to the console whenever it changes
-  }, [searchTerm]);
 
   const handleDropdownChange = (selectedOptionName) => {
     setAuctionName(selectedOptionName);
   };
 
+  useEffect(() => {
+
+    const reorderAuctions = async () => {
+      const auctionsCopy = [...auctions];
+      const auctionsToPay = [];
+      let indexesToRemove = [];
+      for (const auction of auctionsCopy) {
+        const index = auctionsCopy.indexOf(auction);
+        if(!!auction.winnerBid) {
+          if (!!auction && auction.winnerBid === auction.bid) {
+            const response = await axios.get(process.env.REACT_APP_API_URL+`/api/payment/checkPayment/${auction._id}`);
+            const paid = response.data.paid;
+            auction['paid'] = paid;
+            auctionsToPay.push(auction);
+            indexesToRemove.push(index);
+          }
+        }
+      }
+      indexesToRemove = indexesToRemove.sort((a, b) => b - a);
+        indexesToRemove.forEach(index => auctionsCopy.splice(index, 1));
+      setFilteredAuctions(auctionsCopy);
+      auctionsToPay.sort((a, b) => {
+        if (a.paid === false && b.paid === true) {
+          return -1;
+        }
+        // Mantém a ordem dos objetos com paid: true
+        if (a.paid === true && b.paid === false) {
+          return 1;
+        }
+        // Se ambos são iguais, mantém a ordem original
+        return 0;
+      });
+        setAuctionsToPay(auctionsToPay);
+    };
+
+    reorderAuctions();
+
+  } , [auctions]);
+
+
   const handleSearch = (value) => {
-    console.log(foundObjectsListF)
-    console.log()
     const filtered = auctions.filter((auction, index) => {
-      const foundObject = foundObjectsList[index];
-      return foundObject.name.toLowerCase() === value.toLowerCase();
+      return auction.name.toLowerCase() === value.toLowerCase();
     });
-
-    setFoundObjectsListF(foundObjectsList.filter((fo, index) => {
-      return fo.name.toLowerCase() === value.toLowerCase();
-    }));
-
-    setFilteredAuctions(filtered); 
+    setFilteredAuctions(filtered);
   };
-
   const handleResetFilters = () => {
     setSearchTerm('');
     setFilteredAuctions(auctions); // Exibir todos os leilões novamente
-    setFoundObjectsListF(foundObjectsList);
   };
 
   if (isLoading) {
@@ -195,7 +243,7 @@ export default function AuctionsCatalog() {
             required
             onChange={handleDropdownChange}
             name="Auction"
-            options={foundObjectsList}
+            options={auctions}
             value={auctionName}
             ref={searchInputRef}
           />
@@ -203,24 +251,51 @@ export default function AuctionsCatalog() {
           <ResetButton onClick={handleResetFilters}>Reset Filters</ResetButton>
         </ButtonContainer>
       </div>
+      {auctionsToPay.length>0 && <ToPayContainer>
+        <Title> Auctions Payment: </Title>
+        {auctionsToPay.map((auction, index) => (
+              <Card
+                  spacing={2}
+                  name={auction.name}
+                  description={auction.description}
+                  location={auction.location}
+                  category={auction.category}
+                  id={auction._id}
+                  catId={auction.status}
+                  date={auction.endDate}
+                  photo={process.env.REACT_APP_CLOUDINARY_IMAGE_URL + auction.objectImage[0]}
+                  status={auction.status}
+                  matchButton={true}
+                  highbid={auction.winnerBidValue + " EUR"}
+                  onCardClick={handleCardClick}
+                  onPayClick={handlePayButtonClick}
+                  bidValue={auction.value}
+                  paymentObject={{
+                    paid: auction.paid
+                  }}
+              />
+        ))}
+
+      </ToPayContainer>}
       <Grid sx={{ textAlign: '-webkit-center', pt: 7, width: '100%' }} container spacing={5}>
        {openCard ? <AuctionInfoComponent itemid={openCard}/> : null}
         {filteredAuctions.map((auction, index) => (
           <Grid spacing={2} sx={{ justifyContent: 'center' }} item xs={10} md={10} key={index}>
             <Card  
               spacing={2}
-              name={foundObjectsListF[index].name}
+              name={auction.name}
               description={auction.description}
-              location={foundObjectsListF[index].location}
-              category={foundObjectsListF[index].category}
+              location={auction.location}
+              category={auction.category}
               id={auction._id}
               catId={auction.status}
               date={auction.endDate}
-              photo={foundObjectsListF[index].objectImage[0]}
+              photo={ process.env.REACT_APP_CLOUDINARY_IMAGE_URL + auction.objectImage[0]}
               status={auction.status}
               matchButton={true}
-              highbid={auction.winnerBid + " EUR"}
+              highbid={auction.winnerBidValue + " EUR"}
               onCardClick={handleCardClick}
+              bidValue={auction.value}
             />
           </Grid>
         ))}  

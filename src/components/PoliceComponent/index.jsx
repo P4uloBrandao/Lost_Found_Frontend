@@ -133,7 +133,7 @@ const toggleShowPassword2 = () => {
 useEffect(() => {
     const fetchStations = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/police/police-stations');
+            const response = await axios.get(process.env.REACT_APP_API_URL+'/api/police/police-stations');
             setStations(response.data);
             setIsLoading(false);
         } catch (error) {
@@ -230,7 +230,7 @@ async function validateForm() {
             if (!isValid) {
                 return;
             }
-            const response = await axios.post(`http://localhost:3000/api/police/police-officers`,{
+            const response = await axios.post(process.env.REACT_APP_API_URL+`/api/police/police-officers`,{
               "firstName" :first_name,
               "lastName":last_name,
               "phone":phone,
@@ -258,7 +258,7 @@ async function validateForm() {
     // const handleDeleteSubmit = async (event) => {
     //     event.preventDefault();
     //     try {
-    //         const response = await axios.delete(`http://localhost:3000/api/police/police-stations/${stationId}`);
+    //         const response = await axios.delete(process.env.REACT_APP_API_URL+`/api/police/police-stations/${stationId}`);
             
     //     } catch (error) {
     //         console.error( error);

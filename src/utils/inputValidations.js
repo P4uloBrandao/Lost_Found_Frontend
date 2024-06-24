@@ -46,7 +46,7 @@ export function validateZipCode(zipCode) {
 }
 
 export async function checkIfEmailExists(email) {
-    const response = await axios.post("http://localhost:3000/api/users/checkByEmail", {email: email});
+    const response = await axios.post(process.env.REACT_APP_API_URL+"/api/users/checkByEmail", {email: email});
     const data = response.data;
     return data;
 }

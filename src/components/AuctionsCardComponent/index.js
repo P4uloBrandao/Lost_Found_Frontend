@@ -26,6 +26,7 @@ const CardContainer = styled.div`
   
   p {
     color: #000;
+    margin: 0;
   }
   
   img {
@@ -105,7 +106,8 @@ export default function AuctionsCardComponent({itemTitle, daysLeft, id, price, b
               <InfoContainer>
                   <TextContainer>
                       <MajorText>{itemTitle}</MajorText>
-                      <MinorText> {daysLeft} days left</MinorText>
+                      <MinorText> {daysLeft >0 && `${daysLeft} days left`}</MinorText>
+                      <MinorText> {daysLeft <=0 && `${Math.abs(daysLeft)} days closed`}</MinorText>
                   </TextContainer>
                   <PriceActionContainer>
                     <TextContainer>

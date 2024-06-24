@@ -5,6 +5,7 @@ import "../../assets/colors/colors.css";
 import { InputSubmit, Container, InputBox, Title, CategoryTitle } from '../../assets/StylePopularComponent/style';
 import MailIcon from '@mui/icons-material/MailOutlineRounded';
 import axios from "axios";
+import AuctionsListComponent from "../ListAuctionsComponent";
 
 const CategoryButton = styled.button`
   width: 174px;
@@ -51,7 +52,17 @@ export default function AdminAuctionComponent() {
   const handleCreateSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post(`http://localhost:3000/api/auction/`, {
+
+      if (dateStart > dateEnd) {
+        setCreateErrorMessage("The start date must be before the end date");
+        return;
+      }
+
+        if (dateStart < new Date().toISOString().split('T')[0]) {
+            setCreateErrorMessage("The start date must be after the current date");
+            return;
+        }
+      const response = await axios.post(process.env.REACT_APP_API_URL+`/api/auction/`, {
         "foundObject": foundObjId,
         "endDate": dateEnd,
         "startDate": dateStart,
@@ -60,18 +71,13 @@ export default function AdminAuctionComponent() {
       setCreateStatusMessage("Auction created successfully.");
       setCreateErrorMessage("");
     } catch (error) {
-      console.error(error);
       if (foundObjId==='') {
         setCreateErrorMessage("Please insert a Found Object Id");
       } else if (dateStart==='') {
             setCreateErrorMessage("Please insert a Start Date");
       } else if (dateEnd==='') {
             setCreateErrorMessage("Please insert a End Date");
-      } else if (dateStart > dateEnd) {
-            setCreateErrorMessage("The start date must be before the end date");
-      } else if (dateStart < new Date().toISOString().split('T')[0]) {
-            setCreateErrorMessage("The start date must be after the current date");
-      } else {
+      }else {
         setCreateErrorMessage("Please insert a valid Found Object Id.");
       }
       // if (error.response && error.response.data) {
@@ -86,7 +92,7 @@ export default function AdminAuctionComponent() {
   const handleBeginSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.put(`http://localhost:3000/api/auction/${auctionIdB}/begin`);
+      const response = await axios.put(process.env.REACT_APP_API_URL+`/api/auction/${auctionIdB}/begin`);
       setBeginStatusMessage("Auction started successfully.");
       setBeginErrorMessage("");
     } catch (error) {
@@ -102,7 +108,7 @@ export default function AdminAuctionComponent() {
   const handleEndSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.put(`http://localhost:3000/api/auction/${auctionIdE}/end`);
+      const response = await axios.put(process.env.REACT_APP_API_URL+`/api/auction/${auctionIdE}/end`);
       setEndStatusMessage("Auction ended successfully.");
       setEndErrorMessage("");
     } catch (error) {
@@ -119,7 +125,7 @@ export default function AdminAuctionComponent() {
   const handleDeleteSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.delete(`http://localhost:3000/api/auction/${auctionId}`);
+      const response = await axios.delete(process.env.REACT_APP_API_URL+`/api/auction/${auctionId}`);
       setDeleteStatusMessage("Auction deleted successfully.");
       setDeleteErrorMessage("");
     } catch (error) {
@@ -245,6 +251,7 @@ export default function AdminAuctionComponent() {
         </InputBox>
         <InputSubmit type="submit" onClick={handleDeleteSubmit}>Delete</InputSubmit>
       </Container>
+      <AuctionsListComponent />
     </>
   );
 }

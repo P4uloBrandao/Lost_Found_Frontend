@@ -105,7 +105,6 @@ const PrimaryContainer = styled.div`
 const BannerContainer = styled.div`
   background-color: #f5f5f5;
   padding: 2em;
-  text-align: center;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
@@ -168,7 +167,7 @@ const [showFilters, setShowFilters] = React.useState(false);
           }
 
           try {
-              const response = await axios.get(`http://localhost:3000/api/users/profile/${token}`);
+              const response = await axios.get(process.env.REACT_APP_API_URL+`/api/users/profile/${token}`);
               const userProfileData = response.data.currentUser;
               setUser(userProfileData.first_name);
           } catch (error) {
@@ -180,7 +179,7 @@ const [showFilters, setShowFilters] = React.useState(false);
   }, [token]);
   
   useEffect(() => {
-    axios.get("http://localhost:3000/api/auction").then((response) => {
+    axios.get(process.env.REACT_APP_API_URL+"/api/auction").then((response) => {
       setAuctions(response.data);
       console.log(response.data)
     }).catch((error) => {
@@ -194,12 +193,12 @@ const [showFilters, setShowFilters] = React.useState(false);
 
 
   const handleCardClick = (id) => {
-    setOpenCard(id);
+      const auction = auctions.find(auction => auction._id === id);
+      setOpenCard(auction);
   };
   if (loading) {
       return null; // Or a loading spinner
-  }
-
+  };
   return (<>
       <PrimaryContainer>
           <WelcomeHeaderComponent name={user} description={'Welcome to BidFind.er! Let\'s get you started!'}/>
@@ -214,32 +213,26 @@ const [showFilters, setShowFilters] = React.useState(false);
       <Typography variant="h6" gutterBottom>
         Already have an account?
       </Typography>
-      <InputSubmit onClick={redirectLogin} variant="contained" color="primary">
+      <InputSubmit alt={"Login"}onClick={redirectLogin} variant="contained" color="primary">
         Login
       </InputSubmit>
-      <InputSubmit onClick={redirectRegister} variant="outlined" color="primary">
+      <InputSubmit alt={"Create account"} onClick={redirectRegister} variant="outlined" color="primary">
         Create account
       </InputSubmit>
     </BannerContainer>
   </>
 )}
     <BannerContainer>
-     <Title>Active auctions</Title>
- 
-
-
-      
-
-        
-
+     <Title style={{
+         textAlign: 'center',
+     }}>Active auctions</Title>
         <div className="lost-item-container" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             {openCard ? <AuctionInfoComponent itemid={openCard} /> : null}
             <AuctionContainer>
               {auctions.slice(0, 6).map((auction, index) => (
                 auction._id !== openCard && (
-                  <Grid spacing={2} sx={{ justifyContent: 'center' }} item xs={10} md={10} key={index}>
                     <AuctionsCardComponent 
-                      image={"https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/"+ auction.objectImage[0]} 
+                      image={auction.objectImage.length ===0 ? "https://res.cloudinary.com/dkyu0tmfx/image/upload/v1719065883/objectImages/default_obj_ht0fde.png": "https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/"+ auction.objectImage[0]}
                       itemTitle={auction.foundObjectTitle}
                       id={auction._id}
                       daysLeft={getDaysLeft(auction.startDate, auction.endDate)}
@@ -248,7 +241,6 @@ const [showFilters, setShowFilters] = React.useState(false);
                       
                       onCardClick={handleCardClick}
                     />
-                  </Grid>
                 )
               ))}
             </AuctionContainer>
