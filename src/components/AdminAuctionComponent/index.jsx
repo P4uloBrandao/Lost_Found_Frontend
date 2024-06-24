@@ -5,6 +5,7 @@ import "../../assets/colors/colors.css";
 import { InputSubmit, Container, InputBox, Title, CategoryTitle } from '../../assets/StylePopularComponent/style';
 import MailIcon from '@mui/icons-material/MailOutlineRounded';
 import axios from "axios";
+import AuctionsListComponent from "../ListAuctionsComponent";
 
 const CategoryButton = styled.button`
   width: 174px;
@@ -250,6 +251,7 @@ export default function AdminAuctionComponent() {
         </InputBox>
         <InputSubmit type="submit" onClick={handleDeleteSubmit}>Delete</InputSubmit>
       </Container>
+      <AuctionsListComponent />
     </>
   );
 }
