@@ -139,7 +139,7 @@ export default function AuctionsComponent() {
     fetchAuctions();
 
     // Set up interval to fetch data every 2 seconds
-    const intervalId = setInterval(fetchAuctions, 3000);
+    const intervalId = setInterval(fetchAuctions, 2000);
 
     // Set up WebSocket event listeners
     socket.on('newBid', (updatedAuction) => {
@@ -243,7 +243,6 @@ export default function AuctionsComponent() {
         const startDate = new Date(auction.startDate);
         return today < startDate;
       });
-      console.log(futureAuctions)
         setAuctionsFiltered(futureAuctions);
     }
   const setFutureFilter = () => {
