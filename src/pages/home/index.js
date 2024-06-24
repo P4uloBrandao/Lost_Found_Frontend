@@ -105,7 +105,6 @@ const PrimaryContainer = styled.div`
 const BannerContainer = styled.div`
   background-color: #f5f5f5;
   padding: 2em;
-  text-align: center;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
@@ -224,13 +223,14 @@ const [showFilters, setShowFilters] = React.useState(false);
   </>
 )}
     <BannerContainer>
-     <Title>Active auctions</Title>
+     <Title style={{
+         textAlign: 'center',
+     }}>Active auctions</Title>
         <div className="lost-item-container" style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
             {openCard ? <AuctionInfoComponent itemid={openCard} /> : null}
             <AuctionContainer>
               {auctions.slice(0, 6).map((auction, index) => (
                 auction._id !== openCard && (
-                  <Grid spacing={2} sx={{ justifyContent: 'center' }} item xs={10} md={10} key={index}>
                     <AuctionsCardComponent 
                       image={auction.objectImage.length ===0 ? "https://res.cloudinary.com/dkyu0tmfx/image/upload/v1719065883/objectImages/default_obj_ht0fde.png": "https://res.cloudinary.com/dkyu0tmfx/image/upload/v1/objectImages/"+ auction.objectImage[0]}
                       itemTitle={auction.foundObjectTitle}
@@ -241,7 +241,6 @@ const [showFilters, setShowFilters] = React.useState(false);
                       
                       onCardClick={handleCardClick}
                     />
-                  </Grid>
                 )
               ))}
             </AuctionContainer>

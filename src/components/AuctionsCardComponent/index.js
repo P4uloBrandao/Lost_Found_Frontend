@@ -26,6 +26,7 @@ const CardContainer = styled.div`
   
   p {
     color: #000;
+    margin: 0;
   }
   
   img {
