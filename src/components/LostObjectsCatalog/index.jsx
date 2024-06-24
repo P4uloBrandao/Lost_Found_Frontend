@@ -272,6 +272,7 @@ export default function LostObjectCatalog() {
                   policeOfficer={object.policeOfficerThatReceived}
                   matchButton={true}
                   onCardClick={handleCardClick}
+                  alt = {object.title + " image"}
                 />
               </Grid>
             )
