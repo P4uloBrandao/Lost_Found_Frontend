@@ -50,7 +50,7 @@ export default function CategorySelectionComponent({ onFilteredObjects,onClose }
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/category');
+        const response = await axios.get(process.env.REACT_APP_API_URL+'/api/category');
         setCategories(response.data);
         setLoading(false);
       } catch (error) {

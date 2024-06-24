@@ -25,7 +25,7 @@ const LostItemComponent = ({ itemid }) => {
         setLostObject(auctionData);
 
 
-        const matchesResponse = await axios.post('http://localhost:3000/api/match/', { lostObjectId: itemid });
+        const matchesResponse = await axios.post(process.env.REACT_APP_API_URL+'/api/match/', { lostObjectId: itemid });
         const matchesData = matchesResponse.data;
         console.log(matchesData);
         setMatches(matchesData);

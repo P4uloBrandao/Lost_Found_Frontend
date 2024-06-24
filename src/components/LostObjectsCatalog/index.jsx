@@ -184,7 +184,7 @@ export default function LostObjectCatalog() {
 
   const handleDescriptionSearch = async () => {
     try {
-      const response = await axios.post('http://localhost:3000/api/lost-objects/description', {
+      const response = await axios.post(process.env.REACT_APP_API_URL+'/api/lost-objects/description', {
         description: description
       });
       setFilteredObjects(response.data); // Atualizar os objetos filtrados com a resposta da API

@@ -133,7 +133,7 @@ const toggleShowPassword2 = () => {
 useEffect(() => {
     const fetchStations = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/api/police/police-stations');
+            const response = await axios.get(process.env.REACT_APP_API_URL+'/api/police/police-stations');
             setStations(response.data);
             setIsLoading(false);
         } catch (error) {
