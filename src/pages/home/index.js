@@ -103,10 +103,13 @@ const PrimaryContainer = styled.div`
   place-content: center;
 `;
 const BannerContainer = styled.div`
-  background-color: #f5f5f5;
-  padding: 2em;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #f5f5f5;
+    padding: 2em;
+    /* place-self: center; */
+    text-align-last: center;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 `;
 
 const BannerButton = styled.button`
