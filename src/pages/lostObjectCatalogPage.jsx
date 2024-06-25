@@ -25,8 +25,10 @@ export default function LostObjectCatalogPage() {
         const objectsResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/lost-objects/user/${token}`);
         const objectsData = objectsResponse.data;
   
-        // Atualizar o estado dos objetos com os dados buscados
-        setObjects(objectsData);
+        const filteredObjects = objectsData.filter(object => object.status !== 'Claimed' || object.status !== 'accepted' );
+  
+        // Atualizar o estado dos objetos com os dados buscados e filtrados
+        setObjects(filteredObjects);
 
         // Para cada objeto, buscar o nome da categoria associada
         const updatedObjects = await Promise.all(objectsData.map(async (object) => {

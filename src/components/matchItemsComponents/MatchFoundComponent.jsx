@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from "axios";
 import { Grid } from '@mui/material';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
@@ -7,27 +7,24 @@ import './MatchComponentStyle.css';
 import { InputSubmit } from '../../assets/StylePopularComponent/style';
 
 const MatchFoundComponent = ({ matches, lostObject }) => {
-  const [confirmationOpen, setConfirmationOpen] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+
   const handleClaimedObject = async (lostObjectId, foundObjectId) => {
-    setConfirmationOpen(true);
     try {
       await axios.put(`${process.env.REACT_APP_API_URL}/api/accept/`, {
         lostObjectId,
         foundObjectId,
       });
-      
       console.log('Object claimed successfully');
+      setShowSuccessPopup(true); // Mostra o popup de sucesso
     } catch (error) {
       console.error('Error claiming object:', error);
-     
     }
-
-    setConfirmationOpen(false); // Close confirmation dialog after request
   };
 
-  const handleConfirmationClose = () => {
-    setConfirmationOpen(false);
-    // Additional logic after closing confirmation dialog, if necessary
+  const handlePopupClose = () => {
+    setShowSuccessPopup(false);
+   
   };
 
   return (
@@ -95,6 +92,16 @@ const MatchFoundComponent = ({ matches, lostObject }) => {
           </Grid>
         </Grid>
       ))}
+      {showSuccessPopup && (
+        <div className="popup-container">
+          <div className="popup">
+            <div className="popup-content">
+              <h2>Object claimed successfully!</h2>
+              <button className="close-btn" onClick={handlePopupClose}>X</button>
+            </div>
+          </div>
+        </div>
+      )}
       <h2 style={{ marginTop: '80px', textAlign: 'left' }}>More Lost Objects</h2>
     </div>
   );

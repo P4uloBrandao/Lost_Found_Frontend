@@ -6,6 +6,9 @@ import Card from "../CardComponent/index";
 import SearchInput from "../SearchInputFieldComponent/index";
 import axios from "axios";
 
+
+import { useAuth } from '../AuthContext';
+
 const Container = styled.div`
     position: relative;
 `;
@@ -67,18 +70,22 @@ export default function MyFoundObjComponent() {
   const [searchTerm, setSearchTerm] = useState('');
   const searchInputRef = useRef(null); // UseRef para o campo de busca
 
+  const { authUser } = useAuth();
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem("token");
+        const id = authUser._id
+        console.log(id)
   
         // Fetch the lost objects data
-        const objectsResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/lost-objects/user/${token}`);
+        const objectsResponse = await axios.get(process.env.REACT_APP_API_URL+`/api/found-objects/`);
         let objectsData = objectsResponse.data;
+        console.log(objectsData);
 
         // Filter objects to only include those with status "Claimed"
-        objectsData = objectsData.filter(obj => obj.status === 'Claimed');
-        
+        objectsData = objectsData.filter(obj => obj.status === 'Claimed' && obj.claimant === id);
+        console.log(objectsData);
         // Rename the title field to name
         objectsData = objectsData.map(obj => ({ ...obj, name: obj.title }));
 
