@@ -260,6 +260,7 @@ export default function LostObjectCatalog() {
                 justifyContent: 'center'
               }} item xs={10} md={10} key={index}>
                 <Card spacing={2}
+                
                   name={object.title}
                   description={object.description}
                   location={object.location}

@@ -68,6 +68,7 @@ const CardLostObjecs = ({ alt, matchButton, catId, name, description, location, 
           <Grid style={{ textAlign: 'left', paddingLeft: '1rem', fontWeight: '300' }} xs={12} md={6} mdOffset="auto">
             <p>Lost on: {date}</p>
             <p>Lost at: {location}</p>
+            <p className='matchesBtn' onClick={handleRemoveLostObject}>Remove item </p>
 
           </Grid>
           <Grid xs={12} xsOffset={4} md={6} mdOffset={0}>
@@ -79,6 +80,7 @@ const CardLostObjecs = ({ alt, matchButton, catId, name, description, location, 
               <p className='matchesBtn' onClick={handleViewMatches}>View Matches {'>'} </p>
             )}
           </Grid>
+          
         </Grid>
 
       </Grid>
