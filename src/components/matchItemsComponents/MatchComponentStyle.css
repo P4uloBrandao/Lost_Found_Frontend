@@ -1,0 +1,75 @@
+.MatchFoundContainer {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+  }
+  
+  .MatchImage {
+    border-radius: 1.25rem;
+    object-fit: cover;
+  }
+  
+  .MatchDetails {
+    padding: 1rem;
+  }
+  
+  .MatchTitle {
+    margin: 0;
+  }
+  
+  .MatchInfo {
+    font-weight: 300;
+  }
+  
+  .MatchActions {
+    margin-top: 10px;
+  }
+  
+  .ActionLink {
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  .SimilarityContainer {
+    display: flex;
+    align-items: center;
+  }
+  
+  .CircularGraph {
+    margin-right: 1rem;
+    position: relative;
+    width: 50px;
+  }
+  
+  .SimilarityItems {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .SimilarityItems li {
+    margin-top: 5px;
+  }
+  
+
+  @media (min-width: 809px) {
+    .HorizontalGrid {
+      display: flex;
+      flex-direction: row;
+    }
+  
+    .VerticalGrid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+  
+    .VerticalGrid .MatchInfo {
+      margin-top: 1rem;
+    }
+  
+    .VerticalGrid .CircularGraph {
+      margin-top: 1rem;
+    }
+  }

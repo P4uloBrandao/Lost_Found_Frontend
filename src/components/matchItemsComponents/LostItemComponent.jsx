@@ -66,7 +66,7 @@ const LostItemComponent = ({ itemid }) => {
           <LostItemDetails status={lostObject.status} description={lostObject.description} location={lostObject.location} categoy={lostObject.category} lost_date ={lostObject.lostDate} enddate={lostObject.endDate} coordinates={lostObject.coordinates} matchesNumber={matches.length}/>
         </div>
       </div>
-      {matches.length !==0 ? <MatchFoundComponent matches={matches}/> : null}
+      {matches.length !==0 ? <MatchFoundComponent matches={matches} lostObject={lostObject.object_id}/> : null}
 
     </div>
   );
