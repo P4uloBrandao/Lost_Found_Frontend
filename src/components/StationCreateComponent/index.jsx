@@ -150,10 +150,10 @@ export default function SationComponent() {
         }
       };
       const handleDropdownChange = (selectedOptionName) => {
-        setStationId(selectedOptionName)
+        setStationId(getStationID(selectedOptionName))
         // Faça o que for necessário com o nome da opção selecionada
       };
-      function  getStationID(name,stations){
+      function  getStationID(name){
         const foundItem = stations.find(item => item.name === name);
         return foundItem ? foundItem._id : null;
     

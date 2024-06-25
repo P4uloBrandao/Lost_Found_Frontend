@@ -178,12 +178,12 @@ export default function AddCategoryComponent() {
                 value={categoryToDelete}
                 onChange={handleDropdownChange}
                 name="Categories"
-                errorMessage={'Category not found'}
                 
+                options={categories}
               />
             </InputBox>
 
-                {deleteCategoryError && <ErrorMessage>Category not found</ErrorMessage>}
+               {deleteCategoryError && <ErrorMessage>Category not found</ErrorMessage>}
       
         <InputSubmit type="submit" onClick={handleDeleteSubmit}>
             Delete
