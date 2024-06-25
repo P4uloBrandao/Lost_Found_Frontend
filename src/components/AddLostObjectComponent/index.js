@@ -357,7 +357,7 @@ const validateStepTwo = () => {
         <div key={index} className={`form-step ${index === formStepsNum ? 'active' : ''}`}>
           {step.title === "1" && (
             <Container>
-              <Title>Found Object Identification</Title>
+              <Title>Lost Object Identification</Title>
               <Title>What did you lose?</Title>
               <InputBox>
                 <InputF
